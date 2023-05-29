@@ -27,5 +27,6 @@ Route::group(['middleware'=>['auth']],function (){
     Route::resource('staff', 'StaffController');
     Route::resource('rtc', 'RtcController');
     Route::resource('sloat', 'SloatController');
+    Route::resource('course', 'CourseController');
 });
 
