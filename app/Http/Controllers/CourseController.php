@@ -17,7 +17,7 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::orderBy('id','asc')->paginate(5);
+        $courses = Course::orderBy('id', 'asc')->paginate(5);
         return view('courses.index', compact('courses'));
     }
 
@@ -28,8 +28,6 @@ class CourseController extends Controller
      */
     public function create()
     {
-//        $sub_courses = SubCourse::orderBy('id','asc')->get();
-//        $sub_course_points = SubCoursePoint::orderBy('id','asc')->get();
         return view('courses.create');
     }
 
@@ -43,9 +41,9 @@ class CourseController extends Controller
     {
 //       dd($request->all());
         $this->validate($request, [
-            'course_name' => 'required',
-            'sub_course.*' => 'required',
-            'sub_point_name.*' => 'required',
+            'course_name' => 'required|string|max:255',
+            'sub_course.*' => 'required|string|max:255',
+            'point.*' => 'required|string|max:255',
         ]);
         $course = new Course();
         $course->course_name = $request->course_name;
@@ -56,10 +54,10 @@ class CourseController extends Controller
             $subCourse->sub_course_name = $sub_course;
             $subCourse->save();
             foreach ($request->point[$key] as $point) {
-                $subCoursePoint = SubCoursePoint::create(['sub_course_id'=>$subCourse->id,'sub_point_name'=>$point]);
+                $subCoursePoint = SubCoursePoint::create(['sub_course_id' => $subCourse->id, 'sub_point_name' => $point]);
             }
         }
-        return redirect()->route('course.index');
+        return redirect()->route('course.index')->with('success', 'Course Created Successfully.');
 
     }
 
@@ -82,7 +80,7 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
-        return view('courses.edit',compact('course'));
+        return view('courses.edit', compact('course'));
     }
 
     /**
@@ -94,8 +92,6 @@ class CourseController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-//        dd($request->all());
-//        $course->id = $course->id;
         $course->course_name = $request->course_name;
         $course->save();
         foreach ($request->edit_sub_course_name as $key => $sub_course) {
@@ -103,14 +99,24 @@ class CourseController extends Controller
             $subCourse->course_id = $course->id;
             $subCourse->sub_course_name = $sub_course;
             $subCourse->save();
-            foreach ($request->point[$key] as $key1 => $point) {
+            foreach ($request->edit_point[$key] as $key1 => $point) {
                 $subCoursePoint = SubCoursePoint::find($key1);
                 $subCoursePoint->sub_point_name = $point;
                 $subCoursePoint->save();
             }
         }
-        $course->update();
-        return redirect()->route('course.index');
+        if ($request->sub_course_name) {
+            foreach ($request->sub_course_name as $key => $sub_course) {
+                $subCourse = new SubCourse();
+                $subCourse->course_id = $course->id;
+                $subCourse->sub_course_name = $sub_course;
+                $subCourse->save();
+                foreach ($request->point[$key] as $point) {
+                    $subCoursePoint = SubCoursePoint::create(['sub_course_id' => $subCourse->id, 'sub_point_name' => $point]);
+                }
+            }
+        }
+        return redirect()->route('course.index')->with('success', 'Course Updated Successfully.');
     }
 
     /**
@@ -122,6 +128,6 @@ class CourseController extends Controller
     public function destroy(Course $course)
     {
         $course->delete();
-        return redirect()->route('course.index')->with('success','Course Deleted successfully.');
+        return redirect()->route('course.index')->with('success', 'Course Deleted Successfully.');
     }
 }
