@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="favicon.ico">
-    <title>Tiny Dashboard - A Bootstrap Dashboard Template</title>
+{{--    <link rel="icon" href="favicon.ico">--}}
+    <title>Re-Education</title>
     <!-- Simple bar CSS -->
     <link rel="stylesheet" href="{{asset('css/simplebar.css')}}">
     <!-- Fonts CSS -->
@@ -101,49 +101,49 @@
             <ul class="navbar-nav flex-fill w-100 mb-2">
                 <li class="nav-item dropdown">
                     <a class="nav-link pl-3" href="{{route('student.index')}}">
-                        <i class="fe fe-box fe-16"></i>
+                        <i class="fa fa-graduation-cap"></i>
                         <span class="ml-3 item-text">Student</span>
                     </a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link pl-3" href="{{route('staff.index')}}">
-                        <i class="fe fe-box fe-16"></i>
+                        <i class="fa fa-user"></i>
                         <span class="ml-3 item-text">Staff</span>
                     </a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link pl-3" href="./ui-color.html">
-                        <i class="fe fe-box fe-16"></i>
+                        <i class="fa fa-book"></i>
                         <span class="ml-3 item-text">Course</span>
                     </a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link pl-3" href="{{route('sloat.index')}}">
-                        <i class="fe fe-box fe-16"></i>
+                        <i class="fa fa-clock-o"></i>
                         <span class="ml-3 item-text">Sloat</span>
                     </a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link pl-3" href="{{route('rtc.index')}}">
-                        <i class="fe fe-box fe-16"></i>
+                        <i class="fa fa-map-marker"></i>
                         <span class="ml-3 item-text">RTC</span>
                     </a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link pl-3" href="./ui-color.html">
-                        <i class="fe fe-box fe-16"></i>
+                        <i class="fa fa-calendar-check-o"></i>
                         <span class="ml-3 item-text">Student Attendance</span>
                     </a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link pl-3" href="./ui-color.html">
-                        <i class="fe fe-box fe-16"></i>
+                        <i class="fa fa-calendar-check-o"></i>
                         <span class="ml-3 item-text">Staff Attendance</span>
                     </a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link pl-3" href="{{ route('roles.index') }}">
-                        <i class="fe fe-box fe-16"></i>
+                        <i class="fa fa-user-plus"></i>
                         <span class="ml-3 item-text">Roles</span>
                     </a>
                 </li>
@@ -403,7 +403,7 @@
         });
     }
 </script>
-<script src="js/apps.js"></script>
+<script src="{{asset('js/apps.js')}}"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-56159088-1"></script>
 <script>

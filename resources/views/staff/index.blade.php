@@ -25,7 +25,14 @@
                                     <thead>
                                     <tr>
                                         <th>No</th>
+                                        <th>Employee ID</th>
                                         <th>Name</th>
+                                        <th>phone</th>
+                                        <th>I_card</th>
+                                        <th>uniform</th>
+                                        <th>Email</th>
+                                        <th>Address</th>
+                                        <th>Emergency phone</th>
                                         <th width="280px">Action</th>
                                     </tr>
                                     </thead>
@@ -33,9 +40,15 @@
                                     @foreach ($staff as $key => $s)
                                         <tr>
                                             <td>{{ ++$i }}</td>
-                                            <td>{{ $s->name }}</td>
+                                            <td>{{ $s->employee_ID }}</td>
+                                            <td>{{ $s->staff_name }}</td>
+                                            <td>{{ $s->staff_phone }}</td>
+                                            <td>@if($s->staff_I_card) <i class="fe fe-check"></i> @endif</td>
+                                            <td>@if($s->staff_uniform) <i class="fe fe-check"></i> @endif</td>
+                                            <td>{{ $s->staff_email }}</td>
+                                            <td>{{ $s->staff_address }}</td>
+                                            <td>{{ $s->eme_phone }}</td>
                                             <td>
-                                                <a href="{{ route('staff.show',$s->id) }}" class="btn btn-info" title="Show Permission"><i class="fe fe-eye"></i></a>
                                                 @can('staff-edit')
                                                     <a href="{{ route('staff.edit',$s->id) }}" class="btn btn-success" title="Edit"><i class="fe fe-edit"></i></a>
                                                 @endcan

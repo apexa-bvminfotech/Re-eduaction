@@ -12,14 +12,13 @@ class Staff extends Model
 
     protected $fillable = [
         'staff_name',
-        'password',
         'staff_phone',
         'course_id',
         'employee_ID',
-        'staff_I-card',
+        'staff_I_card',
         'staff_uniform',
-        'staff_email',
         'staff_address',
         'eme_phone',
+        'user_id'
     ];
 }

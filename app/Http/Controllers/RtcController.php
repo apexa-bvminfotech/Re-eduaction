@@ -118,7 +118,7 @@ class RtcController extends Controller
      */
     public function destroy($id)
     {
-        DB::table("rtc")->where('id',$id)->delete();
+        Rtc::where('id',$id)->delete();
         return redirect()->route('rtc.index')
             ->with('success','RTC deleted successfully');
     }
