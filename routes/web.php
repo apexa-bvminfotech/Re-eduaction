@@ -28,5 +28,7 @@ Route::group(['middleware'=>['auth']],function (){
     Route::resource('rtc', 'RtcController');
     Route::resource('sloat', 'SloatController');
     Route::resource('course', 'CourseController');
+    Route::resource('point', 'PointController')->only(['destroy']);
+    Route::resource('subCourse', 'SubCourseController')->only(['destroy']);
 });
 

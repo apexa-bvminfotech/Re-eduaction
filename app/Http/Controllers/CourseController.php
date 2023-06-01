@@ -42,7 +42,7 @@ class CourseController extends Controller
     {
         $rules = [
             'course_name' => 'required|string|max:255',
-            'sub_course_name.*.name' => 'required|string|max:255',
+            'sub_course_name.*' => 'required|string|max:255',
             'point.*.name.*' => 'required|string|max:255',
         ];
 

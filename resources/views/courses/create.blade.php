@@ -45,11 +45,14 @@
                                     <div class="col-sm-3"></div>
                                     <label for="points" class="col-sm-1 col-form-label ">Points</label>
                                     <div class="col-sm-5">
-                                        <input type="text" name="point[0][]" data-id="0" class="form-control points" placeholder="Add points" required>
+                                        <input type="text" name="point[0][]" data-id="0"  class="form-control points" placeholder="Add points" required>
                                     </div>
                                     <div class="col-sm-3">
-                                        <button type="button" name="add_point" data-id="0" class="btn btn-primary add-point btn-star">+</button>
+                                        <button type="button" name="add_point" data-id="1" data-mid="0" class="btn btn-primary add-point btn-star">+</button>
                                     </div>
+                                </div>
+                                <div id="dynamic_point_field_0">
+
                                 </div>
                                 <div class="dynamic_field">
 
@@ -71,6 +74,7 @@
     <script>
         $(function () {
             var i = 0;
+            var j = 1;
             $("#add").click(function () {
                 i++;
                 let html = '<div class="form-group row remove' + i + '" >'
@@ -90,9 +94,10 @@
                 html += '<input type="text" name="point['+i+'][]" data-id="'+i+'"  class="form-control points" placeholder="Add points" required>'
                 html += '</div>'
                 html += '<div class="col-sm-3">'
-                html += '<button type="button" name="add_point" data-id="'+i+'" class="btn btn-primary add-point btn-star">+</button>'
+                html += '<button type="button" name="add_point" data-id="' + j + '" data-mid="' + i + '" class="btn btn-primary add-point btn-star p_' + i + '">+</button>'
                 html += '</div>'
                 html += '</div>'
+                html += '<div id="dynamic_point_field_' + j + '"></div>'
                 $('.dynamic_field').append(html);
             });
 
@@ -102,10 +107,15 @@
             });
 
             $(document).on('click',".add-point", function(){
-                var ele = $(this).closest('.clone-point').clone(true);
-                $(this).closest('.clone-point').after(ele);
+                let id = parseInt($(this).data('id'));
+                let mid = parseInt($(this).data('mid'));
+                console.log(id, $(this).data('mid'))
+                id++
+                var ele = $(this).closest('.clone-point').clone(true).appendTo('#dynamic_point_field_' + mid);
+                // $(this).closest('.clone-point').after(ele);
                 ele.find('.btn-star').removeClass('add-point').removeClass('btn-primary').addClass('btn-danger').addClass('point_remove').html('-')
                 ele.find('.points').val("")
+                $(this).data('id', id)
             })
             $(document).on('click', '.point_remove', function(){
                 $(this).closest('.clone-point').remove();

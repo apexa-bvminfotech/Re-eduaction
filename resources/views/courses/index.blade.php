@@ -13,6 +13,11 @@
                         <p>{{ $message }}</p>
                     </div>
                 @endif
+                @if ($message = Session::get('danger'))
+                    <div class="alert alert-danger">
+                        <p>{{ $message }}</p>
+                    </div>
+                @endif
                 <div class="row my-4">
                     <!-- Small table -->
                     <div class="col-md-12">
@@ -43,7 +48,7 @@
                                                         @csrf
                                                         @method('DELETE')
 
-                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                        <button type="submit" class="btn btn-danger show_confirm">Delete</button>
                                                     </form>
                                                 </td>
                                                 </tr>
@@ -63,3 +68,4 @@
 
 
 @endsection
+
