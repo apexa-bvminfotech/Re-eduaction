@@ -54,7 +54,9 @@ class StaffController extends Controller
     {
         $this->validate($request, [
             'employee_ID' => 'required|unique:staff,employee_ID',
+            'first_name' => 'required',
             'staff_name' => 'required',
+            'father_name' => 'required',
             'staff_phone' => 'required',
             'email' => 'required|email|unique:users,email',
             'staff_address' => 'required',
@@ -72,15 +74,17 @@ class StaffController extends Controller
         $user->assignRole($request->input('roles'));
 
         $data = [
-          'staff_name' => $request->staff_name,
-          'staff_phone' => $request->staff_phone,
-          'course_id' => json_encode($request->course_id),
-          'employee_ID' => $request->employee_ID,
-          'staff_I_card' => isset($request->staff_i_card) ? 1 : 0,
-          'staff_uniform' => isset($request->staff_uniform) ? 1 : 0,
-          'staff_address' => $request->staff_address,
-          'eme_phone' => $request->eme_phone,
-          'user_id' => $user->id
+            'first_name' => $request->first_name,
+            'staff_name' => $request->staff_name,
+            'father_name' => $request->father_name,
+            'staff_phone' => $request->staff_phone,
+            'course_id' => json_encode($request->course_id),
+            'employee_ID' => $request->employee_ID,
+            'staff_I_card' => isset($request->staff_i_card) ? 1 : 0,
+            'staff_uniform' => isset($request->staff_uniform) ? 1 : 0,
+            'staff_address' => $request->staff_address,
+            'eme_phone' => $request->eme_phone,
+            'user_id' => $user->id
         ];
         Staff::create($data);
 
@@ -130,7 +134,9 @@ class StaffController extends Controller
     public function update(Request $request, Staff $staff)
     {
         $this->validate($request, [
+            'first_name' => 'required',
             'staff_name' => 'required',
+            'father_name' => 'required',
             'staff_phone' => 'required',
             'staff_address' => 'required',
             'eme_phone' => 'required',
@@ -147,7 +153,9 @@ class StaffController extends Controller
         $user->assignRole($request->input('roles'));
 
         $staff->update([
+            'first_name' => $request->first_name,
             'staff_name' => $request->staff_name,
+            'father_name' => $request->father_name,
             'staff_phone' => $request->staff_phone,
             'course_id' => json_encode($request->course_id),
             'staff_I_card' => isset($request->staff_i_card) ? 1 : 0,

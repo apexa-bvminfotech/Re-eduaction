@@ -34,8 +34,16 @@
                                             <input type="text" name="employee_ID" placeholder="Employee ID" readonly value="{{ $staff->employee_ID }}" class="form-control" required>
                                         </div>
                                         <div class="form-group mb-3">
+                                            <label for="simpleinput">First Name</label>
+                                            <input type="text" name="first_name" value="{{ $staff->first_name }}" placeholder="first name" class="form-control" required>
+                                        </div>
+                                        <div class="form-group mb-3">
                                             <label for="simpleinput">Name</label>
                                             <input type="text" name="staff_name" value="{{ $staff->staff_name }}" placeholder="Name" class="form-control" required>
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label for="simpleinput">Father Name</label>
+                                            <input type="text" name="father_name" value="{{ $staff->father_name }}" placeholder="father name" class="form-control" required>
                                         </div>
                                         <div class="form-group mb-3">
                                             <label for="simpleinput">Phone</label>
