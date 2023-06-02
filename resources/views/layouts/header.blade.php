@@ -136,7 +136,7 @@
                     </a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link pl-3" href="./ui-color.html">
+                    <a class="nav-link pl-3" href="{{route('staff_attendance.index')}}">
                         <i class="fa fa-calendar-check-o"></i>
                         <span class="ml-3 item-text">Staff Attendance</span>
                     </a>
