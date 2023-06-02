@@ -112,8 +112,8 @@
                     </a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link pl-3" href="./ui-color.html">
-                        <i class="fa fa-book"></i>
+                    <a class="nav-link pl-3" href="{{route('course.index')}}">
+                        <i class="fe fe-box fe-16"></i>
                         <span class="ml-3 item-text">Course</span>
                     </a>
                 </li>
@@ -416,5 +416,7 @@
     gtag('js', new Date());
     gtag('config', 'UA-56159088-1');
 </script>
+@stack('scripts')
+
 </body>
 </html>
