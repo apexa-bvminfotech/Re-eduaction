@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->integer('type')->default(1)->comment('0-Admin, 1-Teacher, 3-Student');
+            $table->integer('type')->default(1)->comment('0-Admin, 1-Teacher, 2-Student');
         });
     }
 
