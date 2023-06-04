@@ -31,7 +31,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
                                             <label for="simpleinput">Employee ID</label>
-                                            <input type="text" name="employee_ID" placeholder="Employee ID" readonly value="{{ $staff->employee_ID }}" class="form-control" required>
+                                            <input type="text" name="employee_ID" placeholder="Employee ID" value="{{ $staff->employee_ID }}" class="form-control" required>
                                         </div>
                                         <div class="form-group mb-3">
                                             <label for="simpleinput">First Name</label>
@@ -50,6 +50,13 @@
                                             <input type="text" name="staff_phone" value="{{ $staff->staff_phone }}" placeholder="Phone" class="form-control" required>
                                         </div>
                                         <div class="form-group mb-3">
+                                            <label for="simpleinput">Emergency Phone</label>
+                                            <input type="text" name="eme_phone" value="{{ $staff->eme_phone }}" placeholder="Emergency Phone" class="form-control" required>
+                                        </div>
+
+                                    </div> <!-- /.col -->
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
                                             <label for="example-email">Email</label>
                                             <input type="email" name="email" value="{{ $staff->email }}" class="form-control" placeholder="Email" required>
                                         </div>
@@ -57,19 +64,21 @@
                                             <label for="example-email">Address</label>
                                             <textarea class="form-control" placeholder="Address" name="staff_address" required>{{ $staff->staff_address }}</textarea>
                                         </div>
-                                    </div> <!-- /.col -->
-                                    <div class="col-md-6">
-                                        <div class="form-group mb-3">
-                                            <label for="simpleinput">Emergency Phone</label>
-                                            <input type="text" name="eme_phone" value="{{ $staff->eme_phone }}" placeholder="Emergency Phone" class="form-control" required>
-                                        </div>
                                         <div class="form-group mb-3">
                                             <label for="example-email">Course</label>
-                                            <select class="form-control select2-multi" name="course_id[]" required>
-                                                @foreach($role as $key => $r)
-                                                    <option value="{{ $r->id }}" selected>{{ $r->name }}</option>
+                                            <div class="form-row">
+                                                @foreach($course->chunk(2) as $chunk)
+                                                    <div class="col-sm-4">
+                                                        @foreach ($chunk as $value)
+                                                            <div class="form-check">
+                                                                <label>{{ Form::checkbox('course_id[]', $value->id, in_array($value->id, json_decode($staff->course_id)) ? true : false, array('class' => 'name')) }}
+                                                                    {{ $value->course_name }}</label>
+                                                                <br/>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
                                                 @endforeach
-                                            </select>
+                                            </div>
                                         </div>
                                         <div class="form-group mb-3">
                                             <label for="example-email">Role</label>

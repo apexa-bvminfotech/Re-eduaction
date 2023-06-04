@@ -28,6 +28,7 @@
                                         <th>Staff Name</th>
                                         <th>RTC Name</th>
                                         <th>Time</th>
+                                        <th>Status</th>
                                         <th width="280px">Action</th>
                                     </tr>
                                     </thead>
@@ -39,14 +40,23 @@
                                             <td>{{ $s->rtc_name }}</td>
                                             <td>{{ $s->sloat_time }}</td>
                                             <td>
+                                                <div class="custom-control custom-switch">
+                                                    @can('sloat-edit')
+                                                        <input type="checkbox" data-id="{{$s->id}}" class="custom-control-input checkStatus" id="c{{$key+1}}" {{ $s->is_active ? '' : 'checked' }}>
+                                                        <label class="custom-control-label" for="c{{$key+1}}"></label>
+                                                    @endcan
+                                                    <span class="badge badge-pill changeStatus{{ $s->id }} {{ $s->is_active ? 'badge-danger': 'badge-success' }} ">{{ $s->is_active ? 'Deactive': 'Active' }}</span>
+                                                </div>
+                                            </td>
+                                            <td>
                                                 @can('sloat-edit')
                                                     <a href="{{ route('sloat.edit',$s->id) }}" class="btn btn-success" title="Edit"><i class="fe fe-edit"></i></a>
                                                 @endcan
-                                                @can('sloat-delete')
-                                                    {!! Form::open(['method' => 'DELETE','route' => ['sloat.destroy', $s->id],'style'=>'display:inline']) !!}
-                                                        <button type="submit" class="btn btn-danger" title="Delete" onclick="return confirm('Are you sure you want to delete?')"><i class="fe fe-trash-2"></i></button>
-                                                    {!! Form::close() !!}
-                                                @endcan
+{{--                                                @can('sloat-delete')--}}
+{{--                                                    {!! Form::open(['method' => 'DELETE','route' => ['sloat.destroy', $s->id],'style'=>'display:inline']) !!}--}}
+{{--                                                        <button type="submit" class="btn btn-danger" title="Delete" onclick="return confirm('Are you sure you want to delete?')"><i class="fe fe-trash-2"></i></button>--}}
+{{--                                                    {!! Form::close() !!}--}}
+{{--                                                @endcan--}}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -59,6 +69,32 @@
             </div> <!-- .col-12 -->
         </div> <!-- .row -->
     </div> <!-- .container-fluid -->
-
-
 @endsection
+@push('scripts')
+    <script>
+        $(function() {
+            $('.checkStatus').change(function() {
+                var status = $(this).prop('checked') == true ? 0 : 1;
+                var sloat_id = $(this).data('id');
+
+                $.ajax({
+                    type: "GET",
+                    dataType: "json",
+                    url: '/changeSloatStatus',
+                    data: {'status': status, 'sloat_id': sloat_id},
+                    success: function(data){
+                        if(data == 0){
+                            $('.changeStatus'+sloat_id).removeClass('badge-danger');
+                            $('.changeStatus'+sloat_id).addClass('badge-success');
+                            $('.changeStatus'+sloat_id).html('Active');
+                        } else {
+                            $('.changeStatus'+sloat_id).removeClass('badge-success');
+                            $('.changeStatus'+sloat_id).addClass('badge-danger');
+                            $('.changeStatus'+sloat_id).html('Deactive');
+                        }
+                    }
+                });
+            })
+        })
+    </script>
+@endpush

@@ -32,7 +32,7 @@ class SloatController extends Controller
         $sloat = Sloat::select('sloat.*','staff.staff_name','rtc.rtc_name')
             ->join('staff', 'staff.id', 'sloat.staff_id')
             ->join('rtc', 'rtc.id', 'sloat.rtc_id')
-            ->orderBy('sloat.id','DESC')->get();
+            ->orderBy('sloat.id','DESC')->paginate(10);
         return view('sloat.index',compact('sloat'))->with('i');
     }
 
@@ -43,8 +43,8 @@ class SloatController extends Controller
      */
     public function create()
     {
-        $staff = Staff::orderBy('id','DESC')->get();
-        $rtc = Rtc::orderBy('id','DESC')->paginate(5);
+        $staff = Staff::orderBy('id','DESC')->where('is_active',0)->get();
+        $rtc = Rtc::orderBy('id','DESC')->where('is_active',0)->get();
         return view('sloat.create',compact('staff','rtc'));
     }
 
@@ -94,8 +94,8 @@ class SloatController extends Controller
     public function edit($id)
     {
         $sloat = Sloat::find($id);
-        $staff = Staff::orderBy('id','DESC')->get();
-        $rtc = Rtc::orderBy('id','DESC')->paginate(5);
+        $staff = Staff::orderBy('id','DESC')->where('is_active',0)->get();
+        $rtc = Rtc::orderBy('id','DESC')->where('is_active',0)->get();
         if($sloat){
             return view('sloat.edit',compact('sloat','staff','rtc'));
         } else {
@@ -142,5 +142,12 @@ class SloatController extends Controller
         Sloat::where('id',$id)->delete();
         return redirect()->route('sloat.index')
             ->with('success','Sloat deleted successfully');
+    }
+
+    public function changeSloatStatus(Request $request){
+        $sloat = Sloat::find($request->sloat_id);
+        $sloat->is_active = $request->status;
+        $sloat->save();
+        return response()->json($request->status);
     }
 }

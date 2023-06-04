@@ -13,6 +13,7 @@ class Rtc extends Model
     protected $fillable = [
         'rtc_name',
         'address',
-        'rtc_no'
+        'rtc_no',
+        'is_active'
     ];
 }

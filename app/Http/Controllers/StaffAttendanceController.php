@@ -33,7 +33,7 @@ class StaffAttendanceController extends Controller
             ->select('staff_attendance.date',DB::raw('count(IF(attendance = 0, 1, NULL)) as present'),
                 DB::raw('count(IF(attendance = 1, 1, NULL)) as absent'))
             ->groupBy('staff_attendance.date')
-            ->orderBy('staff_attendance.id','DESC')->get();
+            ->orderBy('staff_attendance.id','DESC')->paginate(10);
 
         return view('staff_attendance.index',compact('staffAttendance'))->with('i');
     }
@@ -45,7 +45,7 @@ class StaffAttendanceController extends Controller
      */
     public function create()
     {
-        $staff = Staff::orderBy('id','DESC')->get();
+        $staff = Staff::orderBy('id','DESC')->where('is_active',0)->get();
         return view('staff_attendance.create',compact('staff'));
     }
 
@@ -97,7 +97,7 @@ class StaffAttendanceController extends Controller
     {
         $EditDate = $date;
         $staffAttendance = staffAttendance::select('staff_attendance.*','staff.id as staffID','staff.staff_name')->Where('date', $date)->join('staff','staff.id','staff_attendance.staff_id')->orderBy('staff_attendance.id','DESC')->get();
-        $staff = Staff::orderBy('id','DESC')->get();
+        $staff = Staff::orderBy('id','DESC')->where('is_active',0)->get();
         if($staffAttendance){
             return view('staff_attendance.edit',compact('staffAttendance','EditDate'));
         } else {
@@ -134,8 +134,10 @@ class StaffAttendanceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($date)
     {
-        //
+        staffAttendance::where('date', $date)->delete();
+        return redirect()->route('staff_attendance.index')
+            ->with('success','Attendance deleted successfully');
     }
 }

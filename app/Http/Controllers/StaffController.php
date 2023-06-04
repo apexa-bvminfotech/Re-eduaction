@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
 use App\Models\Staff;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -29,7 +30,7 @@ class StaffController extends Controller
      */
     public function index()
     {
-        $staff = Staff::orderBy('id','DESC')->paginate(5);
+        $staff = Staff::orderBy('id','DESC')->paginate(10);
         return view('staff.index',compact('staff'))->with('i');
     }
 
@@ -41,7 +42,8 @@ class StaffController extends Controller
     public function create()
     {
         $role = Role::orderBy('id', 'DESC')->get();
-        return view('staff.create',compact('role'));
+        $course = Course::orderBy('id', 'DESC')->get();
+        return view('staff.create',compact('role','course'));
     }
 
     /**
@@ -53,7 +55,7 @@ class StaffController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'employee_ID' => 'required|unique:staff,employee_ID',
+            'employee_ID' => 'required',
             'first_name' => 'required',
             'staff_name' => 'required',
             'father_name' => 'required',
@@ -117,8 +119,9 @@ class StaffController extends Controller
                 ->find($id);
         $user = User::where('id', $staff->user_id)->first();
         $userRole = $user->roles->first();
+        $course = Course::orderBy('id', 'DESC')->get();
         if($staff){
-            return view('staff.edit',compact('staff','role', 'userRole'));
+            return view('staff.edit',compact('staff','role', 'userRole', 'course'));
         } else {
             return view('staff.create');
         }
@@ -158,6 +161,7 @@ class StaffController extends Controller
             'father_name' => $request->father_name,
             'staff_phone' => $request->staff_phone,
             'course_id' => json_encode($request->course_id),
+            'employee_ID' => $request->employee_ID,
             'staff_I_card' => isset($request->staff_i_card) ? 1 : 0,
             'staff_uniform' => isset($request->staff_uniform) ? 1 : 0,
             'staff_address' => $request->staff_address,
@@ -181,4 +185,17 @@ class StaffController extends Controller
         return redirect()->route('staff.index')
             ->with('success','Staff deleted successfully');
     }
+
+    public function changeStaffStatus(Request $request){
+        $staff = Staff::find($request->staff_id);
+        $staff->is_active = $request->status;
+        $staff->save();
+
+        $user = User::find($staff->user_id);
+        $user->is_active = $request->status;
+        $user->save();
+
+        return response()->json($request->status);
+    }
+
 }

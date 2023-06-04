@@ -30,9 +30,9 @@
                                         <th>phone</th>
                                         <th>I_card</th>
                                         <th>uniform</th>
-                                        <th>Email</th>
                                         <th>Address</th>
                                         <th>Emergency phone</th>
+                                        <th>Status</th>
                                         <th width="280px">Action</th>
                                     </tr>
                                     </thead>
@@ -45,18 +45,26 @@
                                             <td>{{ $s->staff_phone }}</td>
                                             <td>@if($s->staff_I_card) <i class="fe fe-check"></i> @endif</td>
                                             <td>@if($s->staff_uniform) <i class="fe fe-check"></i> @endif</td>
-                                            <td>{{ $s->staff_email }}</td>
                                             <td>{{ $s->staff_address }}</td>
                                             <td>{{ $s->eme_phone }}</td>
+                                            <td>
+                                                <div class="custom-control custom-switch">
+                                                    @can('rtc-edit')
+                                                        <input type="checkbox" data-id="{{$s->id}}" class="custom-control-input checkStatus" id="c{{$key+1}}" {{ $s->is_active ? '' : 'checked' }}>
+                                                        <label class="custom-control-label" for="c{{$key+1}}"></label>
+                                                    @endcan
+                                                    <span class="badge badge-pill changeStatus{{ $s->id }} {{ $s->is_active ? 'badge-danger': 'badge-success' }} ">{{ $s->is_active ? 'Deactive': 'Active' }}</span>
+                                                </div>
+                                            </td>
                                             <td>
                                                 @can('staff-edit')
                                                     <a href="{{ route('staff.edit',$s->id) }}" class="btn btn-success" title="Edit"><i class="fe fe-edit"></i></a>
                                                 @endcan
-                                                @can('staff-delete')
-                                                    {!! Form::open(['method' => 'DELETE','route' => ['staff.destroy', $s->id],'style'=>'display:inline']) !!}
-                                                    <button type="submit" class="btn btn-danger" title="Delete" onclick="return confirm('Are you sure you want to delete?')"><i class="fe fe-trash-2"></i></button>
-                                                    {!! Form::close() !!}
-                                                @endcan
+{{--                                                @can('staff-delete')--}}
+{{--                                                    {!! Form::open(['method' => 'DELETE','route' => ['staff.destroy', $s->id],'style'=>'display:inline']) !!}--}}
+{{--                                                    <button type="submit" class="btn btn-danger" title="Delete" onclick="return confirm('Are you sure you want to delete?')"><i class="fe fe-trash-2"></i></button>--}}
+{{--                                                    {!! Form::close() !!}--}}
+{{--                                                @endcan--}}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -72,3 +80,30 @@
 
 
 @endsection
+@push('scripts')
+    <script>
+        $(function() {
+            $('.checkStatus').change(function() {
+                var status = $(this).prop('checked') == true ? 0 : 1;
+                var staff_id = $(this).data('id');
+                $.ajax({
+                    type: "GET",
+                    dataType: "json",
+                    url: '/changeStaffStatus',
+                    data: {'status': status, 'staff_id': staff_id},
+                    success: function(data){
+                        if(data == 0){
+                            $('.changeStatus'+staff_id).removeClass('badge-danger');
+                            $('.changeStatus'+staff_id).addClass('badge-success');
+                            $('.changeStatus'+staff_id).html('Active');
+                        } else {
+                            $('.changeStatus'+staff_id).removeClass('badge-success');
+                            $('.changeStatus'+staff_id).addClass('badge-danger');
+                            $('.changeStatus'+staff_id).html('Deactive');
+                        }
+                    }
+                });
+            })
+        })
+    </script>
+@endpush

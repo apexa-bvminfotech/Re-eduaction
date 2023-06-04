@@ -47,13 +47,13 @@
                             <div class="form-group row">
                                 <label for="inputEmail3" class="col-sm-3 col-form-label">Time</label>
                                 <div class="col-sm-4">
-                                    <input type="text" name="sloat_time_to" class="form-control time-input" placeholder="" aria-describedby="button-addon2" required>
+                                    <input type="text" name="sloat_time_to" class="form-control time-input" autocomplete="off" placeholder="" aria-describedby="button-addon2" required>
                                 </div>
                                 <div class="col-sm-1" style="display: flex;justify-content: space-around;">
                                     <p>to</p>
                                 </div>
                                 <div class="col-sm-4">
-                                    <input type="text" name="sloat_time_from" class="form-control time-input" placeholder="" aria-describedby="button-addon2" required>
+                                    <input type="text" name="sloat_time_from" class="form-control time-input" autocomplete="off" placeholder="" aria-describedby="button-addon2" required>
                                 </div>
                             </div>
                             <div class="form-group mb-2 buttonEnd">

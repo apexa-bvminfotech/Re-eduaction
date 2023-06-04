@@ -28,7 +28,7 @@ class RtcController extends Controller
      */
     public function index()
     {
-        $rtc = Rtc::orderBy('id','DESC')->paginate(5);
+        $rtc = Rtc::orderBy('id','DESC')->paginate(10);
         return view('rtc.index',compact('rtc'))->with('i');
     }
 
@@ -121,5 +121,12 @@ class RtcController extends Controller
         Rtc::where('id',$id)->delete();
         return redirect()->route('rtc.index')
             ->with('success','RTC deleted successfully');
+    }
+
+    public function changeRtcStatus(Request $request){
+        $rtc = Rtc::find($request->rtc_id);
+        $rtc->is_active = $request->status;
+        $rtc->save();
+        return response()->json($request);
     }
 }

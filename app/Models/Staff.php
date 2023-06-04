@@ -11,7 +11,9 @@ class Staff extends Model
     protected $table="staff";
 
     protected $fillable = [
+        'first_name',
         'staff_name',
+        'father_name',
         'staff_phone',
         'course_id',
         'employee_ID',
@@ -19,6 +21,7 @@ class Staff extends Model
         'staff_uniform',
         'staff_address',
         'eme_phone',
-        'user_id'
+        'user_id',
+        'is_active'
     ];
 }

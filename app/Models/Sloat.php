@@ -13,6 +13,7 @@ class Sloat extends Model
     protected $fillable = [
         'sloat_time',
         'staff_id',
-        'rtc_id'
+        'rtc_id',
+        'is_active'
     ];
 }
