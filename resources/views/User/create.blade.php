@@ -19,7 +19,7 @@
                     </div>
                 @endif
                 <div class="row">
-                    <div class="card-deck col-12">
+                    <div class="card-deck col-6">
                         <div class="card shadow mb-4">
                             <div class="card-header">
                                 <strong class="card-title">Form controls</strong>
@@ -36,7 +36,7 @@
                                             <label for="simpleinput">Email:</label>
                                             <input type="email" name="email" value="{{ old('email') }}" placeholder="enter email" class="form-control" required>
                                         </div>
-                                        <div class="col-md-3 mb-1">
+                                        <div class="form-group mb-3">
                                             <label for="role">Role name:</label>
                                             <select class="form-control select2" name="role" required>
                                                 <option value="">------Select Role------</option>

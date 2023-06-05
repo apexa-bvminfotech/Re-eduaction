@@ -15,7 +15,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users=User::orderBy('id')->where('type',0)->get();
+        $users=User::orderBy('id')->where('type',0)->paginate(10);
         return view('user.index',compact('users'));
     }
 
@@ -41,7 +41,6 @@ class UserController extends Controller
         $request->validate([
             'name'=>'required|max:255',
             'email'=>'required|unique:users,email|email',
-//            'password'=>'required|min:6',
         ]);
         $user = User::Create([
             'name' => $request->name,
@@ -50,8 +49,7 @@ class UserController extends Controller
             'type' => 0,
         ]);
         $user->assignRole($request->input('role'));
-//        dd($user);
-        return redirect()->route('user.index',compact('user'));
+        return redirect()->route('user.index',compact('user')) ->with('success','User created successfully');
     }
 
     /**
@@ -88,8 +86,9 @@ class UserController extends Controller
     {
         $request->validate([
             'name'=>'required|max:255',
-            'email'=>'required|unique:users,email|email'
+            'email'=>'required'
         ]);
+
         $user->update([
            'name' => $request->name,
            'email' => $request->email,
@@ -112,6 +111,7 @@ class UserController extends Controller
         return redirect()->route('user.index')
             ->with('success', 'user deleted successfully');
     }
+
     public function changeUserStatus(Request $request){
         $user = User::find($request->user_id);
         $user->is_active = $request->status;

@@ -122,7 +122,7 @@ class StudentsController extends Controller
             'upload_student_image' => $upload_student_image,
             'user_id' => $user->id,
         ]);
-        return redirect()->route('student.index', compact('student'))->with('success', 'student created successfully');
+        return redirect()->route('student.index', compact('student'))->with('success', 'Student created successfully');
     }
 
     /**
