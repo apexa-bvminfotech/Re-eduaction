@@ -127,6 +127,6 @@ class RtcController extends Controller
         $rtc = Rtc::find($request->rtc_id);
         $rtc->is_active = $request->status;
         $rtc->save();
-        return response()->json($request);
+        return response()->json($request->status);
     }
 }
