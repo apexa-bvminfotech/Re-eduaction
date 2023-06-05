@@ -97,7 +97,7 @@
                 html += '<button type="button" name="add_point" data-id="' + j + '" data-mid="' + i + '" class="btn btn-primary add-point btn-star p_' + i + '">+</button>'
                 html += '</div>'
                 html += '</div>'
-                html += '<div id="dynamic_point_field_' + j + '"></div>'
+                html += '<div id="dynamic_point_field_' + i + '"></div>'
                 $('.dynamic_field').append(html);
             });
 
