@@ -32,7 +32,7 @@ class StudentsController extends Controller
         $student = Student::orderBy('id', 'desc')->get();
         $role = Role::orderBy('id', 'desc')->get();
         $course = Course::orderBy('id', 'desc')->get();
-        $staff = Staff::orderBy('id')->get();
+        $staff = Staff::orderBy('id')->where('is_active',0)->get();
         return view('student.create', compact('student', 'role', 'course', 'staff'));
     }
 
@@ -147,7 +147,7 @@ class StudentsController extends Controller
     {
         $role = Role::orderBy('id', 'desc')->get();
         $course = Course::orderBy('id', 'desc')->get();
-        $staff = Staff::orderBy('id')->get();
+        $staff = Staff::orderBy('id')->where('is_active',0)->get();
         return view('student.edit', compact('student', 'role', 'course', 'staff'));
     }
 
@@ -200,6 +200,13 @@ class StudentsController extends Controller
         }
         $time = $request->input('school_time_to') . " - " . $request->input('school_time_from');
         $tuition = $request->input('extra_tuition_time_to') . "-" . $request->input('extra_tuition_time_from');
+        $user = User::Create([
+            'name' => $request->name,
+            'email' => $request->email_id,
+            'password' => bcrypt(strtolower($request->name) . '@123'),
+            'type' => 2,
+        ]);
+        $user->assignRole($request->input('role'));
         $student->update([
             'surname' => $request->surname,
             'name' => $request->name,
