@@ -147,6 +147,12 @@
                         <span class="ml-3 item-text">Roles</span>
                     </a>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link pl-3" href="{{ route('user.index') }}">
+                        <i class="fa fa-user-plus"></i>
+                        <span class="ml-3 item-text">Users</span>
+                    </a>
+                </li>
             </ul>
         </nav>
     </aside>

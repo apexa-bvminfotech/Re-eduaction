@@ -31,8 +31,10 @@ Route::group(['middleware'=>['auth']],function (){
     Route::resource('course', 'CourseController');
     Route::resource('point', 'PointController')->only(['destroy']);
     Route::resource('subCourse', 'SubCourseController')->only(['destroy']);
+    Route::resource('user','UserController');
     Route::get('changeRtcStatus', 'RtcController@changeRtcStatus');
     Route::get('changeSloatStatus', 'SloatController@changeSloatStatus');
     Route::get('changeStaffStatus', 'StaffController@changeStaffStatus');
+    Route::get('changeUserStatus','UserController@changeUserStatus');
 });
 
