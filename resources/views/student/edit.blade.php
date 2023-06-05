@@ -43,7 +43,7 @@
                         <div class="col-md-4 mb-1">
                             <div class="form-group mb-3">
                                 <label for="simpleinput">Surname:</label>
-                                <input type="text" id="simpleinput" class="form-control" value="{{$student->surname}}"
+                                <input type="text" id="simpleinput" class="form-control" value="{{ $student->surname }}"
                                        name="surname" placeholder="enter surname" required>
                             </div>
                         </div>
@@ -51,21 +51,21 @@
                             <div class="form-group mb-3">
                                 <label for="simpleinput">Student Name:</label>
                                 <input type="text" id="simpleinput" class="form-control" name="name"
-                                       value="{{$student->name}}" placeholder="enter name" required>
+                                       value="{{ $student->name }}" placeholder="enter name" required>
                             </div>
                         </div>
                         <div class="col-md-4 mb-1">
                             <div class="form-group mb-3">
                                 <label for="simpleinput">Father Name:</label>
                                 <input type="text" id="simpleinput" class="form-control" name="father_name"
-                                       value="{{$student->father_name}}" placeholder="enter father name" required>
+                                       value="{{ $student->father_name }}" placeholder="enter father name" required>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group mb-3">
                                 <label for="address">Address:</label>
                                 <textarea name="address" class="form-control"
-                                          placeholder="enter address">{{$student->address}}</textarea>
+                                          placeholder="enter address">{{ $student->address }}</textarea>
                             </div>
                         </div>
                         <div class="col-md-6 mb-1">
@@ -74,14 +74,14 @@
                                 <br/>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="gender" id="gender_male"
-                                           value="male" {{$student->gender =='male' ?'checked' : ''}} >
+                                           value="male" {{ $student->gender =='male' ?'checked' : '' }} >
                                     <label class="form-check-label" for="gender_male">
                                         Male
                                     </label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="gender" id="gender_female"
-                                           value="female" {{$student->gender =='female' ?'checked' : ''}} >
+                                           value="female" {{ $student->gender =='female' ?'checked' : '' }} >
                                     <label class="form-check-label" for="gender_female">
                                         Female
                                     </label>
@@ -92,7 +92,7 @@
                             <div class="form-group mb-3">
                                 <label for="email">Email ID:</label>
                                 <input type="email" class="form-control" name="email_id" placeholder="enter email"
-                                       value="{{$student->email_id}}" required>
+                                       value="{{ $student->email_id }}" required>
                             </div>
                         </div>
                         <div class="col-md-6 mb-1">
@@ -101,7 +101,7 @@
                                 <input type="text" class="form-control" name="father_contact_no"
                                        placeholder="enter father's no." id="father_contact_no"
                                        onkeypress="return isNumber(event)" minlength="10" maxlength="10"
-                                       value="{{$student->father_contact_no}}">
+                                       value="{{ $student->father_contact_no }}">
                             </div>
                         </div>
                         <div class="col-md-6 mb-1">
@@ -110,13 +110,13 @@
                                 <input type="text" class="form-control" name="mother_contact_no"
                                        placeholder="enter mother's no." id="mother_contact_no"
                                        onkeypress="return isNumber(event)" minlength="10" maxlength="10"
-                                       value="{{$student->mother_contact_no}}">
+                                       value="{{ $student->mother_contact_no }}">
                             </div>
                         </div>
                         <div class="col-md-6 mb-1">
                             <label for="standard">Standard:</label>
                             <input type="number" class="form-control" name="standard" placeholder="enter standard"
-                                   value="{{$student->standard}}">
+                                   value="{{ $student->standard }}">
                         </div>
                         <div class="col-md-6 mb-1">
                             <div class="form-group">
@@ -124,7 +124,7 @@
                                 <br>
                                 <div class="form-check form-check-inline">
                                     <input type="checkbox" value="gujarati"
-                                           {{$student->medium == 'gujarati'?'checked' :''}} name="medium"
+                                           {{ $student->medium == 'gujarati'?'checked' :'' }} name="medium"
                                            class="form-check-input">
                                     <label class="form-check-label" for="medium_gujarati">
                                         Gujarati
@@ -132,7 +132,7 @@
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input type="checkbox" value="hindi"
-                                           {{$student->medium == 'hindi'?'checked' :''}} name="medium"
+                                           {{ $student->medium == 'hindi'?'checked' :'' }} name="medium"
                                            class="form-check-input">
                                     <label class="form-check-label" for="medium_hindi">
                                         Hindi
@@ -140,7 +140,7 @@
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input type="checkbox" value="english"
-                                           {{$student->medium == 'english'?'checked' :''}} name="medium"
+                                           {{ $student->medium == 'english'?'checked' :'' }} name="medium"
                                            class="form-check-input">
                                     <label class="form-check-label" for="medium_english">
                                         English
@@ -151,11 +151,10 @@
                         <div class="col-md-12 mb-2">
                             <label for="school name">School Name:</label>
                             <input type="text" class="form-control" name="school_name" placeholder="enter school name"
-                                   value="{{$student->school_name}}">
+                                   value="{{ $student->school_name }}">
                         </div>
                         @php
                             $seperateSchlTime = explode('-', $student->school_time);
-
                         @endphp
                         <div class="form-group  col-md-6">
                             <label for="inputEmail3" class=" col-form-label">School Time:</label>
@@ -163,15 +162,15 @@
                                 <div class="col-sm-5">
                                     <input type="text" name="school_time_to" class="form-control time-input"
                                            autocomplete="off" placeholder="" aria-describedby="button-addon2"
-                                           value="{{$seperateSchlTime[0]}}">
+                                           value="{{ $seperateSchlTime[0] }}">
                                 </div>
                                 <div class="col-sm-2" style="display: flex;justify-content: space-around;">
                                     <p>to</p>
                                 </div>
                                 <div class="col-sm-5">
-                                    <input type="text" name="school_time_to" class="form-control time-input"
+                                    <input type="text" name="school_time_from" class="form-control time-input"
                                            autocomplete="off" placeholder="" aria-describedby="button-addon2"
-                                           value="{{$seperateSchlTime[1]}}">
+                                           value="{{ $seperateSchlTime[1] }}">
                                 </div>
                             </div>
                         </div>
@@ -182,7 +181,7 @@
                             <label for="inputEmail3" class="col-form-label">Extra Tuition Time:</label>
                             <div class="row">
                                 <div class="col-sm-5">
-                                    <input type="text" name="extra_tuition_time_from" class="form-control time-input"
+                                    <input type="text" name="extra_tuition_time_to" class="form-control time-input"
                                            autocomplete="off" placeholder="" aria-describedby="button-addon2"
                                            value="{{$seperateTuitionTime[0]}}">
                                 </div>

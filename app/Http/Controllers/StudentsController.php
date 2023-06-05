@@ -58,17 +58,6 @@ class StudentsController extends Controller
             'school_name' => 'required|max:255',
             'school_time_to' => 'required',
             'school_time_from' => 'required',
-            'extra_tuition_time_to' => 'required',
-            'extra_tuition_time_from' => 'required',
-            'dob' => 'required',
-            'age' => 'required',
-            'payment_condition' => 'required|max:255',
-            'reference_by' => 'required',
-            'demo_staff_id' => 'required',
-            'fees' => 'required',
-            'extra_note' => 'required',
-            'analysis_staff_id'=>'required|exists:staff,id',
-            'course_id'=>'required|exists:courses,id'
         ]);
 
         $user = User::Create([
@@ -78,12 +67,14 @@ class StudentsController extends Controller
             'type' => 2,
         ]);
         $user->assignRole($request->input('role'));
+
         $upload_student_image = null;
         if ($request->upload_student_image) {
             $filename = $request->name . '_' . date_default_timezone_get() . '.' . $request->upload_student_image->getClientOriginalExtension();
             $request->upload_student_image->move(public_path('assets/student'), $filename);
             $upload_student_image = 'assets/student' . '/' . $filename;
         }
+
         $upload_analysis = null;
         if ($request->upload_analysis) {
             $filename = $request->name . '-' . $request->upload_analysis->getClientOriginalExtension();
@@ -91,9 +82,9 @@ class StudentsController extends Controller
             $upload_analysis = 'assets/student' . '/' . $filename;
         }
         $time = $request->input('school_time_to') . " - " . $request->input('school_time_from');
-
         $tuition = $request->input('extra_tuition_time_to') . "-" . $request->input('extra_tuition_time_from');
         $last_id = Student::latest()->first() ? Student::latest()->first()->value('id') + 1 : 1;
+
         $student = Student::create([
             'form_no' => 'RE/' . $last_id,
             'surname' => $request->surname,
@@ -166,26 +157,16 @@ class StudentsController extends Controller
             'father_name' => 'required|max:255',
             'address' => 'required',
             'gender' => 'required',
-            'email_id' => 'required|email',
-            'father_contact_no' => 'required|numeric',
-            'mother_contact_no' => 'required|numeric',
-            'standard' => 'required|min:1|max:12',
+            'email_id' => 'required|email|unique:users,email',
+            'father_contact_no' => 'required|numeric|digits:10',
+            'mother_contact_no' => 'required|numeric|digits:10',
+            'standard' => 'required|numeric|max:12',
             'medium' => 'required',
             'school_name' => 'required|max:255',
             'school_time_to' => 'required',
             'school_time_from' => 'required',
-            'extra_tuition_time_to' => 'required',
-            'extra_tuition_time_from'=>'required',
-            'dob' => 'required',
-            'age' => 'required',
-            'payment_condition' => 'required|max:255',
-            'reference_by' => 'required',
-            'demo_staff_id' => 'required',
-            'fees' => 'required',
-            'extra_note' => 'required',
-            'analysis_staff_id'=>'required|exists:staff,id',
-            'course_id'=>'required|exists:courses,id'
         ]);
+
         $upload_student_image = $student->upload_student_image;
         if ($request->upload_student_image) {
             $filename = $request->name . '_' . date_default_timezone_get() . '.' . $request->upload_student_image->getClientOriginalExtension();
@@ -200,6 +181,7 @@ class StudentsController extends Controller
         }
         $time = $request->input('school_time_to') . " - " . $request->input('school_time_from');
         $tuition = $request->input('extra_tuition_time_to') . "-" . $request->input('extra_tuition_time_from');
+
         $user = User::Create([
             'name' => $request->name,
             'email' => $request->email_id,
@@ -207,6 +189,7 @@ class StudentsController extends Controller
             'type' => 2,
         ]);
         $user->assignRole($request->input('role'));
+
         $student->update([
             'surname' => $request->surname,
             'name' => $request->name,
