@@ -60,7 +60,9 @@
                                                 @can('staff-edit')
                                                     <a href="{{ route('staff.edit',$s->id) }}" class="btn btn-success" title="Edit"><i class="fe fe-edit"></i></a>
                                                 @endcan
-{{--                                                @can('staff-delete')--}}
+                                                    <a href="{{ route('staff.show',$s->id) }}" class="btn btn-info" title="Show Permission"><i class="fe fe-eye"></i></a>
+
+                                                    {{--                                                @can('staff-delete')--}}
 {{--                                                    {!! Form::open(['method' => 'DELETE','route' => ['staff.destroy', $s->id],'style'=>'display:inline']) !!}--}}
 {{--                                                    <button type="submit" class="btn btn-danger" title="Delete" onclick="return confirm('Are you sure you want to delete?')"><i class="fe fe-trash-2"></i></button>--}}
 {{--                                                    {!! Form::close() !!}--}}
