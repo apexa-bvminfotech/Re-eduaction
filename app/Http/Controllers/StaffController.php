@@ -102,7 +102,9 @@ class StaffController extends Controller
      */
     public function show(Staff $staff)
     {
-        return view('staff.show',compact('staff'));
+        $course_ids = json_decode($staff->course_id);
+        $course =\App\Models\Course::select('course_name')->whereIn('id', $course_ids)->get();
+        return view('staff.show',compact('staff','course'));
     }
 
     /**

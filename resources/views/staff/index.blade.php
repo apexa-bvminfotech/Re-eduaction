@@ -43,8 +43,8 @@
                                             <td>{{ $s->employee_ID }}</td>
                                             <td>{{ $s->staff_name }}</td>
                                             <td>{{ $s->staff_phone }}</td>
-                                            <td>@if($s->staff_I_card) <i class="fe fe-check"></i> @endif</td>
-                                            <td>@if($s->staff_uniform) <i class="fe fe-check"></i> @endif</td>
+                                            <td>@if($s->staff_I_card) <i class="fa fa-check-circle" style="font-size:20px;color:green"></i> @endif</td>
+                                            <td>@if($s->staff_uniform) <i class="fa fa-check-circle" style="font-size:20px;color:green"></i> @endif</td>
                                             <td>{{ $s->staff_address }}</td>
                                             <td>{{ $s->eme_phone }}</td>
                                             <td>
