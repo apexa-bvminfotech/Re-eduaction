@@ -122,9 +122,8 @@ class StudentsController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Student $student)
     {
-        $student = Student::find($id);
         return view('student.show', compact('student'));
     }
 

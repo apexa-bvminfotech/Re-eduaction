@@ -43,7 +43,8 @@
                                             <td>{{$student->standard}}</td>
                                             <td>{{$student->medium}}</td>
                                             <td>
-                                                @can('student-edit')
+                                                <a href="{{ route('student.show',$student->id) }}" class="btn btn-info" title="Show Permission"><i class="fe fe-eye"></i></a>
+                                            @can('student-edit')
                                                     <a href="{{ route('student.edit',$student->id) }}" class="btn btn-success" title="Edit"><i class="fe fe-edit"></i></a>
                                                 @endcan
                                                 @can('student-delete')
