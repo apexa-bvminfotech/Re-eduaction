@@ -16,4 +16,8 @@ class Sloat extends Model
         'rtc_id',
         'is_active'
     ];
+
+    public function rtc(){
+        return $this->belongsTo(Rtc::class);
+    }
 }

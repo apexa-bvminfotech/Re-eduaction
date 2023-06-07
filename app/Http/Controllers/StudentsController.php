@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\Rtc;
 use App\Models\Staff;
 use App\Models\Student;
 use App\Models\User;
+use App\Models\Sloat;
+use App\Models\StudentStaffAssign;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Spatie\Permission\Models\Role;
 
 class StudentsController extends Controller
@@ -18,8 +22,10 @@ class StudentsController extends Controller
      */
     public function index()
     {
+        $sloats = Sloat::orderBy('id', 'desc')->get();
+        $staffs = Staff::orderBy('id', 'desc')->get();
         $students = Student::with('course')->orderBy('id')->paginate(10);
-        return view('student.index', compact('students'))->with('i');
+        return view('student.index', compact('students','staffs','sloats'))->with('i');
     }
 
     /**
@@ -229,5 +235,34 @@ class StudentsController extends Controller
         Student::where('id', $id)->delete();
         return redirect()->route('student.index')
             ->with('success', 'student deleted successfully');
+    }
+
+    public function sloat($id)
+    {
+        $sloats = Sloat::where('staff_id', $id)
+            ->where('is_active', 0)
+            ->with('rtc')
+            ->get();
+        return response()->json(['sloats'=>$sloats]);
+    }
+    public function assignStaff(Request $request)
+    {
+//        dd($request->all());
+        $validatedData = $request->validate([
+            'student_id' => 'required|integer',
+            'staff_id' => 'required|integer',
+            'sloat' => 'required|integer',
+            'type' => 'required|in:proxy,regular',
+        ]);
+
+        $assignStaff = new StudentStaffAssign();
+        $assignStaff->student_id = $validatedData['student_id'];
+        $assignStaff->staff_id = $validatedData['staff_id'];
+        $assignStaff->sloat_id = $validatedData['sloat'];
+        $assignStaff->type = $validatedData['type'];
+        $assignStaff->date = Carbon::now()->toDateString();
+        $assignStaff->save();
+
+        return redirect()->back()->with('success', 'Staff assigned successfully');
     }
 }

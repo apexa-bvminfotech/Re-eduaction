@@ -22,7 +22,11 @@ Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::group(['middleware'=>['auth']],function (){
-    Route::resource('student', 'StudentsController');
+    Route::resource('student', 'StudentsController');;
+    Route::group(['prefix'=>'student'],function (){
+        Route::get('/staff-sloat/{id}','StudentsController@sloat');
+        Route::post('/assign-staff', 'StudentsController@assignStaff')->name('student.assignStaff');
+    });
     Route::resource('roles', 'RoleController');
     Route::resource('staff', 'StaffController');
     Route::resource('rtc', 'RtcController');

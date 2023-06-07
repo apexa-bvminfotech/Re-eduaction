@@ -33,12 +33,12 @@
                                             <input type="text" name="employee_ID" placeholder="Employee ID" value="{{ old('employee_ID') }}" class="form-control" required>
                                         </div>
                                         <div class="form-group mb-3">
-                                            <label for="simpleinput">First Name</label>
-                                            <input type="text" name="first_name" value="{{ old('first_name') }}" placeholder="first Name" class="form-control" required>
+                                            <label for="simpleinput">Surname</label>
+                                            <input type="text" name="first_name" value="{{ old('first_name') }}" placeholder="Surname" class="form-control" required>
                                         </div>
                                         <div class="form-group mb-3">
                                             <label for="simpleinput">Name</label>
-                                            <input type="text" name="staff_name" value="{{ old('staff_name') }}" placeholder="Name" class="form-control" required>
+                                            <input type="text" name="staff_name" value="{{ old('staff_name') }}" placeholder="Enter Name" class="form-control" required>
                                         </div>
                                         <div class="form-group mb-3">
                                             <label for="simpleinput">Father Name</label>
