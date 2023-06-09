@@ -1,4 +1,4 @@
-@extends('layouts.header')
+@extends('layouts.admin')
 @section('content')
 
     <div class="container-fluid">
@@ -9,7 +9,7 @@
                         <a href="{{route('course.create')}}" class="btn btn-primary">Create New Course</a>
                 </div>
                 @if ($message = Session::get('success'))
-                    <div class="alert alert-success">
+                    <div class="alert alert-default-success">
                         <p>{{ $message }}</p>
                     </div>
                 @endif

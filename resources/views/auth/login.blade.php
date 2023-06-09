@@ -1,99 +1,108 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="favicon.ico">
-    <title>Laravel</title>
-    <!-- Simple bar CSS -->
-    <link rel="stylesheet" href="{{asset('css/simplebar.css')}}">
-    <!-- Fonts CSS -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
-    <!-- Icons CSS -->
-    <link rel="stylesheet" href="{{asset('css/feather.css')}}">
-    <!-- Date Range Picker CSS -->
-    <link rel="stylesheet" href="{{asset('css/daterangepicker.css')}}">
-    <!-- App CSS -->
-    <link rel="stylesheet" href="{{asset('css/app-light.css')}}" id="lightTheme">
-    <link rel="stylesheet" href="{{asset('css/app-dark.css')}}" id="darkTheme" disabled>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>laravel</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{asset('assets/plugins/fontawesome-free/css/all.min.css')}}">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="{{asset('assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{asset('assets/css/adminlte.min.css')}}">
+
 </head>
-<body class="light ">
-<div class="wrapper vh-100">
-    <div class="row align-items-center h-100">
-        <form class="col-lg-3 col-md-4 col-10 mx-auto text-center" method="POST" action="{{route('login')}}">
-            @csrf
-            {{--            @method('GET')--}}
-            <a class="navbar-brand mx-auto mt-2 flex-fill text-center" href="">
-                <svg version="1.1" id="logo" class="navbar-brand-img brand-md" xmlns="http://www.w3.org/2000/svg"
-                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 120 120"
-                     xml:space="preserve">
-              <g>
-                  <polygon class="st0" points="78,105 15,105 24,87 87,87 	"/>
-                  <polygon class="st0" points="96,69 33,69 42,51 105,51 	"/>
-                  <polygon class="st0" points="78,33 15,33 24,15 87,15 	"/>
-              </g>
-            </svg>
-            </a>
-            <h1 class="h6 mb-3">Sign in</h1>
-            <div class="form-group">
-                <label for="inputEmail" class="sr-only">{{ __('Email Address') }}</label>
-                <input type="email" id="inputEmail" name="email"
-                       class="form-control form-control-lg  @error('email') is-invalid @enderror"
-                       placeholder="Email address"
-                       value="{{ old('email') }}" required autocomplete="email" autofocus>
-                @error('email')
-                <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                @enderror
-            </div>
-            <div class="form-group">
-                <label for="inputPassword" class="sr-only">{{ __('Password') }}</label>
-                <input type="password" id="inputPassword" name="password"
-                       class="form-control form-control-lg @error('password') is-invalid @enderror"
-                       placeholder="Password"
-                       required autocomplete="current-password">
-                @error('password')
-                <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                @enderror
-            </div>
+<body class="hold-transition login-page">
+<div class="login-box">
+    <!-- /.login-logo -->
+    <div class="card card-outline card-primary">
+        <div class="card-header text-center">
+            <a href="" class="h1"><b>Laravel</b></a>
+        </div>
+        <div class="card-body">
+            <p class="login-box-msg">Sign in to start your session</p>
 
-            <div class="checkbox mb-3">
-                <label>
-                    <input type="checkbox" value="remember-me"> Stay logged in </label>
-            </div>
-            <button class="btn btn-lg btn-primary btn-block" type="submit"> {{ __('Let me in') }}</button>
-            <p class="mt-5 mb-3 text-muted">© 2020</p>
-        </form>
+            <form action="{{route('login')}}" method="post">
+                @csrf
+                {{--                @method('GET')--}}
+                <div class="input-group mb-3">
+                    <label for="inputEmail" class="sr-only">{{ __('Email Address') }}</label>
+                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="inputEmail"
+                           name="email" placeholder="Email" value="{{ old('email') }}" autofocus>
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+                    </div>
+                    @error('email')
+                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                    @enderror
+                </div>
+                <div class="input-group mb-3">
+                    <label for="inputPassword" class="sr-only">{{ __('Password') }}</label>
+                    <input type="password" class="form-control  @error('password') is-invalid @enderror"
+                           id="inputPassword" name="password" placeholder="Password" required
+                           autocomplete="current-password">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                    @error('password')
+                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                    @enderror
+                </div>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="icheck-primary">
+                            <input type="checkbox" id="remember">
+                            <label for="remember">
+                                Remember Me
+                            </label>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-4">
+                        <button type="submit" class="btn btn-primary btn-block">{{ __('Login') }}</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+            <!-- /.social-auth-links -->
+            <p class="mb-1">
+                <a href="{{route('password.request')}}">I forgot my password</a>
+            </p>
+        </div>
+        <!-- /.card-body -->
     </div>
+    <!-- /.card -->
 </div>
-<script src="{{asset('js/jquery.min.js')}}"></script>
-<script src="{{asset('js/popper.min.js')}}"></script>
-<script src="{{asset('js/moment.min.js')}}"></script>
-<script src="{{asset('js/bootstrap.min.js')}}"></script>
-<script src="{{asset('js/simplebar.min.js')}}"></script>
-<script src='{{asset('js/daterangepicker.js')}}'></script>
-<script src='{{asset('js/jquery.stickOnScroll.js')}}'></script>
-<script src="{{asset('js/tinycolor-min.js')}}"></script>
-<script src="{{asset('js/config.js')}}"></script>
-<script src="{{asset('js/apps.js')}}"></script>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-56159088-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
+<!-- /.login-box -->
 
-    function gtag() {
-        dataLayer.push(arguments);
-    }
-
-    gtag('js', new Date());
-    gtag('config', 'UA-56159088-1');
-</script>
+<!-- jQuery -->
+<script src="{{asset('assets/plugins/jquery.min.js')}}"></script>
+<!-- Bootstrap 4 -->
+<script src="{{asset('assets/plugins/js/bootstrap.bundle.min.js')}}"></script>
+<!-- AdminLTE App -->
+<script src="{{asset('assets/plugins/adminlte.min.js')}}"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+

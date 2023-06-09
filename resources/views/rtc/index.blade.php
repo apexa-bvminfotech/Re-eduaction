@@ -1,4 +1,4 @@
-@extends('layouts.header')
+@extends('layouts.admin')
 @section('content')
 
     <div class="container-fluid">
@@ -50,7 +50,7 @@
                                             </td>
                                             <td>
                                                 @can('rtc-edit')
-                                                    <a href="{{ route('rtc.edit',$r->id) }}" class="btn btn-success" title="Edit"><i class="fe fe-edit"></i></a>
+                                                    <a href="{{ route('rtc.edit',$r->id) }}" class="btn btn-success" title="Edit"><i class="fa fa-edit"></i></a>
                                                 @endcan
 {{--                                                @can('rtc-delete')--}}
 {{--                                                    {!! Form::open(['method' => 'DELETE','route' => ['rtc.destroy', $r->id],'style'=>'display:inline']) !!}--}}

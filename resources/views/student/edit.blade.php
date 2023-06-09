@@ -1,4 +1,4 @@
-@extends('layouts.header')
+@extends('layouts.admin')
 @section('content')
     {!! Form::model($student, ['method' => 'PATCH','enctype'=>'multipart/form-data','route' => ['student.update', $student->id]]) !!}
     <div class="card shadow mb-1">

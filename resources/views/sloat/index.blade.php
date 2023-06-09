@@ -1,4 +1,4 @@
-@extends('layouts.header')
+@extends('layouts.admin')
 @section('content')
 
     <div class="container-fluid">
@@ -11,7 +11,7 @@
                     @endcan
                 </div>
                 @if ($message = Session::get('success'))
-                    <div class="alert alert-success">
+                    <div class="alert alert-default-success">
                         <p>{{ $message }}</p>
                     </div>
                 @endif
@@ -50,7 +50,7 @@
                                             </td>
                                             <td>
                                                 @can('sloat-edit')
-                                                    <a href="{{ route('sloat.edit',$s->id) }}" class="btn btn-success" title="Edit"><i class="fe fe-edit"></i></a>
+                                                    <a href="{{ route('sloat.edit',$s->id) }}" class="btn btn-success" title="Edit"><i class="fa fa-edit"></i></a>
                                                 @endcan
 {{--                                                @can('sloat-delete')--}}
 {{--                                                    {!! Form::open(['method' => 'DELETE','route' => ['sloat.destroy', $s->id],'style'=>'display:inline']) !!}--}}

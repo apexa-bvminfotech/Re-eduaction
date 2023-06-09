@@ -1,4 +1,4 @@
-@extends('layouts.header')
+@extends('layouts.admin')
 @section('content')
 
     <div class="container-fluid">
@@ -7,7 +7,7 @@
                 <div class="buttonAlign">
                     <h2 class="mb-2 page-title">Create New Course</h2>
                     <a href="{{ route('course.index') }}" class="btn btn-primary">Back</a>
-                </div>
+                </div><br>
                 @if (count($errors) > 0)
                     <div class="alert alert-danger">
                         <strong>Whoops!</strong> There were some problems with your input.<br><br>

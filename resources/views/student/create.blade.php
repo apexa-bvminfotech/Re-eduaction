@@ -1,4 +1,4 @@
-@extends('layouts.header')
+@extends('layouts.admin')
 @section('content')
     {!! Form::open(array('route' => 'student.store','method'=>'POST','enctype'=>'multipart/form-data')) !!}
     <div class="card shadow mb-1">

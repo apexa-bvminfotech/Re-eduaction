@@ -1,4 +1,4 @@
-@extends('layouts.header')
+@extends('layouts.admin')
 @section('content')
     <style>
         tr {
@@ -18,6 +18,7 @@
         <div class="row justify-content-center">
             <div class="col-12 col-lg-10 col-xl-8">
                 <h2 class="h3 mb-4 page-title">Show Student </h2>
+                <a href="{{ route('student.index') }}" class="btn btn-primary">Back</a>
                 <div class="my-4">
                     <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
                         <li class="nav-item">

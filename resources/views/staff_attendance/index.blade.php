@@ -1,4 +1,4 @@
-@extends('layouts.header')
+@extends('layouts.admin')
 @section('content')
 
     <div class="container-fluid">
@@ -40,11 +40,11 @@
                                             <td>{{ $s->absent }}</td>
                                             <td>
                                                 @can('staff-attendance-edit')
-                                                    <a href="{{ route('staff_attendance.edit',$s->date) }}" class="btn btn-success" title="Edit"><i class="fe fe-edit"></i></a>
+                                                    <a href="{{ route('staff_attendance.edit',$s->date) }}" class="btn btn-success" title="Edit"><i class="fa fa-edit"></i></a>
                                                 @endcan
                                                 @can('staff-attendance-delete')
                                                     {!! Form::open(['method' => 'DELETE','route' => ['staff_attendance.destroy', $s->date],'style'=>'display:inline']) !!}
-                                                    <button type="submit" class="btn btn-danger" title="Delete" onclick="return confirm('Are you sure you want to delete?')"><i class="fe fe-trash-2"></i></button>
+                                                    <button type="submit" class="btn btn-danger" title="Delete" onclick="return confirm('Are you sure you want to delete?')"><i class="fa fa-trash"></i></button>
                                                     {!! Form::close() !!}
                                                 @endcan
                                             </td>

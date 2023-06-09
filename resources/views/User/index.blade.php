@@ -1,4 +1,4 @@
-@extends('layouts.header')
+@extends('layouts.admin')
 @section('content')
 
     <div class="container-fluid">
@@ -49,7 +49,7 @@
                                             </td>
                                             <td>
                                                 <a href="{{route('user.edit',$u->id)}}" class="btn btn-success"
-                                                   title="Edit"><i class="fe fe-edit"></i></a>
+                                                   title="Edit"><i class="fa fa-edit"></i></a>
 {{--                                                {!! Form::open(['method' => 'DELETE','route' => ['user.destroy', $u->id],'style'=>'display:inline']) !!}--}}
 {{--                                                <button type="submit" class="btn btn-danger" title="Delete"--}}
 {{--                                                        onclick="return confirm('Are you sure you want to delete?')"><i--}}

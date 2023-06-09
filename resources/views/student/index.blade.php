@@ -1,4 +1,4 @@
-@extends('layouts.header')
+@extends('layouts.admin')
 @section('content')
 
     <div class="container-fluid">
@@ -11,7 +11,7 @@
                     @endcan
                 </div>
                 @if ($message = Session::get('success'))
-                    <div class="alert alert-success">
+                    <div class="alert alert-default-success">
                         <p>{{ $message }}</p>
                     </div>
                 @endif
@@ -46,14 +46,15 @@
                                                 <div class="flex justify-between">
                                                     @can('student-edit')
                                                         <a href="{{ route('student.edit',$student->id) }}"
-                                                           class="btn btn-success" title="Edit"><i
-                                                                    class="fe fe-edit"></i></a>
+                                                           class="btn btn-success" title="Edit">
+                                                                    <i class="fa fa-edit"></i>
+                                                        </a>
                                                     @endcan
                                                     @can('student-delete')
                                                         {!! Form::open(['method' => 'DELETE','route' => ['student.destroy', $student->id],'style'=>'display:inline']) !!}
                                                         <button type="submit" class="btn btn-danger" title="Delete"
                                                                 onclick="return confirm('Are you sure you want to delete?')">
-                                                            <i class="fe fe-trash-2"></i></button>
+                                                            <i class="fa fa-trash"></i></button>
                                                         {!! Form::close() !!}
                                                     @endcan
                                                     <button type="button"
