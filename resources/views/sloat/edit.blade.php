@@ -50,13 +50,29 @@
                                     $seprateTime = explode('-', $sloat->sloat_time);
                                 @endphp
                                 <div class="col-sm-4">
-                                    <input type="text" name="sloat_time_to" value="{{ $seprateTime[0] }}" class="form-control time-input" placeholder="" aria-describedby="button-addon2" required>
+                                    <div class="input-group date" id="timepicker" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input"
+                                               name="sloat_time_to" value="{{ $seprateTime[0] }}"
+                                               aria-describedby="button-addon2" data-target="#timepicker"/>
+                                        <div class="input-group-append" data-target="#timepicker"
+                                             data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-sm-1" style="display: flex;justify-content: space-around;">
                                     <p>to</p>
                                 </div>
                                 <div class="col-sm-4">
-                                    <input type="text" name="sloat_time_from" value="{{ $seprateTime[1] }}" class="form-control time-input" placeholder="" aria-describedby="button-addon2" required>
+                                    <div class="input-group date" id="timepicker1" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input"
+                                               name="sloat_time_from" value="{{ $seprateTime[1] }}"
+                                               aria-describedby="button-addon2" data-target="#timepicker1"/>
+                                        <div class="input-group-append" data-target="#timepicker1"
+                                             data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group mb-2 buttonEnd">
@@ -73,3 +89,16 @@
 
 
 @endsection
+@push('scripts')
+    <script>
+        $(document).ready(function () {
+            //Timepicker
+            $('#timepicker').datetimepicker({
+                format: 'LT'
+            })
+            $('#timepicker1').datetimepicker({
+                format: 'LT'
+            })
+        })
+    </script>
+@endpush

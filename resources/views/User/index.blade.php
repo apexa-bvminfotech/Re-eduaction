@@ -1,6 +1,5 @@
 @extends('layouts.admin')
 @section('content')
-
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
@@ -21,7 +20,7 @@
                         <div class="card shadow">
                             <div class="card-body">
                                 <!-- table -->
-                                <table class="table datatables" id="dataTable-1">
+                                <table class="table table-bordered table-striped" id="dataTable-1">
                                     <thead>
                                     <tr>
                                         <th>No</th>
@@ -65,9 +64,10 @@
                     </div> <!-- simple table -->
                 </div> <!-- end section -->
             </div> <!-- .col-12 -->
-        </div> <!-- .row -->
+        </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+@endsection
+@push('scripts')
     <script>
         $(function () {
             $('.checkStatus').change(function () {
@@ -80,17 +80,27 @@
                     data: {'status': status, 'user_id': user_id},
                     success: function (data) {
                         if (data == 0) {
-                            $('.changeStatus'+user_id).removeClass('badge-danger');
-                            $('.changeStatus'+user_id).addClass('badge-success');
-                            $('.changeStatus'+user_id).html('Active');
+                            $('.changeStatus' + user_id).removeClass('badge-danger');
+                            $('.changeStatus' + user_id).addClass('badge-success');
+                            $('.changeStatus' + user_id).html('Active');
                         } else {
-                            $('.changeStatus'+user_id).removeClass('badge-success');
-                            $('.changeStatus'+user_id).addClass('badge-danger');
-                            $('.changeStatus'+user_id).html('Deactive');
+                            $('.changeStatus' + user_id).removeClass('badge-success');
+                            $('.changeStatus' + user_id).addClass('badge-danger');
+                            $('.changeStatus' + user_id).html('Deactive');
                         }
                     }
                 });
             })
         })
+            $('#dataTable-1').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+            });
+
     </script>
-@endsection
+@endpush

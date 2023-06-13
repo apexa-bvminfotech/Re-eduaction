@@ -24,7 +24,7 @@ class StudentsController extends Controller
     {
         $sloats = Sloat::orderBy('id', 'desc')->get();
         $staffs = Staff::orderBy('id', 'desc')->get();
-        $students = Student::with('course')->orderBy('id')->paginate(10);
+        $students = Student::with('course')->orderBy('id')->get();
         return view('student.index', compact('students','staffs','sloats'))->with('i');
     }
 

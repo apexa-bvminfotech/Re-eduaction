@@ -32,7 +32,7 @@ class SloatController extends Controller
         $sloat = Sloat::select('sloat.*','staff.staff_name','rtc.rtc_name')
             ->join('staff', 'staff.id', 'sloat.staff_id')
             ->join('rtc', 'rtc.id', 'sloat.rtc_id')
-            ->orderBy('sloat.id','DESC')->paginate(10);
+            ->orderBy('sloat.id','DESC')->get();
         return view('sloat.index',compact('sloat'))->with('i');
     }
 

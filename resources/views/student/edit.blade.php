@@ -160,17 +160,29 @@
                             <label for="inputEmail3" class=" col-form-label">School Time:</label>
                             <div class="row">
                                 <div class="col-sm-5">
-                                    <input type="text" name="school_time_to" class="form-control time-input"
-                                           autocomplete="off" placeholder="" aria-describedby="button-addon2"
-                                           value="{{ $seperateSchlTime[0] }}">
+                                    <div class="input-group date" id="timepicker" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input"
+                                               name="school_time_to" value="{{ $seperateSchlTime[0] }}"
+                                               aria-describedby="button-addon2" data-target="#timepicker"/>
+                                        <div class="input-group-append" data-target="#timepicker"
+                                             data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-sm-2" style="display: flex;justify-content: space-around;">
                                     <p>to</p>
                                 </div>
                                 <div class="col-sm-5">
-                                    <input type="text" name="school_time_from" class="form-control time-input"
-                                           autocomplete="off" placeholder="" aria-describedby="button-addon2"
-                                           value="{{ $seperateSchlTime[1] }}">
+                                    <div class="input-group date" id="timepicker1" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input"
+                                               name="school_time_from" value="{{ $seperateSchlTime[1] }}"
+                                               aria-describedby="button-addon2" data-target="#timepicker1"/>
+                                        <div class="input-group-append" data-target="#timepicker1"
+                                             data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -181,17 +193,29 @@
                             <label for="inputEmail3" class="col-form-label">Extra Tuition Time:</label>
                             <div class="row">
                                 <div class="col-sm-5">
-                                    <input type="text" name="extra_tuition_time_to" class="form-control time-input"
-                                           autocomplete="off" placeholder="" aria-describedby="button-addon2"
-                                           value="{{$seperateTuitionTime[0]}}">
+                                    <div class="input-group date" id="timepicker2" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input"
+                                               name="extra_tuition_time_to" value="{{$seperateTuitionTime[0]}}"
+                                               aria-describedby="button-addon2" data-target="#timepicker2"/>
+                                        <div class="input-group-append" data-target="#timepicker2"
+                                             data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-sm-2 mt-2" style="display: flex;justify-content: space-around;">
                                     <p>to</p>
                                 </div>
                                 <div class="col-sm-5">
-                                    <input type="text" name="extra_tuition_time_from" class="form-control time-input"
-                                           autocomplete="off" placeholder="" aria-describedby="button-addon2"
-                                           value="{{$seperateTuitionTime[1]}}">
+                                    <div class="input-group date" id="timepicker3" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input"
+                                               name="extra_tuition_time_from" value="{{$seperateTuitionTime[1]}}"
+                                               aria-describedby="button-addon2" data-target="#timepicker3"/>
+                                        <div class="input-group-append" data-target="#timepicker3"
+                                             data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -325,5 +349,20 @@
             }
             return true;
         }
+        $(document).ready(function () {
+            //Timepicker
+            $('#timepicker').datetimepicker({
+                format: 'LT'
+            })
+            $('#timepicker1').datetimepicker({
+                format: 'LT'
+            })
+            $('#timepicker2').datetimepicker({
+                format: 'LT'
+            })
+            $('#timepicker3').datetimepicker({
+                format: 'LT'
+            })
+        })
     </script>
 @endsection

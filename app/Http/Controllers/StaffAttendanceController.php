@@ -33,7 +33,7 @@ class StaffAttendanceController extends Controller
             ->select('staff_attendance.date',DB::raw('count(IF(attendance = 0, 1, NULL)) as present'),
                 DB::raw('count(IF(attendance = 1, 1, NULL)) as absent'))
             ->groupBy('staff_attendance.date')
-            ->orderBy('staff_attendance.id','DESC')->paginate(10);
+            ->orderBy('staff_attendance.id','DESC')->get();
 
         return view('staff_attendance.index',compact('staffAttendance'))->with('i');
     }
