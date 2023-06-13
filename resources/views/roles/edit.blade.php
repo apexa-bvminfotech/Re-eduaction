@@ -52,9 +52,7 @@
                         </div>
                     </div>
                 </div>
-            </div> <!-- .col-12 -->
-        </div> <!-- .row -->
-    </div> <!-- .container-fluid -->
-
-
+            </div>
+        </div>
+    </div>
 @endsection

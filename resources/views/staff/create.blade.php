@@ -53,7 +53,7 @@
                                             <input type="text" name="eme_phone" value="{{ old('eme_phone') }}" placeholder="Emergency Phone" class="form-control" required>
                                         </div>
 
-                                    </div> <!-- /.col -->
+                                    </div>
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
                                             <label for="example-email">Email</label>
@@ -121,6 +121,5 @@
             </div> <!-- .col-12 -->
         </div> <!-- .row -->
     </div> <!-- .container-fluid -->
-
 
 @endsection

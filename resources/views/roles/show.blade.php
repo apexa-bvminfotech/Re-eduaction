@@ -10,7 +10,6 @@
                 </div>
 
                 <div class="row my-4">
-                    <!-- Small table -->
                     <div class="col-md-12">
                         <div class="card shadow">
                             <div class="card-body">
@@ -33,11 +32,10 @@
                                 </div>
                             </div>
                         </div>
-                    </div> <!-- simple table -->
-                </div> <!-- end section -->
-            </div> <!-- .col-12 -->
-        </div> <!-- .row -->
-    </div> <!-- .container-fluid -->
-
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 @endsection

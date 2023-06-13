@@ -105,10 +105,10 @@
                                 </select>
                             </div>
                             <div class="col-md-12 mb-1">
-                                <div class="form-group">
+                                <div class="form-group" >
                                     <label for="gender">lecture Type:</label>
                                     <br/>
-                                    <div class="form-check form-check-inline">
+                                    <div class="form-check form-check-inline" >
                                         <input class="form-check-input" type="radio" name="type" id="type_proxy"
                                                value="proxy" required>
                                         <label class="form-check-label" for="type_proxy">
@@ -133,7 +133,7 @@
                 </div>
             </div>
         </form>
-    </div> <!-- .container-fluid -->
+    </div>
 
 @endsection
 @push('scripts')
@@ -170,8 +170,6 @@
             $(document).on('click', '.btn-primary', function () {
                 $('#assignStaffForm').submit();
             });
-
         })
-
     </script>
 @endpush

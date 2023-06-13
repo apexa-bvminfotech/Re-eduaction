@@ -13,8 +13,6 @@
         border-top: 0;
     }
 
-
-
 </style>
     <div class="container-fluid">
         <div class="row justify-content-center">

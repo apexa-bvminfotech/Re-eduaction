@@ -16,11 +16,9 @@
                     </div>
                 @endif
                 <div class="row my-4">
-                    <!-- Small table -->
                     <div class="col-md-12">
                         <div class="card shadow">
                             <div class="card-body">
-                                <!-- table -->
                                 <table class="table datatables" id="dataTable-1">
                                     <thead>
                                     <tr>
