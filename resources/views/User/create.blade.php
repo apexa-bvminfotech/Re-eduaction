@@ -4,10 +4,7 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
-                <div class="buttonAlign">
-                    <h2 class="mb-2 page-title">Create New User</h2>
-                    <a href="{{ route('user.index') }}" class="btn btn-primary">Back</a>
-                </div>
+
                 @if (count($errors) > 0)
                     <div class="alert alert-danger">
                         <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -22,7 +19,10 @@
                     <div class="card-deck col-6">
                         <div class="card shadow mb-4">
                             <div class="card-header">
-                                <strong class="card-title">Form controls</strong>
+                                <div class="buttonAlign d-flex justify-content-between">
+                                    <h2 class="mb-0 page-title">Create New User</h2>
+                                    <a href="{{ route('user.index') }}" class="btn btn-primary">Back</a>
+                                </div>
                             </div>
                             <div class="card-body">
                                 {!! Form::open(array('route' => 'user.store','method'=>'POST')) !!}
@@ -47,10 +47,12 @@
                                             </select>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="form-group mb-2 buttonEnd">
-                                    <button type="submit" class="btn btn-primary mr-2">Create</button>
-                                    <a href="{{ route('user.index') }}" class="btn btn-danger">Cancel</a>
+                                </div><br>
+                                <div class="form-group mb-2  float-right">
+                                    <div class="d-flex justify-content-between">
+                                        <button type="submit" class="btn btn-success mr-2">Create</button>
+                                        <a href="{{ route('user.index') }}" class="btn btn-danger">Cancel</a>
+                                    </div>
                                 </div>
                                 {!! Form::close() !!}
                             </div>
@@ -60,6 +62,5 @@
             </div> <!-- .col-12 -->
         </div> <!-- .row -->
     </div> <!-- .container-fluid -->
-
 
 @endsection

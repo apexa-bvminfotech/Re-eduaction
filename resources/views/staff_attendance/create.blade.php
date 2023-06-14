@@ -4,10 +4,7 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
-                <div class="buttonAlign">
-                    <h2 class="mb-2 page-title">Staff Attendance</h2>
-                    <a href="{{ route('staff_attendance.index') }}" class="btn btn-primary">Back</a>
-                </div>
+
                 @if (count($errors) > 0)
                     <div class="alert alert-danger">
                         <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -21,7 +18,12 @@
                 <div class="row">
                     <div class="card-deck col-12">
                         <div class="card shadow mb-4">
-
+                            <div class="card-header">
+                                <div class="buttonAlign d-flex justify-content-between">
+                                    <h3 class="mb-1 page-title">Staff Attendance</h3>
+                                    <a href="{{ route('staff_attendance.index') }}" class="btn btn-primary float-right">Back</a>
+                                </div>
+                            </div>
                             <div class="card-body">
                                 {!! Form::open(array('route' => 'staff_attendance.store','method'=>'POST')) !!}
                                 <div class="col-md-12">
@@ -63,7 +65,7 @@
                                         </div>
                                     @endforeach
                                 </div>
-                                <div class="form-group mb-2 buttonEnd">
+                                <div class="form-group mb-2 float-right">
                                     <button type="submit" class="btn btn-primary mr-2">Create</button>
                                     <a href="{{ route('staff_attendance.index') }}" class="btn btn-danger">Cancel</a>
                                 </div>

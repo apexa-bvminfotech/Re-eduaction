@@ -4,10 +4,6 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
-                <div class="buttonAlign">
-                    <h2 class="mb-2 page-title">Create New RTC</h2>
-                    <a href="{{ route('rtc.index') }}" class="btn btn-primary">Back</a>
-                </div>
                 @if (count($errors) > 0)
                     <div class="alert alert-danger">
                         <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -20,6 +16,12 @@
                 @endif
                 <div class="card-deck col-6">
                     <div class="card shadow mb-4">
+                        <div class="card-header">
+                            <div class="buttonAlign d-flex justify-content-between">
+                                <h2 class="mb-0 page-title">Create New RTC</h2>
+                                <a href="{{ route('rtc.index') }}" class="btn btn-primary">Back</a>
+                            </div>
+                        </div>
                         <div class="card-body">
                             {!! Form::open(array('route' => 'rtc.store','method'=>'POST')) !!}
                             <div class="form-group row">
@@ -40,7 +42,7 @@
                                     <textarea class="form-control" name="address" placeholder="RTC Address" rows="2"></textarea>
                                 </div>
                             </div>
-                            <div class="form-group mb-2 buttonEnd">
+                            <div class="form-group mt-3 mb-2 float-right">
                                 <button type="submit" class="btn btn-primary mr-2">Create</button>
                                 <a href="{{ route('rtc.index') }}" class="btn btn-danger">Cancel</a>
                             </div>

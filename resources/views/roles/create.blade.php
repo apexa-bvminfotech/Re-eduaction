@@ -27,7 +27,7 @@
                                 <div class="card-body">
                                     {!! Form::open(array('route' => 'roles.store','method'=>'POST')) !!}
                                     <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-2">Role Name :</label>
+                                        <label for="inputEmail3">Role Name :</label>
 
                                             {!! Form::text('name', null, array('placeholder' => 'Enter Role Name','class' => 'form-control')) !!}
 
@@ -49,7 +49,7 @@
                             </div>
                             <!-- /.card-body -->
 
-                            <div class="card-footer">
+                            <div class="card-fuchsia">
                                 <button type="submit" class="btn btn-primary float-right">Submit</button>
                             </div>
                         </form>

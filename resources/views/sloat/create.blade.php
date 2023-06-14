@@ -4,10 +4,10 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
-                <div class="buttonAlign">
-                    <h2 class="mb-2 page-title">Create New Sloat</h2>
-                    <a href="{{ route('sloat.index') }}" class="btn btn-primary">Back</a>
-                </div>
+{{--                <div class="buttonAlign">--}}
+{{--                    <h2 class="mb-2 page-title">Create New Sloat</h2>--}}
+{{--                    <a href="{{ route('sloat.index') }}" class="btn btn-primary">Back</a>--}}
+{{--                </div>--}}
                 @if (count($errors) > 0)
                     <div class="alert alert-danger">
                         <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -20,6 +20,12 @@
                 @endif
                 <div class="card-deck col-6">
                     <div class="card shadow mb-4">
+                        <div class="card-header">
+                            <div class="buttonAlign d-flex justify-content-between">
+                                <h2 class="mb-0 page-title">Create New Sloat</h2>
+                                <a href="{{ route('sloat.index') }}" class="btn btn-primary">Back</a>
+                            </div>
+                        </div>
                         <div class="card-body">
                             {!! Form::open(array('route' => 'sloat.store','method'=>'POST')) !!}
                             <div class="form-group row">
@@ -56,7 +62,7 @@
                                     <input type="text" name="sloat_time_from" class="form-control time-input" autocomplete="off" placeholder="" aria-describedby="button-addon2" required>
                                 </div>
                             </div>
-                            <div class="form-group mb-2 buttonEnd">
+                            <div class="form-group mt-2 mb-2 float-right">
                                 <button type="submit" class="btn btn-primary mr-2">Create</button>
                                 <a href="{{ route('sloat.index') }}" class="btn btn-danger">Cancel</a>
                             </div>

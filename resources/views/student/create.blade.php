@@ -283,11 +283,12 @@
                             <textarea name="extra_note" class="form-control">{{ old('extra_note') }}</textarea>
                         </div>
                     </div>
+                    <div class="form-group mt-3 mb-2 buttonEnd float-right">
+                        <button type="submit" class="btn btn-primary mr-2" name="submit">Create</button>
+                        <a href="{{ route('student.index') }}" class="btn btn-danger">Cancel</a>
+                    </div>
                 </div>
-                <div class="form-group mb-2 buttonEnd">
-                    <button type="submit" class="btn btn-primary mr-2" name="submit">Create</button>
-                    <a href="{{ route('student.index') }}" class="btn btn-danger">Cancel</a>
-                </div>
+
             </div>
         </div>
     </div>
