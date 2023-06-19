@@ -36,6 +36,7 @@ Route::group(['middleware'=>['auth']],function (){
     Route::resource('point', 'PointController')->only(['destroy']);
     Route::resource('subCourse', 'SubCourseController')->only(['destroy']);
     Route::resource('user','UserController');
+    Route::post('user-create','UserController@userCreate')->name('user.userCreate');
     Route::get('changeRtcStatus', 'RtcController@changeRtcStatus');
     Route::get('changeSloatStatus', 'SloatController@changeSloatStatus');
     Route::get('changeStaffStatus', 'StaffController@changeStaffStatus');

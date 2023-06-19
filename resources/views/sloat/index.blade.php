@@ -19,6 +19,8 @@
                     <div class="col-md-12">
                         <div class="card shadow">
                             <div class="card-body">
+                                <!-- table -->
+                                <table class="table table-bordered table-striped" id="dataTable-1">
                                 <table class="table datatables" id="dataTable-1">
                                     <thead>
                                     <tr>
@@ -93,6 +95,15 @@
                     }
                 });
             })
+            $('#dataTable-1').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+            });
         })
     </script>
 @endpush

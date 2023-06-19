@@ -126,19 +126,22 @@
                                 <label for="medium">Medium:</label>
                                 <br>
                                 <div class="form-check form-check-inline">
-                                    <input type="checkbox" value="gujarati" name="medium" class="form-check-input" {{ old("medium") == 'gujarati' ? 'checked' : '' }}>
+                                    <input type="checkbox" value="gujarati" name="medium"
+                                           class="form-check-input" {{ old("medium") == 'gujarati' ? 'checked' : '' }}>
                                     <label class="form-check-label" for="medium_gujarati">
                                         Gujarati
                                     </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input type="checkbox" value="hindi" name="medium" class="form-check-input" {{ old("medium") == 'hindi' ? 'checked' : '' }}>
+                                    <input type="checkbox" value="hindi" name="medium"
+                                           class="form-check-input" {{ old("medium") == 'hindi' ? 'checked' : '' }}>
                                     <label class="form-check-label" for="medium_hindi">
                                         Hindi
                                     </label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input type="checkbox" value="english" name="medium" class="form-check-input" {{ old("medium") == 'english' ? 'checked' : '' }}>
+                                    <input type="checkbox" value="english" name="medium"
+                                           class="form-check-input" {{ old("medium") == 'english' ? 'checked' : '' }}>
                                     <label class="form-check-label" for="medium_english">
                                         English
                                     </label>
@@ -154,15 +157,29 @@
                             <label for="inputEmail3" class=" col-form-label">School Time:</label>
                             <div class="row">
                                 <div class="col-sm-5">
-                                    <input type="text" name="school_time_to" class="form-control time-input"
-                                           autocomplete="off" placeholder="" aria-describedby="button-addon2" value="{{ old('school_time_to') }}" required>
+                                    <div class="input-group date" id="timepicker" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input"
+                                               name="school_time_to" value="{{ old('school_time_to') }}"
+                                               aria-describedby="button-addon2" data-target="#timepicker"/>
+                                        <div class="input-group-append" data-target="#timepicker"
+                                             data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-sm-2" style="display: flex;justify-content: space-around;">
                                     <p>to</p>
                                 </div>
                                 <div class="col-sm-5">
-                                    <input type="text" name="school_time_from" class="form-control time-input"
-                                           autocomplete="off" placeholder="" aria-describedby="button-addon2" value="{{ old('school_time_from') }}" required>
+                                    <div class="input-group date" id="timepicker1" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input"
+                                               name="school_time_from" value="{{ old('school_time_from') }}"
+                                               aria-describedby="button-addon2" data-target="#timepicker1"/>
+                                        <div class="input-group-append" data-target="#timepicker1"
+                                             data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -170,19 +187,32 @@
                             <label for="inputEmail3" class="col-form-label">Extra Tuition Time:</label>
                             <div class="row">
                                 <div class="col-sm-5">
-                                    <input type="text" name="extra_tuition_time_to" class="form-control time-input"
-                                           autocomplete="off" placeholder="" aria-describedby="button-addon2" value="{{ old('extra_tuition_time_to') }}">
+                                    <div class="input-group date" id="timepicker2" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input"
+                                               name="extra_tuition_time_to" value="{{ old('extra_tuition_time_to') }}"
+                                               aria-describedby="button-addon2" data-target="#timepicker2"/>
+                                        <div class="input-group-append" data-target="#timepicker2"
+                                             data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-sm-2 mt-2" style="display: flex;justify-content: space-around;">
                                     <p>to</p>
                                 </div>
                                 <div class="col-sm-5">
-                                    <input type="text" name="extra_tuition_time_from" class="form-control time-input"
-                                           autocomplete="off" placeholder="" aria-describedby="button-addon2" value="{{ old('extra_tuition_time_from') }}">
+                                    <div class="input-group date" id="timepicker3" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input"
+                                               name="extra_tuition_time_from" value="{{ old('extra_tuition_time_from') }}"
+                                               aria-describedby="button-addon2" data-target="#timepicker3"/>
+                                        <div class="input-group-append" data-target="#timepicker3"
+                                             data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-md-6 mb-2">
                             <label for="dob">Date Of Birth:</label>
                             <input type="date" class="form-control" name="dob" placeholder="enter birthdate"
@@ -267,12 +297,14 @@
                             <br>
                             <div class="form-check form-check-inline">
                                 <input type="checkbox" value="paid" name="fees" class="form-check-input">
-                                <label class="form-check-label" for="medium_hindi" {{ old("fees") == 'paid' ? 'checked' : '' }}>
+                                <label class="form-check-label"
+                                       for="medium_hindi" {{ old("fees") == 'paid' ? 'checked' : '' }}>
                                     Paid
                                 </label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input type="checkbox" value="unpaid" name="fees" class="form-check-input" {{ old("fees") == 'unpaid' ? 'checked' : '' }}>
+                                <input type="checkbox" value="unpaid" name="fees"
+                                       class="form-check-input" {{ old("fees") == 'unpaid' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="medium_hindi">
                                     Unpaid
                                 </label>
@@ -293,6 +325,9 @@
         </div>
     </div>
     {!! Form::close() !!}
+
+@endsection
+@push('scripts')
     <script>
         var loadFile = function (event) {
             var image = document.getElementById("profilePic");
@@ -314,5 +349,22 @@
                 alert("enter age between 1 to 20")
             }
         }
+
+        $(document).ready(function () {
+            //Timepicker
+            $('#timepicker').datetimepicker({
+                format: 'LT'
+            })
+            $('#timepicker1').datetimepicker({
+                format: 'LT'
+            })
+            $('#timepicker2').datetimepicker({
+                format: 'LT'
+            })
+            $('#timepicker3').datetimepicker({
+                format: 'LT'
+            })
+        })
+
     </script>
-@endsection
+@endpush

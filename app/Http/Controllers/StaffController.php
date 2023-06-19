@@ -30,7 +30,7 @@ class StaffController extends Controller
      */
     public function index()
     {
-        $staff = Staff::orderBy('id','DESC')->paginate(10);
+        $staff = Staff::orderBy('id','DESC')->get();
         return view('staff.index',compact('staff'))->with('i');
     }
 

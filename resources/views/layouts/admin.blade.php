@@ -40,6 +40,12 @@
 
 <script src="{{asset('assets/plugins/jquery/jquery.min.js')}}"></script>
 <script src="{{asset('assets/plugins/jquery-ui/jquery-ui.min.js')}}"></script>
+<!-- DataTables -->
+<script src="{{asset('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{asset('assets/plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{asset('assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
     $.widget.bridge('uibutton', $.ui.button)
 </script>
@@ -53,6 +59,8 @@
 <script src="{{asset('assets/plugins/jqvmap/jquery.vmap.min.js')}}"></script>
 <script src="{{asset('assets/plugins/jqvmap/maps/jquery.vmap.usa.js')}}"></script>
 <script src="{{asset('assets/plugins/jquery-knob/jquery.knob.min.js')}}"></script>
+
+<!-- daterangepicker -->
 <script src="{{asset('assets/plugins/moment/moment.min.js')}}"></script>
 <script src="{{asset('assets/plugins/daterangepicker/daterangepicker.js')}}"></script>
 <script src="{{asset('assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js')}}"></script>

@@ -28,7 +28,7 @@ class RtcController extends Controller
      */
     public function index()
     {
-        $rtc = Rtc::orderBy('id','DESC')->paginate(10);
+        $rtc = Rtc::orderBy('id','DESC')->get();
         return view('rtc.index',compact('rtc'))->with('i');
     }
 

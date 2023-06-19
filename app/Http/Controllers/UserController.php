@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -15,7 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users=User::orderBy('id')->where('type',0)->paginate(10);
+        $users=User::orderBy('id')->where('type',0)->get();
         return view('user.index',compact('users'));
     }
 
@@ -49,7 +50,7 @@ class UserController extends Controller
             'type' => 0,
         ]);
         $user->assignRole($request->input('role'));
-        return redirect()->route('user.index',compact('user')) ->with('success','User created successfully');
+        return redirect()->route('user.index') ->with('success','User created successfully');
     }
 
     /**

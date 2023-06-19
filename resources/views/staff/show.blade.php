@@ -13,13 +13,15 @@
         border-top: 0;
     }
 
+
+
 </style>
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
                 <div class="buttonAlign">
                     <h2 class="mb-2 page-title">Show Staff</h2>
-{{--                    <a href="{{ route('staff.index') }}" class="btn btn-primary">Back</a>--}}
+                    {{--                    <a href="{{ route('staff.index') }}" class="btn btn-primary">Back</a>--}}
                 </div>
                 <div class="row">
                     <div class="col-sm-4">
@@ -41,7 +43,8 @@
                             <div class="row align-items-center ">
                                 <div class="col"></div>
                                 <div class="col-auto" style="padding-right: 25px;">
-                                    <a href="{{ route('staff.edit',$staff->id) }}" class="btn btn-outline-info mt-2 " title="Edit"><i class="fa fa-edit"></i></a>
+                                    <a href="{{ route('staff.edit',$staff->id) }}" class="btn btn-outline-info mt-2 "
+                                       title="Edit"><i class="fa fa-edit"></i></a>
                                 </div>
                             </div>
                             <table class="table table-borderless">
@@ -65,23 +68,27 @@
                                 </tr>
                                 <tr>
                                     <th><b>Staff I-card</b></th>
-                                    <td>@if($staff->staff_I_card) <i class="fa fa-check-circle" style="font-size:23px;color:green"></i> @endif</td>
+                                    <td>@if($staff->staff_I_card)
+                                            <i class="fa fa-check-circle" style="font-size:23px;color:green"></i>
+                                        @endif</td>
                                     <th><b>Staff Uniform</b></th>
-                                    <td>@if($staff->staff_uniform) <i class="fa fa-check-circle" style="font-size:23px;color:green"></i> @endif</td>
+                                    <td>@if($staff->staff_uniform)
+                                            <i class="fa fa-check-circle" style="font-size:23px;color:green"></i>
+                                        @endif</td>
                                 </tr>
                                 <tr>
                                     <th><b>Courses:</b></th>
                                     <td>
                                         <div class="mb-2">
                                             @foreach($course as $c)
-                                                <button type="button" class="btn mb-2 btn-outline-primary" disabled="" style="color: #000;border-color: #080808;">{{ $c->course_name }}</button>
+                                                <button type="button" class="btn mb-2 btn-outline-primary" disabled=""
+                                                        style="color: #000;border-color: #080808;">{{ $c->course_name }}</button>
                                             @endforeach
                                         </div>
                                     </td>
                                 </tr>
                             </table>
                         </div>
-
                     </div>
                 </div>
             </div>
