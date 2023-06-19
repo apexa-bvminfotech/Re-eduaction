@@ -18,10 +18,6 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
-                <div class="buttonAlign">
-                    <h2 class="mb-2 page-title">Edit Course</h2>
-                    <a href="{{ route('course.index') }}" class="btn btn-primary">Back</a>
-                </div>
                 @if (count($errors) > 0)
                     <div class="alert alert-danger">
                         <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -34,6 +30,12 @@
                 @endif
                 <div class="card-deck col-12">
                     <div class="card shadow mb-3">
+                        <div class="card-header">
+                            <div class="buttonAlign d-flex justify-content-between">
+                                <h2 class="mb-0 page-title">Edit Course</h2>
+                                <a href="{{ route('course.index') }}" class="btn btn-primary">Back</a>
+                            </div>
+                        </div>
                         <div class="card-body">
                             <form action="{{route('course.update',$course->id)}}" method="POST">
                                 @csrf
@@ -124,7 +126,7 @@
                                 <div class="dynamic_field">
 
                                 </div>
-                                <div class="form-group mb-2 buttonEnd">
+                                <div class="form-group mb-2 float-right">
                                     <button type="submit" class="btn btn-primary mr-2">Update</button>
                                     <a href="{{ route('course.index') }}" class="btn btn-danger">Cancel</a>
                                 </div>

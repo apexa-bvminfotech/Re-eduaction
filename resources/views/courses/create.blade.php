@@ -60,10 +60,8 @@
 
                                 </div><br>
                                 <div class="form-group mb-2  float-right">
-                                    <div class="d-flex justify-content-between">
-                                        <button type="submit" class="btn btn-success mr-2">Create</button>
+                                        <button type="submit" class="btn btn-primary mr-1">Create</button>
                                         <a href="{{ route('course.index') }}" class="btn btn-danger">Cancel</a>
-                                    </div>
                                 </div>
                             </form>
                         </div>
