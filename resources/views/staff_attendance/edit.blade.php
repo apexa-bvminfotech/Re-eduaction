@@ -4,26 +4,26 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
-                <div class="buttonAlign">
-                    <h2 class="mb-2 page-title">Edit Attendance</h2>
-                    <a href="{{ route('staff_attendance.index') }}" class="btn btn-primary">Back</a>
-                </div>
-                @if (count($errors) > 0)
-                    <div class="alert alert-danger">
-                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
                 <div class="row">
                     <div class="card-deck col-12">
                         <div class="card shadow mb-4">
                             <div class="card-header">
+                                <div class="buttonAlign d-flex justify-content-between">
+                                    <h2 class="mb-1 page-title">Edit Attendance</h2>
+                                    <a href="{{ route('staff_attendance.index') }}" class="btn btn-primary float-right">Back</a>
+                                </div>
                                 <strong class="card-title">{{ date('d-m-Y', strtotime($EditDate)) }}</strong>
                             </div>
+                            @if (count($errors) > 0)
+                                <div class="alert alert-danger">
+                                    <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                             <div class="card-body">
                                 {!! Form::model($staffAttendance, ['method' => 'PATCH','route' => ['staff_attendance.update',$EditDate]]) !!}
 
@@ -62,8 +62,8 @@
                                     @endforeach
                                 </div>
                                 <div class="form-group mb-2 buttonEnd">
-                                    <button type="submit" class="btn btn-primary mr-2">Edit</button>
-                                    <a href="{{ route('staff_attendance.index') }}" class="btn btn-danger">Cancel</a>
+                                    <button type="submit" class="btn btn-success float-right mr-2">Edit</button>
+                                    <a href="{{ route('staff_attendance.index') }}" class="btn btn-danger float-right mr-2">Cancel</a>
                                 </div>
                                 {!! Form::close() !!}
                             </div>

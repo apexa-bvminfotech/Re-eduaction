@@ -3,12 +3,6 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
-                <div class="buttonAlign">
-                    <h2 class="mb-2 page-title">User Management</h2>
-                    @can('staff-create')
-                        <a href="{{route('user.create')}}" class="btn btn-primary">Create New User</a>
-                    @endcan
-                </div>
                 @if ($message = Session::get('success'))
                     <div class="alert alert-success">
                         <p>{{ $message }}</p>
@@ -18,6 +12,15 @@
                     <!-- Small table -->
                     <div class="col-md-12">
                         <div class="card shadow">
+                            <div class="card-header">
+                                <div class="buttonAlign d-flex justify-content-between">
+                                    <h2 class="mb-1 page-title">User Management</h2>
+                                    @can('staff-create')
+                                        <a href="{{route('user.create')}}" class="btn btn-primary float-right">Create
+                                            New User</a>
+                                    @endcan
+                                </div>
+                            </div>
                             <div class="card-body">
                                 <!-- table -->
                                 <table class="table table-bordered table-striped" id="dataTable-1">
@@ -40,20 +43,18 @@
                                                 <div class="custom-control custom-switch">
                                                     <input type="checkbox" data-id="{{$u->id}}"
                                                            class="custom-control-input checkStatus"
-                                                           id="c{{$key+1}}" {{ $u->is_active ? '' : 'checked' }}>
+                                                           id="c{{$key+1}}" {{ $u->is_active ? 'checked' : '' }}>
                                                     <label class="custom-control-label" for="c{{$key+1}}"></label>
-                                                    <span
-                                                        class="badge badge-pill changeStatus{{ $u->id }} {{ $u->is_active ? 'badge-danger': 'badge-success' }} ">{{ $u->is_active ? 'Deactive': 'Active' }}</span>
                                                 </div>
                                             </td>
                                             <td>
-                                                <a href="{{route('user.edit',$u->id)}}" class="btn btn-success"
+                                                <a href="{{route('user.edit',$u->id)}}" class="btn btn-outline-success"
                                                    title="Edit"><i class="fa fa-edit"></i></a>
-{{--                                                {!! Form::open(['method' => 'DELETE','route' => ['user.destroy', $u->id],'style'=>'display:inline']) !!}--}}
-{{--                                                <button type="submit" class="btn btn-danger" title="Delete"--}}
-{{--                                                        onclick="return confirm('Are you sure you want to delete?')"><i--}}
-{{--                                                        class="fe fe-trash-2"></i></button>--}}
-{{--                                                {!! Form::close() !!}--}}
+                                                {{--                                                {!! Form::open(['method' => 'DELETE','route' => ['user.destroy', $u->id],'style'=>'display:inline']) !!}--}}
+                                                {{--                                                <button type="submit" class="btn btn-danger" title="Delete"--}}
+                                                {{--                                                        onclick="return confirm('Are you sure you want to delete?')"><i--}}
+                                                {{--                                                        class="fe fe-trash-2"></i></button>--}}
+                                                {{--                                                {!! Form::close() !!}--}}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -70,28 +71,7 @@
 @push('scripts')
     <script>
         $(function () {
-            $('.checkStatus').change(function () {
-                var status = $(this).prop('checked') == true ? 0 : 1;
-                var user_id = $(this).data('id');
-                $.ajax({
-                    type: "GET",
-                    dataType: "json",
-                    url: '/changeUserStatus',
-                    data: {'status': status, 'user_id': user_id},
-                    success: function (data) {
-                        if (data == 0) {
-                            $('.changeStatus' + user_id).removeClass('badge-danger');
-                            $('.changeStatus' + user_id).addClass('badge-success');
-                            $('.changeStatus' + user_id).html('Active');
-                        } else {
-                            $('.changeStatus' + user_id).removeClass('badge-success');
-                            $('.changeStatus' + user_id).addClass('badge-danger');
-                            $('.changeStatus' + user_id).html('Deactive');
-                        }
-                    }
-                });
-            })
-        })
+
             $('#dataTable-1').DataTable({
                 "paging": true,
                 "lengthChange": false,
@@ -101,6 +81,6 @@
                 "autoWidth": false,
                 "responsive": true,
             });
-
+        })
     </script>
 @endpush

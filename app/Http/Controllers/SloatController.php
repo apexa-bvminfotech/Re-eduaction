@@ -67,6 +67,7 @@ class SloatController extends Controller
             'staff_id' => $request->input('staff_id'),
             'rtc_id' => $request->input('rtc_id'),
             'sloat_time' => $time,
+            'is_active'=>$request->input('is_active'),
         ];
         Sloat::create($data);
 
@@ -123,6 +124,7 @@ class SloatController extends Controller
             'staff_id' => $request->input('staff_id'),
             'rtc_id' => $request->input('rtc_id'),
             'sloat_time' => $time,
+            'is_active'=>$request->input('is_active')
         ];
 
         $sloat->update($data);

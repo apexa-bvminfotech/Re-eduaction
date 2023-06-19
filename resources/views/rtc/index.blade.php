@@ -4,12 +4,6 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
-                <div class="buttonAlign">
-                    <h2 class="mb-2 page-title">RTC Management</h2>
-                    @can('rtc-create')
-                        <a href="{{route('rtc.create')}}" class="btn btn-primary">Create New RTC</a>
-                    @endcan
-                </div>
                 @if ($message = Session::get('success'))
                     <div class="alert alert-success">
                         <p>{{ $message }}</p>
@@ -19,18 +13,27 @@
                     <!-- Small table -->
                     <div class="col-md-12">
                         <div class="card shadow">
+                            <div class="card-header">
+                                <div class="buttonAlign d-flex justify-content-between">
+                                    <h2 class="mb-1 page-title">RTC Management</h2>
+                                    @can('rtc-create')
+                                        <a href="{{route('rtc.create')}}" class="btn btn-primary float-right">Create New
+                                            RTC</a>
+                                    @endcan
+                                </div>
+                            </div>
                             <div class="card-body">
                                 <!-- table -->
                                 <table class="table table-bordered table-striped" id="dataTable-1">
                                     <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>RTc No</th>
-                                            <th>RTc Name</th>
-                                            <th>RTc Address</th>
-                                            <th>Status</th>
-                                            <th width="280px">Action</th>
-                                        </tr>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>RTc No</th>
+                                        <th>RTc Name</th>
+                                        <th>RTc Address</th>
+                                        <th>Status</th>
+                                        <th width="280px">Action</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
                                     @foreach ($rtc as $key => $r)
@@ -42,21 +45,24 @@
                                             <td>
                                                 <div class="custom-control custom-switch">
                                                     @can('rtc-edit')
-                                                        <input type="checkbox" data-id="{{$r->id}}" class="custom-control-input checkStatus" id="c{{$key+1}}" {{ $r->is_active ? '' : 'checked' }}>
+                                                        <input type="checkbox" data-id="{{$r->id}}"
+                                                               class="custom-control-input checkStatus"
+                                                               id="c{{$key+1}}" {{ $r->is_active ? 'checked' : '' }}>
                                                         <label class="custom-control-label" for="c{{$key+1}}"></label>
                                                     @endcan
-                                                    <span class="badge badge-pill changeStatus{{ $r->id }} {{ $r->is_active ? 'badge-danger': 'badge-success' }} ">{{ $r->is_active ? 'Deactive': 'Active' }}</span>
                                                 </div>
                                             </td>
                                             <td>
                                                 @can('rtc-edit')
-                                                    <a href="{{ route('rtc.edit',$r->id) }}" class="btn btn-success" title="Edit"><i class="fa fa-edit"></i></a>
+                                                    <a href="{{ route('rtc.edit',$r->id) }}"
+                                                       class="btn btn-outline-success" title="Edit"><i
+                                                            class="fa fa-edit"></i></a>
                                                 @endcan
-{{--                                                @can('rtc-delete')--}}
-{{--                                                    {!! Form::open(['method' => 'DELETE','route' => ['rtc.destroy', $r->id],'style'=>'display:inline']) !!}--}}
-{{--                                                        <button type="submit" class="btn btn-danger" title="Delete" onclick="return confirm('Are you sure you want to delete?')"><i class="fe fe-trash-2"></i></button>--}}
-{{--                                                    {!! Form::close() !!}--}}
-{{--                                                @endcan--}}
+                                                {{--                                                @can('rtc-delete')--}}
+                                                {{--                                                    {!! Form::open(['method' => 'DELETE','route' => ['rtc.destroy', $r->id],'style'=>'display:inline']) !!}--}}
+                                                {{--                                                        <button type="submit" class="btn btn-danger" title="Delete" onclick="return confirm('Are you sure you want to delete?')"><i class="fe fe-trash-2"></i></button>--}}
+                                                {{--                                                    {!! Form::close() !!}--}}
+                                                {{--                                                @endcan--}}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -73,8 +79,8 @@
 @endsection
 @push('scripts')
     <script>
-        $(function() {
-            $('.checkStatus').change(function() {
+        $(function () {
+            $('.checkStatus').change(function () {
                 var status = $(this).prop('checked') == true ? 0 : 1;
                 var rtc_id = $(this).data('id');
                 $.ajax({
@@ -82,15 +88,15 @@
                     dataType: "json",
                     url: '/changeRtcStatus',
                     data: {'status': status, 'rtc_id': rtc_id},
-                    success: function(data){
-                        if(data == 0){
-                            $('.changeStatus'+rtc_id).removeClass('badge-danger');
-                            $('.changeStatus'+rtc_id).addClass('badge-success');
-                            $('.changeStatus'+rtc_id).html('Active');
+                    success: function (data) {
+                        if (data == 0) {
+                            $('.changeStatus' + rtc_id).removeClass('badge-danger');
+                            $('.changeStatus' + rtc_id).addClass('badge-success');
+
                         } else {
-                            $('.changeStatus'+rtc_id).removeClass('badge-success');
-                            $('.changeStatus'+rtc_id).addClass('badge-danger');
-                            $('.changeStatus'+rtc_id).html('Deactive');
+                            $('.changeStatus' + rtc_id).removeClass('badge-success');
+                            $('.changeStatus' + rtc_id).addClass('badge-danger');
+
                         }
                     }
                 });

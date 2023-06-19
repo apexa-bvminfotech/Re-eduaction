@@ -4,29 +4,32 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
-                <div class="buttonAlign">
-                    <h2 class="mb-2 page-title">Create New Course</h2>
-                    <a href="{{ route('course.index') }}" class="btn btn-primary">Back</a>
-                </div><br>
-                @if (count($errors) > 0)
-                    <div class="alert alert-danger">
-                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
                 <div class="card-deck col-12">
                     <div class="card shadow mb-3">
+                        <div class="card-header">
+                            <div class="buttonAlign d-flex justify-content-between">
+                                <h2 class="mb-1 page-title">Create New Course</h2>
+                                <a href="{{ route('course.index') }}" class="btn btn-primary float-right">Back</a>
+                            </div>
+                        </div>
+                        @if (count($errors) > 0)
+                            <div class="alert alert-danger">
+                                <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <div class="card-body">
                             <form action="{{route('course.store')}}" method="POST">
                                 @csrf
                                 <div class="form-group row">
                                     <label for="inputEmail3" class="col-sm-2 col-form-label">Course Name</label>
                                     <div class="col-sm-10">
-                                        <input type="text" name="course_name" class="form-control" placeholder="Add Course" required>
+                                        <input type="text" name="course_name" class="form-control"
+                                               placeholder="Add Course" required>
                                     </div>
                                 </div>
 
@@ -38,17 +41,21 @@
                                                placeholder="Add SubCourse" required>
                                     </div>
                                     <div class="col-sm-1">
-                                        <button type="button" name="add" id="add" class="btn btn-primary">Add More</button>
+                                        <button type="button" name="add" id="add" class="btn btn-primary">Add More
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="form-group row clone-point">
                                     <div class="col-sm-3"></div>
                                     <label for="points" class="col-sm-1 col-form-label ">Points</label>
                                     <div class="col-sm-5">
-                                        <input type="text" name="point[0][]" data-id="0"  class="form-control points" placeholder="Add points" required>
+                                        <input type="text" name="point[0][]" data-id="0" class="form-control points"
+                                               placeholder="Add points" required>
                                     </div>
                                     <div class="col-sm-3">
-                                        <button type="button" name="add_point" data-id="1" data-mid="0" class="btn btn-primary add-point btn-star">+</button>
+                                        <button type="button" name="add_point" data-id="1" data-mid="0"
+                                                class="btn btn-primary add-point btn-star">+
+                                        </button>
                                     </div>
                                 </div>
                                 <div id="dynamic_point_field_0">
@@ -58,8 +65,9 @@
 
                                 </div>
                                 <div class="form-group mb-2 buttonEnd">
-                                    <button type="submit" class="btn btn-primary mr-2">Create</button>
-                                    <a href="{{ route('course.index') }}" class="btn btn-danger">Cancel</a>
+                                    <button type="submit" class="btn btn-success float-right mr-2">Create</button>
+                                    <a href="{{ route('course.index') }}"
+                                       class="btn btn-danger float-right mr-2">Cancel</a>
                                 </div>
                             </form>
                         </div>
@@ -91,7 +99,7 @@
                 html += '<div class="col-sm-3"></div>'
                 html += '<label for="points" class="col-sm-1 col-form-label">Points</label>'
                 html += '<div class="col-sm-5">'
-                html += '<input type="text" name="point['+i+'][]" data-id="'+i+'"  class="form-control points" placeholder="Add points" required>'
+                html += '<input type="text" name="point[' + i + '][]" data-id="' + i + '"  class="form-control points" placeholder="Add points" required>'
                 html += '</div>'
                 html += '<div class="col-sm-3">'
                 html += '<button type="button" name="add_point" data-id="' + j + '" data-mid="' + i + '" class="btn btn-primary add-point btn-star p_' + i + '">+</button>'
@@ -106,7 +114,7 @@
                 $('.remove' + button_id + '').remove();
             });
 
-            $(document).on('click',".add-point", function(){
+            $(document).on('click', ".add-point", function () {
                 let id = parseInt($(this).data('id'));
                 let mid = parseInt($(this).data('mid'));
                 console.log(id, $(this).data('mid'))
@@ -117,7 +125,7 @@
                 ele.find('.points').val("")
                 $(this).data('id', id)
             })
-            $(document).on('click', '.point_remove', function(){
+            $(document).on('click', '.point_remove', function () {
                 $(this).closest('.clone-point').remove();
             });
         });

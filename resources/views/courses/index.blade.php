@@ -4,10 +4,6 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
-                <div class="buttonAlign">
-                    <h2 class="mb-2 page-title">Course Management</h2>
-                        <a href="{{route('course.create')}}" class="btn btn-primary">Create New Course</a>
-                </div>
                 @if ($message = Session::get('success'))
                     <div class="alert alert-default-success">
                         <p>{{ $message }}</p>
@@ -22,6 +18,12 @@
                     <!-- Small table -->
                     <div class="col-md-12">
                         <div class="card shadow">
+                            <div class="card-header">
+                                <div class="buttonAlign d-flex justify-content-between">
+                                    <h2 class="mb-1 page-title">Course Management</h2>
+                                    <a href="{{route('course.create')}}" class="btn btn-primary float-right">Create New Course</a>
+                                </div>
+                            </div>
                             <div class="card-body">
                                 <!-- table -->
                                 <table class="table table-bordered table-striped" id="dataTable-1">
@@ -65,8 +67,6 @@
             </div> <!-- .col-12 -->
         </div> <!-- .row -->
     </div> <!-- .container-fluid -->
-
-
 @endsection
 @push('scripts')
     <script>
