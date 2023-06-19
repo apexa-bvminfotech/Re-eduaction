@@ -4,12 +4,6 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
-                <div class="buttonAlign">
-                    <h2 class="mb-2 page-title">Students Management</h2>
-                    @can('role-create')
-                        <a href="{{route('student.create')}}" class="btn btn-primary">Create New Student</a>
-                    @endcan
-                </div>
                 @if ($message = Session::get('success'))
                     <div class="alert alert-default-success">
                         <p>{{ $message }}</p>
@@ -19,6 +13,15 @@
                     <!-- Small table -->
                     <div class="col-md-12">
                         <div class="card shadow">
+                            <div class="card-header">
+                                <div class="buttonAlign d-flex justify-content-between">
+                                    <h2 class="mb-1 page-title">Students Management</h2>
+                                        @can('role-create')
+                                            <a href="{{route('student.create')}}" class="btn btn-primary float-right">Create
+                                                New Student</a>
+                                    @endcan
+                                </div>
+                            </div>
                             <div class="card-body">
                                 <!-- table -->
                                 <table class="table table-bordered table-striped" id="dataTable-1">
@@ -47,7 +50,7 @@
                                                     @can('student-edit')
                                                         <a href="{{ route('student.edit',$student->id) }}"
                                                            class="btn btn-success" title="Edit">
-                                                                    <i class="fa fa-edit"></i>
+                                                            <i class="fa fa-edit"></i>
                                                         </a>
                                                     @endcan
                                                     @can('student-delete')
@@ -93,7 +96,8 @@
                                     <option value="0">------Select Staff-----</option>
                                     @foreach($staffs as $key=>$staff)
                                         @if($staff->is_active == 0)
-                                            <option value="{{$staff->id}}" {{old('name')==$staff->id}}>{{$staff->staff_name}}</option>
+                                            <option
+                                                value="{{$staff->id}}" {{old('name')==$staff->id}}>{{$staff->staff_name}}</option>
                                         @endif
                                     @endforeach
                                 </select>

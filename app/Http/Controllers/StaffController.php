@@ -86,7 +86,8 @@ class StaffController extends Controller
             'staff_uniform' => isset($request->staff_uniform) ? 1 : 0,
             'staff_address' => $request->staff_address,
             'eme_phone' => $request->eme_phone,
-            'user_id' => $user->id
+            'user_id' => $user->id,
+            'is_active' =>$request->is_active,
         ];
         Staff::create($data);
 
@@ -168,6 +169,7 @@ class StaffController extends Controller
             'staff_uniform' => isset($request->staff_uniform) ? 1 : 0,
             'staff_address' => $request->staff_address,
             'eme_phone' => $request->eme_phone,
+            'is_active' =>$request->is_active,
         ]);
 
         return redirect()->route('staff.index')

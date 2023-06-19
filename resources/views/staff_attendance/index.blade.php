@@ -4,20 +4,24 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
-                <div class="buttonAlign">
-                    <h2 class="mb-2 page-title">Staff Attendance</h2>
-                    @can('staff-attendance-create')
-                        <a href="{{route('staff_attendance.create')}}" class="btn btn-primary">Today Attendance</a>
-                    @endcan
-                </div>
                 @if ($message = Session::get('success'))
                     <div class="alert alert-success">
                         <p>{{ $message }}</p>
                     </div>
                 @endif
                 <div class="row my-4">
+                    <!-- Small table -->
                     <div class="col-md-12">
                         <div class="card shadow">
+                            <div class="card-header">
+                                <div class="buttonAlign d-flex justify-content-between">
+                                    <h2 class="mb-1 page-title">Staff Attendance</h2>
+                                    @can('staff-attendance-create')
+                                        <a href="{{route('staff_attendance.create')}}"
+                                           class="btn btn-primary float-right">Today Attendance</a>
+                                    @endcan
+                                </div>
+                            </div>
                             <div class="card-body">
                                 <table class="table datatables" id="dataTable-1">
                                 <!-- table -->
@@ -40,11 +44,15 @@
                                             <td>{{ $s->absent }}</td>
                                             <td>
                                                 @can('staff-attendance-edit')
-                                                    <a href="{{ route('staff_attendance.edit',$s->date) }}" class="btn btn-outline-success" title="Edit"><i class="fa fa-edit"></i></a>
+                                                    <a href="{{ route('staff_attendance.edit',$s->date) }}"
+                                                       class="btn btn-success" title="Edit"><i
+                                                            class="fa fa-edit"></i></a>
                                                 @endcan
                                                 @can('staff-attendance-delete')
                                                     {!! Form::open(['method' => 'DELETE','route' => ['staff_attendance.destroy', $s->date],'style'=>'display:inline']) !!}
-                                                    <button type="submit" class="btn btn-outline-danger" title="Delete" onclick="return confirm('Are you sure you want to delete?')"><i class="fa fa-trash"></i></button>
+                                                    <button type="submit" class="btn btn-danger" title="Delete"
+                                                            onclick="return confirm('Are you sure you want to delete?')">
+                                                        <i class="fa fa-trash"></i></button>
                                                     {!! Form::close() !!}
                                                 @endcan
                                             </td>
@@ -59,7 +67,6 @@
             </div> <!-- .col-12 -->
         </div> <!-- .row -->
     </div> <!-- .container-fluid -->
-
 
 @endsection
 @push('scripts')

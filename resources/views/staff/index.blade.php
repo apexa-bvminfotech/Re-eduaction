@@ -5,10 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-12">
                 <div class="buttonAlign">
-                    <h2 class="mb-2 page-title">Staff Management</h2>
-                    @can('staff-create')
-                        <a href="{{route('staff.create')}}" class="btn btn-primary">Create New Staff</a>
-                    @endcan
+
                 </div>
                 @if ($message = Session::get('success'))
                     <div class="alert alert-default-success">
@@ -18,6 +15,15 @@
                 <div class="row my-4">
                     <div class="col-md-12">
                         <div class="card shadow">
+                            <div class="card-header">
+                                <div class="buttonAlign d-flex justify-content-between">
+                                    <h2 class="mb-1 page-title">Staff Management</h2>
+                                    @can('staff-create')
+                                        <a href="{{route('staff.create')}}" class="btn btn-primary float-right">Create
+                                            New Staff</a>
+                                    @endcan
+                                </div>
+                            </div>
                             <div class="card-body">
                                 <table class="table datatables" id="dataTable-1">
                                     <thead>
@@ -41,30 +47,40 @@
                                             <td>{{ $s->employee_ID }}</td>
                                             <td>{{ $s->staff_name }}</td>
                                             <td>{{ $s->staff_phone }}</td>
-                                            <td>@if($s->staff_I_card) <i class="fa fa-check-circle" style="font-size:20px;color:green"></i> @endif</td>
-                                            <td>@if($s->staff_uniform) <i class="fa fa-check-circle" style="font-size:20px;color:green"></i> @endif</td>
+                                            <td>@if($s->staff_I_card)
+                                                    <i class="fa fa-check-circle"
+                                                       style="font-size:20px;color:green"></i>
+                                                @endif</td>
+                                            <td>@if($s->staff_uniform)
+                                                    <i class="fa fa-check-circle"
+                                                       style="font-size:20px;color:green"></i>
+                                                @endif</td>
                                             <td>{{ $s->staff_address }}</td>
                                             <td>{{ $s->eme_phone }}</td>
                                             <td>
                                                 <div class="custom-control custom-switch">
                                                     @can('rtc-edit')
-                                                        <input type="checkbox" data-id="{{$s->id}}" class="custom-control-input checkStatus" id="c{{$key+1}}" {{ $s->is_active ? '' : 'checked' }}>
+                                                        <input type="checkbox" data-id="{{$s->id}}"
+                                                               class="custom-control-input checkStatus"
+                                                               id="c{{$key+1}}" {{ $s->is_active ? 'checked' : '' }}>
                                                         <label class="custom-control-label" for="c{{$key+1}}"></label>
                                                     @endcan
-                                                    <span class="badge badge-pill changeStatus{{ $s->id }} {{ $s->is_active ? 'badge-danger': 'badge-success' }} ">{{ $s->is_active ? 'Deactive': 'Active' }}</span>
                                                 </div>
                                             </td>
                                             <td>
                                                 @can('staff-edit')
-                                                    <a href="{{ route('staff.edit',$s->id) }}" class="btn btn-success" title="Edit"><i class="fa fa-edit"></i></a>
+                                                    <a href="{{ route('staff.edit',$s->id) }}"
+                                                       class="btn btn-outline-success" title="Edit"><i
+                                                            class="fa fa-edit"></i></a>
                                                 @endcan
-                                                    <a href="{{ route('staff.show',$s->id) }}" class="btn btn-info" title="Show Permission"><i class="fa fa-eye"></i></a>
+                                                <a href="{{ route('staff.show',$s->id) }}" class="btn btn-outline-info"
+                                                   title="Show Permission"><i class="fa fa-eye"></i></a>
 
-                                                    {{--                                                @can('staff-delete')--}}
-{{--                                                    {!! Form::open(['method' => 'DELETE','route' => ['staff.destroy', $s->id],'style'=>'display:inline']) !!}--}}
-{{--                                                    <button type="submit" class="btn btn-danger" title="Delete" onclick="return confirm('Are you sure you want to delete?')"><i class="fe fe-trash-2"></i></button>--}}
-{{--                                                    {!! Form::close() !!}--}}
-{{--                                                @endcan--}}
+                                                {{--                                                @can('staff-delete')--}}
+                                                {{--                                                    {!! Form::open(['method' => 'DELETE','route' => ['staff.destroy', $s->id],'style'=>'display:inline']) !!}--}}
+                                                {{--                                                    <button type="submit" class="btn btn-danger" title="Delete" onclick="return confirm('Are you sure you want to delete?')"><i class="fe fe-trash-2"></i></button>--}}
+                                                {{--                                                    {!! Form::close() !!}--}}
+                                                {{--                                                @endcan--}}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -78,12 +94,11 @@
         </div> <!-- .row -->
     </div> <!-- .container-fluid -->
 
-
 @endsection
 @push('scripts')
     <script>
-        $(function() {
-            $('.checkStatus').change(function() {
+        $(function () {
+            $('.checkStatus').change(function () {
                 var status = $(this).prop('checked') == true ? 0 : 1;
                 var staff_id = $(this).data('id');
                 $.ajax({
@@ -91,15 +106,15 @@
                     dataType: "json",
                     url: '/changeStaffStatus',
                     data: {'status': status, 'staff_id': staff_id},
-                    success: function(data){
-                        if(data == 0){
-                            $('.changeStatus'+staff_id).removeClass('badge-danger');
-                            $('.changeStatus'+staff_id).addClass('badge-success');
-                            $('.changeStatus'+staff_id).html('Active');
+                    success: function (data) {
+                        if (data == 0) {
+                            $('.changeStatus' + staff_id).removeClass('badge-danger');
+                            $('.changeStatus' + staff_id).addClass('badge-success');
+                            $('.changeStatus' + staff_id).html('Active');
                         } else {
-                            $('.changeStatus'+staff_id).removeClass('badge-success');
-                            $('.changeStatus'+staff_id).addClass('badge-danger');
-                            $('.changeStatus'+staff_id).html('Deactive');
+                            $('.changeStatus' + staff_id).removeClass('badge-success');
+                            $('.changeStatus' + staff_id).addClass('badge-danger');
+                            $('.changeStatus' + staff_id).html('Deactive');
                         }
                     }
                 });

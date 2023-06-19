@@ -10,13 +10,16 @@
                     </div>
                 @endif
                 <div class="row my-4">
+                    <!-- Small table -->
                     <div class="col-md-12">
                         <div class="card shadow">
                             <div class="card-header">
-                                <div class="d-flex justify-content-between ">
-                                    <h2 class="mb-0 page-title">Role Management</h2>
-                                    <a href="{{route('roles.create')}}" class="btn btn-outline-primary float-right">Create
-                                        New Role</a>
+                                <div class="buttonAlign d-flex justify-content-between">
+                                    <h2 class="mb-1 page-title">Role Management</h2>
+                                    @can('role-create')
+                                        <a href="{{route('roles.create')}}" class="btn btn-primary float-right">Create
+                                            New Role</a>
+                                    @endcan
                                 </div>
                             </div>
                             <div class="card-body">
@@ -31,7 +34,7 @@
                                     <tbody>
                                     @foreach ($roles as $key => $role)
                                         <tr>
-                                            <td>{{ $role->id }}</td>
+                                            <td>{{ ++$i }}</td>
                                             <td>{{ $role->name }}</td>
                                             <td>
                                                 <a href="{{ route('roles.show',$role->id) }}" class="btn btn-info"
@@ -39,7 +42,7 @@
                                                 @can('role-edit')
                                                     <a href="{{ route('roles.edit',$role->id) }}"
                                                        class="btn btn-success" title="Edit"><i
-                                                                class="fa fa-edit"></i></a>
+                                                            class="fa fa-edit"></i></a>
                                                 @endcan
                                                 @can('role-delete')
                                                     {!! Form::open(['method' => 'DELETE','route' => ['roles.destroy', $role->id],'style'=>'display:inline']) !!}

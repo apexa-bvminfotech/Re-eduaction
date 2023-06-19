@@ -4,26 +4,12 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
-{{--                <div class="buttonAlign">--}}
-{{--                    <h2 class="mb-2 page-title">Create New Sloat</h2>--}}
-{{--                    <a href="{{ route('sloat.index') }}" class="btn btn-primary">Back</a>--}}
-{{--                </div>--}}
-                @if (count($errors) > 0)
-                    <div class="alert alert-danger">
-                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
                 <div class="card-deck col-6">
                     <div class="card shadow mb-4">
                         <div class="card-header">
                             <div class="buttonAlign d-flex justify-content-between">
-                                <h2 class="mb-0 page-title">Create New Sloat</h2>
-                                <a href="{{ route('sloat.index') }}" class="btn btn-primary">Back</a>
+                                <h2 class="mb-1 page-title">Create New Sloat</h2>
+                                <a href="{{ route('sloat.index') }}" class="btn btn-primary float-right">Back</a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -31,12 +17,15 @@
                             <div class="form-group row">
                                 <label for="inputEmail3" class="col-sm-3 col-form-label">Staff Name</label>
                                 <div class="col-sm-9">
-                                    <select class="form-control select2"  name="staff_id" required>
+                                    <select class="form-control select2" name="staff_id" required>
                                         <option value="">--- Select Staff ---</option>
                                         @foreach($staff as $key => $s)
                                             <option value="{{ $s->id }}">{{ $s->staff_name }}</option>
                                         @endforeach
                                     </select>
+                                    @error('staff_id')
+                                    <span class="text-danger">{{$message}}</span>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -48,6 +37,9 @@
                                             <option value="{{ $r->id }}">{{ $r->rtc_name }}</option>
                                         @endforeach
                                     </select>
+                                    @error('rtc_id')
+                                    <span class="text-danger">{{$message}}</span>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -61,6 +53,9 @@
                                              data-toggle="datetimepicker">
                                             <div class="input-group-text"><i class="far fa-clock"></i></div>
                                         </div>
+                                        @error('sloat_time_to')
+                                        <span class="text-danger">{{$message}}</span>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col-sm-1" style="display: flex;justify-content: space-around;">
@@ -75,12 +70,33 @@
                                              data-toggle="datetimepicker">
                                             <div class="input-group-text"><i class="far fa-clock"></i></div>
                                         </div>
+                                        @error('sloat_time_from')
+                                        <span class="text-danger">{{$message}}</span>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group mt-2 mb-2 float-right">
-                                <button type="submit" class="btn btn-primary mr-2">Create</button>
-                                <a href="{{ route('sloat.index') }}" class="btn btn-danger">Cancel</a>
+                            <div class="form-group row">
+                                <label for="status" class="col-sm-3 col-form-label">Status:</label>
+                                <div class="col-sm-9 d-flex justify-content-evenly">
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="customRadio1"
+                                               name="is_active" value="1">
+                                        <label for="customRadio1" class="custom-control-label">Active</label>
+                                    </div>
+                                    <div class="custom-control custom-radio ml-2">
+                                        <input class="custom-control-input custom-control-input-danger" value="0"
+                                               type="radio" id="customRadio4" name="is_active">
+                                        <label for="customRadio4" class="custom-control-label">Deactive</label>
+                                    </div>
+                                    @error('status')
+                                    <span class="text-danger">{{$message}}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-group mb-2 buttonEnd">
+                                <button type="submit" class="btn btn-success float-right mr-2">Create</button>
+                                <a href="{{ route('sloat.index') }}" class="btn btn-danger float-right mr-2">Cancel</a>
                             </div>
                             {!! Form::close() !!}
                         </div>
@@ -89,17 +105,18 @@
             </div> <!-- .col-12 -->
         </div> <!-- .row -->
     </div> <!-- .container-fluid -->
+
 @endsection
 @push('scripts')
     <script>
-    $(document).ready(function () {
-        //Timepicker
-        $('#timepicker').datetimepicker({
-            format: 'LT'
+        $(document).ready(function () {
+            //Timepicker
+            $('#timepicker').datetimepicker({
+                format: 'LT'
+            })
+            $('#timepicker1').datetimepicker({
+                format: 'LT'
+            })
         })
-        $('#timepicker1').datetimepicker({
-            format: 'LT'
-        })
-    })
     </script>
 @endpush

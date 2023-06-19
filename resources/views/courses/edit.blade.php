@@ -18,22 +18,24 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
-                <div class="buttonAlign">
-                    <h2 class="mb-2 page-title">Edit Course</h2>
-                    <a href="{{ route('course.index') }}" class="btn btn-primary">Back</a>
-                </div>
-                @if (count($errors) > 0)
-                    <div class="alert alert-danger">
-                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
                 <div class="card-deck col-12">
                     <div class="card shadow mb-3">
+                        <div class="card-header">
+                            <div class="buttonAlign d-flex justify-content-between">
+                                <h2 class="mb-1 page-title">Edit Course</h2>
+                                <a href="{{ route('course.index') }}" class="btn btn-primary float-right">Back</a>
+                            </div>
+                        </div>
+                        @if (count($errors) > 0)
+                            <div class="alert alert-danger">
+                                <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <div class="card-body">
                             <form action="{{route('course.update',$course->id)}}" method="POST">
                                 @csrf
@@ -67,13 +69,17 @@
                                         </div>
                                         @if($key == 0)
                                             <div class="col-sm-1">
-                                                <button type="button" name="add" id="add" class="btn btn-primary add" data-url="{{route('subCourse.destroy',$subCourse->id)}}">
+                                                <button type="button" name="add" id="add" class="btn btn-primary add"
+                                                        data-url="{{route('subCourse.destroy',$subCourse->id)}}">
                                                     Add More
                                                 </button>
                                             </div>
                                         @else
                                             <div class="col-sm-1">
-                                                <button type="button" name="add" class="btn btn-danger btn_remove" data-url="{{route('subCourse.destroy',$subCourse->id)}}" data-id="{{$count}}">X</button>
+                                                <button type="button" name="add" class="btn btn-danger btn_remove"
+                                                        data-url="{{route('subCourse.destroy',$subCourse->id)}}"
+                                                        data-id="{{$count}}">X
+                                                </button>
                                             </div>
                                         @endif
 
@@ -105,12 +111,15 @@
                                                 <div class="col-sm-3">
                                                     <button type="button" name="add_point" data-id="{{$incPoint}}"
                                                             data-mid="{{$count}}"
-                                                            class="btn btn-primary  add-points btn-start p_{{$count}}" data-url="{{route('point.destroy',$point->id)}}">+
+                                                            class="btn btn-primary  add-points btn-start p_{{$count}}"
+                                                            data-url="{{route('point.destroy',$point->id)}}">+
                                                     </button>
                                                 </div>
                                             @else
                                                 <div class="col-sm-1">
-                                                    <button type="button" name="add" class="btn btn-danger edit_btn_remove" data-url="{{route('point.destroy',$point->id)}}">-
+                                                    <button type="button" name="add"
+                                                            class="btn btn-danger edit_btn_remove"
+                                                            data-url="{{route('point.destroy',$point->id)}}">-
                                                     </button>
                                                 </div>
                                             @endif
@@ -125,8 +134,9 @@
 
                                 </div>
                                 <div class="form-group mb-2 buttonEnd">
-                                    <button type="submit" class="btn btn-primary mr-2">Update</button>
-                                    <a href="{{ route('course.index') }}" class="btn btn-danger">Cancel</a>
+                                    <button type="submit" class="btn btn-success float-right mr-2">Update</button>
+                                    <a href="{{ route('course.index') }}"
+                                       class="btn btn-danger float-right mr-2">Cancel</a>
                                 </div>
                             </form>
                         </div>
@@ -176,7 +186,7 @@
                 var button_id = $(this).data("id");
                 let url = $(this).data('url')
                 console.log(url)
-                if(url != ""){
+                if (url != "") {
                     $.ajax({
                         url: url, // Replace "points" with the appropriate route URL for deleting a point
                         type: 'DELETE',
@@ -198,7 +208,7 @@
                 console.log(id, $(this).data('id'))
                 id++;
                 var element = $(this).closest('.clone-points').clone(true).appendTo('#dynamic_point_field_' + mid);
-                element.find('.btn-start').removeClass('add-points').removeClass('btn-primary').addClass('btn-danger').addClass('points-rmv').addClass('edit_btn_remove').html('-').attr('data-url',"")
+                element.find('.btn-start').removeClass('add-points').removeClass('btn-primary').addClass('btn-danger').addClass('points-rmv').addClass('edit_btn_remove').html('-').attr('data-url', "")
                 element.find('.point-rmv').val("").attr('name', 'sub_course_name[' + mid + '][point][' + id + '][name]')
                 element.find('.point-id').val("").attr('name', 'sub_course_name[' + mid + '][point][' + id + '][id]')
                 $(this).data('id', id)
@@ -214,7 +224,7 @@
             $(document).on('click', '.edit_btn_remove', function () {
                 let url = $(this).data('url')
                 console.log(url)
-                if(url != ""){
+                if (url != "") {
                     $.ajax({
                         url: url,
                         type: 'DELETE',

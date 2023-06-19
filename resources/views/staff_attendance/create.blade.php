@@ -4,17 +4,6 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
-
-                @if (count($errors) > 0)
-                    <div class="alert alert-danger">
-                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
                 <div class="row">
                     <div class="card-deck col-12">
                         <div class="card shadow mb-4">
@@ -24,6 +13,16 @@
                                     <a href="{{ route('staff_attendance.index') }}" class="btn btn-primary float-right">Back</a>
                                 </div>
                             </div>
+                            @if (count($errors) > 0)
+                                <div class="alert alert-danger">
+                                    <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                             <div class="card-body">
                                 {!! Form::open(array('route' => 'staff_attendance.store','method'=>'POST')) !!}
                                 <div class="col-md-12">
@@ -66,7 +65,7 @@
                                     @endforeach
                                 </div>
                                 <div class="form-group mb-2 float-right">
-                                    <button type="submit" class="btn btn-primary mr-2">Create</button>
+                                    <button type="submit" class="btn btn-success mr-2">Create</button>
                                     <a href="{{ route('staff_attendance.index') }}" class="btn btn-danger">Cancel</a>
                                 </div>
                                 {!! Form::close() !!}

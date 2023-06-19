@@ -15,16 +15,18 @@
                     </div>
                 @endif
                 <div class="row my-4">
+                    <!-- Small table -->
                     <div class="col-md-12">
                         <div class="card shadow">
-                            <div class="card-body">
-                                <div class="card-header">
-                                    <div class="d-flex justify-content-between">
-                                        <h2 class="mb-0 page-title">Course Management</h2>
-                                        <a href="{{route('course.create')}}" class="btn btn-primary float-right">  Create New Course</a>
-                                    </div>
+                            <div class="card-header">
+                                <div class="buttonAlign d-flex justify-content-between">
+                                    <h2 class="mb-1 page-title">Course Management</h2>
+                                    <a href="{{route('course.create')}}" class="btn btn-primary float-right">Create New Course</a>
                                 </div>
-                                <table class="table datatables" id="dataTable-1">
+                            </div>
+                            <div class="card-body">
+                                <!-- table -->
+                                <table class="table table-bordered table-striped" id="dataTable-1">
                                     <thead>
                                     <tr class="card-primary">
                                         <th>No</th>

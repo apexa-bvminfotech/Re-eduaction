@@ -58,12 +58,11 @@
                                 </div>
                                 <div class="dynamic_field">
 
-                                </div><br>
-                                <div class="form-group mb-2  float-right">
-                                    <div class="d-flex justify-content-between">
-                                        <button type="submit" class="btn btn-success mr-2">Create</button>
-                                        <a href="{{ route('course.index') }}" class="btn btn-danger">Cancel</a>
-                                    </div>
+                                </div>
+                                <div class="form-group mb-2 buttonEnd">
+                                    <button type="submit" class="btn btn-success float-right mr-2">Create</button>
+                                    <a href="{{ route('course.index') }}"
+                                       class="btn btn-danger float-right mr-2">Cancel</a>
                                 </div>
                             </form>
                         </div>
@@ -95,7 +94,7 @@
                 html += '<div class="col-sm-3"></div>'
                 html += '<label for="points" class="col-sm-1 col-form-label">Points</label>'
                 html += '<div class="col-sm-5">'
-                html += '<input type="text" name="point['+i+'][]" data-id="'+i+'"  class="form-control points" placeholder="Add points" required>'
+                html += '<input type="text" name="point[' + i + '][]" data-id="' + i + '"  class="form-control points" placeholder="Add points" required>'
                 html += '</div>'
                 html += '<div class="col-sm-3">'
                 html += '<button type="button" name="add_point" data-id="' + j + '" data-mid="' + i + '" class="btn btn-primary add-point btn-star p_' + i + '">+</button>'
@@ -110,7 +109,7 @@
                 $('.remove' + button_id + '').remove();
             });
 
-            $(document).on('click',".add-point", function(){
+            $(document).on('click', ".add-point", function () {
                 let id = parseInt($(this).data('id'));
                 let mid = parseInt($(this).data('mid'));
                 console.log(id, $(this).data('mid'))
@@ -121,7 +120,7 @@
                 ele.find('.points').val("")
                 $(this).data('id', id)
             })
-            $(document).on('click', '.point_remove', function(){
+            $(document).on('click', '.point_remove', function () {
                 $(this).closest('.clone-point').remove();
             });
         });
