@@ -133,10 +133,9 @@
                                 <div class="dynamic_field">
 
                                 </div>
-                                <div class="form-group mb-2 buttonEnd">
-                                    <button type="submit" class="btn btn-success float-right mr-2">Update</button>
-                                    <a href="{{ route('course.index') }}"
-                                       class="btn btn-danger float-right mr-2">Cancel</a>
+                                <div class="form-group mb-2 float-right">
+                                    <button type="submit" class="btn btn-primary mr-2">Update</button>
+                                    <a href="{{ route('course.index') }}" class="btn btn-danger">Cancel</a>
                                 </div>
                             </form>
                         </div>
