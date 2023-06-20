@@ -86,7 +86,7 @@
                                         <select class="form-control select2" name="branch_id" >
                                             <option value="">-------------Select Branch------------</option>
                                             @foreach($branches as $key=> $branch)
-                                                <option value="{{$branch->id}}" {{old('branch')==$branch->id?'selected':''}}>{{$branch->name}}</option>
+                                                <option value="{{$branch->id}}" {{old('branch_id')==$branch->id?'selected':''}}>{{$branch->name}}</option>
                                             @endforeach
                                         </select>
                                         @error('branch_id')

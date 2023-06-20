@@ -3,11 +3,11 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
-                @if ($message = Session::get('success'))
-                    <div class="alert alert-default-success">
-                        <p>{{ $message }}</p>
-                    </div>
-                @endif
+{{--                @if ($message = Session::get('success'))--}}
+{{--                    <div class="alert alert-default-success">--}}
+{{--                        <p>{{ $message }}</p>--}}
+{{--                    </div>--}}
+{{--                @endif--}}
                 <div class="row my-4">
                     <div class="col-md-12">
                         <div class="card shadow">

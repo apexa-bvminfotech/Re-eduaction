@@ -3,11 +3,6 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
-                @if ($message = Session::get('success'))
-                    <div class="alert alert-default-success">
-                        <p>{{ $message }}</p>
-                    </div>
-                @endif
                 <div class="row my-3">
                   <div class="col-md-12">
                         <div class="card shadow">
@@ -61,11 +56,11 @@
                                             <td>
                                                 <a href="{{route('user.edit',$u->id)}}" class="btn btn-outline-success"
                                                    title="Edit"><i class="fa fa-edit"></i></a>
-                                                {{--                                                {!! Form::open(['method' => 'DELETE','route' => ['user.destroy', $u->id],'style'=>'display:inline']) !!}--}}
-                                                {{--                                                <button type="submit" class="btn btn-danger" title="Delete"--}}
-                                                {{--                                                        onclick="return confirm('Are you sure you want to delete?')"><i--}}
-                                                {{--                                                        class="fe fe-trash-2"></i></button>--}}
-                                                {{--                                                {!! Form::close() !!}--}}
+{{--                                                                                                {!! Form::open(['method' => 'DELETE','route' => ['user.destroy', $u->id],'style'=>'display:inline']) !!}--}}
+{{--                                                                                                <button type="submit" class="btn btn-danger" title="Delete"--}}
+{{--                                                                                                        onclick="return confirm('Are you sure you want to delete?')"><i--}}
+{{--                                                                                                        class="fe fe-trash-2"></i></button>--}}
+{{--                                                                                                {!! Form::close() !!}--}}
                                             </td>
                                         </tr>
                                     @endforeach
