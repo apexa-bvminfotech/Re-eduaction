@@ -61,7 +61,7 @@
                                                         {!! Form::close() !!}
                                                     @endcan
                                                     <button type="button"
-                                                            class="btn mb-3 btn-outline-success mt-3 btn-assign"
+                                                            class="btn  btn-outline-success  btn-assign"
                                                             data-id="{{$student->id}}"> Assign Staff
                                                     </button>
                                                 </div>
@@ -103,9 +103,9 @@
                                 </select>
                             </div>
                             <div class="col-md-12 mb-1">
-                                <label for="name">Sloat: </label>
-                                <select class="form-control sloat" name="sloat" required>
-                                    <option value="">------Select Sloat-----</option>
+                                <label for="name">Slot: </label>
+                                <select class="form-control slot" name="slot" required>
+                                    <option value="">------Select Slot-----</option>
                                 </select>
                             </div>
                             <div class="col-md-12 mb-1">
@@ -148,25 +148,25 @@
                 $('.student_id').val(id)
                 $('#verticalModal').modal('toggle')
                 $('.staff_id').val($('.staff_id').children().eq(0).val());
-                $('.sloat').html('<option value="">------Select Sloat-----</option>')
+                $('.slot').html('<option value="">------Select Slot-----</option>')
             });
             $(document).on('change', '.staff_id', function () {
                 let staff = ($(this).val());
                 if (staff != "") {
                     $.ajax({
-                        url: 'student/staff-sloat/' + staff,
+                        url: 'student/staff-slot/' + staff,
                         type: 'GET',
                         data: {
                             "_token": "{{csrf_token()}}",
                         },
                         success: function (data) {
-                            console.log("Sloat display done.", data);
-                            let sloatOption = '<option value="">------Select Sloat-----</option>'
-                            $.each(data.sloats, function (index, sloat) {
-                                sloatOption += '<option value="' + sloat.id + '">' + sloat.sloat_time + '  (' + sloat.rtc.rtc_name + ')</option>'
+                            console.log("Slot display done.", data);
+                            let slotOption = '<option value="">------Select Slot-----</option>'
+                            $.each(data.slots, function (index, slot) {
+                                slotOption += '<option value="' + slot.id + '">' + slot.slot_time + '  (' + slot.rtc.rtc_name + ')</option>'
                             })
-                            $('.sloat').html("")
-                            $('.sloat').html(sloatOption)
+                            $('.slot').html("")
+                            $('.slot').html(slotOption)
                         }
                     });
                 }

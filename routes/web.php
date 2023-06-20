@@ -24,22 +24,23 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::group(['middleware'=>['auth']],function (){
     Route::resource('student', 'StudentsController');;
     Route::group(['prefix'=>'student'],function (){
-        Route::get('/staff-sloat/{id}','StudentsController@sloat');
+        Route::get('/staff-slot/{id}','StudentsController@sloat');
         Route::post('/assign-staff', 'StudentsController@assignStaff')->name('student.assignStaff');
     });
     Route::resource('roles', 'RoleController');
-    Route::resource('staff', 'StaffController');
+    Route::resource('trainer', 'TrainerController');
     Route::resource('rtc', 'RtcController');
-    Route::resource('sloat', 'SloatController');
+    Route::resource('slot', 'SlotController');
     Route::resource('staff_attendance', 'StaffAttendanceController');
     Route::resource('course', 'CourseController');
     Route::resource('point', 'PointController')->only(['destroy']);
     Route::resource('subCourse', 'SubCourseController')->only(['destroy']);
     Route::resource('user','UserController');
-    Route::resource('branch','BranchController');
+//    Route::resource('branch','BranchController');
     Route::get('changeRtcStatus', 'RtcController@changeRtcStatus');
-    Route::get('changeSloatStatus', 'SloatController@changeSloatStatus');
+    Route::get('changeSlotStatus', 'SloatController@changeSloatStatus');
     Route::get('changeStaffStatus', 'StaffController@changeStaffStatus');
     Route::get('changeUserStatus','UserController@changeUserStatus');
+    Route::get('get-trainer-data','SlotController@gettrainerdata')->name('get-trainer-data');
 });
 

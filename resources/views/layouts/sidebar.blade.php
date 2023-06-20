@@ -14,9 +14,9 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{route('staff.index')}}" class="nav-link @if(Route::currentRouteName() == 'staff.index')active  @endif">
+                    <a href="{{route('trainer.index')}}" class="nav-link @if(Route::currentRouteName() == 'staff.index')active  @endif">
                         <i class="nav-icon fas fa-columns"></i>
-                        <p>Staff</p>
+                        <p>Trainer</p>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -26,9 +26,9 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{route('sloat.index')}}" class="nav-link @if(Route::currentRouteName() == 'sloat.index')active  @endif">
+                    <a href="{{route('slot.index')}}" class="nav-link @if(Route::currentRouteName() == 'slot.index')active  @endif">
                         <i class="nav-icon fas fa-columns"></i>
-                        <p>Sloat</p>
+                        <p>Slot</p>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -61,12 +61,12 @@
                         <p>Users</p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('branch.index') }}" class="nav-link @if(Route::currentRouteName() == 'user.index')active  @endif">
-                        <i class="nav-icon fas fa-columns"></i>
-                        <p>Branch</p>
-                    </a>
-                </li>
+{{--                <li class="nav-item">--}}
+{{--                    <a href="{{ route('branch.index') }}" class="nav-link @if(Route::currentRouteName() == 'user.index')active  @endif">--}}
+{{--                        <i class="nav-icon fas fa-columns"></i>--}}
+{{--                        <p>Branch</p>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
             </ul>
         </nav>
     </div>

@@ -16,6 +16,9 @@ return new class extends Migration
         Schema::create('rtc', function (Blueprint $table) {
             $table->id();
             $table->string('rtc_name');
+            $table->foreignId('branch_id');
+            $table->string('person_name');
+            $table->string('contact');
             $table->text('address');
             $table->string('rtc_no');
             $table->timestamps();

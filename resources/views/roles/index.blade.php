@@ -34,7 +34,7 @@
                                     <tbody>
                                     @foreach ($roles as $key => $role)
                                         <tr>
-                                            <td>{{ ++$i }}</td>
+                                            <td>{{ $role->id }}</td>
                                             <td>{{ $role->name }}</td>
                                             <td>
                                                 <a href="{{ route('roles.show',$role->id) }}" class="btn btn-info"
@@ -72,7 +72,7 @@
             "searching": true,
             "ordering": true,
             "info": true,
-            "autoWidth": false,
+            "autoWidth": true,
             "responsive": true,
         });
     </script>

@@ -20,10 +20,10 @@ class PermissionTableSeeder extends Seeder
             'staff-create',
             'staff-edit',
             'staff-delete',
-            'sloat-list',
-            'sloat-create',
-            'sloat-edit',
-            'sloat-delete',
+            'slot-list',
+            'slot-create',
+            'slot-edit',
+            'slot-delete',
             'rtc-list',
             'rtc-create',
             'rtc-edit',
@@ -48,6 +48,10 @@ class PermissionTableSeeder extends Seeder
             'staff-attendance-create',
             'staff-attendance-edit',
             'staff-attendance-delete',
+            'trainer-list',
+            'trainer-create',
+            'trainer-edit',
+            'trainer-delete',
         ];
 
         foreach ($permissions as $permission) {

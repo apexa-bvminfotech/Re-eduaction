@@ -7,7 +7,7 @@ use App\Models\Rtc;
 use App\Models\Staff;
 use App\Models\Student;
 use App\Models\User;
-use App\Models\Sloat;
+use App\Models\Slot;
 use App\Models\StudentStaffAssign;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -22,10 +22,10 @@ class StudentsController extends Controller
      */
     public function index()
     {
-        $sloats = Sloat::orderBy('id', 'desc')->get();
+        $slots = Slot::orderBy('id', 'desc')->get();
         $staffs = Staff::orderBy('id', 'desc')->get();
         $students = Student::with('course')->orderBy('id')->get();
-        return view('student.index', compact('students','staffs','sloats'))->with('i');
+        return view('student.index', compact('students','staffs','slots'))->with('i');
     }
 
     /**
@@ -237,13 +237,13 @@ class StudentsController extends Controller
             ->with('success', 'student deleted successfully');
     }
 
-    public function sloat($id)
+    public function slot($id)
     {
-        $sloats = Sloat::where('staff_id', $id)
+        $slots = Slot::where('staff_id', $id)
             ->where('is_active', 0)
             ->with('rtc')
             ->get();
-        return response()->json(['sloats'=>$sloats]);
+        return response()->json(['slots'=>$slots]);
     }
     public function assignStaff(Request $request)
     {
@@ -251,14 +251,14 @@ class StudentsController extends Controller
         $validatedData = $request->validate([
             'student_id' => 'required|integer',
             'staff_id' => 'required|integer',
-            'sloat' => 'required|integer',
+            'slot' => 'required|integer',
             'type' => 'required|in:proxy,regular',
         ]);
 
         $assignStaff = new StudentStaffAssign();
         $assignStaff->student_id = $validatedData['student_id'];
         $assignStaff->staff_id = $validatedData['staff_id'];
-        $assignStaff->sloat_id = $validatedData['sloat'];
+        $assignStaff->slot_id = $validatedData['slot'];
         $assignStaff->type = $validatedData['type'];
         $assignStaff->date = Carbon::now()->toDateString();
         $assignStaff->save();

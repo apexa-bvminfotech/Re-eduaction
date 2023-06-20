@@ -4,56 +4,56 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
+                <div class="buttonAlign">
+
+                </div>
                 @if ($message = Session::get('success'))
-                    <div class="alert alert-success">
+                    <div class="alert alert-default-success">
                         <p>{{ $message }}</p>
                     </div>
                 @endif
                 <div class="row my-4">
-                    <!-- Small table -->
                     <div class="col-md-12">
                         <div class="card shadow">
                             <div class="card-header">
                                 <div class="buttonAlign d-flex justify-content-between">
-                                    <h2 class="mb-1 page-title">Staff Attendance</h2>
-                                    @can('staff-attendance-create')
-                                        <a href="{{route('staff_attendance.create')}}"
-                                           class="btn btn-primary float-right">Today Attendance</a>
+                                    <h2 class="mb-1 page-title">Trainer Management</h2>
+                                    @can('staff-create')
+                                        <a href="{{route('trainer.create')}}" class="btn btn-primary float-right">Create
+                                            New Trainer</a>
                                     @endcan
                                 </div>
                             </div>
                             <div class="card-body">
-                                <!-- table -->
                                 <table class="table table-bordered table-striped datatables" id="dataTable-1">
                                     <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Date</th>
-                                        <th>Total present Staff</th>
-                                        <th>Total absent Staff</th>
-                                        <th width="280px">Action</th>
+                                        <th>Name</th>
+                                        <th>Branch Name</th>
+                                        <th>Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach ($staffAttendance as $key => $s)
+                                    @foreach ($trainer as $key => $t)
                                         <tr>
-                                            <td>{{ ++$i }}</td>
-                                            <td>{{ date('d-m-Y', strtotime($s->date))}}</td>
-                                            <td>{{ $s->present }}</td>
-                                            <td>{{ $s->absent }}</td>
+                                            <td>{{ $t->id }}</td>
+                                            <td>{{ $t->name }}</td>
+                                            <td>{{$t->branch ? $t->branch->name : ''}}</td>
                                             <td>
-                                                @can('staff-attendance-edit')
-                                                    <a href="{{ route('staff_attendance.edit',$s->date) }}"
-                                                       class="btn btn-success" title="Edit"><i
+                                                @can('staff-edit')
+                                                    <a href="{{ route('trainer.edit',$t->id) }}"
+                                                       class="btn btn-outline-success" title="Edit"><i
                                                             class="fa fa-edit"></i></a>
                                                 @endcan
-                                                @can('staff-attendance-delete')
-                                                    {!! Form::open(['method' => 'DELETE','route' => ['staff_attendance.destroy', $s->date],'style'=>'display:inline']) !!}
-                                                    <button type="submit" class="btn btn-danger" title="Delete"
-                                                            onclick="return confirm('Are you sure you want to delete?')">
-                                                        <i class="fa fa-trash"></i></button>
-                                                    {!! Form::close() !!}
-                                                @endcan
+                                                <a href="{{ route('trainer.show',$t->id) }}" class="btn btn-outline-info"
+                                                   title="Show Permission"><i class="fa fa-eye"></i></a>
+
+                                                {{--                                                @can('staff-delete')--}}
+                                                {{--                                                    {!! Form::open(['method' => 'DELETE','route' => ['staff.destroy', $s->id],'style'=>'display:inline']) !!}--}}
+                                                {{--                                                    <button type="submit" class="btn btn-danger" title="Delete" onclick="return confirm('Are you sure you want to delete?')"><i class="fe fe-trash-2"></i></button>--}}
+                                                {{--                                                    {!! Form::close() !!}--}}
+                                                {{--                                                @endcan--}}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -82,4 +82,5 @@
             });
         })
     </script>
+    }
 @endpush

@@ -22,14 +22,15 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <table class="table datatables" id="dataTable-1">
                                 <!-- table -->
-                                <table class="table table-bordered table-striped" id="dataTable-1">
+                                <table class="table table-bordered table-striped datatables" id="dataTable-1">
                                     <thead>
                                     <tr>
                                         <th>No</th>
+                                        <th>Branch Name</th>
                                         <th>RTc No</th>
                                         <th>RTc Name</th>
+                                        <th>Person Name</th>
                                         <th>RTc Address</th>
                                         <th>Status</th>
                                         <th width="280px">Action</th>
@@ -39,8 +40,10 @@
                                     @foreach ($rtc as $key => $r)
                                         <tr>
                                             <td>{{ ++$i }}</td>
+                                            <td>{{ $r->branch ? $r->branch->name : ''}}</td>
                                             <td>{{ $r->rtc_no }}</td>
                                             <td>{{ $r->rtc_name }}</td>
+                                            <td>{{$r->person_name}}<br>{{$r->contact}}</td>
                                             <td>{{ $r->address }}</td>
                                             <td>
                                                 <div class="custom-control custom-switch">
