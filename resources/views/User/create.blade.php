@@ -68,14 +68,14 @@
                                 <div class="form-group row">
                                     <label for="role" class="col-sm-3 col-form-label">Role name:</label>
                                     <div class="col-sm-9">
-                                        <select class="form-control select2" name="role" required>
+                                        <select class="form-control select2" name="role" >
                                             <option value="">------Select Role------</option>
                                             @foreach($role as $key=> $r)
                                                 <option
                                                     value="{{$r->id}}"{{old('role')==$r->id?'selected':''}}>{{$r->name}}</option>
                                             @endforeach
                                         </select>
-                                        @error('role')
+                                        @error("role")
                                         <span class="text-danger">{{$message}}</span>
                                         @enderror
                                     </div>
@@ -89,7 +89,7 @@
                                                 <option value="{{$branch->id}}" {{old('branch')==$branch->id?'selected':''}}>{{$branch->name}}</option>
                                             @endforeach
                                         </select>
-                                        @error('branch')
+                                        @error('branch_id')
                                         <span class="text-danger">{{$message}}</span>
                                         @enderror
                                     </div>
@@ -106,8 +106,8 @@
                                             <input class="custom-control-input custom-control-input-danger" value="0"
                                                    type="radio" id="customRadio4" name="is_active">
                                             <label for="customRadio4" class="custom-control-label">Deactive</label>
-                                        </div>
-                                        @error('status')
+                                        </div>&nbsp;
+                                        @error('is_active')
                                         <span class="text-danger">{{$message}}</span>
                                         @enderror
                                     </div>

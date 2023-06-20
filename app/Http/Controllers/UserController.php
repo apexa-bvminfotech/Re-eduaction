@@ -17,8 +17,9 @@ class UserController extends Controller
      */
     public function index()
     {
+        $branches = Branch::orderBy('id')->get();
         $users = User::orderBy('id')->where('type', 0)->get();
-        return view('user.index', compact('users'));
+        return view('user.index', compact('users','branches'));
     }
 
     /**
@@ -48,8 +49,9 @@ class UserController extends Controller
             'email' => 'required|unique:users,email|email',
             'contact' => 'required|numeric|digits:10',
             'branch_id' => 'required',
+            'is_active' => 'required'
         ]);
-//        dd($request->all());
+
         $user = User::Create([
             'name' => $request->name,
             'surname' => $request->surname,

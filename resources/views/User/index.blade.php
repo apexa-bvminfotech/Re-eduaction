@@ -25,18 +25,31 @@
                                     <thead>
                                     <tr>
                                         <th>No</th>
+                                        <th>Surname</th>
                                         <th>Name</th>
+                                        <th>Father Name</th>
                                         <th>Email</th>
+                                        <th>Contact</th>
+                                        <th>Branch</th>
                                         <th>Status</th>
                                         <th width="280px">Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
+
                                     @foreach($users as $key=>$u)
                                         <tr>
                                             <td>{{$u->id}}</td>
+                                            <td>{{$u->surname}}</td>
                                             <td>{{$u->name}}</td>
+                                            <td>{{$u->father_name}}</td>
                                             <td>{{$u->email}}</td>
+                                            <td>{{$u->contact}}</td>
+                                            <td>
+                                                @if($u->branch)
+                                                    {{$u->branch->name}}
+                                                @endif
+                                            </td>
                                             <td>
                                                 <div class="custom-control custom-switch">
                                                     <input type="checkbox" data-id="{{$u->id}}"
