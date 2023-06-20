@@ -16,10 +16,10 @@ class PermissionTableSeeder extends Seeder
     public function run()
     {
         $permissions = [
-            'staff-list',
-            'staff-create',
-            'staff-edit',
-            'staff-delete',
+            'trainer-list',
+            'trainer-create',
+            'trainer-edit',
+            'trainer-delete',
             'slot-list',
             'slot-create',
             'slot-edit',
@@ -44,14 +44,10 @@ class PermissionTableSeeder extends Seeder
             'student-attendance-create',
             'student-attendance-edit',
             'student-attendance-delete',
-            'staff-attendance-list',
-            'staff-attendance-create',
-            'staff-attendance-edit',
-            'staff-attendance-delete',
-            'trainer-list',
-            'trainer-create',
-            'trainer-edit',
-            'trainer-delete',
+            'trainer-attendance-list',
+            'trainer-attendance-create',
+            'trainer-attendance-edit',
+            'trainer-attendance-delete',
         ];
 
         foreach ($permissions as $permission) {
