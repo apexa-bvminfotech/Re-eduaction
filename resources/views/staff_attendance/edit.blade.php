@@ -9,7 +9,7 @@
                         <div class="card shadow mb-4">
                             <div class="card-header">
                                 <div class="buttonAlign d-flex justify-content-between">
-                                    <h2 class="mb-1 page-title">Edit Attendance</h2>
+                                    <h2 class="mb-0 page-title">Edit Attendance</h2>
                                     <a href="{{ route('staff_attendance.index') }}" class="btn btn-primary float-right">Back</a>
                                 </div>
                                 <strong class="card-title">{{ date('d-m-Y', strtotime($EditDate)) }}</strong>

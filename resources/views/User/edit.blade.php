@@ -9,7 +9,7 @@
                         <div class="card shadow mb-4">
                             <div class="card-header">
                                 <div class="buttonAlign d-flex justify-content-between">
-                                <h2 class="mb-1 page-title">Edit User</h2>
+                                <h2 class="mb-0 page-title">Edit User</h2>
                                     <a href="{{ route('user.index') }}" class="btn btn-primary float-right">Back</a>
                                 </div>
                             </div>
@@ -18,6 +18,16 @@
                                 <input type="hidden" name="user_id" value="{{ $user->user_id }}">
                                 {{--                                <div class="row">--}}
                                 {{--                                    <div class="col-md-12">--}}
+                                <div class="form-group row">
+                                    <label for="surname" class="col-sm-3 col-form-label">Surname:</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="surname" placeholder="Enter Surname" value="{{ $user->surname }}"
+                                               class="form-control" >
+                                        @error('surname')
+                                        <span class="text-danger">{{$message}}</span>
+                                        @enderror
+                                    </div>
+                                </div>
                                 <div class="form-group row">
                                     <label for="name" class="col-sm-3 col-form-label">Name:</label>
                                     <div class="col-sm-9">
@@ -29,11 +39,31 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    <label for="father_name" class="col-sm-3 col-form-label">Father Name:</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="father_name" placeholder="Enter Father Name" value="{{ $user->father_name }}"
+                                               class="form-control" >
+                                        @error('father_name')
+                                        <span class="text-danger">{{$message}}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <label for="email" class="col-sm-3 col-form-label">Email:</label>
                                     <div class="col-sm-9">
                                         <input type="email" name="email" value="{{ $user->email }}"
                                                placeholder="email" class="form-control" required>
                                         @error('email')
+                                        <span class="text-danger">{{$message}}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="simpleinput" class="col-sm-3 col-form-label">Contact:</label>
+                                    <div class="col-sm-9">
+                                        <input type="number" name="contact" placeholder="Enter Contact" value="{{ $user->contact }}" class="form-control" onkeypress="return isNumber(event)" minlength="10"
+                                               maxlength="10" >
+                                        @error('contact')
                                         <span class="text-danger">{{$message}}</span>
                                         @enderror
                                     </div>
@@ -50,6 +80,21 @@
                                             @endforeach
                                         </select>
                                         @error('role')
+                                        <span class="text-danger">{{$message}}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="role" class="col-sm-3 col-form-label">Branch:</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control select2" name="branch_id" >
+                                            <option value="">------Select Branch-------</option>
+                                            @foreach($branches as $key=> $branch)
+                                                <option
+                                                        value="{{$branch->id}}"{{old('branch',$user->branch_id)==$branch->id?'selected':''}}>{{$branch->name}}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('branch')
                                         <span class="text-danger">{{$message}}</span>
                                         @enderror
                                     </div>

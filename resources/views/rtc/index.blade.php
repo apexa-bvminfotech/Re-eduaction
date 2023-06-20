@@ -14,7 +14,7 @@
                         <div class="card shadow">
                             <div class="card-header">
                                 <div class="buttonAlign d-flex justify-content-between">
-                                    <h2 class="mb-1 page-title">RTC Management</h2>
+                                    <h2 class="mb-0 page-title">RTC Management</h2>
                                     @can('rtc-create')
                                         <a href="{{route('rtc.create')}}" class="btn btn-primary float-right">Create New
                                             RTC</a>

@@ -15,7 +15,7 @@
                         <div class="card shadow">
                             <div class="card-header">
                                 <div class="buttonAlign d-flex justify-content-between">
-                                    <h2 class="mb-1 page-title">Staff Attendance</h2>
+                                    <h2 class="mb-0 page-title">Staff Attendance</h2>
                                     @can('staff-attendance-create')
                                         <a href="{{route('staff_attendance.create')}}"
                                            class="btn btn-primary float-right">Today Attendance</a>

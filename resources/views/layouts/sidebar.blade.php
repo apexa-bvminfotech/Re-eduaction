@@ -62,7 +62,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('branch.index') }}" class="nav-link @if(Route::currentRouteName() == 'user.index')active  @endif">
+                    <a href="{{ route('branch.index') }}" class="nav-link @if(Route::currentRouteName() == 'branch.index')active  @endif">
                         <i class="nav-icon fas fa-columns"></i>
                         <p>Branch</p>
                     </a>

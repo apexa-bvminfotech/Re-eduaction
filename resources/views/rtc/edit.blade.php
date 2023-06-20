@@ -8,7 +8,7 @@
                     <div class="card shadow mb-4">
                         <div class="card-header">
                             <div class="buttonAlign d-flex justify-content-between">
-                                <h2 class="mb-1 page-title">Edit RTC</h2>
+                                <h2 class="mb-0 page-title">Edit RTC</h2>
                                 <a href="{{ route('rtc.index') }}" class="btn btn-primary float-right">Back</a>
                             </div>
                         </div>

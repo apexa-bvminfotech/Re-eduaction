@@ -20,7 +20,7 @@
                         <div class="card shadow">
                             <div class="card-header">
                                 <div class="buttonAlign d-flex justify-content-between">
-                                    <h2 class="mb-1 page-title">Course Management</h2>
+                                    <h2 class="mb-0 page-title">Course Management</h2>
                                     <a href="{{route('course.create')}}" class="btn btn-primary float-right">Create New Course</a>
                                 </div>
                             </div>

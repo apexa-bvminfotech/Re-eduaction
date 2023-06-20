@@ -15,7 +15,7 @@
                         <div class="card shadow">
                             <div class="card-header">
                                 <div class="buttonAlign d-flex justify-content-between">
-                                    <h2 class="mb-1 page-title">Role Management</h2>
+                                    <h2 class="mb-0 page-title">Role Management</h2>
                                     @can('role-create')
                                         <a href="{{route('roles.create')}}" class="btn btn-primary float-right">Create
                                             New Role</a>
@@ -34,7 +34,7 @@
                                     <tbody>
                                     @foreach ($roles as $key => $role)
                                         <tr>
-                                            <td>{{ ++$i }}</td>
+                                            <td>{{ $role->id }}</td>
                                             <td>{{ $role->name }}</td>
                                             <td>
                                                 <a href="{{ route('roles.show',$role->id) }}" class="btn btn-info"

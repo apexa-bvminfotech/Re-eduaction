@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -27,8 +28,9 @@ class UserController extends Controller
      */
     public function create()
     {
+        $branches = Branch::orderBy('id')->get();
         $role = Role::orderBy('id')->get();
-        return view('user.create', compact('role'));
+        return view('user.create', compact('role','branches'));
     }
 
     /**
@@ -41,12 +43,21 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required|max:255',
+            'surname' => 'required|max:255',
+            'father_name' => 'required|max:255',
             'email' => 'required|unique:users,email|email',
+            'contact' => 'required|numeric|digits:10',
+            'branch_id' => 'required',
         ]);
+//        dd($request->all());
         $user = User::Create([
             'name' => $request->name,
+            'surname' => $request->surname,
+            'father_name' => $request->father_name,
             'email' => $request->email,
             'password' => bcrypt(strtolower($request->name) . '@2121'),
+            'contact' => $request->contact,
+            'branch_id' => $request->branch_id,
             'type' => 0,
             'is_active' => $request->is_active,
         ]);
@@ -62,7 +73,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-
+        //
     }
 
     /**
@@ -73,8 +84,9 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $branches = Branch::orderBy('id')->get();
         $role = Role::orderBy('id')->get();
-        return view('user.edit', compact('user', 'role'));
+        return view('user.edit', compact('user', 'role','branches'));
     }
 
     /**
@@ -87,19 +99,27 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
+            'surname' => 'required|max:255',
             'name' => 'required|max:255',
-            'email' => 'required'
+            'father_name' => 'required|max:255',
+            'email' => 'required|email',
+            'contact' => 'required|numeric|digits:10',
+            'branch_id' => 'required',
         ]);
 
         $user->update([
+            'surname' => $request->surname,
             'name' => $request->name,
+            'father_name' => $request->father_name,
             'email' => $request->email,
             'password' => bcrypt(strtolower($request->name) . '@2121'),
+            'contact' => $request->contact,
+            'branch_id' => $request->branch_id,
             'type' => 0,
             'is_active' => $request->is_active,
         ]);
         $user->assignRole($request->input('role'));
-        return redirect()->route('user.index')->with('success', 'User update successfully');
+        return redirect()->route('user.index')->with('success', 'User updated successfully');
     }
 
     /**

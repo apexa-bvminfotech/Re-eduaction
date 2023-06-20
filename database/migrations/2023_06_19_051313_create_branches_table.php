@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('address');
-            $table->string('Authorized_person_name');
-            $table->string('Authorized_person_contact');
+            $table->string('authorized_person_name');
+            $table->string('authorized_person_contact');
             $table->timestamps();
         });
     }
