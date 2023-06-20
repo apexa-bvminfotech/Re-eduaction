@@ -58,7 +58,7 @@
                                 <div class="form-group row">
                                     <label for="simpleinput" class="col-sm-3 col-form-label">Contact:</label>
                                     <div class="col-sm-9">
-                                        <input type="number" name="contact" placeholder="Enter Contact" value="{{ old('contact') }}" class="form-control" onkeypress="return isNumber(event)" minlength="10"
+                                        <input type="text" name="contact" placeholder="Enter Contact" value="{{ old('contact') }}" class="form-control" onkeypress="return isNumber(event)" minlength="10"
                                            maxlength="10" >
                                         @error('contact')
                                         <span class="text-danger">{{$message}}</span>
@@ -99,7 +99,7 @@
                                     <div class="col-sm-9 d-flex justify-content-evenly">
                                         <div class="custom-control custom-radio">
                                             <input class="custom-control-input" type="radio" id="customRadio1"
-                                                   name="is_active" value="1">
+                                                   name="is_active" value="1" checked>
                                             <label for="customRadio1" class="custom-control-label">Active</label>
                                         </div>
                                         <div class="custom-control custom-radio ml-2">

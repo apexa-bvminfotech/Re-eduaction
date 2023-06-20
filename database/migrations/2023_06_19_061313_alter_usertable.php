@@ -14,8 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('branch_id')->nullable()->after('is_active');
-            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
+            $table->integer('branch_id')->default('0');
             $table->string('surname')->after('id');
             $table->string('father_name')->after('name');
             $table->string('contact')->after('email');

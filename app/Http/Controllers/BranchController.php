@@ -48,7 +48,7 @@ class BranchController extends Controller
             'name' => $request->name,
             'address' => $request->address,
             'authorized_person_name' => $request->authorized_person_name,
-            'authorized_person_contact' => $request->authorized_person_contact,
+            'authorized_person_contact' => $request->authorized_person_contact
         ]);
 
         return redirect()->route('branch.index')->with('success', 'Branch Created successfully');

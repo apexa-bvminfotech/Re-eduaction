@@ -3,18 +3,13 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
-{{--                @if ($message = Session::get('success'))--}}
-{{--                    <div class="alert alert-default-success">--}}
-{{--                        <p>{{ $message }}</p>--}}
-{{--                    </div>--}}
-{{--                @endif--}}
                 <div class="row my-4">
                     <div class="col-md-12">
                         <div class="card shadow">
                             <div class="card-header">
                                 <div class="buttonAlign d-flex justify-content-between">
                                     <h2 class="mb-0 page-title">Branch Management</h2>
-                                    @can('staff-create')
+                                    @can('branch-create')
                                         <a href="{{route('branch.create')}}" class="btn btn-primary float-right">Create
                                             New Branch</a>
                                     @endcan
@@ -41,8 +36,10 @@
                                             <td>{{$u->authorized_person_name}}</td>
                                             <td>{{$u->authorized_person_contact}}</td>
                                             <td>
-                                                <a href="{{route('branch.edit',$u->id)}}" class="btn btn-outline-success"
-                                                   title="Edit"><i class="fa fa-edit"></i></a>
+                                                @can('branch-edit')
+                                                    <a href="{{route('branch.edit',$u->id)}}" class="btn btn-outline-success"
+                                                       title="Edit"><i class="fa fa-edit"></i></a>
+                                                @endcan
                                                 {{--                                                {!! Form::open(['method' => 'DELETE','route' => ['branch.destroy', $u->id],'style'=>'display:inline']) !!}--}}
                                                 {{--                                                <button type="submit" class="btn btn-danger" title="Delete"--}}
                                                 {{--                                                        onclick="return confirm('Are you sure you want to delete?')"><i--}}

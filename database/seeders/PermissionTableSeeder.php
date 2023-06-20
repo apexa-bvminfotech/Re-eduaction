@@ -48,6 +48,14 @@ class PermissionTableSeeder extends Seeder
             'trainer-attendance-create',
             'trainer-attendance-edit',
             'trainer-attendance-delete',
+            'branch-list',
+            'branch-create',
+            'branch-edit',
+            'branch-delete',
+            'user-list',
+            'user-create',
+            'user-edit',
+            'user-delete',
         ];
 
         foreach ($permissions as $permission) {

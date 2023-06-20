@@ -9,7 +9,7 @@
                             <div class="card-header">
                                 <div class="buttonAlign d-flex justify-content-between">
                                     <h2 class="mb-0 page-title">User Management</h2>
-                                    @can('staff-create')
+                                    @can('user-create')
                                         <a href="{{route('user.create')}}" class="btn btn-primary float-right">Create
                                             New User</a>
                                     @endcan
@@ -46,16 +46,20 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" data-id="{{$u->id}}"
-                                                           class="custom-control-input checkStatus"
-                                                           id="c{{$key+1}}" {{ $u->is_active ? 'checked' : '' }}>
-                                                    <label class="custom-control-label" for="c{{$key+1}}"></label>
-                                                </div>
+                                                @can('user-edit')
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" data-id="{{$u->id}}"
+                                                               class="custom-control-input checkStatus"
+                                                               id="c{{$key+1}}" {{ $u->is_active ? 'checked' : '' }}>
+                                                        <label class="custom-control-label" for="c{{$key+1}}"></label>
+                                                    </div>
+                                                @endcan
                                             </td>
                                             <td>
-                                                <a href="{{route('user.edit',$u->id)}}" class="btn btn-outline-success"
+                                                @can('user-edit')
+                                                    <a href="{{route('user.edit',$u->id)}}" class="btn btn-outline-success"
                                                    title="Edit"><i class="fa fa-edit"></i></a>
+                                                @endcan
 {{--                                                                                                {!! Form::open(['method' => 'DELETE','route' => ['user.destroy', $u->id],'style'=>'display:inline']) !!}--}}
 {{--                                                                                                <button type="submit" class="btn btn-danger" title="Delete"--}}
 {{--                                                                                                        onclick="return confirm('Are you sure you want to delete?')"><i--}}

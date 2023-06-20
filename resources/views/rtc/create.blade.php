@@ -76,7 +76,7 @@
                                 <div class="col-sm-9 d-flex justify-content-evenly">
                                     <div class="custom-control custom-radio">
                                         <input class="custom-control-input" type="radio" id="customRadio1"
-                                               name="is_active" value="1">
+                                               name="is_active" value="1" checked>
                                         <label for="customRadio1" class="custom-control-label">Active</label>
                                     </div>
                                     <div class="custom-control custom-radio ml-2">

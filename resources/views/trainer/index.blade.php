@@ -7,18 +7,14 @@
                 <div class="buttonAlign">
 
                 </div>
-                @if ($message = Session::get('success'))
-                    <div class="alert alert-default-success">
-                        <p>{{ $message }}</p>
-                    </div>
-                @endif
+
                 <div class="row my-4">
                     <div class="col-md-12">
                         <div class="card shadow">
                             <div class="card-header">
                                 <div class="buttonAlign d-flex justify-content-between">
                                     <h2 class="mb-1 page-title">Trainer Management</h2>
-                                    @can('staff-create')
+                                    @can('trainer-create')
                                         <a href="{{route('trainer.create')}}" class="btn btn-primary float-right">Create
                                             New Trainer</a>
                                     @endcan
@@ -41,7 +37,7 @@
                                             <td>{{ $t->name }}</td>
                                             <td>{{$t->branch ? $t->branch->name : ''}}</td>
                                             <td>
-                                                @can('staff-edit')
+                                                @can('trainer-edit')
                                                     <a href="{{ route('trainer.edit',$t->id) }}"
                                                        class="btn btn-outline-success" title="Edit"><i
                                                             class="fa fa-edit"></i></a>
