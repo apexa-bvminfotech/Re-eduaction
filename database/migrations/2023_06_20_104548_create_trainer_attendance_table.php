@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('staff_attendance', function (Blueprint $table) {
+        Schema::create('trainer_attendance', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('staff_id')->constrained('staff')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('trainers_id')->constrained('trainers')->cascadeOnUpdate()->cascadeOnDelete();
             $table->integer('attendance');
             $table->string('absent_reason')->nullable();
             $table->date('date');
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('staff_attendance');
+        Schema::dropIfExists('trainer_attendance');
     }
 };
