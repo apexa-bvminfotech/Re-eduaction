@@ -5,19 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Sloat extends Model
+class Slot extends Model
 {
     use HasFactory;
-    protected $table="sloat";
 
     protected $fillable = [
-        'sloat_time',
-        'staff_id',
+        'slot_time',
+        'trainer_id',
+        'branch_id',
+        'whatsapp_group_name',
         'rtc_id',
         'is_active'
     ];
 
     public function rtc(){
         return $this->belongsTo(Rtc::class);
+    }
+    public function trainer(){
+        return $this->belongsTo(Trainer::class);
+    }
+    public function branch(){
+        return $this->belongsTo(Branch::class);
     }
 }

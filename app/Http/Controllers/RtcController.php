@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
 use Illuminate\Http\Request;
 use App\Models\Rtc;
 use DB;
@@ -39,7 +40,8 @@ class RtcController extends Controller
      */
     public function create()
     {
-        return view('rtc.create');
+        $branch = Branch::orderBy('id','DESC')->get();
+        return view('rtc.create',compact('branch'));
     }
 
     /**
@@ -53,10 +55,20 @@ class RtcController extends Controller
         $this->validate($request, [
             'rtc_no' => 'required|unique:rtc,rtc_no',
             'rtc_name' => 'required',
+            'branch_id'=>'required',
+            'person_name'=>'required',
+            'contact'=>'required',
             'address' => 'required',
         ]);
-
-        Rtc::create($request->all());
+        $data = [
+            'rtc_no' => $request->input('rtc_no'),
+            'rtc_name' => $request->input('rtc_name'),
+            'branch_id'=>$request->input('branch_id'),
+            'person_name'=>$request->person_name,
+            'contact' => $request->contact,
+            'address'=>$request->address,
+        ];
+        Rtc::create($data);
 
         return redirect()->route('rtc.index')
             ->with('success','RTC created successfully.');
@@ -82,8 +94,9 @@ class RtcController extends Controller
     public function edit($id)
     {
         $rtc = Rtc::find($id);
+        $branch = Branch::orderBy('id','DESC')->get();
         if($rtc){
-            return view('rtc.edit',compact('rtc'));
+            return view('rtc.edit',compact('rtc','branch'));
         } else {
             return view('rtc.create');
         }
@@ -99,8 +112,11 @@ class RtcController extends Controller
     public function update(Request $request, Rtc $rtc)
     {
         $this->validate($request, [
-            'rtc_no' => 'required|unique:rtc,rtc_no',
+            'rtc_no' => 'required|unique:rtc,rtc_no,'.$rtc->id,
             'rtc_name' => 'required',
+            'branch_id'=>'required',
+            'person_name'=>'required',
+            'contact'=>'required',
             'address' => 'required',
         ]);
 

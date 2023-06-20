@@ -13,14 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('rtc', function (Blueprint $table) {
+        Schema::create('trainers', function (Blueprint $table) {
             $table->id();
-            $table->string('rtc_name');
-            $table->foreignId('branch_id');
-            $table->string('person_name');
-            $table->string('contact');
-            $table->text('address');
-            $table->string('rtc_no');
+            $table->string('name');
+            $table->unsignedBigInteger('branch_id')->nullable();
+            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -32,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rtc');
+        Schema::dropIfExists('trainers');
     }
 };
