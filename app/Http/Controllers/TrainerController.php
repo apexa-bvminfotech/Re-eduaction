@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Course;
 use App\Models\Trainer;
 use App\Models\Branch;
+use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 
 class TrainerController extends Controller
@@ -28,7 +30,9 @@ class TrainerController extends Controller
     public function create()
     {
         $branch = Branch::orderBy('id','DESC')->get();
-        return view('trainer.create',compact('branch'));
+        $course = Course::orderBy('id','DESC')->get();
+        $roles = Role::orderBy('id','DESC')->get();
+        return view('trainer.create',compact('branch','course','roles'));
     }
 
     /**
@@ -42,10 +46,14 @@ class TrainerController extends Controller
         $this->validate($request, [
             'name' => 'required|max:255',
             'branch_id'=>'required',
+            'course_id'=>'required',
+            'role_id'=>'required'
             ]);
         $data = [
             'name' => $request->name,
-            'branch_id'=>$request->input('branch_id')
+            'branch_id'=>$request->input('branch_id'),
+            'course_id'=>$request->input('course_id'),
+            'role_id'=>$request->input('role_id'),
             ];
 //        dd($data);
         Trainer::create($data);
@@ -88,10 +96,14 @@ class TrainerController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'branch_id'=>'required',
+            'course_id'=>'required',
+            'role_id'=>'required'
             ]);
         $trainer->update([
             'name' => $request->name,
-            'branch_id'=>$request->input('branch_id')
+            'branch_id'=>$request->input('branch_id'),
+            'course_id'=>$request->input('course_id'),
+            'role_id'=>$request->input('role_id'),
             ]);
         return redirect()->route('trainer.index')
             ->with('success','trainer updated successfully');

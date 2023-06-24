@@ -16,12 +16,12 @@
     <link rel="stylesheet" href="{{asset('assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/plugins/jqvmap/jqvmap.min.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/adminlte.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/plugins/daterangepicker/daterangepicker.css')}}">
     <link rel="stylesheet" href="{{asset('assets/plugins/summernote/summernote-bs4.min.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/plugins/bs-stepper/css/bs-stepper.min.css')}}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bs-stepper/dist/css/bs-stepper.min.css">
     <link rel="stylesheet" href="{{asset('assets/plugins/toastr/toastr.min.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/adminlte.min.css')}}">
     @stack('styles')
 
 </head>
@@ -70,7 +70,7 @@
 <script src="{{asset('assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js')}}"></script>
 <script src="{{asset('assets/plugins/summernote/summernote-bs4.min.js')}}"></script>
 <script src="{{asset('assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
-<script src="{{asset('assets/plugins/bs-stepper/js/bs-stepper.min.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bs-stepper/dist/js/bs-stepper.min.js"></script>
 <script src="{{asset('assets/js/adminlte.js')}}"></script>
 <script src="{{asset('assets/js/demo.js')}}"></script>
 <script src="{{asset('assets/js/pages/dashboard.js')}}"></script>
@@ -79,15 +79,6 @@
 @stack('scripts')
 
 <script>
-    $(function () {
-        $('.select2').select2();
-        var Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 300000
-        });
-    });
     @if(Session::has('success'))
         toastr.options =
         {

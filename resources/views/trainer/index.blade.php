@@ -13,7 +13,7 @@
                         <div class="card shadow">
                             <div class="card-header">
                                 <div class="buttonAlign d-flex justify-content-between">
-                                    <h2 class="mb-1 page-title">Trainer Management</h2>
+                                    <h2 class="mb-0 page-title">Trainer Management</h2>
                                     @can('trainer-create')
                                         <a href="{{route('trainer.create')}}" class="btn btn-primary float-right">Create
                                             New Trainer</a>
