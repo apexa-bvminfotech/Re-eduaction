@@ -1,68 +1,71 @@
 @extends('layouts.admin')
 @section('content')
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Create New Branch</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ route('branch.index') }}">Show Branch List</a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
 
-    <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-12">
+        <section class="content">
+            <div class="container-fluid">
                 <div class="row">
-                    <div class="card-deck col-6">
-                        <div class="card shadow mb-4">
-                            <div class="card-header">
-                                <div class="buttonAlign d-flex justify-content-between">
-                                    <h2 class="mb-0 page-title">Create New Branch</h2>
-                                    <a href="{{ route('branch.index') }}" class="btn btn-primary">Back</a>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                {!! Form::open(array('route' => 'branch.store','method'=>'POST')) !!}
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group mb-3">
-                                            <label for="simpleinput">Name:</label>
-                                            <input type="text" name="name" placeholder="name" value="{{ old('name') }}" class="form-control" >
-                                            @error('name')
+                    <div class="col-md-6">
+                        <div class="card card-primary">
+                            {!! Form::open(array('route' => 'branch.store','method'=>'POST')) !!}
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="simpleinput">Branch Name</label>
+                                        <input type="text" name="name" placeholder="Enter branch name" value="{{ old('name') }}" class="form-control" required>
+                                        @error('name')
                                             <span class="text-danger">{{$message}}</span>
-                                            @enderror
-                                        </div>
+                                        @enderror
+                                    </div>
 
-                                        <div class="form-group mb-3">
-                                            <label for="address">Address:</label>
-                                            <textarea name="address" class="form-control"
-                                                      placeholder="enter address">{{ old('address') }}</textarea>
-                                            @error('address')
+                                    <div class="form-group">
+                                        <label for="address">Branch Address</label>
+                                        <textarea name="address" class="form-control" placeholder="Enter branch address" required>{{ old('address') }}</textarea>
+                                        @error('address')
                                             <span class="text-danger">{{$message}}</span>
-                                            @enderror
-                                        </div>
-                                        <div class="form-group mb-3">
-                                            <label for="simpleinput">Authorized Person Name:</label>
-                                            <input type="text" name="authorized_person_name" placeholder="Enter Authorized Person Name" value="{{ old('authorized_person_name') }}" class="form-control" >
-                                            @error('authorized_person_name')
-                                            <span class="text-danger">{{$message}}</span>
-                                            @enderror
-                                        </div>
-                                        <div class="form-group mb-3">
-                                            <label for="simpleinput">Authorized Person Contact:</label>
-                                            <input type="number" name="authorized_person_contact" placeholder="Enter Authorized Person Contact" value="{{ old('authorized_person_contact') }}" class="form-control" onkeypress="return isNumber(event)" minlength="10"
-                                                   maxlength="10" >
-                                            @error('authorized_person_contact')
-                                            <span class="text-danger">{{$message}}</span>
-                                            @enderror
-                                        </div>
+                                        @enderror
                                     </div>
-                                </div><br>
-                                <div class="form-group mb-2  float-right">
-                                    <div class="d-flex justify-content-between">
-                                        <a href="{{ route('branch.index') }}" class="btn btn-danger mr-2">Cancel</a>
-                                        <button type="submit" class="btn btn-success ">Create</button>
+                                    <div class="form-group">
+                                        <label for="simpleinput">Authorized Person Name</label>
+                                        <input type="text" name="authorized_person_name" placeholder="Enter Authorized person name" value="{{ old('authorized_person_name') }}" class="form-control" >
+                                        @error('authorized_person_name')
+                                            <span class="text-danger">{{$message}}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="simpleinput">Authorized Person Contact:</label>
+                                        <input type="tel" name="authorized_person_contact" placeholder="12345 67890" value="{{ old('authorized_person_contact') }}" class="form-control" pattern="[0-9]{5}[\s]{1}[0-9]{5}">
+                                        @error('authorized_person_contact')
+                                            <span class="text-danger">{{$message}}</span>
+                                        @enderror
                                     </div>
                                 </div>
-                                {!! Form::close() !!}
-                            </div>
+                                <!-- /.card-body -->
+
+                                <div class="card-footer justify-content-end d-flex" >
+                                    <button type="submit" class="btn btn-primary mr-2">Create</button>
+                                    <a href="{{ route('branch.index') }}" class="btn btn-danger">Cancel</a>
+                                </div>
+                            {!! Form::close() !!}
                         </div>
                     </div>
                 </div>
-            </div> <!-- .col-12 -->
-        </div> <!-- .row -->
-    </div> <!-- .container-fluid -->
-
+            </div>
+        </section>
+    </div>
 @endsection

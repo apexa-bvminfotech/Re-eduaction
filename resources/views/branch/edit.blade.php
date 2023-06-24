@@ -1,57 +1,69 @@
 @extends('layouts.admin')
 @section('content')
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Edit Branch</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ route('branch.index') }}">Show Branch List</a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
 
-    <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-12">
+        <section class="content">
+            <div class="container-fluid">
                 <div class="row">
-                    <div class="card-deck col-6">
-                        <div class="card shadow mb-4">
-                            <div class="card-header">
-                                <div class="buttonAlign d-flex justify-content-between">
-                                    <h2 class="mb-0 page-title">Edit Branch</h2>
-                                    <a href="{{ route('branch.index') }}" class="btn btn-primary float-right">Back</a>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                {!! Form::model($branch, ['method' => 'PATCH','route' => ['branch.update', $branch->id]]) !!}
-                                <input type="hidden" name="branch_id" value="{{ $branch->branch_id }}">
-                                {{--                                <div class="row">--}}
-                                {{--                                    <div class="col-md-12">--}}
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group mb-3">
-                                            <label for="simpleinput">Name:</label>
-                                            <input type="text" name="name" placeholder="name" value="{{ $branch->name }}" class="form-control" >
-                                        </div>
-                                        <div class="form-group mb-3">
-                                            <label for="address">Address:</label>
-                                            <textarea name="address" class="form-control"
-                                                      placeholder="enter address">{{ $branch->address }}</textarea>
-                                        </div>
-                                        <div class="form-group mb-3">
-                                            <label for="simpleinput">Authorized Person Name:</label>
-                                            <input type="text" name="authorized_person_name" placeholder="Enter Authorized Person Name" value="{{ $branch->authorized_person_name }}" class="form-control" >
-                                        </div>
-                                        <div class="form-group mb-3">
-                                            <label for="simpleinput">Authorized Person Contact:</label>
-                                            <input type="number" name="authorized_person_contact" placeholder="Enter Authorized Person Contact" value="{{ $branch->authorized_person_contact }}" class="form-control" onkeypress="return isNumber(event)" minlength="10"
-                                                   maxlength="10" >
-                                        </div>
+                    <div class="col-md-6">
+                        <div class="card card-primary">
+                            {!! Form::model($branch, ['method' => 'PATCH','route' => ['branch.update', $branch->id]]) !!}
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="simpleinput">Branch Name</label>
+                                        <input type="text" name="name" placeholder="Enter branch name" value="{{ $branch->name }}" class="form-control" >
+                                        @error('name')
+                                            <span class="text-danger">{{$message}}</span>
+                                        @enderror
                                     </div>
-                                </div><br>
-                                <div class="form-group mb-2 buttonEnd">
-                                    <button type="submit" class="btn btn-success float-right mr-2">Edit</button>
-                                    <a href="{{ route('branch.index') }}"
-                                       class="btn btn-danger float-right mr-2">Cancel</a>
+                                    <div class="form-group mb-3">
+                                        <label for="address">Branch Address</label>
+                                        <textarea name="address" class="form-control" placeholder="Enter branch address">{{ $branch->address }}</textarea>
+                                        @error('address')
+                                            <span class="text-danger">{{$message}}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label for="simpleinput">Authorized Person Name:</label>
+                                        <input type="text" name="authorized_person_name" placeholder="Enter authorized person name" value="{{ $branch->authorized_person_name }}" class="form-control" >
+                                        @error('authorized_person_name')
+                                            <span class="text-danger">{{$message}}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label for="simpleinput">Authorized Person Contact:</label>
+                                        <input type="tel" name="authorized_person_contact" placeholder="12345 67890" value="{{ $branch->authorized_person_contact }}" class="form-control" pattern="[0-9]{5}[\s]{1}[0-9]{5}">
+
+                                        @error('authorized_person_contact')
+                                            <span class="text-danger">{{$message}}</span>
+                                        @enderror
+                                    </div>
                                 </div>
-                            </div>
+                                <div class="card-footer justify-content-end d-flex" >
+                                    <button type="submit" class="btn btn-primary mr-2">Update</button>
+                                    <a href="{{ route('branch.index') }}" class="btn btn-danger">Cancel</a>
+                                </div>
                             {!! Form::close() !!}
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
-
 @endsection

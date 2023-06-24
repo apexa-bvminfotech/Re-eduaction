@@ -155,7 +155,7 @@ class SlotController extends Controller
         $slot = Slot::find($request->slot_id);
         $slot->is_active = $request->status;
         $slot->save();
-        return response()->json($request->status);
+        return response()->json(['success' => $request->status ? 'Slot de-active' : 'Slot active']);
     }
 
     public function gettrainerdata(Request $request)

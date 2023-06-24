@@ -42,7 +42,7 @@ class BranchController extends Controller
             'name' => 'required|max:255',
             'address' => 'required',
             'authorized_person_name' => 'required',
-            'authorized_person_contact' => 'required|numeric|digits:10',
+            'authorized_person_contact' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
         ]);
         $branch = Branch::Create([
             'name' => $request->name,
@@ -89,7 +89,7 @@ class BranchController extends Controller
             'name' => 'required|max:255',
             'address' => 'required',
             'authorized_person_name' => 'required',
-            'authorized_person_contact' => 'required|numeric|digits:10',
+            'authorized_person_contact' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
         ]);
         $branch->update([
             'name' => $request->name,

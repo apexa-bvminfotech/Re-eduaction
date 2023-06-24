@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -23,7 +24,7 @@ class CreateAdminUserSeeder extends Seeder
             'father_name' => 'Dhirubhai',
             'contact' => '7572901278',
             'email' => 'admin@gmail.com',
-            'password' => bcrypt('z'),
+            'password' => Hash::make('z'),
             'type' => 0,
             'branch_id' => 0
         ]);

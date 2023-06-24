@@ -55,9 +55,9 @@ class RtcController extends Controller
         $this->validate($request, [
             'rtc_no' => 'required|unique:rtc,rtc_no',
             'rtc_name' => 'required',
-            'branch_id'=>'required',
-            'person_name'=>'required',
-            'contact'=>'required',
+            'branch_id' => 'required',
+            'person_name' => 'required',
+            'contact' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
             'address' => 'required',
         ]);
         $data = [
@@ -67,6 +67,7 @@ class RtcController extends Controller
             'person_name'=>$request->person_name,
             'contact' => $request->contact,
             'address'=>$request->address,
+            'is_active' => $request->is_active,
         ];
         Rtc::create($data);
 
@@ -114,9 +115,9 @@ class RtcController extends Controller
         $this->validate($request, [
             'rtc_no' => 'required|unique:rtc,rtc_no,'.$rtc->id,
             'rtc_name' => 'required',
-            'branch_id'=>'required',
-            'person_name'=>'required',
-            'contact'=>'required',
+            'branch_id' => 'required',
+            'person_name' => 'required',
+            'contact' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
             'address' => 'required',
         ]);
 
@@ -143,6 +144,6 @@ class RtcController extends Controller
         $rtc = Rtc::find($request->rtc_id);
         $rtc->is_active = $request->status;
         $rtc->save();
-        return response()->json($request->status);
+        return response()->json(['success' => $request->status ? 'RTC de-active' : 'RTC active']);
     }
 }

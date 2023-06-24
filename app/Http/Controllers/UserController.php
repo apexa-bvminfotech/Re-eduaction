@@ -47,8 +47,8 @@ class UserController extends Controller
             'surname' => 'required|max:255',
             'father_name' => 'required|max:255',
             'email' => 'required|unique:users,email|email',
-            'contact' => 'required|numeric|digits:10',
-            'branch_id' => 'required',
+            'contact' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
+            'role' => 'required',
             'is_active' => 'required'
         ]);
 
@@ -59,7 +59,7 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => bcrypt(strtolower($request->name) . '@2121'),
             'contact' => $request->contact,
-            'branch_id' => $request->branch_id,
+            'branch_id' => $request->branch_id ? $request->branch_id : 0,
             'type' => 0,
             'is_active' => $request->is_active,
         ]);
@@ -105,8 +105,8 @@ class UserController extends Controller
             'name' => 'required|max:255',
             'father_name' => 'required|max:255',
             'email' => 'required|email',
-            'contact' => 'required|numeric|digits:10',
-            'branch_id' => 'required',
+            'contact' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
+            'role' => 'required',
         ]);
 
         $user->update([
@@ -116,7 +116,7 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => bcrypt(strtolower($request->name) . '@2121'),
             'contact' => $request->contact,
-            'branch_id' => $request->branch_id,
+            'branch_id' => $request->branch_id ? $request->branch_id : 0,
             'type' => 0,
             'is_active' => $request->is_active,
         ]);
@@ -142,6 +142,6 @@ class UserController extends Controller
         $user = User::find($request->user_id);
         $user->is_active = $request->status;
         $user->save();
-        return response()->json($request->status);
+        return response()->json(['success' => $request->status ? 'User de-active' : 'User active']);
     }
 }

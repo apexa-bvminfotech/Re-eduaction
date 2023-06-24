@@ -1,55 +1,81 @@
 @extends('layouts.admin')
 @section('content')
-
-    <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-8">
-                @if (count($errors) > 0)
-                    <div class="alert alert-danger">
-                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Edit Role</h1>
                     </div>
-                @endif
-                <div class="card card-primary">
-                    <div class="card-header">
-                        <div class="d-flex justify-content-between">
-                            <h3 class="mb-1 page-title">Edit Role</h3>
-                            <a href="{{ route('roles.index') }}" class="btn btn-outline-dark float-right">Back</a>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ route('roles.index') }}">Show Roles List</a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="card card-primary">
+                            {!! Form::model($role, ['method' => 'PATCH','route' => ['roles.update', $role->id]]) !!}
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="inputEmail3">Role Name</label>
+                                    <input type="text" name="name" placeholder="Enter role name" value="{{ $role->name }}" class="form-control col-md-6" required>
+                                    @error('name')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label>Permission</label>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="exampleCheck1" onclick="toggle(this);">
+                                        <label class="form-check-label" for="exampleCheck1">Select All</label>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        @foreach($permission->chunk(count($permission) / 3) as $chunk)
+                                            <div class="col-sm-4">
+                                                @foreach ($chunk as $value)
+                                                    <div class="custom-control custom-checkbox mb-2">
+                                                        <input  name="permission[]" class="custom-control-input" type="checkbox" id="customCheckbox{{ $value->id }}" value="{{ $value->id }}" {{ in_array($value->id, $rolePermissions) ? 'checked' : '' }}>
+                                                        <label for="customCheckbox{{ $value->id }}" class="custom-control-label">{{ $value->name }}</label><br>
+                                                    </div>
+                                                @endforeach
+
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    @error('permission')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="card-footer justify-content-end d-flex" >
+                                <button type="submit" class="btn btn-primary mr-2">Update</button>
+                                <a href="{{ route('roles.index') }}" class="btn btn-danger">Cancel</a>
+                            </div>
+                            {!! Form::close() !!}
                         </div>
-                    </div>
-                    <div class="card-body">
-                    <form action="{{route('roles.update', $role->id)}}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <div class="form-group">
-                            <label for="simpleinput">Role Name</label>
-                            <input type="text" name="name" value="{{ $role->name }}" placeholder="Enter Role name" class="form-control" required>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-2">Permission :</label>
-
-                                    @foreach($permission->chunk(16) as $chunk)
-                                        <div class="col-sm-4">
-                                            @foreach ($chunk as $value)
-                                                <div class="form-check">
-                                                    <label>{{ Form::checkbox('permission[]', $value->id, in_array($value->id, $rolePermissions) ? true : false, array('class' => 'name')) }}
-                                                        {{ $value->name }}</label><br/>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    @endforeach
-                                </div>
-                                <div class="card-fuchsia">
-                                    <button type="submit" class="btn btn-primary float-right">Submit</button>
-                                </div>
-                        </form>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 @endsection
+@push('scripts')
+    <script>
+        function toggle(source) {
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i] != source)
+                    checkboxes[i].checked = source.checked;
+            }
+        }
+    </script>
+@endpush

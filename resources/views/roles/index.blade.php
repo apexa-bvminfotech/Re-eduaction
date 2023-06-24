@@ -1,59 +1,51 @@
 @extends('layouts.admin')
 @section('content')
-
-    <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-12">
-                @if ($message = Session::get('success'))
-                    <div class="alert alert-default-success">
-                        <p>{{ $message }}</p>
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Role Management</h1>
                     </div>
-                @endif
-                <div class="row my-4">
-                    <!-- Small table -->
-                    <div class="col-md-12">
-                        <div class="card shadow">
-                            <div class="card-header">
-                                <div class="buttonAlign d-flex justify-content-between">
-                                    <h2 class="mb-0 page-title">Role Management</h2>
-                                    @can('role-create')
-                                        <a href="{{route('roles.create')}}" class="btn btn-primary float-right">Create
-                                            New Role</a>
-                                    @endcan
-                                </div>
-                            </div>
+                    <div class="col-sm-6">
+                        @can('role-create')
+                            <a href="{{route('roles.create')}}" class="btn btn-primary float-right">Create New Role</a>
+                        @endcan
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
                             <div class="card-body">
-                                <table class="table table-bordered table-striped" id="dataTable-1">
+                                <table id="example1" class="table table-bordered table-striped">
                                     <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Name</th>
-                                        <th width="280px">Action</th>
-                                    </tr>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Name</th>
+                                            <th>Action</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach ($roles as $key => $role)
-                                        <tr>
-                                            <td>{{ $role->id }}</td>
-                                            <td>{{ $role->name }}</td>
-                                            <td>
-                                                <a href="{{ route('roles.show',$role->id) }}" class="btn btn-info"
-                                                   title="Show Permission"><i class="fa fa-eye"></i></a>
-                                                @can('role-edit')
-                                                    <a href="{{ route('roles.edit',$role->id) }}"
-                                                       class="btn btn-success" title="Edit"><i
-                                                            class="fa fa-edit"></i></a>
-                                                @endcan
-                                                @can('role-delete')
-                                                    {!! Form::open(['method' => 'DELETE','route' => ['roles.destroy', $role->id],'style'=>'display:inline']) !!}
-                                                    <button type="submit" class="btn btn-danger" title="Delete"
-                                                            onclick="return confirm('Are you sure you want to delete?')">
-                                                        <i class="fa fa-trash"></i></button>
-                                                    {!! Form::close() !!}
-                                                @endcan
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                        @foreach ($roles as $key => $role)
+                                            <tr>
+                                                <td>{{ $role->id }}</td>
+                                                <td>{{ $role->name }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-outline-info btn-xs" data-id="{{ $role->id }}" data-toggle="modal" data-target="#modal-lg">
+                                                        <i class="fa fa-eye"></i>
+                                                    </button>
+                                                    @can('role-edit')
+                                                        <a href="{{ route('roles.edit',$role->id) }}"
+                                                           class="btn btn-outline-success btn-xs" title="Edit"><i
+                                                                class="fa fa-edit"></i></a>
+                                                    @endcan
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -61,19 +53,45 @@
                     </div>
                 </div>
             </div>
+        </section>
+    </div>
+    <div class="modal fade" id="modal-lg">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title roleName"></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body permission">
+                </div>
+            </div>
+            <!-- /.modal-content -->
         </div>
+        <!-- /.modal-dialog -->
     </div>
 @endsection
 @push('scripts')
     <script>
-        $('#dataTable-1').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": true,
-            "responsive": true,
+        $(function () {
+            $("#example1").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        });
+
+        $(".showDetail").on('click', function(){
+            var id = $(this).attr("data-id");
+            $.ajax({
+                url: 'roles/'+id,
+                type: 'get',
+                success: function(result){
+                    var roleName = "Role Name : " + result.role.name;
+                    $('.roleName').html(roleName);
+                    $('.permission').html(result.permissionData);
+                }
+            });
         });
     </script>
 @endpush

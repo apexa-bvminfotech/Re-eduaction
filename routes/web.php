@@ -38,7 +38,7 @@ Route::group(['middleware'=>['auth']],function (){
     Route::resource('user','UserController');
     Route::resource('branch','BranchController');
     Route::get('changeRtcStatus', 'RtcController@changeRtcStatus');
-    Route::get('changeSlotStatus', 'SloatController@changeSloatStatus');
+    Route::get('changeSlotStatus', 'SlotController@changeSlotStatus');
     Route::get('changeStaffStatus', 'StaffController@changeStaffStatus');
     Route::get('changeUserStatus','UserController@changeUserStatus');
     Route::get('get-trainer-data','SlotController@gettrainerdata')->name('get-trainer-data');
