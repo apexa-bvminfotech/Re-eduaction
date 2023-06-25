@@ -58,6 +58,7 @@ return new class extends Migration {
             $table->string('incentive')->nullable();
             $table->string('other_allowance')->nullable();
             $table->integer('emp_type');
+            $table->bigInteger('user_id');
             $table->timestamps();
 
         });
