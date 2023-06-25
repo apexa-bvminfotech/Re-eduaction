@@ -587,7 +587,6 @@
     </div>
 @endsection
 @push('scripts')
-    <script src="{{asset('assets/plugins/jquery-validation/jquery.validate.min.js')}}"></script>
     <script>
 
         $(document).ready(function () {

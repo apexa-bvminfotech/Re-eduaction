@@ -37,6 +37,9 @@
 
 <script src="{{asset('assets/plugins/jquery/jquery.min.js')}}"></script>
 <script src="{{asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{asset('assets/plugins/bs-stepper/js/bs-stepper.min.js')}}"></script>
+<script src="{{asset('assets/plugins/jquery-validation/jquery.validate.min.js')}}"></script>
+<script src="{{asset('assets/plugins/jquery-validation/additional-methods.min.js')}}"></script>
 <script src="{{asset('assets/plugins/jquery-ui/jquery-ui.min.js')}}"></script>
 <script src="{{asset('assets/plugins/select2/js/select2.full.min.js')}}"></script>
 <!-- DataTables -->
@@ -63,7 +66,7 @@
 <script src="{{asset('assets/plugins/jqvmap/jquery.vmap.min.js')}}"></script>
 <script src="{{asset('assets/plugins/jqvmap/maps/jquery.vmap.usa.js')}}"></script>
 <script src="{{asset('assets/plugins/jquery-knob/jquery.knob.min.js')}}"></script>
-<script src="{{asset('assets/plugins/bs-stepper/js/bs-stepper.min.js')}}"></script>
+
 <!-- daterangepicker -->
 <script src="{{asset('assets/plugins/moment/moment.min.js')}}"></script>
 <script src="{{asset('assets/plugins/daterangepicker/daterangepicker.js')}}"></script>
