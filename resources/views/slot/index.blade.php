@@ -57,7 +57,7 @@
                                                 <td>
                                                     @can('slot-edit')
                                                         <a href="{{ route('slot.edit',$s->id) }}"
-                                                           class="btn btn-outline-success btn-xs" title="Edit"><i
+                                                           class="btn btn-outline-success btn-sm" title="Edit"><i
                                                                 class="fa fa-edit"></i></a>
                                                     @endcan
                                                 </td>

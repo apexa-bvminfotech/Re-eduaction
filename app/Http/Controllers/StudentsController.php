@@ -6,6 +6,7 @@ use App\Models\Course;
 use App\Models\Rtc;
 use App\Models\Staff;
 use App\Models\Student;
+use App\Models\Trainer;
 use App\Models\User;
 use App\Models\Slot;
 use App\Models\StudentStaffAssign;
@@ -23,7 +24,7 @@ class StudentsController extends Controller
     public function index()
     {
         $slots = Slot::orderBy('id', 'desc')->get();
-        $staffs = Staff::orderBy('id', 'desc')->get();
+        $staffs = Trainer::orderBy('id', 'desc')->get();
         $students = Student::with('course')->orderBy('id')->get();
         return view('student.index', compact('students','staffs','slots'))->with('i');
     }
@@ -38,7 +39,7 @@ class StudentsController extends Controller
         $student = Student::orderBy('id', 'desc')->get();
         $role = Role::orderBy('id', 'desc')->get();
         $course = Course::orderBy('id', 'desc')->get();
-        $staff = Staff::orderBy('id')->where('is_active',0)->get();
+        $staff = Trainer::orderBy('id')->get();
         return view('student.create', compact('student', 'role', 'course', 'staff'));
     }
 

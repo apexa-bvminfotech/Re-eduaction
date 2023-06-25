@@ -57,7 +57,7 @@
                                                 <td>
                                                     @can('rtc-edit')
                                                         <a href="{{ route('rtc.edit',$r->id) }}"
-                                                           class="btn btn-outline-success btn-xs" title="Edit"><i
+                                                           class="btn btn-outline-success btn-sm" title="Edit"><i
                                                                 class="fa fa-edit"></i></a>
                                                     @endcan
                                                 </td>

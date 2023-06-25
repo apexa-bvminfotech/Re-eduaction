@@ -43,12 +43,12 @@ class TrainerController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required|max:255',
-            'branch_id'=>'required',
-            'course_id'=>'required',
-            'role_id'=>'required'
-            ]);
+//        $this->validate($request, [
+//            'name' => 'required|max:255',
+//            'branch_id'=>'required',
+//            'course_id'=>'required',
+//            'role_id'=>'required'
+//            ]);
         $data = [
             'name' => $request->name,
             'branch_id'=>$request->input('branch_id'),

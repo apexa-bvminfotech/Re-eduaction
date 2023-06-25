@@ -62,8 +62,7 @@
                                                     <input type="text" id="simpleinput" class="form-control "
                                                            value="{{ old('surname') }}"
                                                            name="surname" placeholder="enter surname" required>
-                                                    <div class="invalid-feedback">
-                                                    </div>
+                                                    <div class="invalid-feedback"></div>
                                                 </div>
                                             </div>
                                             <div class="col-md-4 mb-1">
@@ -449,7 +448,7 @@
                     return true;
                 }
 
-                function ageValidation() {
+                function  () {
                     var x = document.getElementById("txtAge").value;
                     if (x < 1 || x > 20) {
                         alert("enter age between 1 to 20")
