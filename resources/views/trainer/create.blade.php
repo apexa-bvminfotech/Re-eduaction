@@ -529,7 +529,7 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Passport Size Photo</label>
                                                             <div class="custom-file">
-                                                                <input type="file" class="custom-file-input" id="customFile" name="passPhoto">
+                                                                <input type="file" class="custom-file-input" name="passPhoto">
                                                                 <label class="custom-file-label" for="customFile">Choose file</label>
                                                             </div>
                                                         </div>
@@ -538,7 +538,7 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Aadhaar Card</label>
                                                             <div class="custom-file">
-                                                                <input type="file" class="custom-file-input" id="customFile" name="AadhaarPhoto">
+                                                                <input type="file" class="custom-file-input" name="AadhaarPhoto">
                                                                 <label class="custom-file-label" for="customFile">Choose file</label>
                                                             </div>
                                                         </div>
@@ -547,7 +547,7 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Last Education MarkSheet</label>
                                                             <div class="custom-file">
-                                                                <input type="file" class="custom-file-input" id="customFile" name="markSheet">
+                                                                <input type="file" class="custom-file-input" name="markSheet">
                                                                 <label class="custom-file-label" for="customFile">Choose file</label>
                                                             </div>
                                                         </div>
@@ -556,7 +556,7 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Choose Bank Passbook Photo</label>
                                                             <div class="custom-file">
-                                                                <input type="file" class="custom-file-input" id="customFile" name="passBook">
+                                                                <input type="file" class="custom-file-input" name="passBook">
                                                                 <label class="custom-file-label" for="customFile">Choose file</label>
                                                             </div>
                                                         </div>

@@ -77,10 +77,14 @@
 <script src="{{asset('assets/js/demo.js')}}"></script>
 <script src="{{asset('assets/js/pages/dashboard.js')}}"></script>
 <script src="{{asset('assets/plugins/toastr/toastr.min.js')}}"></script>
+<script src="{{asset('assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js')}}"></script>
 
 @stack('scripts')
 
 <script>
+    $(function () {
+        bsCustomFileInput.init();
+    });
     $('.select2').select2();
     @if(Session::has('success'))
         toastr.options =
