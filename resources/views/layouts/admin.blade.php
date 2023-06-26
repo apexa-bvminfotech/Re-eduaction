@@ -81,6 +81,7 @@
 @stack('scripts')
 
 <script>
+    $('.select2').select2();
     @if(Session::has('success'))
         toastr.options =
         {
