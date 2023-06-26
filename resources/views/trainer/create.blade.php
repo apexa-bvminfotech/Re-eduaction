@@ -494,7 +494,7 @@
                                                         <div class="form-group mb-3">
                                                             <label for="inputtext" class="col-sm-3 col-form-label">Course
                                                                 Name:</label>
-                                                            <select class="form-control select2" name="course_id">
+                                                            <select class="form-control select2" name="course_id" multiple="multiple" data-placeholder="Select a course">
                                                                 <option value="">--- Select Course ---</option>
                                                                 @foreach($course as $key => $c)
                                                                     <option
