@@ -60,7 +60,7 @@
                                     <div class="step" data-target="#terms-condition-part">
                                         <button type="button" class="step-trigger" role="tab"
                                                 aria-controls="terms-condition-part"
-                                                id="terms-condition-part-trigger">
+                                                id="terms-condition-part-trigger" required>
                                             <span class="bs-stepper-circle">5</span>
                                             <span class="bs-stepper-label">Terms & Condition</span>
                                         </button>
@@ -79,9 +79,12 @@
                                                             <input type="text"
                                                                    class="form-control "
                                                                    value="{{ old('surname') }}"
-                                                                   name="surname" placeholder="Enter Surname">
-                                                            <div class="invalid-feedback">
-                                                            </div>
+                                                                   name="surname" placeholder="Enter Surname" >
+{{--                                                            <div class="invalid-feedback">--}}
+{{--                                                            </div>--}}
+                                                            @error('surname')
+                                                            <span class="text-danger">{{$message}}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 mb-1">
@@ -103,6 +106,9 @@
                                                                    name="father_name"
                                                                    value="{{ old('father_name') }}"
                                                                    placeholder="Enter Father Name">
+                                                            @error('father_name')
+                                                            <span class="text-danger">{{$message}}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 mb-1">
@@ -110,7 +116,10 @@
                                                             <label for="contact number">Mobile No:</label>
                                                             <input type="tel" name="phone"
                                                                    placeholder="12345 67890" value="{{ old('phone') }}"
-                                                                   class="form-control" pattern="[0-9]{5}[\s]{1}[0-9]{5}">
+                                                                   class="form-control" >
+                                                            @error('phone')
+                                                            <span class="text-danger">{{$message}}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 mb-1">
@@ -118,9 +127,9 @@
                                                             <label for="inputMailForm">Email address:</label>
                                                             <input id="inputMailForm" type="email" name="email"
                                                                    class="form-control" placeholder="Enter Email Address">
-                                                            <div class="invalid-feedback">Please fill the email
-                                                                field
-                                                            </div>
+                                                            @error('email')
+                                                            <span class="text-danger">{{$message}}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 mb-1">
@@ -131,6 +140,9 @@
                                                                    placeholder="Enter Your Qualification"
                                                                    id="qualification"
                                                                    value="{{ old('qualification') }}">
+                                                            @error('qualification')
+                                                            <span class="text-danger">{{$message}}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 mb-1">
@@ -139,6 +151,9 @@
                                                             <input type="date" class="form-control" name="dob"
                                                                    placeholder="Enter Birthdate"
                                                                    value="{{ old('dob',date('Y-m-d')) }}">
+                                                            @error('dob')
+                                                            <span class="text-danger">{{$message}}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 mb-1">
@@ -168,7 +183,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button class="btn btn-primary float-right nxtbt" onclick="stepper.next()">Next</button>
+                                                <button class="btn btn-primary float-right next-btn" id="firstNext" type="button">Next</button>
                                             </div>
                                         </div>
                                         <div id="information-part" class="content" role="tabpanel"
@@ -207,7 +222,7 @@
                                                         <br>
                                                     </div>
                                                 </div>
-                                                <button type="submit" class="btn btn-primary float-right nxtbt  ml-2" onclick="stepper.next()">
+                                                <button type="submit" class="btn btn-primary float-right next-btn  ml-2">
                                                     Next
                                                 </button>
                                                 <button class="btn btn-primary prvBtn float-right" onclick="stepper.previous()">Previous
@@ -492,7 +507,7 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext" class="col-sm-3 col-form-label">Role
                                                                 Name:</label>
-                                                            <select class="form-control select2" name="role_id">
+                                                            <select class="form-control select2" name="role_id" required>
                                                                 <option value="">--- Select Role ---</option>
                                                                 @foreach($roles as $key => $r)
                                                                     <option
@@ -502,7 +517,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button type="submit" class="btn btn-primary float-right nxtbt ml-2" onclick="stepper.next()">Next</button>
+                                                <button type="submit" class="btn btn-primary float-right next-btn ml-2">Next</button>
                                                 <button class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
                                             </div>
                                         </div>
@@ -514,7 +529,7 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Passport Size Photo</label>
                                                             <div class="custom-file">
-                                                                <input type="file" class="custom-file-input" id="customFile">
+                                                                <input type="file" class="custom-file-input" id="customFile" name="passPhoto">
                                                                 <label class="custom-file-label" for="customFile">Choose file</label>
                                                             </div>
                                                         </div>
@@ -523,7 +538,7 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Aadhaar Card</label>
                                                             <div class="custom-file">
-                                                                <input type="file" class="custom-file-input" id="customFile">
+                                                                <input type="file" class="custom-file-input" id="customFile" name="AadhaarPhoto">
                                                                 <label class="custom-file-label" for="customFile">Choose file</label>
                                                             </div>
                                                         </div>
@@ -532,22 +547,22 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Last Education MarkSheet</label>
                                                             <div class="custom-file">
-                                                                <input type="file" class="custom-file-input" id="customFile">
+                                                                <input type="file" class="custom-file-input" id="customFile" name="markSheet">
                                                                 <label class="custom-file-label" for="customFile">Choose file</label>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group mb-2">
-                                                            <label for="inputtext">Choose Passport Size Photo</label>
+                                                            <label for="inputtext">Choose Bank Passbook Photo</label>
                                                             <div class="custom-file">
-                                                                <input type="file" class="custom-file-input" id="customFile">
+                                                                <input type="file" class="custom-file-input" id="customFile" name="passBook">
                                                                 <label class="custom-file-label" for="customFile">Choose file</label>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button type="submit" class="btn btn-primary float-right nxtbt  ml-2" onclick="stepper.next()">
+                                                <button type="submit" class="btn btn-primary float-right next-btn  ml-2">
                                                     Next
                                                 </button>
                                                 <button class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous
@@ -568,7 +583,7 @@
                                                     </div>
                                                 </div>
                                                 <button class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
-                                                <button type="submit" class="btn btn-primary float-right nxtbt  ml-2">
+                                                <button type="submit" class="btn btn-primary float-right next-btn  ml-2">
                                                     Submit
                                                 </button>
 
@@ -587,15 +602,19 @@
     </div>
 @endsection
 @push('scripts')
-    <script>
-
+     <script type="text/javascript">
         $(document).ready(function () {
-            $('#quickForm').validate({
+            var form = $('#quickForm');
+            var validator = form.validate({
                 rules: {
                     surname: {
                         required: true,
                         maxlength: 255,
                     },
+                    emer_fullName: {
+                        required: true,
+                        maxlength: 255,
+                    },
                     name: {
                         required: true,
                         maxlength: 255,
@@ -604,23 +623,99 @@
                         required: true,
                         maxlength: 255,
                     },
+                    phone: {
+                        required: true,
+                    },
+                    email: {
+                        required: true,
+                    },
+                    qualification: {
+                        required: true,
+                    },
+                    dob: {
+                        required: true,
+                    },
+                    marital_status: {
+                        required: true,
+                    },
                     address: {
                         required: true,
                     },
+                    emer_phone: {
+                        required: true,
+                    },
+                    emer_relationship: {
+                        required: true,
+                    },
+                    emer_address: {
+                        required: true,
+                    },
+                    passPhoto: {
+                        required: true,
+                    },
+                    AadhaarPhoto: {
+                        required:true,
+                    },
+                    markSheet: {
+                        required:true,
+                    },
+                    passBook: {
+                        required:true,
+                    }
+
                 },
                 messages: {
                     surname: {
-                        required: "Please enter a surname ",
+                        required: 'Please enter your surname.'
+                    },
+                    emer_fullName: {
+                        required: 'Please enter your emer_fullName.'
                     },
                     name: {
-                        required: "Please enter a name ",
+                        required: 'Please enter your name.'
                     },
                     father_name: {
-                        required: "Please enter a father name ",
+                        required: "Please enter your father name ",
+                    },
+                    phone: {
+                        required: "Please enter a Contact ",
+                    },
+                    email: {
+                        required: "Please enter your Email ",
+                    },
+                    qualification: {
+                        required: "Please enter your Qualification ",
+                    },
+                    dob: {
+                        required: "Please enter your Date of birth ",
+                    },
+                    marital_status: {
+                        required: "Please fill this field ",
                     },
                     address: {
-                        required: "Please enter a address ",
+                        required: "Please enter a Address ",
                     },
+                    emer_phone: {
+                        required: "Please enter Emergency contact Number",
+                    },
+                    emer_relationship: {
+                        required: "Please enter Relationship",
+                    },
+                    emer_address: {
+                        required: "Please Enter Address",
+                    },
+                    passPhoto: {
+                        required: "Please choose Passport size ",
+                    },
+                    AadhaarPhoto: {
+                        required: "Please choose Aadhaar card ",
+                    },
+                    markSheet: {
+                        required: "Please choose Education MarkSheet",
+                    },
+                    passBook: {
+                        required: "Please choose Aadhaar card ",
+                    }
                 },
                 errorElement: 'span',
                 errorPlacement: function (error, element) {
@@ -634,9 +729,22 @@
                     $(element).removeClass('is-invalid');
                 }
             });
+            $('.next-btn').click(function() {
+                var isValid = form.valid();
+                if (isValid) {
+                    stepper.next()
+                    resetValidation(form)
+                }
+            });
+            function resetValidation(form) {
+                form.find('.is-invalid').removeClass('is-invalid');
+                form.find('.invalid-feedback').remove();
+            }
         });
         document.addEventListener('DOMContentLoaded', function () {
             window.stepper = new Stepper(document.querySelector('.bs-stepper'))
         });
+
+
     </script>
 @endpush
