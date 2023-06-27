@@ -34,7 +34,8 @@ class TrainerController extends Controller
         $branch = Branch::orderBy('id','DESC')->get();
         $course = Course::orderBy('id','DESC')->get();
         $roles = Role::orderBy('id','DESC')->get();
-        return view('trainer.create',compact('branch','course','roles'));
+        $emp_id = Trainer::get()->count();
+        return view('trainer.create',compact('branch','course', 'roles', 'emp_id'));
     }
 
     /**
@@ -50,7 +51,7 @@ class TrainerController extends Controller
             'surname' => 'required',
             'name' => 'required|max:255',
             'father_name' => 'required|max:255',
-            'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
+            'phone' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
             'email' => 'required|email|unique:users,email',
             'qualification' => 'required',
             'dob' => 'required',
@@ -66,19 +67,21 @@ class TrainerController extends Controller
             'bank_passbook' => 'required',
             'terms_conditions' => 'required',
         ]);
-//        dd($request->all());
-       $user = User::Create([
+
+        $user = User::Create([
             'surname' => $request->surname,
             'name' => $request->name,
             'father_name' => $request->father_name,
             'email' => $request->email,
             'contact' => $request->phone,
-            'password' => Hash::make(($request->name) . '@123'),
+            'password' => Hash::make(strtolower($request->name) . '@123'),
             'type' => 1,
             'branch_id'=>$request->input('branch_id'),
         ]);
+        $user->assignRole($request->input('role_id'));
+
         Trainer::create( [
-//            'emp_id' =>
+            'emp_id' => $request->emp_id,
             'surname' => $request->surname,
             'name' => $request->name,
             'father_name' => $request->father_name,
@@ -97,8 +100,7 @@ class TrainerController extends Controller
             'work_location' => $request->work_location,
             'emp_type' => $request->emp_type,
             'office_use_email' => $request->office_use_email,
-            'joining_date_from' => $request->joining_date_from,
-            'joining_date_to' => $request->joining_date_to,
+            'joining_date' => $request->joining_date_from .'-'. $request->joining_date_to,
             'i_card_date' => $request->i_card_date,
             'i_card_return_date' => $request->i_card_return_date,
             'i_card_note' => $request->i_card_note,
@@ -116,8 +118,7 @@ class TrainerController extends Controller
             'incentive' => $request->incentive,
             'other_allowance' => $request->other_allowance,
             'branch_id'=>$request->input('branch_id'),
-            'course_id'=>$request->input('course_id'),
-            'role_id'=>$request->input('role_id'),
+            'course_id'=> json_encode($request->input('course_id')),
             'user_id' => $user->id,
             'photo' => $request->photo,
             'aadhaar_card' => $request->aadhaar_card,
@@ -125,9 +126,8 @@ class TrainerController extends Controller
             'bank_passbook' => $request->bank_passbook,
             'terms_conditions' => $request->terms_conditions,
         ]);
-//        dd($data);
-//        Trainer::create($data);
-             return redirect()->route('trainer.index')
+
+        return redirect()->route('trainer.index')
                  ->with('success','Trainer created successfully');
     }
 
@@ -169,7 +169,7 @@ class TrainerController extends Controller
             'surname' => 'required',
             'name' => 'required|max:255',
             'father_name' => 'required|max:255',
-            'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
+            'phone' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
             'email' => 'required|email|unique:users,email',
             'qualification' => 'required',
             'dob' => 'required',
@@ -185,8 +185,10 @@ class TrainerController extends Controller
             'bank_passbook' => 'required',
             'terms_conditions' => 'required',
         ]);
-//        dd($request->all());
-        $user = User::Create([
+
+        $user = User::find($request->user_id);
+
+        $user->update([
             'surname' => $request->surname,
             'name' => $request->name,
             'father_name' => $request->father_name,
@@ -196,8 +198,10 @@ class TrainerController extends Controller
             'type' => 1,
             'branch_id'=>$request->input('branch_id'),
         ]);
+        $user->assignRole($request->input('role_id'));
+
         $trainer->update([
-//            'emp_id' =>
+            'emp_id' => $request->emp_id,
             'surname' => $request->surname,
             'name' => $request->name,
             'father_name' => $request->father_name,
@@ -216,8 +220,7 @@ class TrainerController extends Controller
             'work_location' => $request->work_location,
             'emp_type' => $request->emp_type,
             'office_use_email' => $request->office_use_email,
-//            'joining_date_from' => $request->joining_date_from,
-//            'joining_date_to' => $request->joining_date_to,
+            'joining_date' => $request->joining_date_from .'-'. $request->joining_date_to,
             'i_card_date' => $request->i_card_date,
             'i_card_return_date' => $request->i_card_return_date,
             'i_card_note' => $request->i_card_note,
@@ -236,16 +239,14 @@ class TrainerController extends Controller
             'other_allowance' => $request->other_allowance,
             'branch_id'=>$request->input('branch_id'),
             'course_id'=>$request->input('course_id'),
-            'role_id'=>$request->input('role_id'),
-            'user_id' => $user->id,
+            'user_id' => $request->user_id,
             'photo' => $request->photo,
             'aadhaar_card' => $request->aadhaar_card,
             'last_edu_markSheet' => $request->last_edu_markSheet,
             'bank_passbook' => $request->bank_passbook,
             'terms_conditions' => $request->terms_conditions,
         ]);
-//        dd($data);
-//        Trainer::create($data);
+
         return redirect()->route('trainer.index')
             ->with('success','Trainer updated successfully');
     }

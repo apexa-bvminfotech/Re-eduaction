@@ -71,9 +71,22 @@
                                     <form action="{{route('trainer.update',$trainer->id)}}" method="POST" id="quickForm" class="needs-validation" novalidate>
                                         @csrf
                                         @method('PUT')
+                                        <input type="hidden" lass="form-control" value="{{ $trainer->user_id }}"
+                                               name="user_id" readonly>
                                         <div id="logins-part" class="content" role="tabpanel"
                                              aria-labelledby="logins-part-trigger">
                                             <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-4 mb-1">
+                                                        <div class="form-group mb-3">
+                                                            <label for="simpleinput">Employee ID</label>
+                                                            <input type="text"
+                                                                   class="form-control "
+                                                                   value="{{ $trainer->emp_id }}"
+                                                                   name="emp_id" readonly>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div class="row">
                                                     <div class="col-md-4 mb-1">
                                                         <div class="form-group mb-3">
@@ -82,8 +95,6 @@
                                                                    class="form-control "
                                                                    value="{{ old('surname',$trainer->surname) }}"
                                                                    name="surname" placeholder="Enter Surname" >
-                                                            {{--                                                            <div class="invalid-feedback">--}}
-                                                            {{--                                                            </div>--}}
                                                             @error('surname')
                                                             <span class="text-danger">{{$message}}</span>
                                                             @enderror
@@ -502,7 +513,7 @@
                                                         <div class="form-group mb-3">
                                                             <label for="inputtext" class="col-sm-3 col-form-label">Branch
                                                                 Name:</label>
-                                                            <select class="form-control select2" name="branch_id">
+                                                            <select class="form-control select2" name="branch_id" required>
                                                                 <option value="">--- Select Branch ---</option>
                                                                 @foreach($branch as $key => $b)
                                                                     <option
@@ -747,7 +758,7 @@
                         required: "Please fill this field ",
                     },
                     terms_conditions: {
-                        required: '',
+                        required: 'Please read terms and condition and select this checkbox for submit data',
                     }
                 },
                 errorElement: 'span',

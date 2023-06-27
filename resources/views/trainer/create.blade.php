@@ -77,6 +77,17 @@
                                                 <div class="row">
                                                     <div class="col-md-4 mb-1">
                                                         <div class="form-group mb-3">
+                                                            <label for="simpleinput">Employee ID</label>
+                                                            <input type="text"
+                                                                   class="form-control "
+                                                                   value="REYB01E{{ $emp_id+1<10 ? '0'.$emp_id+1 : $emp_id+1 }}"
+                                                                   name="emp_id" readonly>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-4 mb-1">
+                                                        <div class="form-group mb-3">
                                                             <label for="simpleinput">Surname:</label>
                                                             <input type="text"
                                                                    class="form-control "
@@ -502,7 +513,7 @@
                                                         <div class="form-group mb-3">
                                                             <label for="inputtext" class="col-sm-3 col-form-label">Branch
                                                                 Name:</label>
-                                                            <select class="form-control select2" name="branch_id">
+                                                            <select class="form-control select2" name="branch_id" required>
                                                                 <option value="">--- Select Branch ---</option>
                                                                 @foreach($branch as $key => $b)
                                                                     <option
@@ -598,7 +609,7 @@
                                                     <div class="col-md-12">
                                                         <div class="form-group mb-3">
                                                             <input type="checkbox" name="terms_conditions" value="1" @if(old('terms_conditions') == '1')checked  @endif
-                                                                   class="m-2">
+                                                                   class="m-2" required>
                                                             <label for="terms & conditon">Terms & Conditions:</label>
                                                         </div>
                                                     </div>
@@ -741,7 +752,7 @@
                         required: "Please fill this field ",
                     },
                     terms_conditions: {
-                        required: '',
+                        required: 'Please read terms and condition and select this checkbox for submit data',
                     }
                 },
                 errorElement: 'span',
