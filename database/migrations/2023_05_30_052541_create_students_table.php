@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->string('form_no');
-            $table->string('surname');
+            $table->string('surname')->nullable();
             $table->string('name');
             $table->string('father_name');
             $table->longText('address');
@@ -34,11 +34,11 @@ return new class extends Migration
             $table->integer('course_id')->default(0);
             $table->string('payment_condition')->nullable();
             $table->string('reference_by')->nullable();
-            $table->integer('demo_staff_id')->default(0);
+            $table->integer('demo_trainer_id')->default(0);
             $table->enum('fees',['paid','unpaid'])->nullable();
             $table->time('batch_time')->nullable();
             $table->string('extra_note')->nullable();
-            $table->integer('analysis_staff_id')->default(0);
+            $table->integer('analysis_trainer_id')->default(0);
             $table->string('upload_analysis')->nullable();
             $table->string('upload_student_image');
             $table->boolean('status')->default(1);

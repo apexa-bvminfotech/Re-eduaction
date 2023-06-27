@@ -23,7 +23,15 @@
     <link rel="stylesheet" href="{{asset('assets/plugins/toastr/toastr.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/css/adminlte.min.css')}}">
     @stack('styles')
-
+<style>
+    .btn:not(:disabled):not(.disabled) {
+        cursor: pointer;
+    }
+    .bs-stepper .content.active:not(.fade), .bs-stepper-pane.active:not(.fade) {
+        display: block;
+        visibility: visible;
+    }
+</style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
