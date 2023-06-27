@@ -8,12 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Trainer extends Model
 {
     use HasFactory;
-    protected $table="trainers";
-    protected $fillable = [
-        'name',
-        'branch_id',
-    ];
+
+    protected $guarded = ['id'];
+
     public function branch(){
         return $this->belongsTo(Branch::class);
     }
+
 }

@@ -68,7 +68,9 @@
                                 </div>
                                 <div class="bs-stepper-content">
                                     <!-- your steps content here -->
-                                    <form id="quickForm" class="needs-validation" onsubmit="return false" novalidate>
+                                    <form action="{{route('trainer.store')}}" method="POST" id="quickForm" class="needs-validation" novalidate>
+                                        @csrf
+                                        @method('POST')
                                         <div id="logins-part" class="content" role="tabpanel"
                                              aria-labelledby="logins-part-trigger">
                                             <div class="card-body">
@@ -116,7 +118,7 @@
                                                             <label for="contact number">Mobile No:</label>
                                                             <input type="tel" name="phone"
                                                                    placeholder="12345 67890" value="{{ old('phone') }}"
-                                                                   class="form-control" >
+                                                                   class="form-control" pattern="[0-9]{5}[\s]{1}[0-9]{5}">
                                                             @error('phone')
                                                             <span class="text-danger">{{$message}}</span>
                                                             @enderror
@@ -126,7 +128,7 @@
                                                         <div class="form-group mb-3">
                                                             <label for="inputMailForm">Email address:</label>
                                                             <input id="inputMailForm" type="email" name="email"
-                                                                   class="form-control" placeholder="Enter Email Address">
+                                                                   class="form-control" placeholder="Enter Email Address" value="{{ old('email') }}">
                                                             @error('email')
                                                             <span class="text-danger">{{$message}}</span>
                                                             @enderror
@@ -150,7 +152,7 @@
                                                             <label for="dob">Date Of Birth:</label>
                                                             <input type="date" class="form-control" name="dob"
                                                                    placeholder="Enter Birthdate"
-                                                                   value="{{ old('dob',date('Y-m-d')) }}">
+                                                                   value="{{ old('dob') }}">
                                                             @error('dob')
                                                             <span class="text-danger">{{$message}}</span>
                                                             @enderror
@@ -162,16 +164,19 @@
                                                             <br/>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio">
-                                                                    <input class="custom-control-input" type="radio" id="customRadio1" name="marital_status" checked>
+                                                                    <input class="custom-control-input" type="radio" id="customRadio1" value="1" name="marital_status" >
                                                                     <label for="customRadio1" class="custom-control-label" style="font-weight: normal">Married</label>
                                                                 </div>
                                                             </div>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio">
-                                                                    <input class="custom-control-input" type="radio" id="customRadio2" name="marital_status">
+                                                                    <input class="custom-control-input" type="radio" id="customRadio2" value="0" name="marital_status" checked>
                                                                     <label for="customRadio2" class="custom-control-label" style="font-weight: normal">Unmarried</label>
                                                                 </div>
                                                             </div>
+                                                            @error('marital_status')
+                                                            <span class="text-danger">{{$message}}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-12">
@@ -180,10 +185,13 @@
                                                             <textarea name="address" class="form-control"
                                                                       placeholder="Enter Address"
                                                             >{{ old('address') }}</textarea>
+                                                            @error('address')
+                                                            <span class="text-danger">{{$message}}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button class="btn btn-primary float-right next-btn" id="firstNext" type="button">Next</button>
+                                                <button type="button" class="btn btn-primary float-right next-btn" id="firstNext" >Next</button>
                                             </div>
                                         </div>
                                         <div id="information-part" class="content" role="tabpanel"
@@ -196,6 +204,9 @@
                                                             <input type="text" class="form-control" name="emer_fullName"
                                                                    placeholder="Enter Your FullName"
                                                                    value="{{ old('emer_fullName') }}">
+                                                            @error('emer_fullName')
+                                                            <span class="text-danger">{{$message}}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 mb-1">
@@ -203,7 +214,11 @@
                                                             <label for="contact number">Mobile No:</label>
                                                             <input type="tel" name="emer_phone"
                                                                    placeholder="12345 67890" value="{{ old('emer_phone') }}"
-                                                                   class="form-control" pattern="[0-9]{5}[\s]{1}[0-9]{5}">
+                                                                   class="form-control" pattern="[0-9]{5}[\s]{1}[0-9]{5}" >
+
+                                                            @error('emer_phone')
+                                                            <span class="text-danger">{{$message}}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
@@ -213,6 +228,9 @@
                                                                    placeholder="Relationship"
                                                                    name="emer_relationship"
                                                                    value="{{ old('emer_relationship') }}">
+                                                            @error('emer_relationship')
+                                                            <span class="text-danger">{{$message}}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-md-12">
@@ -220,12 +238,15 @@
                                                         <textarea name="emer_address" placeholder="address"
                                                                   class="form-control">{{ old('emer_address') }}</textarea>
                                                         <br>
+                                                        @error('emer_address')
+                                                        <span class="text-danger">{{$message}}</span>
+                                                        @enderror
                                                     </div>
                                                 </div>
-                                                <button type="submit" class="btn btn-primary float-right next-btn  ml-2">
+                                                <button type="button" class="btn btn-primary float-right next-btn ml-2">
                                                     Next
                                                 </button>
-                                                <button class="btn btn-primary prvBtn float-right" onclick="stepper.previous()">Previous
+                                                <button type="button" class="btn btn-primary prvBtn float-right" onclick="stepper.previous()">Previous
                                                 </button>
 
                                             </div>
@@ -262,13 +283,13 @@
                                                             <br/>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio">
-                                                                    <input class="custom-control-input" type="radio" id="customRadio1" name="emp_type" checked>
+                                                                    <input class="custom-control-input" type="radio" id="customRadio1" value="1" name="emp_type" checked>
                                                                     <label for="customRadio1" class="custom-control-label" style="font-weight: normal">Freelancer</label>
                                                                 </div>
                                                             </div>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio">
-                                                                    <input class="custom-control-input" type="radio" id="customRadio2" name="emp_type">
+                                                                    <input class="custom-control-input" type="radio" id="customRadio2" value="0" name="emp_type">
                                                                     <label for="customRadio2" class="custom-control-label" style="font-weight: normal">Fix</label>
                                                                 </div>
                                                             </div>
@@ -410,7 +431,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <label for="simpleinput">Offer Latter:</label>
+                                                        <label for="simpleinput">Offer Letter:</label>
                                                         <div class="row">
                                                             <div class="col-md-6">
                                                                 <div class="form-group mb-3">
@@ -485,7 +506,7 @@
                                                                 <option value="">--- Select Branch ---</option>
                                                                 @foreach($branch as $key => $b)
                                                                     <option
-                                                                        value="{{ $b->id }}">{{ $b->name }}</option>
+                                                                        value="{{ $b->id }}" {{ old('branch_id')==$b->id?'selected':'' }}>{{ $b->name }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -496,9 +517,9 @@
                                                                 Name:</label>
                                                             <select class="form-control select2" name="course_id" multiple="multiple" data-placeholder="Select a course">
                                                                 <option value="">--- Select Course ---</option>
-                                                                @foreach($course as $key => $c)
+                                                                @foreach($course as $key=>$c)
                                                                     <option
-                                                                        value="{{ $c->id }}">{{ $c->name }}</option>
+                                                                            value="{{$c->id}}" {{ old('course_id')==$c->id?'selected':'' }}>{{$c->course_name}}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -511,14 +532,14 @@
                                                                 <option value="">--- Select Role ---</option>
                                                                 @foreach($roles as $key => $r)
                                                                     <option
-                                                                        value="{{ $r->id }}">{{ $r->name }}</option>
+                                                                        value="{{ $r->id }}" {{ old('role_id')==$r->id?'selected':'' }}>{{ $r->name }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button type="submit" class="btn btn-primary float-right next-btn ml-2">Next</button>
-                                                <button class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
+                                                <button type="button" class="btn btn-primary float-right next-btn ml-2">Next</button>
+                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
                                             </div>
                                         </div>
                                         <div id="document-list-part" class="content" role="tabpanel"
@@ -529,7 +550,7 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Passport Size Photo</label>
                                                             <div class="custom-file">
-                                                                <input type="file" class="custom-file-input" name="passPhoto">
+                                                                <input type="file" class="custom-file-input" name="photo" accept="image/*">
                                                                 <label class="custom-file-label" for="customFile">Choose file</label>
                                                             </div>
                                                         </div>
@@ -538,7 +559,7 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Aadhaar Card</label>
                                                             <div class="custom-file">
-                                                                <input type="file" class="custom-file-input" name="AadhaarPhoto">
+                                                                <input type="file" class="custom-file-input" name="aadhaar_card" accept="image/*">
                                                                 <label class="custom-file-label" for="customFile">Choose file</label>
                                                             </div>
                                                         </div>
@@ -547,7 +568,7 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Last Education MarkSheet</label>
                                                             <div class="custom-file">
-                                                                <input type="file" class="custom-file-input" name="markSheet">
+                                                                <input type="file" class="custom-file-input" name="last_edu_markSheet" accept="image/*">
                                                                 <label class="custom-file-label" for="customFile">Choose file</label>
                                                             </div>
                                                         </div>
@@ -556,16 +577,16 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Choose Bank Passbook Photo</label>
                                                             <div class="custom-file">
-                                                                <input type="file" class="custom-file-input" name="passBook">
+                                                                <input type="file" class="custom-file-input" name="bank_passbook" accept="image/*">
                                                                 <label class="custom-file-label" for="customFile">Choose file</label>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button type="submit" class="btn btn-primary float-right next-btn  ml-2">
+                                                <button type="button" class="btn btn-primary float-right next-btn  ml-2">
                                                     Next
                                                 </button>
-                                                <button class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous
+                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous
                                                 </button>
                                             </div>
 
@@ -576,16 +597,16 @@
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group mb-3">
-                                                            <input type="checkbox" name="terms_conditions"
+                                                            <input type="checkbox" name="terms_conditions" value="1" @if(old('terms_conditions') == '1')checked  @endif
                                                                    class="m-2">
                                                             <label for="terms & conditon">Terms & Conditions:</label>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
-                                                <button type="submit" class="btn btn-primary float-right next-btn  ml-2">
+                                                <button type="submit" name="submit" class="btn btn-success float-right next-btn  ml-2">
                                                     Submit
                                                 </button>
+                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
 
                                             </div>
                                         </div>
@@ -632,12 +653,6 @@
                     qualification: {
                         required: true,
                     },
-                    dob: {
-                        required: true,
-                    },
-                    marital_status: {
-                        required: true,
-                    },
                     address: {
                         required: true,
                     },
@@ -650,17 +665,26 @@
                     emer_address: {
                         required: true,
                     },
-                    passPhoto: {
+                    photo: {
                         required: true,
                     },
-                    AadhaarPhoto: {
+                    aadhaar_card: {
                         required:true,
                     },
-                    markSheet: {
+                    last_edu_markSheet: {
                         required:true,
                     },
-                    passBook: {
+                    bank_passbook: {
                         required:true,
+                    },
+                    dob: {
+                        required: true,
+                    },
+                    marital_status: {
+                        required: true,
+                    },
+                    terms_conditions: {
+                        required: true,
                     }
 
                 },
@@ -686,12 +710,6 @@
                     qualification: {
                         required: "Please enter your Qualification ",
                     },
-                    dob: {
-                        required: "Please enter your Date of birth ",
-                    },
-                    marital_status: {
-                        required: "Please fill this field ",
-                    },
                     address: {
                         required: "Please enter a Address ",
                     },
@@ -704,17 +722,26 @@
                     emer_address: {
                         required: "Please Enter Address",
                     },
-                    passPhoto: {
+                    photo: {
                         required: "Please choose Passport size ",
                     },
-                    AadhaarPhoto: {
+                    aadhaar_card: {
                         required: "Please choose Aadhaar card ",
                     },
-                    markSheet: {
-                        required: "Please choose Education MarkSheet",
+                    last_edu_markSheet: {
+                        required: "Please choose Education MarkSheet ",
                     },
-                    passBook: {
+                    bank_passbook: {
                         required: "Please choose Aadhaar card ",
+                    },
+                    dob: {
+                        required: "Please choose Date Of Birth ",
+                    },
+                    marital_status: {
+                        required: "Please fill this field ",
+                    },
+                    terms_conditions: {
+                        required: '',
                     }
                 },
                 errorElement: 'span',
@@ -736,6 +763,7 @@
                     resetValidation(form)
                 }
             });
+
             function resetValidation(form) {
                 form.find('.is-invalid').removeClass('is-invalid');
                 form.find('.invalid-feedback').remove();

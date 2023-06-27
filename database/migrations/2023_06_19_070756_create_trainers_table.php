@@ -24,7 +24,6 @@ return new class extends Migration {
             $table->string('qualification');
             $table->string('email')->unique();
             $table->integer('marital_status');
-            $table->string('password');
             $table->string('course_id')->nullable();
             $table->foreignId('branch_id')->nullable()->constrained('branches')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('emer_fullName');
