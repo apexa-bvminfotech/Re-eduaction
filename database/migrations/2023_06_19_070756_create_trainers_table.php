@@ -56,7 +56,7 @@ return new class extends Migration {
             $table->string('petrol_allowance')->nullable();
             $table->string('incentive')->nullable();
             $table->string('other_allowance')->nullable();
-            $table->integer('emp_type');
+            $table->integer('emp_type')->default('0');
             $table->bigInteger('user_id');
             $table->timestamps();
 

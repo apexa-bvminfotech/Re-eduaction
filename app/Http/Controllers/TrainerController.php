@@ -80,6 +80,31 @@ class TrainerController extends Controller
         ]);
         $user->assignRole($request->input('role_id'));
 
+        $photo = null;
+        if ($request->photo) {
+            $filename = $request->photo->getClientOriginalName();
+            $request->photo->move('assets/trainer', $filename);
+            $photo = $filename;
+        }
+        $aadhaar_card = null;
+        if ($request->aadhaar_card) {
+            $filename = $request->aadhaar_card->getClientOriginalName();
+            $request->aadhaar_card->move('assets/trainer', $filename);
+            $aadhaar_card = $filename;
+        }
+        $last_edu_markSheet = null;
+        if ($request->last_edu_markSheet) {
+            $filename = $request->last_edu_markSheet->getClientOriginalName();
+            $request->last_edu_markSheet->move('assets/trainer', $filename);
+            $last_edu_markSheet = $filename;
+        }
+        $bank_passbook = null;
+        if ($request->bank_passbook) {
+            $filename = $request->bank_passbook->getClientOriginalName();
+            $request->bank_passbook->move('assets/trainer', $filename);
+            $bank_passbook = $filename;
+        }
+
         Trainer::create( [
             'emp_id' => $request->emp_id,
             'surname' => $request->surname,
@@ -100,7 +125,7 @@ class TrainerController extends Controller
             'work_location' => $request->work_location,
             'emp_type' => $request->emp_type,
             'office_use_email' => $request->office_use_email,
-            'joining_date' => $request->joining_date_from .'-'. $request->joining_date_to,
+            'joining_date' => $request->joining_date_from .','. $request->joining_date_to,
             'i_card_date' => $request->i_card_date,
             'i_card_return_date' => $request->i_card_return_date,
             'i_card_note' => $request->i_card_note,
@@ -118,17 +143,17 @@ class TrainerController extends Controller
             'incentive' => $request->incentive,
             'other_allowance' => $request->other_allowance,
             'branch_id'=>$request->input('branch_id'),
-            'course_id'=> json_encode($request->input('course_id')),
+            'course_id'=> json_decode($request->input('course_id')),
             'user_id' => $user->id,
-            'photo' => $request->photo,
-            'aadhaar_card' => $request->aadhaar_card,
-            'last_edu_markSheet' => $request->last_edu_markSheet,
-            'bank_passbook' => $request->bank_passbook,
+            'photo' => $photo,
+            'aadhaar_card' => $aadhaar_card,
+            'last_edu_markSheet' => $last_edu_markSheet,
+            'bank_passbook' => $bank_passbook,
             'terms_conditions' => $request->terms_conditions,
         ]);
 
         return redirect()->route('trainer.index')
-                 ->with('success','Trainer created successfully');
+            ->with('success','Trainer created successfully');
     }
 
     /**
@@ -165,6 +190,7 @@ class TrainerController extends Controller
      */
     public function update(Request $request, Trainer $trainer)
     {
+//        dd($request->all());
         $request->validate([
             'surname' => 'required',
             'name' => 'required|max:255',
@@ -200,6 +226,31 @@ class TrainerController extends Controller
         ]);
         $user->assignRole($request->input('role_id'));
 
+        $photo = $trainer->photo;
+        if ($request->photo) {
+            $filename = $request->photo->getClientOriginalName() ;
+            $request->photo->move('assets/trainer', $filename);
+            $photo = $filename;
+        }
+        $aadhaar_card = $trainer->aadhaar_card;
+        if ($request->aadhaar_card) {
+            $filename = $request->aadhaar_card->getClientOriginalName() ;
+            $request->aadhaar_card->move('assets/trainer', $filename);
+            $aadhaar_card = $filename;
+        }
+        $last_edu_markSheet = $trainer->last_edu_markSheet;
+        if ($request->last_edu_markSheet) {
+            $filename = $request->last_edu_markSheet->getClientOriginalName();
+            $request->last_edu_markSheet->move('assets/trainer', $filename);
+            $last_edu_markSheet = $filename;
+        }
+        $bank_passbook = $trainer->bank_passbook;
+        if ($request->bank_passbook) {
+            $filename = $request->bank_passbook->getClientOriginalName();
+            $request->bank_passbook->move('assets/trainer', $filename);
+            $bank_passbook = $filename;
+        }
+
         $trainer->update([
             'emp_id' => $request->emp_id,
             'surname' => $request->surname,
@@ -220,7 +271,7 @@ class TrainerController extends Controller
             'work_location' => $request->work_location,
             'emp_type' => $request->emp_type,
             'office_use_email' => $request->office_use_email,
-            'joining_date' => $request->joining_date_from .'-'. $request->joining_date_to,
+            'joining_date' => $request->joining_date_from .','. $request->joining_date_to,
             'i_card_date' => $request->i_card_date,
             'i_card_return_date' => $request->i_card_return_date,
             'i_card_note' => $request->i_card_note,
@@ -238,12 +289,12 @@ class TrainerController extends Controller
             'incentive' => $request->incentive,
             'other_allowance' => $request->other_allowance,
             'branch_id'=>$request->input('branch_id'),
-            'course_id'=>$request->input('course_id'),
+            'course_id'=>json_decode($request->input('course_id')),
             'user_id' => $request->user_id,
-            'photo' => $request->photo,
-            'aadhaar_card' => $request->aadhaar_card,
-            'last_edu_markSheet' => $request->last_edu_markSheet,
-            'bank_passbook' => $request->bank_passbook,
+            'photo' => $photo,
+            'aadhaar_card' => $aadhaar_card,
+            'last_edu_markSheet' => $last_edu_markSheet,
+            'bank_passbook' => $bank_passbook,
             'terms_conditions' => $request->terms_conditions,
         ]);
 

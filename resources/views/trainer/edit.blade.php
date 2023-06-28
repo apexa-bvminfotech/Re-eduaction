@@ -1,4 +1,12 @@
 @extends('layouts.admin')
+@push('styles')
+    <style>
+        .form-check-input {
+            width: 1em;
+            height: 1em;
+        }
+    </style>
+@endpush
 @section('content')
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -6,7 +14,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Employee Registration Form</h1>
+                        <h1>Employee Update Form</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -22,7 +30,6 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card card-primary">
-                            {{--                            {!! Form::open(array('route' => 'trainer.store','method'=>'POST')) !!}--}}
                             <div class="bs-stepper">
                                 <div class="bs-stepper-header" role="tablist">
                                     <div class="step" data-target="#logins-part">
@@ -68,7 +75,7 @@
                                 </div>
                                 <div class="bs-stepper-content">
                                     <!-- your steps content here -->
-                                    <form action="{{route('trainer.update',$trainer->id)}}" method="POST" id="quickForm" class="needs-validation" novalidate>
+                                    <form action="{{route('trainer.update',$trainer->id)}}" method="POST" id="quickForm" class="needs-validation" novalidate enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')
                                         <input type="hidden" lass="form-control" value="{{ $trainer->user_id }}"
@@ -175,21 +182,22 @@
                                                             <br/>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio">
-                                                                    <input class="custom-control-input" type="radio" id="customRadio1" value="1" name="marital_status" >
-                                                                    <label for="customRadio1" class="custom-control-label" style="font-weight: normal">Married</label>
+                                                                    <input class="custom-control-input" name="marital_status" type="radio" id="married" value="1" {{ old('marital_status') == 1 ? 'checked' : '' }} checked>
+                                                                    <label for="married" class="custom-control-label" style="font-weight: normal">Married</label>
                                                                 </div>
                                                             </div>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio">
-                                                                    <input class="custom-control-input" type="radio" id="customRadio2" value="0" name="marital_status" checked>
-                                                                    <label for="customRadio2" class="custom-control-label" style="font-weight: normal">Unmarried</label>
+                                                                    <input class="custom-control-input"  name="marital_status" type="radio" id="unmarried" value="0" {{ old('marital_status') == 0 ? 'checked' : '' }} >
+                                                                    <label for="unmarried" class="custom-control-label" style="font-weight: normal">Unmarried</label>
                                                                 </div>
                                                             </div>
                                                             @error('marital_status')
-                                                            <span class="text-danger">{{$message}}</span>
+                                                            <span class="text-danger">{{ $message }}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
+
                                                     <div class="col-sm-12">
                                                         <div class="form-group mb-3">
                                                             <label for="address">Address:</label>
@@ -290,19 +298,15 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="Marital Status">Trainer Type</label>
-                                                            <br/>
+                                                            <label for="trainerType">Trainer Type</label>
+                                                            <br>
                                                             <div class="form-check form-check-inline">
-                                                                <div class="custom-control custom-radio">
-                                                                    <input class="custom-control-input" type="radio" id="customRadio1" value="1" name="emp_type" checked>
-                                                                    <label for="customRadio1" class="custom-control-label" style="font-weight: normal">Freelancer</label>
-                                                                </div>
+                                                                <input class="form-check-input" type="radio" id="freelancerRadio" name="emp_type" value="1" {{ old('emp_type') == 1 ? 'checked' : '' }} checked>
+                                                                <label class="form-check-label" for="freelancerRadio">Freelancer</label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <div class="custom-control custom-radio">
-                                                                    <input class="custom-control-input" type="radio" id="customRadio2" value="0" name="emp_type">
-                                                                    <label for="customRadio2" class="custom-control-label" style="font-weight: normal">Fix</label>
-                                                                </div>
+                                                                <input class="form-check-input" type="radio" id="fixedRadio" name="emp_type" value="0" {{ old('emp_type') == 0 ? 'checked' : '' }} >
+                                                                <label class="form-check-label" for="fixedRadio">Fixed</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -316,6 +320,10 @@
                                                                    value="{{ old('office_use_email',$trainer->office_use_email) }}">
                                                         </div>
                                                     </div>
+
+                                                    @php
+                                                        $seperateJoinDate = explode(',', $trainer->joining_date);
+                                                    @endphp
                                                     <div class="col-md-6">
                                                         <label for="simpleinput">Joining Date:</label>
                                                         <div class="row mb-3">
@@ -331,7 +339,7 @@
                                                                     <input type="date"
                                                                            class="form-control"
                                                                            name="joining_date_from"
-                                                                           value="{{ old('joining_date_from',$trainer->joining_date_from) }}">
+                                                                           value="{{ $seperateJoinDate[0] }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-1"
@@ -346,7 +354,7 @@
                                                                     <input type="date"
                                                                            class="form-control "
                                                                            name="joining_date_to"
-                                                                           value="{{ old('joining_date_to',$trainer->joining_date_to) }}">
+                                                                           value="{{ $seperateJoinDate[1] }}">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -542,10 +550,7 @@
                                                             <select class="form-control select2" name="role_id" required>
                                                                 <option value="">--- Select Role ---</option>
                                                                 @foreach($roles as $key => $r)
-                                                                    <option
-                                                                            value="{{$r->id}}"
-{{--                                                                            @if($trainer->user->roles->first()->id == $r->id) selected @endif>{{$r->name}}</option>--}}
-                                                                             {{ old('role_id',$trainer->role_id)==$r->id?'selected':'' }}>{{ $r->name }}</option>
+                                                                    <option value="{{$r->id}}" {{ old('role_id',$trainer->role_id)==$r->id?'selected':'' }}>{{ $r->name }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -565,7 +570,7 @@
                                                             <div class="custom-file">
                                                                 <input type="file" class="custom-file-input" name="photo" accept="image/*">
                                                                 <label class="custom-file-label" for="customFile">Choose file</label>
-                                                                <img src="{{asset( $trainer->photo )}}" width="150">
+                                                                    <img src="{{asset('assets/trainer/' . $trainer->photo)}}" width="100" height="100">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -575,7 +580,7 @@
                                                             <div class="custom-file">
                                                                 <input type="file" class="custom-file-input" name="aadhaar_card" accept="image/*">
                                                                 <label class="custom-file-label" for="customFile">Choose file</label>
-                                                                <img src="{{asset( $trainer->aadhaar_card )}}" width="150">
+                                                                <img src="{{asset('assets/trainer/' . $trainer->aadhaar_card)}}" width="100" height="100">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -585,7 +590,7 @@
                                                             <div class="custom-file">
                                                                 <input type="file" class="custom-file-input" name="last_edu_markSheet" accept="image/*">
                                                                 <label class="custom-file-label" for="customFile">Choose file</label>
-                                                                <img src="{{asset( $trainer->last_edu_markSheet )}}" width="150">
+                                                               <img src="{{asset('assets/trainer/' . $trainer->last_edu_markSheet)}}" width="100" height="100">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -595,7 +600,7 @@
                                                             <div class="custom-file">
                                                                 <input type="file" class="custom-file-input" name="bank_passbook" accept="image/*">
                                                                 <label class="custom-file-label" for="customFile">Choose file</label>
-                                                                <img src="{{asset( $trainer->bank_passbook )}}" width="150">
+                                                               <img src="{{asset('assets/trainer/' . $trainer->bank_passbook)}}" width="100" height="100">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -620,11 +625,10 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
                                                 <button type="submit" name="submit" class="btn btn-success float-right next-btn  ml-2">
                                                     Update
                                                 </button>
-                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
-
                                             </div>
                                         </div>
                                     </form>

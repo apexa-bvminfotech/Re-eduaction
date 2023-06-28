@@ -1,4 +1,12 @@
 @extends('layouts.admin')
+@push('styles')
+    <style>
+        .form-check-input {
+            width: 1em;
+            height: 1em;
+        }
+    </style>
+@endpush
 @section('content')
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -68,7 +76,7 @@
                                 </div>
                                 <div class="bs-stepper-content">
                                     <!-- your steps content here -->
-                                    <form action="{{route('trainer.store')}}" method="POST" id="quickForm" class="needs-validation" novalidate>
+                                    <form action="{{route('trainer.store')}}" method="POST" id="quickForm" class="needs-validation" novalidate enctype="multipart/form-data">
                                         @csrf
                                         @method('POST')
                                         <div id="logins-part" class="content" role="tabpanel"
@@ -175,13 +183,13 @@
                                                             <br/>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio">
-                                                                    <input class="custom-control-input" type="radio" id="customRadio1" value="1" name="marital_status" >
+                                                                    <input class="custom-control-input" type="radio" id="customRadio1" name="marital_status" value="1" {{ old('marital_status') == 1 ? 'checked' : '' }} checked >
                                                                     <label for="customRadio1" class="custom-control-label" style="font-weight: normal">Married</label>
                                                                 </div>
                                                             </div>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio">
-                                                                    <input class="custom-control-input" type="radio" id="customRadio2" value="0" name="marital_status" checked>
+                                                                    <input class="custom-control-input" type="radio" id="customRadio2" value="0" {{ old('marital_status') == 0 ? 'checked' : '' }} name="marital_status">
                                                                     <label for="customRadio2" class="custom-control-label" style="font-weight: normal">Unmarried</label>
                                                                 </div>
                                                             </div>
@@ -290,23 +298,18 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="Marital Status">Trainer Type</label>
-                                                            <br/>
+                                                            <label for="trainerType">Trainer Type</label>
+                                                            <br>
                                                             <div class="form-check form-check-inline">
-                                                                <div class="custom-control custom-radio">
-                                                                    <input class="custom-control-input" type="radio" id="customRadio1" value="1" name="emp_type" checked>
-                                                                    <label for="customRadio1" class="custom-control-label" style="font-weight: normal">Freelancer</label>
-                                                                </div>
+                                                                <input class="form-check-input" type="radio" id="freelancerRadio" name="emp_type" value="1" {{ old('emp_type') == 1 ? 'checked' : '' }} checked >
+                                                                <label class="form-check-label" for="freelancerRadio">Freelancer</label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <div class="custom-control custom-radio">
-                                                                    <input class="custom-control-input" type="radio" id="customRadio2" value="0" name="emp_type">
-                                                                    <label for="customRadio2" class="custom-control-label" style="font-weight: normal">Fix</label>
-                                                                </div>
+                                                                <input class="form-check-input" type="radio" id="fixedRadio" name="emp_type" value="0" {{ old('emp_type') == 0 ? 'checked' : '' }} >
+                                                                <label class="form-check-label" for="fixedRadio">Fixed</label>
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                     <div class="col-md-6 ">
                                                         <div class="form-group mb-3">
                                                             <label for="simpleinput">Email Address:</label>
@@ -614,10 +617,10 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
                                                 <button type="submit" name="submit" class="btn btn-success float-right next-btn  ml-2">
                                                     Submit
                                                 </button>
-                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
 
                                             </div>
                                         </div>
