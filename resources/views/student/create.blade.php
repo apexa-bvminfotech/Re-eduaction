@@ -6,7 +6,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Student Registration Form</h1>
+                        <h1>Create New Student</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -510,7 +510,7 @@
                                                     </div>
                                                 </div>
                                                 <button type="submit"
-                                                        class="btn btn-primary float-right ml-2 next-btn1">Next
+                                                        class="btn btn-success float-right ml-2 next-btn1">Submit
                                                 </button>
                                                 <button class="btn btn-primary prvBtn float-right ml-2"
                                                         onclick="stepper.previous()">Previous

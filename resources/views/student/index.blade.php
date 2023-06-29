@@ -48,15 +48,19 @@
                                             <td>{{$s->medium}}</td>
                                             <td>
                                                 <div class="flex justify-between">
+                                                    <a href="{{ route('student.show',$s->id) }}"
+                                                       class="btn btn-outline-info" title="Show">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
                                                     @can('student-edit')
                                                         <a href="{{ route('student.edit',$s->id) }}"
-                                                           class="btn btn-success" title="Edit">
+                                                           class="btn btn-outline-success" title="Edit">
                                                             <i class="fa fa-edit"></i>
                                                         </a>
                                                     @endcan
                                                     @can('student-delete')
                                                         {!! Form::open(['method' => 'DELETE','route' => ['student.destroy', $s->id],'style'=>'display:inline']) !!}
-                                                        <button type="submit" class="btn btn-danger" title="Delete"
+                                                        <button type="submit" class="btn btn-outline-danger" title="Delete"
                                                                 onclick="return confirm('Are you sure you want to delete?')">
                                                             <i class="fa fa-trash"></i></button>
                                                         {!! Form::close() !!}
