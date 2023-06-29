@@ -617,10 +617,10 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
                                                 <button type="submit" name="submit" class="btn btn-success float-right next-btn  ml-2">
                                                     Submit
                                                 </button>
+                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
 
                                             </div>
                                         </div>

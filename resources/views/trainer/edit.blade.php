@@ -323,7 +323,7 @@
 
                                                     @php
                                                         $seperateJoinDate = explode(',', $trainer->joining_date);
-                                                    @endphp
+//                                                    @endphp
                                                     <div class="col-md-6">
                                                         <label for="simpleinput">Joining Date:</label>
                                                         <div class="row mb-3">
@@ -547,10 +547,12 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext" class="col-sm-3 col-form-label">Role
                                                                 Name:</label>
+{{--                                                            @dd($roles)--}}
                                                             <select class="form-control select2" name="role_id" required>
                                                                 <option value="">--- Select Role ---</option>
                                                                 @foreach($roles as $key => $r)
-                                                                    <option value="{{$r->id}}" {{ old('role_id',$trainer->role_id)==$r->id?'selected':'' }}>{{ $r->name }}</option>
+{{--                                                                    <option value="{{$r->id}}" {{ old('role_id', optional($trainer->roles)->first()?->id) == $r->id ? 'selected' : '' }}>{{$r->name}}</option>--}}
+                                                                    <option value="{{$r->id}}" @if($userRole->id == $r->id) selected @endif>{{$r->name}}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -564,7 +566,7 @@
                                              aria-labelledby="document-list-part-trigger">
                                             <div class="card-body">
                                                 <div class="row">
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-6 mb-5">
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Passport Size Photo</label>
                                                             <div class="custom-file">
@@ -574,7 +576,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-6 mb-5">
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Aadhaar Card</label>
                                                             <div class="custom-file">
@@ -584,7 +586,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-6 mb-5">
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Last Education MarkSheet</label>
                                                             <div class="custom-file">
@@ -594,7 +596,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-6 mb-5">
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Choose Bank Passbook Photo</label>
                                                             <div class="custom-file">
@@ -625,10 +627,10 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
                                                 <button type="submit" name="submit" class="btn btn-success float-right next-btn  ml-2">
                                                     Update
                                                 </button>
+                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
                                             </div>
                                         </div>
                                     </form>
@@ -686,18 +688,7 @@
                     emer_address: {
                         required: true,
                     },
-                    photo: {
-                        required: true,
-                    },
-                    aadhaar_card: {
-                        required:true,
-                    },
-                    last_edu_markSheet: {
-                        required:true,
-                    },
-                    bank_passbook: {
-                        required:true,
-                    },
+
                     dob: {
                         required: true,
                     },
@@ -743,18 +734,7 @@
                     emer_address: {
                         required: "Please Enter Address",
                     },
-                    photo: {
-                        required: "Please choose Passport size ",
-                    },
-                    aadhaar_card: {
-                        required: "Please choose Aadhaar card ",
-                    },
-                    last_edu_markSheet: {
-                        required: "Please choose Education MarkSheet ",
-                    },
-                    bank_passbook: {
-                        required: "Please choose Aadhaar card ",
-                    },
+
                     dob: {
                         required: "Please choose Date Of Birth ",
                     },

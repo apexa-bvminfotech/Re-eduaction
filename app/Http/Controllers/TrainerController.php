@@ -1,27 +1,30 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Course;
 use App\Models\Trainer;
 use App\Models\Branch;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+
 use Illuminate\Http\Request;
 
 class TrainerController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:trainer-list|trainer-create|trainer-edit|trainer-delete', ['only' => ['index','store']]);
-        $this->middleware('permission:trainer-create', ['only' => ['create','store']]);
-        $this->middleware('permission:trainer-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:trainer-list|trainer-create|trainer-edit|trainer-delete', ['only' => ['index', 'store']]);
+        $this->middleware('permission:trainer-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:trainer-edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:trainer-delete', ['only' => ['destroy']]);
     }
+
     public function index()
     {
-        $trainer = Trainer::orderBy('id','DESC')->get();
-        return view('trainer.index',compact('trainer'));
+        $trainer = Trainer::orderBy('id', 'DESC')->get();
+        return view('trainer.index', compact('trainer'));
     }
 
     /**
@@ -31,17 +34,17 @@ class TrainerController extends Controller
      */
     public function create()
     {
-        $branch = Branch::orderBy('id','DESC')->get();
-        $course = Course::orderBy('id','DESC')->get();
-        $roles = Role::orderBy('id','DESC')->get();
+        $branch = Branch::orderBy('id', 'DESC')->get();
+        $course = Course::orderBy('id', 'DESC')->get();
+        $roles = Role::orderBy('id', 'DESC')->get();
         $emp_id = Trainer::get()->count();
-        return view('trainer.create',compact('branch','course', 'roles', 'emp_id'));
+        return view('trainer.create', compact('branch', 'course', 'roles', 'emp_id'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -76,7 +79,7 @@ class TrainerController extends Controller
             'contact' => $request->phone,
             'password' => Hash::make(strtolower($request->name) . '@123'),
             'type' => 1,
-            'branch_id'=>$request->input('branch_id'),
+            'branch_id' => $request->input('branch_id'),
         ]);
         $user->assignRole($request->input('role_id'));
 
@@ -105,7 +108,7 @@ class TrainerController extends Controller
             $bank_passbook = $filename;
         }
 
-        Trainer::create( [
+        Trainer::create([
             'emp_id' => $request->emp_id,
             'surname' => $request->surname,
             'name' => $request->name,
@@ -125,7 +128,7 @@ class TrainerController extends Controller
             'work_location' => $request->work_location,
             'emp_type' => $request->emp_type,
             'office_use_email' => $request->office_use_email,
-            'joining_date' => $request->joining_date_from .','. $request->joining_date_to,
+            'joining_date' => $request->joining_date_from . ',' . $request->joining_date_to,
             'i_card_date' => $request->i_card_date,
             'i_card_return_date' => $request->i_card_return_date,
             'i_card_note' => $request->i_card_note,
@@ -142,8 +145,8 @@ class TrainerController extends Controller
             'petrol_allowance' => $request->petrol_allowance,
             'incentive' => $request->incentive,
             'other_allowance' => $request->other_allowance,
-            'branch_id'=>$request->input('branch_id'),
-            'course_id'=> json_decode($request->input('course_id')),
+            'branch_id' => $request->input('branch_id'),
+            'course_id' => json_decode($request->input('course_id')),
             'user_id' => $user->id,
             'photo' => $photo,
             'aadhaar_card' => $aadhaar_card,
@@ -153,50 +156,52 @@ class TrainerController extends Controller
         ]);
 
         return redirect()->route('trainer.index')
-            ->with('success','Trainer created successfully');
+            ->with('success', 'Trainer created successfully');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show(Trainer $trainer)
     {
-        return view('trainer.show',compact('trainer'));
+        return view('trainer.show', compact('trainer'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit(Trainer $trainer)
     {
-        $course = Course::orderBy('id','DESC')->get();
-        $branch = Branch::orderBy('id','DESC')->get();
-        $roles = Role::orderBy('id','DESC')->get();
-        return view('trainer.edit',compact('trainer','branch','course','roles'));
+        $course = Course::orderBy('id', 'DESC')->get();
+        $branch = Branch::orderBy('id', 'DESC')->get();
+        $roles = Role::orderBy('id', 'DESC')->get();
+        $user = User::where('id', $trainer->user_id)->first();
+        $userRole = $user->roles->first();
+        return view('trainer.edit', compact('trainer', 'branch', 'course', 'roles', 'user', 'userRole'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Trainer $trainer)
     {
-//        dd($request->all());
+
         $request->validate([
             'surname' => 'required',
             'name' => 'required|max:255',
             'father_name' => 'required|max:255',
             'phone' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email|unique:trainers,email,' . $trainer->id,
             'qualification' => 'required',
             'dob' => 'required',
             'marital_status' => 'required',
@@ -205,15 +210,13 @@ class TrainerController extends Controller
             'emer_phone' => 'required',
             'emer_relationship' => 'required',
             'emer_address' => 'required',
-            'photo' => 'required',
-            'aadhaar_card' => 'required',
-            'last_edu_markSheet' => 'required',
-            'bank_passbook' => 'required',
+            'photo' => 'nullable',
+            'aadhaar_card' => 'nullable',
+            'last_edu_markSheet' => 'nullable',
+            'bank_passbook' => 'nullable',
             'terms_conditions' => 'required',
         ]);
-
-        $user = User::find($request->user_id);
-
+        $user = $trainer->user;
         $user->update([
             'surname' => $request->surname,
             'name' => $request->name,
@@ -222,19 +225,26 @@ class TrainerController extends Controller
             'contact' => $request->phone,
             'password' => Hash::make(($request->name) . '@123'),
             'type' => 1,
-            'branch_id'=>$request->input('branch_id'),
+            'branch_id' => $request->input('branch_id'),
         ]);
-        $user->assignRole($request->input('role_id'));
+
+        if ($user->roles()->count() > 0) {
+            $user->removeRole($user->roles()->first()->id);
+            $user->assignRole($request->role_id);
+        } else {
+            $user->assignRole($request->role_id);
+        }
+
 
         $photo = $trainer->photo;
         if ($request->photo) {
-            $filename = $request->photo->getClientOriginalName() ;
+            $filename = $request->photo->getClientOriginalName();
             $request->photo->move('assets/trainer', $filename);
             $photo = $filename;
         }
         $aadhaar_card = $trainer->aadhaar_card;
         if ($request->aadhaar_card) {
-            $filename = $request->aadhaar_card->getClientOriginalName() ;
+            $filename = $request->aadhaar_card->getClientOriginalName();
             $request->aadhaar_card->move('assets/trainer', $filename);
             $aadhaar_card = $filename;
         }
@@ -271,7 +281,7 @@ class TrainerController extends Controller
             'work_location' => $request->work_location,
             'emp_type' => $request->emp_type,
             'office_use_email' => $request->office_use_email,
-            'joining_date' => $request->joining_date_from .','. $request->joining_date_to,
+            'joining_date' => $request->joining_date_from . ',' . $request->joining_date_to,
             'i_card_date' => $request->i_card_date,
             'i_card_return_date' => $request->i_card_return_date,
             'i_card_note' => $request->i_card_note,
@@ -288,8 +298,8 @@ class TrainerController extends Controller
             'petrol_allowance' => $request->petrol_allowance,
             'incentive' => $request->incentive,
             'other_allowance' => $request->other_allowance,
-            'branch_id'=>$request->input('branch_id'),
-            'course_id'=>json_decode($request->input('course_id')),
+            'branch_id' => $request->input('branch_id'),
+            'course_id' => json_decode($request->input('course_id')),
             'user_id' => $request->user_id,
             'photo' => $photo,
             'aadhaar_card' => $aadhaar_card,
@@ -299,20 +309,20 @@ class TrainerController extends Controller
         ]);
 
         return redirect()->route('trainer.index')
-            ->with('success','Trainer updated successfully');
+            ->with('success', 'Trainer updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        Trainer::where('id',$id)->delete();
+        Trainer::where('id', $id)->delete();
         return redirect()->route('trainer.index')
-            ->with('success','trainer deleted successfully');
+            ->with('success', 'trainer deleted successfully');
     }
 
 }

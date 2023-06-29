@@ -103,12 +103,12 @@
                                     <div class="col-sm-9 d-flex justify-content-evenly">
                                         <div class="custom-control custom-radio">
                                             <input class="custom-control-input" type="radio" id="customRadio1"
-                                                   name="is_active" value="1"
+                                                   name="is_active" value="0"
                                                    @if($user->is_active =='0') checked @endif>
                                             <label for="customRadio1" class="custom-control-label">Active</label>
                                         </div>
                                         <div class="custom-control custom-radio ml-2">
-                                            <input class="custom-control-input custom-control-input-danger" value="0"
+                                            <input class="custom-control-input custom-control-input-danger" value="1"
                                                    type="radio" id="customRadio4" name="is_active"
                                                    @if($user->is_active =='1') checked @endif>
                                             <label for="customRadio4" class="custom-control-label">Deactive</label>
