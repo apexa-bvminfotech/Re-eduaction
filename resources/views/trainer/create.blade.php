@@ -1,8 +1,8 @@
 @extends('layouts.admin')
 @push('styles')
     <style>
-        .form-check-input {
-            width: 1em;
+        input[type=radio] {
+            width: 2em;
             height: 1em;
         }
     </style>
@@ -101,11 +101,7 @@
                                                                    class="form-control "
                                                                    value="{{ old('surname') }}"
                                                                    name="surname" placeholder="Enter Surname" >
-{{--                                                            <div class="invalid-feedback">--}}
-{{--                                                            </div>--}}
-                                                            @error('surname')
-                                                            <span class="text-danger">{{$message}}</span>
-                                                            @enderror
+
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 mb-1">
@@ -115,9 +111,7 @@
                                                                    name="name"
                                                                    value="{{ old('name') }}"
                                                                    placeholder="Enter Name">
-                                                            @error('name')
-                                                            <span class="text-danger">{{$message}}</span>
-                                                            @enderror
+
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 mb-1">
@@ -127,9 +121,7 @@
                                                                    name="father_name"
                                                                    value="{{ old('father_name') }}"
                                                                    placeholder="Enter Father Name">
-                                                            @error('father_name')
-                                                            <span class="text-danger">{{$message}}</span>
-                                                            @enderror
+
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 mb-1">
@@ -138,9 +130,7 @@
                                                             <input type="tel" name="phone"
                                                                    placeholder="12345 67890" value="{{ old('phone') }}"
                                                                    class="form-control" pattern="[0-9]{5}[\s]{1}[0-9]{5}">
-                                                            @error('phone')
-                                                            <span class="text-danger">{{$message}}</span>
-                                                            @enderror
+
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 mb-1">
@@ -148,9 +138,7 @@
                                                             <label for="inputMailForm">Email address:</label>
                                                             <input id="inputMailForm" type="email" name="email"
                                                                    class="form-control" placeholder="Enter Email Address" value="{{ old('email') }}">
-                                                            @error('email')
-                                                            <span class="text-danger">{{$message}}</span>
-                                                            @enderror
+
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 mb-1">
@@ -161,9 +149,7 @@
                                                                    placeholder="Enter Your Qualification"
                                                                    id="qualification"
                                                                    value="{{ old('qualification') }}">
-                                                            @error('qualification')
-                                                            <span class="text-danger">{{$message}}</span>
-                                                            @enderror
+
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 mb-1">
@@ -172,9 +158,7 @@
                                                             <input type="date" class="form-control" name="dob"
                                                                    placeholder="Enter Birthdate"
                                                                    value="{{ old('dob') }}">
-                                                            @error('dob')
-                                                            <span class="text-danger">{{$message}}</span>
-                                                            @enderror
+
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 mb-1">
@@ -182,20 +166,17 @@
                                                             <label for="Marital Status">Marital Status:</label>
                                                             <br/>
                                                             <div class="form-check form-check-inline">
-                                                                <div class="custom-control custom-radio">
-                                                                    <input class="custom-control-input" type="radio" id="customRadio1" name="marital_status" value="1" {{ old('marital_status') == 1 ? 'checked' : '' }} checked >
-                                                                    <label for="customRadio1" class="custom-control-label" style="font-weight: normal">Married</label>
+                                                                <div class="custom-control custom-radio mt-2">
+                                                                    <input type="radio" id="married" name="marital_status" value="1" {{ old('marital_status')}}>
+                                                                    <label for="customRadio1" style="font-weight: normal">Married</label>
                                                                 </div>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <div class="custom-control custom-radio">
-                                                                    <input class="custom-control-input" type="radio" id="customRadio2" value="0" {{ old('marital_status') == 0 ? 'checked' : '' }} name="marital_status">
-                                                                    <label for="customRadio2" class="custom-control-label" style="font-weight: normal">Unmarried</label>
+                                                                <div class="custom-control custom-radio mt-1">
+                                                                    <input type="radio" id="unmarried" name="marital_status" value="0" {{ old('marital_status')}}>
+                                                                    <label for="customRadio2" style="font-weight: normal">Unmarried</label>
                                                                 </div>
                                                             </div>
-                                                            @error('marital_status')
-                                                            <span class="text-danger">{{$message}}</span>
-                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-12">
@@ -204,9 +185,7 @@
                                                             <textarea name="address" class="form-control"
                                                                       placeholder="Enter Address"
                                                             >{{ old('address') }}</textarea>
-                                                            @error('address')
-                                                            <span class="text-danger">{{$message}}</span>
-                                                            @enderror
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -223,9 +202,6 @@
                                                             <input type="text" class="form-control" name="emer_fullName"
                                                                    placeholder="Enter Your FullName"
                                                                    value="{{ old('emer_fullName') }}">
-                                                            @error('emer_fullName')
-                                                            <span class="text-danger">{{$message}}</span>
-                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 mb-1">
@@ -234,10 +210,6 @@
                                                             <input type="tel" name="emer_phone"
                                                                    placeholder="12345 67890" value="{{ old('emer_phone') }}"
                                                                    class="form-control" pattern="[0-9]{5}[\s]{1}[0-9]{5}" >
-
-                                                            @error('emer_phone')
-                                                            <span class="text-danger">{{$message}}</span>
-                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
@@ -247,9 +219,7 @@
                                                                    placeholder="Relationship"
                                                                    name="emer_relationship"
                                                                    value="{{ old('emer_relationship') }}">
-                                                            @error('emer_relationship')
-                                                            <span class="text-danger">{{$message}}</span>
-                                                            @enderror
+
                                                         </div>
                                                     </div>
                                                     <div class="col-md-12">
@@ -257,9 +227,7 @@
                                                         <textarea name="emer_address" placeholder="address"
                                                                   class="form-control">{{ old('emer_address') }}</textarea>
                                                         <br>
-                                                        @error('emer_address')
-                                                        <span class="text-danger">{{$message}}</span>
-                                                        @enderror
+
                                                     </div>
                                                 </div>
                                                 <button type="button" class="btn btn-primary float-right next-btn ml-2">
@@ -300,8 +268,8 @@
                                                         <div class="form-group">
                                                             <label for="trainerType">Trainer Type</label>
                                                             <br>
-                                                            <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" id="freelancerRadio" name="emp_type" value="1" {{ old('emp_type') == 1 ? 'checked' : '' }} checked >
+                                                            <div class="form-check form-check-inline mt-1">
+                                                                <input class="form-check-input" type="radio" id="freelancerRadio" name="emp_type" value="1" {{ old('emp_type') == 1 ? 'checked' : '' }}>
                                                                 <label class="form-check-label" for="freelancerRadio">Freelancer</label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
@@ -529,7 +497,7 @@
                                                         <div class="form-group mb-3">
                                                             <label for="inputtext" class="col-sm-3 col-form-label">Course
                                                                 Name:</label>
-                                                            <select class="form-control select2" name="course_id" multiple="multiple" data-placeholder="Select a course">
+                                                            <select class="form-control select2" name="course_id[]" multiple="multiple" data-placeholder="Select a course">
                                                                 <option value="">--- Select Course ---</option>
                                                                 @foreach($course as $key=>$c)
                                                                     <option
@@ -783,6 +751,7 @@
                 form.find('.invalid-feedback').remove();
             }
         });
+
         document.addEventListener('DOMContentLoaded', function () {
             window.stepper = new Stepper(document.querySelector('.bs-stepper'))
         });

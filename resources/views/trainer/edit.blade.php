@@ -182,13 +182,13 @@
                                                             <br/>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio">
-                                                                    <input class="custom-control-input" name="marital_status" type="radio" id="married" value="1" {{ old('marital_status') == 1 ? 'checked' : '' }} checked>
+                                                                    <input class="custom-control-input" name="marital_status" type="radio" id="married" value="1" {{ old('marital_status') == 1 ? 'checked' : '' }}>
                                                                     <label for="married" class="custom-control-label" style="font-weight: normal">Married</label>
                                                                 </div>
                                                             </div>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio">
-                                                                    <input class="custom-control-input"  name="marital_status" type="radio" id="unmarried" value="0" {{ old('marital_status') == 0 ? 'checked' : '' }} >
+                                                                    <input class="custom-control-input"  name="marital_status" type="radio" id="unmarried" value="0" {{ old('marital_status') == 0 ? 'checked' : '' }}>
                                                                     <label for="unmarried" class="custom-control-label" style="font-weight: normal">Unmarried</label>
                                                                 </div>
                                                             </div>
@@ -301,7 +301,7 @@
                                                             <label for="trainerType">Trainer Type</label>
                                                             <br>
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" id="freelancerRadio" name="emp_type" value="1" {{ old('emp_type') == 1 ? 'checked' : '' }} checked>
+                                                                <input class="form-check-input" type="radio" id="freelancerRadio" name="emp_type" value="1" {{ old('emp_type') == 1 ? 'checked' : '' }}>
                                                                 <label class="form-check-label" for="freelancerRadio">Freelancer</label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
@@ -534,7 +534,8 @@
                                                         <div class="form-group mb-3">
                                                             <label for="inputtext" class="col-sm-3 col-form-label">Course
                                                                 Name:</label>
-                                                            <select class="form-control select2" name="course_id" multiple="multiple" data-placeholder="Select a course">
+
+                                                            <select class="form-control select2" name="course_id[]" multiple="multiple" data-placeholder="Select a course">
                                                                 <option value="">--- Select Course ---</option>
                                                                 @foreach($course as $key=>$c)
                                                                     <option
@@ -621,7 +622,7 @@
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group mb-3">
-                                                            <input type="checkbox" name="terms_conditions" value="1" @if(old('terms_conditions') == '1')checked  @endif
+                                                            <input type="checkbox" name="terms_conditions" value="1" @if(old('terms_conditions',$trainer->terms_conditions) == '1')checked  @endif
                                                             class="m-2">
                                                             <label for="terms & conditon">Terms & Conditions:</label>
                                                         </div>

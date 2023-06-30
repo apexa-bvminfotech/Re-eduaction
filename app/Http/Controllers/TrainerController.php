@@ -146,7 +146,7 @@ class TrainerController extends Controller
             'incentive' => $request->incentive,
             'other_allowance' => $request->other_allowance,
             'branch_id' => $request->input('branch_id'),
-            'course_id' => json_decode($request->input('course_id')),
+            'course_id' => json_encode($request->input('course_id')),
             'user_id' => $user->id,
             'photo' => $photo,
             'aadhaar_card' => $aadhaar_card,
@@ -183,7 +183,11 @@ class TrainerController extends Controller
         $roles = Role::orderBy('id', 'DESC')->get();
         $user = User::where('id', $trainer->user_id)->first();
         $userRole = $user->roles->first();
-        return view('trainer.edit', compact('trainer', 'branch', 'course', 'roles', 'user', 'userRole'));
+
+        $selectedCourses = json_encode($trainer->course_id);
+//        dd($selectedCourses);
+
+        return view('trainer.edit', compact('trainer', 'branch', 'course', 'roles', 'user', 'userRole','selectedCourses'));
     }
 
     /**
@@ -195,7 +199,7 @@ class TrainerController extends Controller
      */
     public function update(Request $request, Trainer $trainer)
     {
-
+//dd($request->all());
         $request->validate([
             'surname' => 'required',
             'name' => 'required|max:255',
@@ -229,12 +233,11 @@ class TrainerController extends Controller
         ]);
 
         if ($user->roles()->count() > 0) {
-            $user->removeRole($user->roles()->first()->id);
+//            $user->removeRole($user->roles()->first()->id);
             $user->assignRole($request->role_id);
         } else {
             $user->assignRole($request->role_id);
         }
-
 
         $photo = $trainer->photo;
         if ($request->photo) {
@@ -299,7 +302,7 @@ class TrainerController extends Controller
             'incentive' => $request->incentive,
             'other_allowance' => $request->other_allowance,
             'branch_id' => $request->input('branch_id'),
-            'course_id' => json_decode($request->input('course_id')),
+            'course_id' => json_encode($request->input('course_id')),
             'user_id' => $request->user_id,
             'photo' => $photo,
             'aadhaar_card' => $aadhaar_card,
