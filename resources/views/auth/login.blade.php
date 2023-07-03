@@ -21,7 +21,7 @@
     <!-- /.login-logo -->
     <div class="card card-outline card-primary">
         <div class="card-header text-center">
-            <a href="" class="h1"><b>Laravel</b></a>
+            <img src="{{ asset('assets/img') }}/re-education.jpg" style="width: 190px">
         </div>
         <div class="card-body">
             <p class="login-box-msg">Sign in to start your session</p>
@@ -35,13 +35,13 @@
                            name="email" placeholder="Email" value="{{ old('email') }}" autofocus>
                     <div class="input-group-append">
                         <div class="input-group-text">
-                            <i class="fa-solid fa-envelope"></i>
+                            <i class="fas fa-envelope"></i>
                         </div>
                     </div>
                     @error('email')
-                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
                     @enderror
                 </div>
                 <div class="input-group mb-3">
@@ -55,9 +55,9 @@
                         </div>
                     </div>
                     @error('password')
-                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
                     @enderror
                 </div>
                 <div class="row">

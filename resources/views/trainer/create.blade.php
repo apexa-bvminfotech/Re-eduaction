@@ -173,7 +173,7 @@
                                                             </div>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio mt-1">
-                                                                    <input type="radio" id="unmarried" name="marital_status" value="0" {{ old('marital_status')}}>
+                                                                    <input type="radio" id="unmarried" name="marital_status" checked value="0" {{ old('marital_status')}}>
                                                                     <label for="customRadio2" style="font-weight: normal">Unmarried</label>
                                                                 </div>
                                                             </div>
@@ -302,7 +302,7 @@
                                                                     <input type="date"
                                                                            class="form-control"
                                                                            name="joining_date_from"
-                                                                           value="{{ old('joining_date') }}">
+                                                                           value="{{ old('joining_date', date('Y-m-d')) }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-1"
@@ -317,7 +317,7 @@
                                                                     <input type="date"
                                                                            class="form-control "
                                                                            name="joining_date_to"
-                                                                           value="{{ old('joining_date') }}">
+                                                                           value="{{ old('joining_date', date('Y-m-d', strtotime(' + 1 years'))) }}">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -330,16 +330,14 @@
                                                                     <input placeholder="i-card date"
                                                                            class="form-control textbox-n"
                                                                            name="i_card_date"
-                                                                           type="text"
-                                                                           onfocus="(this.type='date')"
+                                                                           type="date"
                                                                            id="date"
-                                                                           value="{{ old('i_card_date') }}"/>
+                                                                           value="{{ old('i_card_date', date('Y-m-d')) }}"/>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group mb-3">
-                                                                    <input type="text" class="form-control textbox-n"
-                                                                           onfocus="(this.type='date')"
+                                                                    <input type="date" class="form-control textbox-n"
                                                                            name="i_card_return_date"
                                                                            placeholder="i-card return date"
                                                                            value="{{ old('i_card_return_date') }}">
@@ -360,16 +358,14 @@
                                                                     <input placeholder="uniform date"
                                                                            class="form-control textbox-n"
                                                                            name="uniform_date"
-                                                                           type="text"
-                                                                           onfocus="(this.type='date')"
+                                                                           type="date"
                                                                            id="date"
-                                                                           value="{{ old('uniform_date') }}"/>
+                                                                           value="{{ old('uniform_date', date('Y-m-d')) }}"/>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group mb-3">
-                                                                    <input type="text" class="form-control textbox-n"
-                                                                           onfocus="(this.type='date')"
+                                                                    <input type="date" class="form-control textbox-n"
                                                                            name="uniform_return_date"
                                                                            placeholder="uniform return date"
                                                                            value="{{ old('uniform_return_date') }}">
@@ -390,16 +386,14 @@
                                                                     <input placeholder="material date"
                                                                            class="form-control textbox-n"
                                                                            name="material_date"
-                                                                           type="text"
-                                                                           onfocus="(this.type='date')"
+                                                                           type="date"
                                                                            id="date"
-                                                                           value="{{ old('material_date') }}"/>
+                                                                           value="{{ old('material_date', date('Y-m-d')) }}"/>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group mb-3">
-                                                                    <input type="text" class="form-control textbox-n"
-                                                                           onfocus="(this.type='date')"
+                                                                    <input type="date" class="form-control textbox-n"
                                                                            name="material_return_date"
                                                                            placeholder="material return date"
                                                                            value="{{ old('material_return_date') }}">
@@ -420,10 +414,9 @@
                                                                     <input placeholder="Offer later date"
                                                                            class="form-control textbox-n"
                                                                            name="offer_letter_date"
-                                                                           type="text"
-                                                                           onfocus="(this.type='date')"
+                                                                           type="date"
                                                                            id="date"
-                                                                           value="{{ old('offer_letter_date') }}"/>
+                                                                           value="{{ old('offer_letter_date', date('Y-m-d')) }}"/>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">
@@ -442,10 +435,9 @@
                                                                     <input placeholder="bond date"
                                                                            class="form-control textbox-n"
                                                                            name="bond_date"
-                                                                           type="text"
-                                                                           onfocus="(this.type='date')"
+                                                                           type="date"
                                                                            id="date"
-                                                                           value="{{ old('bond_date') }}"/>
+                                                                           value="{{ old('bond_date', date('Y-m-d')) }}"/>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">

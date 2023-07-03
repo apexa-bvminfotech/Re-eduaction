@@ -1,7 +1,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <a href="index3.html" class="brand-link">
-        <img src="{{asset('assets/img/AdminLTELogo.png')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">AdminLTE 3</span>
+    <a href="index3.html" class="brand-link" style="display: flex;
+    justify-content: space-around;background: #fff">
+        <img src="{{ asset('assets/img') }}/re-education.jpg" alt="AdminLTE Logo" style="max-height: 30px;width: 165px;">
     </a>
 
     <div class="sidebar">
