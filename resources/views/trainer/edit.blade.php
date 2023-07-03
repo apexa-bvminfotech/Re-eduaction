@@ -182,13 +182,13 @@
                                                             <br/>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio">
-                                                                    <input class="custom-control-input" name="marital_status" type="radio" id="married" value="1" {{ old('marital_status') == 1 ? 'checked' : '' }}>
+                                                                    <input class="custom-control-input" name="marital_status" type="radio" id="married" value="1" {{ old('marital_status',$trainer->marital_status) == 1 ? 'checked' : '' }}>
                                                                     <label for="married" class="custom-control-label" style="font-weight: normal">Married</label>
                                                                 </div>
                                                             </div>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio">
-                                                                    <input class="custom-control-input"  name="marital_status" type="radio" id="unmarried" value="0" {{ old('marital_status') == 0 ? 'checked' : '' }}>
+                                                                    <input class="custom-control-input"  name="marital_status" type="radio" id="unmarried" value="0" {{ old('marital_status',$trainer->marital_status) == 0 ? 'checked' : '' }}>
                                                                     <label for="unmarried" class="custom-control-label" style="font-weight: normal">Unmarried</label>
                                                                 </div>
                                                             </div>
@@ -301,11 +301,11 @@
                                                             <label for="trainerType">Trainer Type</label>
                                                             <br>
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" id="freelancerRadio" name="emp_type" value="1" {{ old('emp_type') == 1 ? 'checked' : '' }}>
+                                                                <input class="form-check-input" type="radio" id="freelancerRadio" name="emp_type" value="1" {{ old('emp_type',$trainer->emp_type) == 1 ? 'checked' : '' }}>
                                                                 <label class="form-check-label" for="freelancerRadio">Freelancer</label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" id="fixedRadio" name="emp_type" value="0" {{ old('emp_type') == 0 ? 'checked' : '' }} >
+                                                                <input class="form-check-input" type="radio" id="fixedRadio" name="emp_type" value="0" {{ old('emp_type',$trainer->emp_type) == 0 ? 'checked' : '' }} >
                                                                 <label class="form-check-label" for="fixedRadio">Fixed</label>
                                                             </div>
                                                         </div>
@@ -367,7 +367,7 @@
                                                                     <input placeholder="i-card date"
                                                                            class="form-control textbox-n"
                                                                            name="i_card_date"
-                                                                           type="text"
+                                                                           type="date"
                                                                            onfocus="(this.type='date')"
                                                                            id="date"
                                                                            value="{{ old('i_card_date',$trainer->i_card_date) }}"/>
@@ -375,7 +375,7 @@
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group mb-3">
-                                                                    <input type="text" class="form-control textbox-n"
+                                                                    <input type="date" class="form-control textbox-n"
                                                                            onfocus="(this.type='date')"
                                                                            name="i_card_return_date"
                                                                            placeholder="i-card return date"
@@ -397,7 +397,7 @@
                                                                     <input placeholder="uniform date"
                                                                            class="form-control textbox-n"
                                                                            name="uniform_date"
-                                                                           type="text"
+                                                                           type="date"
                                                                            onfocus="(this.type='date')"
                                                                            id="date"
                                                                            value="{{ old('uniform_date',$trainer->uniform_date) }}"/>
@@ -405,7 +405,7 @@
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group mb-3">
-                                                                    <input type="text" class="form-control textbox-n"
+                                                                    <input type="date" class="form-control textbox-n"
                                                                            onfocus="(this.type='date')"
                                                                            name="uniform_return_date"
                                                                            placeholder="uniform return date"
@@ -427,7 +427,7 @@
                                                                     <input placeholder="material date"
                                                                            class="form-control textbox-n"
                                                                            name="material_date"
-                                                                           type="text"
+                                                                           type="date"
                                                                            onfocus="(this.type='date')"
                                                                            id="date"
                                                                            value="{{ old('material_date',$trainer->material_date) }}"/>
@@ -435,7 +435,7 @@
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group mb-3">
-                                                                    <input type="text" class="form-control textbox-n"
+                                                                    <input type="date" class="form-control textbox-n"
                                                                            onfocus="(this.type='date')"
                                                                            name="material_return_date"
                                                                            placeholder="material return date"
@@ -457,7 +457,7 @@
                                                                     <input placeholder="Offer later date"
                                                                            class="form-control textbox-n"
                                                                            name="offer_letter_date"
-                                                                           type="text"
+                                                                           type="date"
                                                                            onfocus="(this.type='date')"
                                                                            id="date"
                                                                            value="{{ old('offer_letter_date',$trainer->offer_letter_date) }}"/>
@@ -479,7 +479,7 @@
                                                                     <input placeholder="bond date"
                                                                            class="form-control textbox-n"
                                                                            name="bond_date"
-                                                                           type="text"
+                                                                           type="date"
                                                                            onfocus="(this.type='date')"
                                                                            id="date"
                                                                            value="{{ old('bond_date',$trainer->bond_date) }}"/>
@@ -532,15 +532,14 @@
                                                     </div>
                                                     <div class="col-md-4 mb-1">
                                                         <div class="form-group mb-3">
-                                                            <label for="inputtext" class="col-sm-3 col-form-label">Course
-                                                                Name:</label>
-
+                                                            <label for="inputtext" class="col-sm-3 col-form-label">Course Name:</label>
                                                             <select class="form-control select2" name="course_id[]" multiple="multiple" data-placeholder="Select a course">
                                                                 <option value="">--- Select Course ---</option>
-                                                                @foreach($course as $key=>$c)
-                                                                    <option
-                                                                            value="{{$c->id}}" {{ old('course_id',$trainer->course_id)==$c->id?'selected':'' }}>{{$c->course_name}}</option>
-                                                                @endforeach
+                                                                @if ($course)
+                                                                    @foreach($course as $key => $c)
+                                                                        <option value="{{$c->id}}" {{ in_array($c->id, json_decode($selectedCourses)) ? 'selected' : '' }}>{{$c->course_name}}</option>
+                                                                    @endforeach
+                                                                @endif
                                                             </select>
                                                         </div>
                                                     </div>

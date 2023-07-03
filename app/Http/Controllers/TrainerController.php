@@ -183,12 +183,11 @@ class TrainerController extends Controller
         $roles = Role::orderBy('id', 'DESC')->get();
         $user = User::where('id', $trainer->user_id)->first();
         $userRole = $user->roles->first();
+        $selectedCourses = $trainer->course_id;
 
-        $selectedCourses = json_encode($trainer->course_id);
-//        dd($selectedCourses);
-
-        return view('trainer.edit', compact('trainer', 'branch', 'course', 'roles', 'user', 'userRole','selectedCourses'));
+        return view('trainer.edit', compact('trainer', 'branch', 'course', 'roles', 'user', 'userRole', 'selectedCourses'));
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -233,8 +232,9 @@ class TrainerController extends Controller
         ]);
 
         if ($user->roles()->count() > 0) {
-//            $user->removeRole($user->roles()->first()->id);
-            $user->assignRole($request->role_id);
+            if ($user->removeRole($user->roles()->first()->id)){
+                $user->assignRole($request->role_id);
+            }
         } else {
             $user->assignRole($request->role_id);
         }
@@ -302,7 +302,7 @@ class TrainerController extends Controller
             'incentive' => $request->incentive,
             'other_allowance' => $request->other_allowance,
             'branch_id' => $request->input('branch_id'),
-            'course_id' => json_encode($request->input('course_id')),
+            'course_id' => $request->input('course_id') ? json_encode($request->input('course_id')) : null,
             'user_id' => $request->user_id,
             'photo' => $photo,
             'aadhaar_card' => $aadhaar_card,
