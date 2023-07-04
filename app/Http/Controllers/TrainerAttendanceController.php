@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Staff;
-use App\Models\staffAttendance;
+use App\Models\Trainer;
+use App\Models\TrainerAttendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class StaffAttendanceController extends Controller
+class TrainerAttendanceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,10 +16,10 @@ class StaffAttendanceController extends Controller
      */
     function __construct()
     {
-        $this->middleware('permission:staff-attendance-list|staff-attendance-create|staff-attendance-edit|staff-attendance-delete', ['only' => ['index','store']]);
-        $this->middleware('permission:staff-attendance-create', ['only' => ['create','store']]);
-        $this->middleware('permission:staff-attendance-edit', ['only' => ['edit','update']]);
-        $this->middleware('permission:staff-attendance-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:trainer-attendance-list|trainer-attendance-create|trainer-attendance-edit|trainer-attendance-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:trainer-attendance-create', ['only' => ['create','store']]);
+        $this->middleware('permission:trainer-attendance-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:trainer-attendance-delete', ['only' => ['destroy']]);
     }
 
     /**
@@ -29,13 +29,13 @@ class StaffAttendanceController extends Controller
      */
     public function index()
     {
-        $staffAttendance = DB::table("staff_attendance")
-            ->select('staff_attendance.date',DB::raw('count(IF(attendance = 0, 1, NULL)) as present'),
+        $trainerAttendance = DB::table("trainer_attendance")
+            ->select('trainer_attendance.date',DB::raw('count(IF(attendance = 0, 1, NULL)) as present'),
                 DB::raw('count(IF(attendance = 1, 1, NULL)) as absent'))
-            ->groupBy('staff_attendance.date')
-            ->orderBy('staff_attendance.id','DESC')->get();
+            ->groupBy('trainer_attendance.date')
+            ->orderBy('trainer_attendance.id','DESC')->get();
 
-        return view('staff_attendance.index',compact('staffAttendance'))->with('i');
+        return view('trainer_attendance.index',compact('trainerAttendance'))->with('i');
     }
 
     /**
@@ -45,8 +45,8 @@ class StaffAttendanceController extends Controller
      */
     public function create()
     {
-        $staff = Staff::orderBy('id','DESC')->where('is_active',0)->get();
-        return view('staff_attendance.create',compact('staff'));
+        $trainer = Trainer::orderBy('id','DESC')->get();
+        return view('trainer_attendance.create',compact('trainer'));
     }
 
     /**
@@ -58,21 +58,21 @@ class StaffAttendanceController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'date' => 'required|unique:staff_attendance,date',
+            'date' => 'required|unique:trainer_attendance,date',
         ]);
         foreach ($request->data as $key => $r){
             $data = [
-                'staff_id' => $r['Staff_id'],
+                'trainers_id' => $r['trainer_id'],
                 'attendance' => $r['attendance'],
                 'absent_reason' => $r['absent_reason'],
                 'date' => date('Y-m-d', strtotime($request->date)),
                 'user_id' => auth()->user()->id,
             ];
-            staffAttendance::Create($data);
+            TrainerAttendance::Create($data);
         }
 
-        return redirect()->route('staff_attendance.index')
-            ->with('success','Staff attendance add successfully');
+        return redirect()->route('trainer_attendance.index')
+            ->with('success','trainer attendance add successfully');
 
     }
 
@@ -96,12 +96,15 @@ class StaffAttendanceController extends Controller
     public function edit($date)
     {
         $EditDate = $date;
-        $staffAttendance = staffAttendance::select('staff_attendance.*','staff.id as staffID','staff.staff_name')->Where('date', $date)->join('staff','staff.id','staff_attendance.staff_id')->orderBy('staff_attendance.id','DESC')->get();
-        $staff = Staff::orderBy('id','DESC')->where('is_active',0)->get();
-        if($staffAttendance){
-            return view('staff_attendance.edit',compact('staffAttendance','EditDate'));
+        $trainerAttendance = TrainerAttendance::select('trainer_attendance.*','trainers.id as trainerID','trainers.name')
+            ->Where('date', $date)
+            ->join('trainers','trainers.id','trainer_attendance.trainers_id')
+            ->orderBy('trainer_attendance.id','DESC')->get();
+        $trainer = Trainer::orderBy('id','DESC')->get();
+        if($trainerAttendance){
+            return view('trainer_attendance.edit',compact('trainerAttendance','EditDate'));
         } else {
-            return view('staff_attendance.create',compact('staff'));
+            return view('trainer_attendance.create',compact('trainer'));
         }
     }
 
@@ -116,14 +119,14 @@ class StaffAttendanceController extends Controller
     {
         foreach ($request->data as $key => $r){
             $data = [
-                'staff_id' => $r['Staff_id'],
+                'trainers_id' => $r['trainers_id'],
                 'attendance' => $r['attendance'],
                 'absent_reason' => $r['absent_reason'],
                 'user_id' => auth()->user()->id,
             ];
-            staffAttendance::where('id',$r['id'])->update($data);
+            TrainerAttendance::where('id',$r['id'])->update($data);
         }
-        return redirect()->route('staff_attendance.index')
+        return redirect()->route('trainer_attendance.index')
             ->with('success','Updated successfully');
 
     }
@@ -136,8 +139,8 @@ class StaffAttendanceController extends Controller
      */
     public function destroy($date)
     {
-        staffAttendance::where('date', $date)->delete();
-        return redirect()->route('staff_attendance.index')
+        TrainerAttendance::where('date', $date)->delete();
+        return redirect()->route('trainer_attendance.index')
             ->with('success','Attendance deleted successfully');
     }
 }

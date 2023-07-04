@@ -23,6 +23,11 @@
         <div class="card-header text-center">
             <a href="" class="h1"><b>Laravel</b></a>
         </div>
+        @if ($errors->has('inactive'))
+            <div class="alert alert-danger">
+                {{ $errors->first('inactive') }}
+            </div>
+        @endif
         <div class="card-body">
             <p class="login-box-msg">Sign in to start your session</p>
 

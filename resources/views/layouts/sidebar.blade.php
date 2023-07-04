@@ -38,7 +38,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link @if(Route::currentRouteName() == 'staff_attendance.index')active  @endif">
+                    <a href="#" class="nav-link @if(Route::currentRouteName() == 'trainer_attendance.index')active  @endif">
                         <i class="nav-icon fas fa-calendar-check"></i>
                         <p> Attendance
                             <i class="fas fa-angle-left right"></i>
@@ -46,15 +46,15 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{route('staff_attendance.index')}}" class="nav-link @if(Route::currentRouteName() == 'staff_attendance.index')active  @endif">
+                            <a href="{{route('student_attendance.index')}}" class="nav-link @if(Route::currentRouteName() == 'student_attendance.index')active  @endif">
                                 <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
-                                <p>Staff Attendance</p>
+                                <p>Student Attendance</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{route('staff_attendance.index')}}" class="nav-link @if(Route::currentRouteName() == 'staff_attendance.index')active  @endif">
+                            <a href="{{route('trainer_attendance.index')}}" class="nav-link @if(Route::currentRouteName() == 'trainer_attendance.index')active  @endif">
                                 <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
-                                <p>Staff Attendance</p>
+                                <p>Trainer Attendance</p>
                             </a>
                         </li>
                     </ul>
