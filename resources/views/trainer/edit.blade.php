@@ -19,7 +19,8 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active"><a href="{{ route('trainer.index') }}">Show Trainer List</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ route('trainer.index') }}">Show Trainer
+                                    List</a></li>
                         </ol>
                     </div>
                 </div>
@@ -75,7 +76,8 @@
                                 </div>
                                 <div class="bs-stepper-content">
                                     <!-- your steps content here -->
-                                    <form action="{{route('trainer.update',$trainer->id)}}" method="POST" id="quickForm" class="needs-validation" novalidate enctype="multipart/form-data">
+                                    <form action="{{route('trainer.update',$trainer->id)}}" method="POST" id="quickForm"
+                                          class="needs-validation" novalidate enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')
                                         <input type="hidden" lass="form-control" value="{{ $trainer->user_id }}"
@@ -101,7 +103,7 @@
                                                             <input type="text"
                                                                    class="form-control "
                                                                    value="{{ old('surname',$trainer->surname) }}"
-                                                                   name="surname" placeholder="Enter Surname" >
+                                                                   name="surname" placeholder="Enter Surname">
                                                             @error('surname')
                                                             <span class="text-danger">{{$message}}</span>
                                                             @enderror
@@ -122,7 +124,7 @@
                                                     <div class="col-md-4 mb-1">
                                                         <div class="form-group mb-3">
                                                             <label for="simpleinput">Father Name:</label>
-                                                            <input type="text"  class="form-control"
+                                                            <input type="text" class="form-control"
                                                                    name="father_name"
                                                                    value="{{ old('father_name',$trainer->father_name) }}"
                                                                    placeholder="Enter Father Name">
@@ -135,8 +137,10 @@
                                                         <div class="form-group mb-3">
                                                             <label for="contact number">Mobile No:</label>
                                                             <input type="tel" name="phone"
-                                                                   placeholder="12345 67890" value="{{ old('phone',$trainer->phone) }}"
-                                                                   class="form-control" pattern="[0-9]{5}[\s]{1}[0-9]{5}">
+                                                                   placeholder="12345 67890"
+                                                                   value="{{ old('phone',$trainer->phone) }}"
+                                                                   class="form-control"
+                                                                   pattern="[0-9]{5}[\s]{1}[0-9]{5}">
                                                             @error('phone')
                                                             <span class="text-danger">{{$message}}</span>
                                                             @enderror
@@ -146,7 +150,9 @@
                                                         <div class="form-group mb-3">
                                                             <label for="inputMailForm">Email address:</label>
                                                             <input id="inputMailForm" type="email" name="email"
-                                                                   class="form-control" placeholder="Enter Email Address" value="{{ old('email',$trainer->email) }}">
+                                                                   class="form-control"
+                                                                   placeholder="Enter Email Address"
+                                                                   value="{{ old('email',$trainer->email) }}">
                                                             @error('email')
                                                             <span class="text-danger">{{$message}}</span>
                                                             @enderror
@@ -182,14 +188,22 @@
                                                             <br/>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio">
-                                                                    <input class="custom-control-input" name="marital_status" type="radio" id="married" value="1" {{ old('marital_status',$trainer->marital_status) == 1 ? 'checked' : '' }}>
-                                                                    <label for="married" class="custom-control-label" style="font-weight: normal">Married</label>
+                                                                    <input class="custom-control-input"
+                                                                           name="marital_status" type="radio"
+                                                                           id="married"
+                                                                           value="1" {{ old('marital_status',$trainer->marital_status) == 1 ? 'checked' : '' }}>
+                                                                    <label for="married" class="custom-control-label"
+                                                                           style="font-weight: normal">Married</label>
                                                                 </div>
                                                             </div>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio">
-                                                                    <input class="custom-control-input"  name="marital_status" type="radio" id="unmarried" value="0" {{ old('marital_status',$trainer->marital_status) == 0 ? 'checked' : '' }}>
-                                                                    <label for="unmarried" class="custom-control-label" style="font-weight: normal">Unmarried</label>
+                                                                    <input class="custom-control-input"
+                                                                           name="marital_status" type="radio"
+                                                                           id="unmarried"
+                                                                           value="0" {{ old('marital_status',$trainer->marital_status) == 0 ? 'checked' : '' }}>
+                                                                    <label for="unmarried" class="custom-control-label"
+                                                                           style="font-weight: normal">Unmarried</label>
                                                                 </div>
                                                             </div>
                                                             @error('marital_status')
@@ -210,7 +224,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button type="button" class="btn btn-primary float-right next-btn" id="firstNext" >Next</button>
+                                                <button type="button" class="btn btn-primary float-right next-btn"
+                                                        id="firstNext">Next
+                                                </button>
                                             </div>
                                         </div>
                                         <div id="information-part" class="content" role="tabpanel"
@@ -232,8 +248,10 @@
                                                         <div class="form-group mb-3">
                                                             <label for="contact number">Mobile No:</label>
                                                             <input type="tel" name="emer_phone"
-                                                                   placeholder="12345 67890" value="{{ old('emer_phone',$trainer->emer_phone) }}"
-                                                                   class="form-control" pattern="[0-9]{5}[\s]{1}[0-9]{5}" >
+                                                                   placeholder="12345 67890"
+                                                                   value="{{ old('emer_phone',$trainer->emer_phone) }}"
+                                                                   class="form-control"
+                                                                   pattern="[0-9]{5}[\s]{1}[0-9]{5}">
 
                                                             @error('emer_phone')
                                                             <span class="text-danger">{{$message}}</span>
@@ -265,7 +283,8 @@
                                                 <button type="button" class="btn btn-primary float-right next-btn ml-2">
                                                     Next
                                                 </button>
-                                                <button type="button" class="btn btn-primary prvBtn float-right" onclick="stepper.previous()">Previous
+                                                <button type="button" class="btn btn-primary prvBtn float-right"
+                                                        onclick="stepper.previous()">Previous
                                                 </button>
 
                                             </div>
@@ -301,12 +320,17 @@
                                                             <label for="trainerType">Trainer Type</label>
                                                             <br>
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" id="freelancerRadio" name="emp_type" value="1" {{ old('emp_type',$trainer->emp_type) == 1 ? 'checked' : '' }}>
+                                                                <input class="form-check-input" type="radio"
+                                                                       id="freelancerRadio" name="emp_type"
+                                                                       value="1" {{ old('emp_type',$trainer->emp_type) == 1 ? 'checked' : '' }}>
                                                                 <label class="form-check-label" for="freelancerRadio">Freelancer</label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" id="fixedRadio" name="emp_type" value="0" {{ old('emp_type',$trainer->emp_type) == 0 ? 'checked' : '' }} >
-                                                                <label class="form-check-label" for="fixedRadio">Fixed</label>
+                                                                <input class="form-check-input" type="radio"
+                                                                       id="fixedRadio" name="emp_type"
+                                                                       value="0" {{ old('emp_type',$trainer->emp_type) == 0 ? 'checked' : '' }} >
+                                                                <label class="form-check-label"
+                                                                       for="fixedRadio">Fixed</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -323,7 +347,7 @@
 
                                                     @php
                                                         $seperateJoinDate = explode(',', $trainer->joining_date);
-//                                                    @endphp
+//                                                  @endphp
                                                     <div class="col-md-6">
                                                         <label for="simpleinput">Joining Date:</label>
                                                         <div class="row mb-3">
@@ -331,7 +355,6 @@
                                                                  style="display: flex;justify-content: space-around;">
                                                                 <label for="simpleinput">From:</label>
                                                             </div>
-                                                            {{--                                                            <label for="simpleinput" class="m-2" style="justify-content: space-around; display: flex">From:</label>--}}
                                                             <div class="col-sm-4">
                                                                 <div class="input-group date" id="timepicker2"
                                                                      data-target-input="nearest">
@@ -346,7 +369,6 @@
                                                                  style="display: flex;justify-content: space-around;">
                                                                 <label for="simpleinput">To:</label>
                                                             </div>
-                                                            {{--                                                            <label for="simpleinput" class="m-2"  style="justify-content: space-around; display: flex">To:</label>--}}
                                                             <div class="col-sm-4">
                                                                 <div class="input-group date" id="timepicker3"
                                                                      data-target-input="nearest">
@@ -521,23 +543,26 @@
                                                         <div class="form-group mb-3">
                                                             <label for="inputtext" class="col-sm-3 col-form-label">Branch
                                                                 Name:</label>
-                                                            <select class="form-control select2" name="branch_id" required>
+                                                            <select class="form-control select2" name="branch_id"
+                                                                    required>
                                                                 <option value="">--- Select Branch ---</option>
                                                                 @foreach($branch as $key => $b)
                                                                     <option
-                                                                            value="{{ $b->id }}" {{ old('branch_id',$trainer->branch_id)==$b->id?'selected':'' }}>{{ $b->name }}</option>
+                                                                        value="{{ $b->id }}" {{ old('branch_id',$trainer->branch_id)==$b->id?'selected':'' }}>{{ $b->name }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 mb-1">
                                                         <div class="form-group mb-3">
-                                                            <label for="inputtext" class="col-sm-3 col-form-label">Course Name:</label>
+                                                            <label for="inputtext" class="col-sm-3 col-form-label">Course
+                                                                Name:</label>
                                                             <select class="form-control select2" name="course_id[]" multiple="multiple" data-placeholder="Select a course">
                                                                 <option value="">--- Select Course ---</option>
                                                                 @if ($course)
                                                                     @foreach($course as $key => $c)
-                                                                        <option value="{{$c->id}}" {{ in_array($c->id, json_decode($selectedCourses)) ? 'selected' : '' }}>{{$c->course_name}}</option>
+                                                                        <option
+                                                                            value="{{$c->id}}" {{ in_array($c->id, json_decode($selectedCourses)) ? 'selected' : '' }}>{{$c->course_name}}</option>
                                                                     @endforeach
                                                                 @endif
                                                             </select>
@@ -547,19 +572,23 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext" class="col-sm-3 col-form-label">Role
                                                                 Name:</label>
-{{--                                                            @dd($roles)--}}
-                                                            <select class="form-control select2" name="role_id" required>
+                                                            <select class="form-control select2" name="role_id"
+                                                                    required>
                                                                 <option value="">--- Select Role ---</option>
                                                                 @foreach($roles as $key => $r)
-{{--                                                                    <option value="{{$r->id}}" {{ old('role_id', optional($trainer->roles)->first()?->id) == $r->id ? 'selected' : '' }}>{{$r->name}}</option>--}}
-                                                                    <option value="{{$r->id}}" @if($userRole->id == $r->id) selected @endif>{{$r->name}}</option>
+                                                                    <option value="{{$r->id}}"
+                                                                            @if($userRole->id == $r->id) selected @endif>{{$r->name}}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button type="button" class="btn btn-primary float-right next-btn ml-2">Next</button>
-                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
+                                                <button type="button" class="btn btn-primary float-right next-btn ml-2">
+                                                    Next
+                                                </button>
+                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2"
+                                                        onclick="stepper.previous()">Previous
+                                                </button>
                                             </div>
                                         </div>
                                         <div id="document-list-part" class="content" role="tabpanel"
@@ -570,9 +599,13 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Passport Size Photo</label>
                                                             <div class="custom-file">
-                                                                <input type="file" class="custom-file-input" name="photo" accept="image/*">
-                                                                <label class="custom-file-label" for="customFile">Choose file</label>
-                                                                    <img src="{{asset('assets/trainer/' . $trainer->photo)}}" width="100" height="100">
+                                                                <input type="file" class="custom-file-input"
+                                                                       name="photo" accept="image/*">
+                                                                <label class="custom-file-label" for="customFile">Choose
+                                                                    file</label>
+                                                                <img
+                                                                    src="{{asset('assets/trainer/' . $trainer->photo)}}"
+                                                                    width="100" height="100">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -580,9 +613,13 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Aadhaar Card</label>
                                                             <div class="custom-file">
-                                                                <input type="file" class="custom-file-input" name="aadhaar_card" accept="image/*">
-                                                                <label class="custom-file-label" for="customFile">Choose file</label>
-                                                                <img src="{{asset('assets/trainer/' . $trainer->aadhaar_card)}}" width="100" height="100">
+                                                                <input type="file" class="custom-file-input"
+                                                                       name="aadhaar_card" accept="image/*">
+                                                                <label class="custom-file-label" for="customFile">Choose
+                                                                    file</label>
+                                                                <img
+                                                                    src="{{asset('assets/trainer/' . $trainer->aadhaar_card)}}"
+                                                                    width="100" height="100">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -590,9 +627,13 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Last Education MarkSheet</label>
                                                             <div class="custom-file">
-                                                                <input type="file" class="custom-file-input" name="last_edu_markSheet" accept="image/*">
-                                                                <label class="custom-file-label" for="customFile">Choose file</label>
-                                                               <img src="{{asset('assets/trainer/' . $trainer->last_edu_markSheet)}}" width="100" height="100">
+                                                                <input type="file" class="custom-file-input"
+                                                                       name="last_edu_markSheet" accept="image/*">
+                                                                <label class="custom-file-label" for="customFile">Choose
+                                                                    file</label>
+                                                                <img
+                                                                    src="{{asset('assets/trainer/' . $trainer->last_edu_markSheet)}}"
+                                                                    width="100" height="100">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -600,17 +641,23 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Choose Bank Passbook Photo</label>
                                                             <div class="custom-file">
-                                                                <input type="file" class="custom-file-input" name="bank_passbook" accept="image/*">
-                                                                <label class="custom-file-label" for="customFile">Choose file</label>
-                                                               <img src="{{asset('assets/trainer/' . $trainer->bank_passbook)}}" width="100" height="100">
+                                                                <input type="file" class="custom-file-input"
+                                                                       name="bank_passbook" accept="image/*">
+                                                                <label class="custom-file-label" for="customFile">Choose
+                                                                    file</label>
+                                                                <img
+                                                                    src="{{asset('assets/trainer/' . $trainer->bank_passbook)}}"
+                                                                    width="100" height="100">
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button type="button" class="btn btn-primary float-right next-btn  ml-2">
+                                                <button type="button"
+                                                        class="btn btn-primary float-right next-btn  ml-2">
                                                     Next
                                                 </button>
-                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous
+                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2"
+                                                        onclick="stepper.previous()">Previous
                                                 </button>
                                             </div>
 
@@ -621,16 +668,21 @@
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group mb-3">
-                                                            <input type="checkbox" name="terms_conditions" value="1" @if(old('terms_conditions',$trainer->terms_conditions) == '1')checked  @endif
-                                                            class="m-2">
+                                                            <input type="checkbox" name="terms_conditions" value="1"
+                                                                   @if(old('terms_conditions',$trainer->terms_conditions) == '1')checked
+                                                                   @endif
+                                                                   class="m-2">
                                                             <label for="terms & conditon">Terms & Conditions:</label>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button type="submit" name="submit" class="btn btn-success float-right next-btn  ml-2">
+                                                <button type="submit" name="submit"
+                                                        class="btn btn-success float-right next-btn  ml-2">
                                                     Update
                                                 </button>
-                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
+                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2"
+                                                        onclick="stepper.previous()">Previous
+                                                </button>
                                             </div>
                                         </div>
                                     </form>
@@ -757,7 +809,7 @@
                     $(element).removeClass('is-invalid');
                 }
             });
-            $('.next-btn').click(function() {
+            $('.next-btn').click(function () {
                 var isValid = form.valid();
                 if (isValid) {
                     stepper.next()

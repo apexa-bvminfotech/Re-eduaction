@@ -27,11 +27,6 @@ class TrainerController extends Controller
         return view('trainer.index', compact('trainer'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $branch = Branch::orderBy('id', 'DESC')->get();
@@ -41,12 +36,6 @@ class TrainerController extends Controller
         return view('trainer.create', compact('branch', 'course', 'roles', 'emp_id'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
 //        dd($request->all());
@@ -159,23 +148,14 @@ class TrainerController extends Controller
             ->with('success', 'Trainer created successfully');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function show(Trainer $trainer)
     {
-        return view('trainer.show', compact('trainer'));
+        $courseIds = json_decode($trainer->course_id);
+        $courseNames = Course::whereIn('id', $courseIds)->pluck('course_name');
+
+        return view('trainer.show', compact('trainer', 'courseNames'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Trainer $trainer)
     {
         $course = Course::orderBy('id', 'DESC')->get();
@@ -188,14 +168,6 @@ class TrainerController extends Controller
         return view('trainer.edit', compact('trainer', 'branch', 'course', 'roles', 'user', 'userRole', 'selectedCourses'));
     }
 
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Trainer $trainer)
     {
 //dd($request->all());
@@ -315,12 +287,6 @@ class TrainerController extends Controller
             ->with('success', 'Trainer updated successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         Trainer::where('id', $id)->delete();
