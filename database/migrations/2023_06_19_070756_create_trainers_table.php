@@ -22,7 +22,7 @@ return new class extends Migration {
             $table->string('phone', 15);
             $table->date('dob');
             $table->string('qualification');
-            $table->string('email')->unique();
+            $table->string('email_id')->unique();
             $table->integer('marital_status');
             $table->string('course_id')->nullable();
             $table->foreignId('branch_id')->nullable()->constrained('branches')->cascadeOnUpdate()->cascadeOnDelete();
@@ -57,6 +57,7 @@ return new class extends Migration {
             $table->string('incentive')->nullable();
             $table->string('other_allowance')->nullable();
             $table->integer('emp_type')->default('0');
+            $table->boolean('is_active')->default('0');
             $table->bigInteger('user_id');
             $table->timestamps();
 

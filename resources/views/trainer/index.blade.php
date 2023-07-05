@@ -29,6 +29,7 @@
                                         <th>No</th>
                                         <th>Name</th>
                                         <th>Branch Name</th>
+                                        <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                     </thead>
@@ -39,13 +40,23 @@
                                             <td>{{ $t->name }}</td>
                                             <td>{{$t->branch ? $t->branch->name : ''}}</td>
                                             <td>
+                                                @can('user-edit')
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" data-id="{{$t->id}}"
+                                                               class="custom-control-input checkStatus"
+                                                               id="c{{$key+1}}" {{ $t->is_active ? '' : 'checked' }}>
+                                                        <label class="custom-control-label" for="c{{$key+1}}"></label>
+                                                    </div>
+                                                @endcan
+                                            </td>
+                                            <td>
                                                 <a href="{{ route('trainer.show',$t->id) }}"
-                                                   class="btn btn-outline-info btn-sm" title="show"><i
+                                                   class="btn btn-info btn-sm" title="show"><i
                                                         class="fa fa-eye"></i></a>
 
                                                 @can('trainer-edit')
                                                     <a href="{{ route('trainer.edit',$t->id) }}"
-                                                       class="btn btn-outline-success btn-sm" title="Edit"><i
+                                                       class="btn btn-success btn-sm" title="Edit"><i
                                                             class="fa fa-edit"></i></a>
                                                 @endcan
                                             </td>
@@ -69,7 +80,27 @@
                 "responsive": true, "lengthChange": false, "autoWidth": false,
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
+            $('.checkStatus').change(function () {
+                var status = $(this).prop('checked') == true ? 0 : 1;
+                var trainer_id = $(this).data('id');
+                $.ajax({
+                    type: "GET",
+                    url: '/changeUserStatus',
+                    data: {'status': status, 'trainer_id': trainer_id},
+                    success: function (data) {
+                        toastr.options =
+                            {
+                                "closeButton": true,
+                                "progressBar": true
+                            }
+                        if (status) {
+                            toastr.error(data.success);
+                        } else {
+                            toastr.success(data.success);
+                        }
+                    }
+                });
+            });
         })
     </script>
 @endpush

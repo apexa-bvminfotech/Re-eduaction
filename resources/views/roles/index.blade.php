@@ -35,12 +35,12 @@
                                                 <td>{{ $role->id }}</td>
                                                 <td>{{ $role->name }}</td>
                                                 <td>
-                                                    <button type="button" class="btn btn-outline-info btn-sm showDetail" data-id="{{ $role->id }}" data-toggle="modal" data-target="#modal-lg">
+                                                    <button type="button" class="btn btn-info btn-sm showDetail" data-id="{{ $role->id }}" data-toggle="modal" data-target="#modal-lg">
                                                         <i class="fa fa-eye"></i>
                                                     </button>
                                                     @can('role-edit')
                                                         <a href="{{ route('roles.edit',$role->id) }}"
-                                                           class="btn btn-outline-success btn-sm" title="Edit"><i
+                                                           class="btn btn-success btn-sm" title="Edit"><i
                                                                 class="fa fa-edit"></i></a>
                                                     @endcan
                                                 </td>

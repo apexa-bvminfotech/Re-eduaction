@@ -45,7 +45,7 @@
                                                 <td>{{$u->authorized_person_contact}}</td>
                                                 <td>
                                                     @can('branch-edit')
-                                                        <a href="{{route('branch.edit',$u->id)}}" class="btn btn-outline-success btn-sm"
+                                                        <a href="{{route('branch.edit',$u->id)}}" class="btn btn-success btn-sm"
                                                            title="Edit"><i class="fa fa-edit"></i></a>
                                                     @endcan
                                                 </td>

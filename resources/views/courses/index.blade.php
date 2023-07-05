@@ -43,12 +43,12 @@
                                                 <td>
                                                     <form action="{{route('course.destroy',$course->id)}}" method="POST">
 
-                                                        <a class="btn btn-outline-success fa fa-edit" href="{{ route('course.edit',$course->id) }}"></a>
+                                                        <a class="btn btn-success fa fa-edit" href="{{ route('course.edit',$course->id) }}"></a>
 
                                                         @csrf
                                                         @method('DELETE')
 
-                                                        <button type="submit" class="btn btn-outline-danger fa fa-trash-alt show_confirm"></button>
+                                                        <button type="submit" class="btn btn-danger fa fa-trash-alt show_confirm"></button>
                                                     </form>
                                                 </td>
                                                 </tr>

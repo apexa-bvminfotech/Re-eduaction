@@ -61,7 +61,7 @@
                                                         {!! Form::close() !!}
                                                     @endcan
                                                     <button type="button"
-                                                            class="btn  btn-outline-success  btn-assign"
+                                                            class="btn  btn-success  btn-assign"
                                                             data-id="{{$student->id}}"> Assign Staff
                                                     </button>
                                                 </div>

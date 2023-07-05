@@ -98,7 +98,7 @@
                                                     </tr>
                                                     <tr>
                                                         <th>Email address</th>
-                                                        <td>{{ $trainer->email }}</td>
+                                                        <td>{{ $trainer->email_id }}</td>
                                                     </tr>
                                                     <tr>
                                                         <th>Marital Status</th>

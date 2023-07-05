@@ -80,7 +80,7 @@
                                           class="needs-validation" novalidate enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')
-                                        <input type="hidden" lass="form-control" value="{{ $trainer->user_id }}"
+                                        <input type="hidden" class="form-control" value="{{$trainer->user_id}}"
                                                name="user_id" readonly>
                                         <div id="logins-part" class="content" role="tabpanel"
                                              aria-labelledby="logins-part-trigger">
@@ -149,11 +149,11 @@
                                                     <div class="col-md-6 mb-1">
                                                         <div class="form-group mb-3">
                                                             <label for="inputMailForm">Email address:</label>
-                                                            <input id="inputMailForm" type="email" name="email"
+                                                            <input id="inputMailForm" type="email" name="email_id"
                                                                    class="form-control"
                                                                    placeholder="Enter Email Address"
-                                                                   value="{{ old('email',$trainer->email) }}">
-                                                            @error('email')
+                                                                   value="{{ old('email',$trainer->email_id) }}">
+                                                            @error('email_id')
                                                             <span class="text-danger">{{$message}}</span>
                                                             @enderror
                                                         </div>
@@ -557,7 +557,9 @@
                                                         <div class="form-group mb-3">
                                                             <label for="inputtext" class="col-sm-3 col-form-label">Course
                                                                 Name:</label>
-                                                            <select class="form-control select2" name="course_id[]" multiple="multiple" data-placeholder="Select a course">
+                                                            <select class="form-control select2" name="course_id[]"
+                                                                    multiple="multiple"
+                                                                    data-placeholder="Select a course">
                                                                 <option value="">--- Select Course ---</option>
                                                                 @if ($course)
                                                                     @foreach($course as $key => $c)
@@ -577,7 +579,7 @@
                                                                 <option value="">--- Select Role ---</option>
                                                                 @foreach($roles as $key => $r)
                                                                     <option value="{{$r->id}}"
-                                                                            @if($userRole->id == $r->id) selected @endif>{{$r->name}}</option>
+                                                                            @if($trainer->user->roles->first()->id == $r->id) selected @endif>{{$r->name}}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -675,12 +677,33 @@
                                                             <label for="terms & conditon">Terms & Conditions:</label>
                                                         </div>
                                                     </div>
+                                                    <label for="status" class="col-sm-3 col-form-label">Status:</label>
+                                                    <div class="col-sm-9 d-flex justify-content-evenly">
+                                                        <div class="custom-control custom-radio">
+                                                            <input class="custom-control-input" type="radio"
+                                                                   id="customRadio1"
+                                                                   name="is_active" value="0"
+                                                                   @if($trainer->is_active == 0) checked @endif>
+                                                            <label for="customRadio1"
+                                                                   class="custom-control-label">Active</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio ml-2">
+                                                            <input
+                                                                class="custom-control-input custom-control-input-danger"
+                                                                value="1"
+                                                                type="radio" id="customRadio4" name="is_active"
+                                                                @if($trainer->is_active == 1) checked @endif>
+                                                            <label for="customRadio4"
+                                                                   class="custom-control-label">Deactive</label>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <button type="submit" name="submit"
                                                         class="btn btn-success float-right next-btn  ml-2">
                                                     Update
                                                 </button>
-                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2"
+                                                <button type="button"
+                                                        class="btn btn-primary prvBtn float-right ml-2"
                                                         onclick="stepper.previous()">Previous
                                                 </button>
                                             </div>

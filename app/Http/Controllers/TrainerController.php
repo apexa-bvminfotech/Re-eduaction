@@ -38,13 +38,12 @@ class TrainerController extends Controller
 
     public function store(Request $request)
     {
-//        dd($request->all());
         $request->validate([
             'surname' => 'required',
             'name' => 'required|max:255',
             'father_name' => 'required|max:255',
             'phone' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
-            'email' => 'required|email|unique:users,email',
+            'email_id' => 'required|email|unique:users,email',
             'qualification' => 'required',
             'dob' => 'required',
             'marital_status' => 'required',
@@ -58,13 +57,13 @@ class TrainerController extends Controller
             'last_edu_markSheet' => 'required',
             'bank_passbook' => 'required',
             'terms_conditions' => 'required',
+            'is_active' => 'required',
         ]);
-
         $user = User::Create([
             'surname' => $request->surname,
             'name' => $request->name,
             'father_name' => $request->father_name,
-            'email' => $request->email,
+            'email' => $request->email_id,
             'contact' => $request->phone,
             'password' => Hash::make(strtolower($request->name) . '@123'),
             'type' => 1,
@@ -96,13 +95,12 @@ class TrainerController extends Controller
             $request->bank_passbook->move('assets/trainer', $filename);
             $bank_passbook = $filename;
         }
-
         Trainer::create([
             'emp_id' => $request->emp_id,
             'surname' => $request->surname,
             'name' => $request->name,
             'father_name' => $request->father_name,
-            'email' => $request->email,
+            'email_id' => $request->email_id,
             'phone' => $request->phone,
             'qualification' => $request->qualification,
             'dob' => $request->dob,
@@ -142,8 +140,8 @@ class TrainerController extends Controller
             'last_edu_markSheet' => $last_edu_markSheet,
             'bank_passbook' => $bank_passbook,
             'terms_conditions' => $request->terms_conditions,
+            'is_active' => $request->is_active,
         ]);
-
         return redirect()->route('trainer.index')
             ->with('success', 'Trainer created successfully');
     }
@@ -165,18 +163,17 @@ class TrainerController extends Controller
         $userRole = $user->roles->first();
         $selectedCourses = $trainer->course_id;
 
-        return view('trainer.edit', compact('trainer', 'branch', 'course', 'roles', 'user', 'userRole', 'selectedCourses'));
+        return view('trainer.edit', compact('trainer', 'branch', 'course', 'roles', 'user','userRole','selectedCourses'));
     }
 
     public function update(Request $request, Trainer $trainer)
     {
-//dd($request->all());
         $request->validate([
             'surname' => 'required',
             'name' => 'required|max:255',
             'father_name' => 'required|max:255',
             'phone' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
-            'email' => 'required|email|unique:trainers,email,' . $trainer->id,
+            'email_id' => 'required|email',
             'qualification' => 'required',
             'dob' => 'required',
             'marital_status' => 'required',
@@ -196,7 +193,7 @@ class TrainerController extends Controller
             'surname' => $request->surname,
             'name' => $request->name,
             'father_name' => $request->father_name,
-            'email' => $request->email,
+            'email' => $request->email_id,
             'contact' => $request->phone,
             'password' => Hash::make(($request->name) . '@123'),
             'type' => 1,
@@ -204,7 +201,7 @@ class TrainerController extends Controller
         ]);
 
         if ($user->roles()->count() > 0) {
-            if ($user->removeRole($user->roles()->first()->id)){
+            if ($user->removeRole($user->roles()->first()->id)) {
                 $user->assignRole($request->role_id);
             }
         } else {
@@ -241,7 +238,7 @@ class TrainerController extends Controller
             'surname' => $request->surname,
             'name' => $request->name,
             'father_name' => $request->father_name,
-            'email' => $request->email,
+            'email_id' => $request->email_id,
             'phone' => $request->phone,
             'qualification' => $request->qualification,
             'dob' => $request->dob,
@@ -281,6 +278,7 @@ class TrainerController extends Controller
             'last_edu_markSheet' => $last_edu_markSheet,
             'bank_passbook' => $bank_passbook,
             'terms_conditions' => $request->terms_conditions,
+            'is_active' => $request->is_active,
         ]);
 
         return redirect()->route('trainer.index')

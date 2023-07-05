@@ -19,7 +19,8 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active"><a href="{{ route('trainer.index') }}">Show Trainer List</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ route('trainer.index') }}">Show Trainer
+                                    List</a></li>
                         </ol>
                     </div>
                 </div>
@@ -30,7 +31,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card card-primary">
-{{--                            {!! Form::open(array('route' => 'trainer.store','method'=>'POST')) !!}--}}
+                            {{--                            {!! Form::open(array('route' => 'trainer.store','method'=>'POST')) !!}--}}
                             <div class="bs-stepper">
                                 <div class="bs-stepper-header" role="tablist">
                                     <div class="step" data-target="#logins-part">
@@ -76,7 +77,8 @@
                                 </div>
                                 <div class="bs-stepper-content">
                                     <!-- your steps content here -->
-                                    <form action="{{route('trainer.store')}}" method="POST" id="quickForm" class="needs-validation" novalidate enctype="multipart/form-data">
+                                    <form action="{{route('trainer.store')}}" method="POST" id="quickForm"
+                                          class="needs-validation" novalidate enctype="multipart/form-data">
                                         @csrf
                                         @method('POST')
                                         <div id="logins-part" class="content" role="tabpanel"
@@ -100,7 +102,7 @@
                                                             <input type="text"
                                                                    class="form-control "
                                                                    value="{{ old('surname') }}"
-                                                                   name="surname" placeholder="Enter Surname" >
+                                                                   name="surname" placeholder="Enter Surname">
 
                                                         </div>
                                                     </div>
@@ -117,7 +119,7 @@
                                                     <div class="col-md-4 mb-1">
                                                         <div class="form-group mb-3">
                                                             <label for="simpleinput">Father Name:</label>
-                                                            <input type="text"  class="form-control"
+                                                            <input type="text" class="form-control"
                                                                    name="father_name"
                                                                    value="{{ old('father_name') }}"
                                                                    placeholder="Enter Father Name">
@@ -129,15 +131,18 @@
                                                             <label for="contact number">Mobile No:</label>
                                                             <input type="tel" name="phone"
                                                                    placeholder="12345 67890" value="{{ old('phone') }}"
-                                                                   class="form-control" pattern="[0-9]{5}[\s]{1}[0-9]{5}">
+                                                                   class="form-control"
+                                                                   pattern="[0-9]{5}[\s]{1}[0-9]{5}">
 
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 mb-1">
                                                         <div class="form-group mb-3">
                                                             <label for="inputMailForm">Email address:</label>
-                                                            <input id="inputMailForm" type="email" name="email"
-                                                                   class="form-control" placeholder="Enter Email Address" value="{{ old('email') }}">
+                                                            <input id="inputMailForm" type="email" name="email_id"
+                                                                   class="form-control"
+                                                                   placeholder="Enter Email Address"
+                                                                   value="{{ old('email_id') }}">
 
                                                         </div>
                                                     </div>
@@ -167,14 +172,20 @@
                                                             <br/>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio mt-2">
-                                                                    <input type="radio" id="married" name="marital_status" value="1" {{ old('marital_status')}}>
-                                                                    <label for="customRadio1" style="font-weight: normal">Married</label>
+                                                                    <input type="radio" id="married"
+                                                                           name="marital_status"
+                                                                           value="1" {{ old('marital_status')}}>
+                                                                    <label for="customRadio1"
+                                                                           style="font-weight: normal">Married</label>
                                                                 </div>
                                                             </div>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio mt-1">
-                                                                    <input type="radio" id="unmarried" name="marital_status" checked value="0" {{ old('marital_status')}}>
-                                                                    <label for="customRadio2" style="font-weight: normal">Unmarried</label>
+                                                                    <input type="radio" id="unmarried"
+                                                                           name="marital_status" checked
+                                                                           value="0" {{ old('marital_status')}}>
+                                                                    <label for="customRadio2"
+                                                                           style="font-weight: normal">Unmarried</label>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -189,7 +200,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button type="button" class="btn btn-primary float-right next-btn" id="firstNext" >Next</button>
+                                                <button type="button" class="btn btn-primary float-right next-btn"
+                                                        id="firstNext">Next
+                                                </button>
                                             </div>
                                         </div>
                                         <div id="information-part" class="content" role="tabpanel"
@@ -208,8 +221,10 @@
                                                         <div class="form-group mb-3">
                                                             <label for="contact number">Mobile No:</label>
                                                             <input type="tel" name="emer_phone"
-                                                                   placeholder="12345 67890" value="{{ old('emer_phone') }}"
-                                                                   class="form-control" pattern="[0-9]{5}[\s]{1}[0-9]{5}" >
+                                                                   placeholder="12345 67890"
+                                                                   value="{{ old('emer_phone') }}"
+                                                                   class="form-control"
+                                                                   pattern="[0-9]{5}[\s]{1}[0-9]{5}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
@@ -233,7 +248,8 @@
                                                 <button type="button" class="btn btn-primary float-right next-btn ml-2">
                                                     Next
                                                 </button>
-                                                <button type="button" class="btn btn-primary prvBtn float-right" onclick="stepper.previous()">Previous
+                                                <button type="button" class="btn btn-primary prvBtn float-right"
+                                                        onclick="stepper.previous()">Previous
                                                 </button>
 
                                             </div>
@@ -269,12 +285,17 @@
                                                             <label for="trainerType">Trainer Type</label>
                                                             <br>
                                                             <div class="form-check form-check-inline mt-1">
-                                                                <input class="form-check-input" type="radio" id="freelancerRadio" name="emp_type" value="1" {{ old('emp_type') == 1 ? 'checked' : '' }}>
+                                                                <input class="form-check-input" type="radio"
+                                                                       id="freelancerRadio" name="emp_type"
+                                                                       value="1" {{ old('emp_type') == 1 ? 'checked' : '' }}>
                                                                 <label class="form-check-label" for="freelancerRadio">Freelancer</label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" id="fixedRadio" name="emp_type" value="0" {{ old('emp_type') == 0 ? 'checked' : '' }} >
-                                                                <label class="form-check-label" for="fixedRadio">Fixed</label>
+                                                                <input class="form-check-input" type="radio"
+                                                                       id="fixedRadio" name="emp_type"
+                                                                       value="0" {{ old('emp_type') == 0 ? 'checked' : '' }} >
+                                                                <label class="form-check-label"
+                                                                       for="fixedRadio">Fixed</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -476,7 +497,8 @@
                                                         <div class="form-group mb-3">
                                                             <label for="inputtext" class="col-sm-3 col-form-label">Branch
                                                                 Name:</label>
-                                                            <select class="form-control select2" name="branch_id" required>
+                                                            <select class="form-control select2" name="branch_id"
+                                                                    required>
                                                                 <option value="">--- Select Branch ---</option>
                                                                 @foreach($branch as $key => $b)
                                                                     <option
@@ -489,11 +511,13 @@
                                                         <div class="form-group mb-3">
                                                             <label for="inputtext" class="col-sm-3 col-form-label">Course
                                                                 Name:</label>
-                                                            <select class="form-control select2" name="course_id[]" multiple="multiple" data-placeholder="Select a course">
+                                                            <select class="form-control select2" name="course_id[]"
+                                                                    multiple="multiple"
+                                                                    data-placeholder="Select a course">
                                                                 <option value="">--- Select Course ---</option>
                                                                 @foreach($course as $key=>$c)
                                                                     <option
-                                                                            value="{{$c->id}}" {{ old('course_id')==$c->id?'selected':'' }}>{{$c->course_name}}</option>
+                                                                        value="{{$c->id}}" {{ old('course_id')==$c->id?'selected':'' }}>{{$c->course_name}}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -502,7 +526,8 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext" class="col-sm-3 col-form-label">Role
                                                                 Name:</label>
-                                                            <select class="form-control select2" name="role_id" required>
+                                                            <select class="form-control select2" name="role_id"
+                                                                    required>
                                                                 <option value="">--- Select Role ---</option>
                                                                 @foreach($roles as $key => $r)
                                                                     <option
@@ -512,8 +537,12 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button type="button" class="btn btn-primary float-right next-btn ml-2">Next</button>
-                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
+                                                <button type="button" class="btn btn-primary float-right next-btn ml-2">
+                                                    Next
+                                                </button>
+                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2"
+                                                        onclick="stepper.previous()">Previous
+                                                </button>
                                             </div>
                                         </div>
                                         <div id="document-list-part" class="content" role="tabpanel"
@@ -524,8 +553,10 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Passport Size Photo</label>
                                                             <div class="custom-file">
-                                                                <input type="file" class="custom-file-input" name="photo" accept="image/*">
-                                                                <label class="custom-file-label" for="customFile">Choose file</label>
+                                                                <input type="file" class="custom-file-input"
+                                                                       name="photo" accept="image/*">
+                                                                <label class="custom-file-label" for="customFile">Choose
+                                                                    file</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -533,8 +564,10 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Aadhaar Card</label>
                                                             <div class="custom-file">
-                                                                <input type="file" class="custom-file-input" name="aadhaar_card" accept="image/*">
-                                                                <label class="custom-file-label" for="customFile">Choose file</label>
+                                                                <input type="file" class="custom-file-input"
+                                                                       name="aadhaar_card" accept="image/*">
+                                                                <label class="custom-file-label" for="customFile">Choose
+                                                                    file</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -542,8 +575,10 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Last Education MarkSheet</label>
                                                             <div class="custom-file">
-                                                                <input type="file" class="custom-file-input" name="last_edu_markSheet" accept="image/*">
-                                                                <label class="custom-file-label" for="customFile">Choose file</label>
+                                                                <input type="file" class="custom-file-input"
+                                                                       name="last_edu_markSheet" accept="image/*">
+                                                                <label class="custom-file-label" for="customFile">Choose
+                                                                    file</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -551,19 +586,22 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Choose Bank Passbook Photo</label>
                                                             <div class="custom-file">
-                                                                <input type="file" class="custom-file-input" name="bank_passbook" accept="image/*">
-                                                                <label class="custom-file-label" for="customFile">Choose file</label>
+                                                                <input type="file" class="custom-file-input"
+                                                                       name="bank_passbook" accept="image/*">
+                                                                <label class="custom-file-label" for="customFile">Choose
+                                                                    file</label>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button type="button" class="btn btn-primary float-right next-btn  ml-2">
+                                                <button type="button"
+                                                        class="btn btn-primary float-right next-btn  ml-2">
                                                     Next
                                                 </button>
-                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous
+                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2"
+                                                        onclick="stepper.previous()">Previous
                                                 </button>
                                             </div>
-
                                         </div>
                                         <div id="terms-condition-part" class="content" role="tabpanel"
                                              aria-labelledby="terms-condition-part-trigger">
@@ -571,24 +609,45 @@
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group mb-3">
-                                                            <input type="checkbox" name="terms_conditions" value="1" @if(old('terms_conditions') == '1')checked  @endif
+                                                            <input type="checkbox" name="terms_conditions" value="1"
+                                                                   @if(old('terms_conditions') == '1')checked @endif
                                                                    class="m-2" required>
                                                             <label for="terms & conditon">Terms & Conditions:</label>
                                                         </div>
                                                     </div>
+                                                    {{--                                                    <div class="form-group row">--}}
+                                                    <label for="status" class="col-sm-3 col-form-label">Status </label>
+                                                    <div class="col-sm-9 d-flex justify-content-evenly">
+                                                        <div class="custom-control custom-radio">
+                                                            <input class="custom-control-input" type="radio"
+                                                                   id="customRadio1" name="is_active" value="0"
+                                                                   {{ old('is_active') == 0 ? 'checked' : '' }} checked>
+                                                            <label for="customRadio1" class="custom-control-label">Active</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio ml-2">
+                                                            <input
+                                                                class="custom-control-input custom-control-input-danger"
+                                                                value="1" type="radio" id="customRadio4"
+                                                                name="is_active" {{ old('is_active') == 1 ? 'checked' : '' }}>
+                                                            <label for="customRadio4" class="custom-control-label">Deactive</label>
+                                                        </div>&nbsp;
+                                                        {{--                                                        </div>--}}
+                                                    </div>
                                                 </div>
-                                                <button type="submit" name="submit" class="btn btn-success float-right next-btn  ml-2">
+                                                <button type="submit" name="submit"
+                                                        class="btn btn-success float-right next-btn  ml-2">
                                                     Submit
                                                 </button>
-                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
-
+                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2"
+                                                        onclick="stepper.previous()">Previous
+                                                </button>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                                 <!-- /.card-body -->
                             </div>
-{{--                            {!! Form::close() !!}--}}
+                            {{--                            {!! Form::close() !!}--}}
                         </div>
                     </div>
                 </div>
@@ -597,7 +656,7 @@
     </div>
 @endsection
 @push('scripts')
-     <script type="text/javascript">
+    <script type="text/javascript">
         $(document).ready(function () {
             var form = $('#quickForm');
             var validator = form.validate({
@@ -643,13 +702,13 @@
                         required: true,
                     },
                     aadhaar_card: {
-                        required:true,
+                        required: true,
                     },
                     last_edu_markSheet: {
-                        required:true,
+                        required: true,
                     },
                     bank_passbook: {
-                        required:true,
+                        required: true,
                     },
                     dob: {
                         required: true,
@@ -730,7 +789,7 @@
                     $(element).removeClass('is-invalid');
                 }
             });
-            $('.next-btn').click(function() {
+            $('.next-btn').click(function () {
                 var isValid = form.valid();
                 if (isValid) {
                     stepper.next()

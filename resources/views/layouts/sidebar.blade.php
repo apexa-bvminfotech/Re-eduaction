@@ -44,20 +44,20 @@
                             <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{route('staff_attendance.index')}}" class="nav-link @if(Route::currentRouteName() == 'staff_attendance.index')active  @endif">
-                                <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
-                                <p>Staff Attendance</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{route('staff_attendance.index')}}" class="nav-link @if(Route::currentRouteName() == 'staff_attendance.index')active  @endif">
-                                <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
-                                <p>Staff Attendance</p>
-                            </a>
-                        </li>
-                    </ul>
+{{--                    <ul class="nav nav-treeview">--}}
+{{--                        <li class="nav-item">--}}
+{{--                            <a href="{{route('staff_attendance.index')}}" class="nav-link @if(Route::currentRouteName() == 'staff_attendance.index')active  @endif">--}}
+{{--                                <i class="nav-icon fas fa-circle" style="font-size:12px"></i>--}}
+{{--                                <p>Staff Attendance</p>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+{{--                        <li class="nav-item">--}}
+{{--                            <a href="{{route('staff_attendance.index')}}" class="nav-link @if(Route::currentRouteName() == 'staff_attendance.index')active  @endif">--}}
+{{--                                <i class="nav-icon fas fa-circle" style="font-size:12px"></i>--}}
+{{--                                <p>Staff Attendance</p>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+{{--                    </ul>--}}
                 </li>
 
                 <li class="nav-item">
