@@ -82,7 +82,7 @@ class LoginController extends Controller
                 $request->session()->regenerateToken();
 
                 return redirect()->route('login')
-                    ->withErrors(['inactive' => 'Inactive trainers cannot log in.']);
+                    ->withErrors(['inactive' => 'Your account is de-active. Please contact your admin to active account.']);
 
             }
         }
