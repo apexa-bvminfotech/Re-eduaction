@@ -23,6 +23,11 @@
         <div class="card-header text-center">
             <img src="{{ asset('assets/img') }}/re-education.jpg" style="width: 190px">
         </div>
+        @if ($errors->has('inactive'))
+            <div class="alert alert-danger">
+                {{ $errors->first('inactive') }}
+            </div>
+        @endif
         <div class="card-body">
             <p class="login-box-msg">Sign in to start your session</p>
 

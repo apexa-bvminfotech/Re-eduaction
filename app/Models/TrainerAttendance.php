@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class staffAttendance extends Model
+class TrainerAttendance extends Model
 {
     use HasFactory;
-    protected $table="staff_attendance";
+    protected $table="trainer_attendance";
 
     protected $fillable = [
-        'staff_id',
+        'trainers_id',
         'attendance',
         'absent_reason',
         'date',
