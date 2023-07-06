@@ -40,6 +40,7 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
+//        dd($request->all());
         $rules = [
             'course_name' => 'required|string|max:255',
             'sub_course_name.*' => 'required|string|max:255',
@@ -59,13 +60,16 @@ class CourseController extends Controller
         $course = new Course();
         $course->course_name = $request->course_name;
         $course->save();
+
         foreach ($request->sub_course_name as $key => $sub_course) {
             $subCourse = new SubCourse();
             $subCourse->course_id = $course->id;
             $subCourse->sub_course_name = $sub_course;
             $subCourse->save();
-            foreach ($request->point[$key] as $point) {
-                $subCoursePoint = SubCoursePoint::create(['sub_course_id' => $subCourse->id, 'sub_point_name' => $point]);
+            if (isset($request->point[$key])) {
+                foreach ($request->point[$key] as $point) {
+                    $subCoursePoint = SubCoursePoint::create(['sub_course_id' => $subCourse->id, 'sub_point_name' => $point]);
+                }
             }
         }
         return redirect()->route('course.index')->with('success', 'Course Created Successfully.');
@@ -111,29 +115,52 @@ class CourseController extends Controller
             'sub_course_name.*.point' => 'required',
             'sub_course_name.*.point.*.name' => 'required|string|max:255',
         ];
+
         $messages = [
             'course_name.required' => 'The course name is required.',
             'sub_course_name.*.name.required' => 'The sub-course name is required.',
             'sub_course_name.*.point.*.name.required' => 'The point field is required.',
         ];
-        $validator = Validator::make($request->all(), $rules,$messages);
+
+        $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
+
         $course->course_name = $request->course_name;
         $course->save();
 
-        if ($request->sub_course_name) {
-            foreach ($request->sub_course_name as $key => $sub_course) {
-                $subCourse = SubCourse::updateOrCreate(['id' => $sub_course['id']], ['course_id' => $course->id, 'sub_course_name' => $sub_course['name']]);
+        $subCoursesData = [];
 
+        foreach ($request->sub_course_name as $key => $sub_course) {
+            $subCourse = SubCourse::updateOrCreate(['id'=> $sub_course['id']], [
+                'id' => $sub_course['id'],
+                'course_id' => $course->id,
+                'sub_course_name' => $sub_course['name']
+            ]);
+            if (isset($sub_course['point'])) {
                 foreach ($sub_course['point'] as $point) {
-                    $subCoursePoint = SubCoursePoint::updateOrCreate(['id' => $point['id']],['sub_course_id' => $subCourse->id, 'sub_point_name' =>  $point['name']]);
+                    SubCoursePoint::where('id',$point['id'])->update([
+                        'sub_point_name' => $point['name']
+                    ]);
                 }
             }
+
+            if (isset($request->point[$key])) {
+
+                foreach ($request->point[$key] as $p) {
+
+                    $subCoursePoint = SubCoursePoint::create(['sub_course_id' => $subCourse->id, 'sub_point_name' =>  $p]);
+                }
+            }
+
         }
+
+
+
         return redirect()->route('course.index')->with('success', 'Course Updated Successfully.');
     }
+
 
     /**
      * Remove the specified resource from storage.
