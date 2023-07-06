@@ -43,7 +43,7 @@
                                             <td>
                                                 @can('student-attendance-edit')
                                                     <a href="{{route('student_attendance.edit',$s->attendance_date)}}"
-                                                       class="btn btn-outline-success" title="Edit"><i
+                                                       class="btn btn-success" title="Edit"><i
                                                             class="fa fa-edit"></i></a>
                                                 @endcan
                                                 @can('student-attendance-delete')

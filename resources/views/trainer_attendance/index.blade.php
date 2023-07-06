@@ -60,12 +60,12 @@
                                                     <td>
                                                         @can('trainer-attendance-edit')
                                                             <a href="{{ route('trainer_attendance.edit',$s->date) }}"
-                                                               class="btn btn-outline-success" title="Edit"><i
+                                                               class="btn btn-success" title="Edit"><i
                                                                     class="fa fa-edit"></i></a>
                                                         @endcan
                                                         @can('trainer-attendance-delete')
                                                             {!! Form::open(['method' => 'DELETE','route' => ['trainer_attendance.destroy', $s->date],'style'=>'display:inline']) !!}
-                                                            <button type="submit" class="btn btn-outline-danger" title="Delete"
+                                                            <button type="submit" class="btn btn-danger" title="Delete"
                                                                     onclick="return confirm('Are you sure you want to delete?')">
                                                                 <i class="fa fa-trash"></i></button>
                                                             {!! Form::close() !!}
