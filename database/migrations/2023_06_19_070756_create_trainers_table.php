@@ -57,7 +57,6 @@ return new class extends Migration {
             $table->string('incentive')->nullable();
             $table->string('other_allowance')->nullable();
             $table->integer('emp_type')->default('0');
-            $table->boolean('is_active')->default('0');
             $table->bigInteger('user_id');
             $table->timestamps();
 
