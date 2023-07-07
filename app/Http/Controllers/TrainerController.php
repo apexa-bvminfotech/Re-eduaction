@@ -291,5 +291,12 @@ class TrainerController extends Controller
         return redirect()->route('trainer.index')
             ->with('success', 'trainer deleted successfully');
     }
+    public function changeTrainerStatus(Request $request)
+    {
+        $trainer = Trainer::find($request->trainer_id);
+        $trainer->is_active = $request->status;
+        $trainer->save();
+        return response()->json(['success' => $request->status ? 'Trainer de-active' : 'Trainer active']);
+    }
 
 }

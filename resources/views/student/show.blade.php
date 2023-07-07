@@ -145,7 +145,153 @@
                         </div>
                     </div>
                 </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="text-dark"><b><i>Courses</i></b></h2></div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            {{--                            <div class="card">--}}
+                            <div class="card-body">
+                                <table class="table table-bordered table-striped">
+                                    <tr>
+                                        <th class="text-center bg-info" colspan="4" style="font-size: 20px">Gujarati</th>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-top: 15px; padding-left: 120px">Before</td>
+                                        <td rowspan="2" class="text-center" style="padding-top: 35px">Topics</td>
+                                        <td style="padding-top: 15px; padding-left: 120px">After</td>
+                                        <td rowspan="2" class="text-center" style="padding-top: 35px">Date</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-top: 10px; padding-left: 140px">0</td>
+                                        <td style="padding-top: 10px; padding-left: 140px">0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="custom-control custom-checkbox"
+                                                 style="padding-left: 150px;">
+                                                <input class="custom-control-input" type="checkbox"
+                                                       id="customCheckbox2">
+                                                <label for="customCheckbox2" class="custom-control-label"></label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            ગુજરાતી k,kh,g
+                                        </td>
+                                        <td>
+                                            <div class="custom-control custom-checkbox"
+                                                 style="padding-left: 150px;">
+                                                <input class="custom-control-input" type="checkbox"
+                                                       id="customCheckbox3">
+                                                <label for="customCheckbox3" class="custom-control-label"></label>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">--</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="custom-control custom-checkbox"
+                                                 style="padding-left: 150px;">
+                                                <input class="custom-control-input" type="checkbox"
+                                                       id="customCheckbox4">
+                                                <label for="customCheckbox4" class="custom-control-label"></label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            a ની માત્ર વાળા શબ્દ
+                                        </td>
+                                        <td>
+                                            <div class="custom-control custom-checkbox"
+                                                 style="padding-left: 150px;">
+                                                <input class="custom-control-input" type="checkbox"
+                                                       id="customCheckbox5">
+                                                <label for="customCheckbox5" class="custom-control-label"></label>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">--</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            {{--                            </div>--}}
+                        </div>
+                        <div class="col-sm-6">
+                            {{--                            <div class="card">--}}
+                            <div class="card-body">
+                                <table class="table table-bordered table-striped">
+                                    <tr>
+                                        <th class="text-center bg-info" colspan="4" style="font-size: 20px">Hindi</th>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-top: 15px; padding-left: 120px">Before</td>
+                                        <td rowspan="2" class="text-center" style="padding-top: 35px">Topics</td>
+                                        <td style="padding-top: 15px; padding-left: 120px">After</td>
+                                        <td rowspan="2" class="text-center" style="padding-top: 35px">Date</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-top: 10px; padding-left: 140px">0</td>
+                                        <td style="padding-top: 10px; padding-left: 140px">0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="custom-control custom-checkbox" style="padding-left: 150px;">
+                                                <input class="custom-control-input" type="checkbox"
+                                                       id="customCheckbox6">
+                                                <label for="customCheckbox6" class="custom-control-label"></label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            हिंदी क,ख,ग
+                                        </td>
+                                        <td>
+                                            <div class="custom-control custom-checkbox" style="padding-left: 150px;">
+                                                <input class="custom-control-input" type="checkbox"
+                                                       id="customCheckbox7">
+                                                <label for="customCheckbox7" class="custom-control-label"></label>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">--</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="custom-control custom-checkbox" style="padding-left: 150px;">
+                                                <input class="custom-control-input" type="checkbox"
+                                                       id="customCheckbox8">
+                                                <label for="customCheckbox8" class="custom-control-label"></label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            ए की मात्रा वाले शब्द
+                                        </td>
+                                        <td>
+                                            <div class="custom-control custom-checkbox" style="padding-left: 150px;">
+                                                <input class="custom-control-input" type="checkbox"
+                                                       id="customCheckbox9">
+                                                <label for="customCheckbox9" class="custom-control-label"></label>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">--</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+            {{--            </div>--}}
         </section>
     </div>
 @endsection
+@push('styles')
+    <style>
+        .checkbox {
+            width: 200px;
+            color: #fff;
+            margin: auto;
+        }
+
+        .topics {
+            padding-top: 300px;
+        }
+
+    </style>
+@endpush

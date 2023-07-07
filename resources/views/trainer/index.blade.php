@@ -40,7 +40,7 @@
                                             <td>{{ $t->name }}</td>
                                             <td>{{$t->branch ? $t->branch->name : ''}}</td>
                                             <td>
-                                                @can('user-edit')
+                                                @can('trainer-edit')
                                                     <div class="custom-control custom-switch">
                                                         <input type="checkbox" data-id="{{$t->id}}"
                                                                class="custom-control-input checkStatus"
@@ -85,7 +85,7 @@
                 var trainer_id = $(this).data('id');
                 $.ajax({
                     type: "GET",
-                    url: '/changeUserStatus',
+                    url: '/changeTrainerStatus',
                     data: {'status': status, 'trainer_id': trainer_id},
                     success: function (data) {
                         toastr.options =
