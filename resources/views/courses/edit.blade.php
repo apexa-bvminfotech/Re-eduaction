@@ -43,6 +43,9 @@
                                                        placeholder="Add Course"
                                                        value="{{ old('course_name', $course->course_name) }}">
                                             </div>
+                                            @error('course_name')
+                                            <span class="text-danger">{{$message}}</span>
+                                            @enderror
                                             <div class="col-sm-1">
                                                 <button type="button" name="add" id="add" class="btn btn-primary add">
                                                     Add SubCourse
@@ -150,10 +153,10 @@
                 i++;
 
                 let html = '<div class="form-group row remove' + i + '" >'
-                html += '<div class="col-sm-1"></div>'
-                html += '<label for="subcourse" class="col-sm-2 col-form-label">Sub Course Name</label>'
+                html += '<div class="col-sm-2"></div>'
+                html += '<label for="subcourse" class="col-sm-1 col-form-label">Sub Course Name</label>'
                 html += '<div class="col-sm-7">'
-                html += '<input type="text" name="sub_course_name[' + i + '][name]" class="form-control" value="{{ old("sub_course_name.' + i + '.name") }}" placeholder="Add SubCourse">'
+                html += '<input type="text" name="sub_course_name[' + i + '][name]" class="form-control" value="{{ old("sub_course_name.' + i + '.name") }}" placeholder="Add SubCourse" required>'
                 html += '<input type="hidden" name="sub_course_name[' + i + '][id]" class="form-control" value="">'
                 html += '</div>'
                 html += '<div class="col-sm-0">'
@@ -199,7 +202,7 @@
                 html += '<div class="col-sm-3"></div>'
                 html += '<label for="points" class="col-sm-1 col-form-label">Points</label>'
                 html += '<div class="col-sm-5">'
-                html += '<input type="text" name="point[' + mid + '][]" data-id="' + mid + '"  class="form-control points " value="{{ old("point.' + i + '") }}" placeholder="Add points">'
+                html += '<input type="text" name="point[' + mid + '][]" data-id="' + mid + '"  class="form-control points " value="{{ old("point.' + i + '") }}" placeholder="Add points" required>'
                 html += '</div>'
                 html += '<div class="col-sm-3">'
                 html += '<button type="button" name="point_remove" data-id="' + id + '" data-mid="' + mid + '" class="btn btn-danger edit_btn_remove btn-star p_' + mid + '">X</button>'

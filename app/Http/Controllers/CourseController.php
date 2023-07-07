@@ -40,35 +40,38 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-//        dd($request->all());
         $rules = [
             'course_name' => 'required|string|max:255',
-            'sub_course_name.*' => 'required|string|max:255',
-            'point.*.name.*' => 'required|string|max:255',
+            'sub_course_name' => 'nullable|array',
+            'sub_course_name.*.name' => 'nullable|string|max:255',
+            'sub_course_name.*.point' => 'nullable|array',
+            'sub_course_name.*.point.*.name' => 'nullable|string|max:255',
         ];
 
         $messages = [
             'course_name.required' => 'The course name is required.',
             'sub_course_name.*.name.required' => 'The sub-course name is required.',
-            'point.*.name.*.required' => 'The point field is required.',
+            'sub_course_name.*.point.*.name.required' => 'The point field is required.',
         ];
+
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-
         $course = new Course();
         $course->course_name = $request->course_name;
         $course->save();
 
-        foreach ($request->sub_course_name as $key => $sub_course) {
-            $subCourse = new SubCourse();
-            $subCourse->course_id = $course->id;
-            $subCourse->sub_course_name = $sub_course;
-            $subCourse->save();
-            if (isset($request->point[$key])) {
-                foreach ($request->point[$key] as $point) {
-                    $subCoursePoint = SubCoursePoint::create(['sub_course_id' => $subCourse->id, 'sub_point_name' => $point]);
+        if (isset($request->sub_course_name)) {
+            foreach ($request->sub_course_name as $key => $sub_course) {
+                $subCourse = new SubCourse();
+                $subCourse->course_id = $course->id;
+                $subCourse->sub_course_name = $sub_course;
+                $subCourse->save();
+                if (isset($request->point[$key])) {
+                    foreach ($request->point[$key] as $point) {
+                        $subCoursePoint = SubCoursePoint::create(['sub_course_id' => $subCourse->id, 'sub_point_name' => $point]);
+                    }
                 }
             }
         }
@@ -107,13 +110,12 @@ class CourseController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-//        dd($request->all());
         $rules = [
             'course_name' => 'required|string|max:255',
-            'sub_course_name' => 'required',
-            'sub_course_name.*.name' => 'required|string|max:255',
-            'sub_course_name.*.point' => 'required',
-            'sub_course_name.*.point.*.name' => 'required|string|max:255',
+            'sub_course_name' => 'nullable|array',
+            'sub_course_name.*.name' => 'nullable|string|max:255',
+            'sub_course_name.*.point' => 'nullable|array',
+            'sub_course_name.*.point.*.name' => 'nullable|string|max:255',
         ];
 
         $messages = [
@@ -131,33 +133,31 @@ class CourseController extends Controller
         $course->save();
 
         $subCoursesData = [];
-
-        foreach ($request->sub_course_name as $key => $sub_course) {
-            $subCourse = SubCourse::updateOrCreate(['id'=> $sub_course['id']], [
-                'id' => $sub_course['id'],
-                'course_id' => $course->id,
-                'sub_course_name' => $sub_course['name']
-            ]);
-            if (isset($sub_course['point'])) {
-                foreach ($sub_course['point'] as $point) {
-                    SubCoursePoint::where('id',$point['id'])->update([
-                        'sub_point_name' => $point['name']
-                    ]);
+        if (isset($request->sub_course_name)) {
+            foreach ($request->sub_course_name as $key => $sub_course) {
+                $subCourse = SubCourse::updateOrCreate(['id' => $sub_course['id']], [
+                    'id' => $sub_course['id'],
+                    'course_id' => $course->id,
+                    'sub_course_name' => $sub_course['name']
+                ]);
+                if (isset($sub_course['point'])) {
+                    foreach ($sub_course['point'] as $point) {
+                        SubCoursePoint::where('id', $point['id'])->update([
+                            'sub_point_name' => $point['name']
+                        ]);
+                    }
                 }
-            }
 
-            if (isset($request->point[$key])) {
+                if (isset($request->point[$key])) {
 
-                foreach ($request->point[$key] as $p) {
+                    foreach ($request->point[$key] as $p) {
 
-                    $subCoursePoint = SubCoursePoint::create(['sub_course_id' => $subCourse->id, 'sub_point_name' =>  $p]);
+                        $subCoursePoint = SubCoursePoint::create(['sub_course_id' => $subCourse->id, 'sub_point_name' => $p]);
+                    }
                 }
-            }
 
+            }
         }
-
-
-
         return redirect()->route('course.index')->with('success', 'Course Updated Successfully.');
     }
 
@@ -171,6 +171,6 @@ class CourseController extends Controller
     public function destroy(Course $course)
     {
         $course->delete();
-        return redirect()->route('course.index')->with('success', 'Course Deleted Successfully.');
+        return redirect()->route('course.index')->with('success', "$course->course_name Deleted Successfully.");
     }
 }
