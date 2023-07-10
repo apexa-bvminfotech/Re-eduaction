@@ -616,8 +616,8 @@
                                                         </div>
                                                     </div>
                                                     {{--                                                    <div class="form-group row">--}}
-                                                    <label for="status" class="col-sm-3 col-form-label">Status </label>
-                                                    <div class="col-sm-9 d-flex justify-content-evenly">
+                                                    <label for="status" class="col-sm-1 col-form-label">Status </label>
+                                                    <div class="col-sm-9 mt-2 d-flex justify-content-evenly">
                                                         <div class="custom-control custom-radio">
                                                             <input class="custom-control-input" type="radio"
                                                                    id="customRadio1" name="is_active" value="0"
@@ -630,7 +630,7 @@
                                                                 value="1" type="radio" id="customRadio4"
                                                                 name="is_active" {{ old('is_active') == 1 ? 'checked' : '' }}>
                                                             <label for="customRadio4" class="custom-control-label">Deactive</label>
-                                                        </div>&nbsp;
+                                                        </div>
                                                         {{--                                                        </div>--}}
                                                     </div>
                                                 </div>
@@ -680,7 +680,7 @@
                     phone: {
                         required: true,
                     },
-                    email: {
+                    email_id: {
                         required: true,
                     },
                     qualification: {
@@ -737,7 +737,7 @@
                     phone: {
                         required: "Please enter a Contact ",
                     },
-                    email: {
+                    email_id: {
                         required: "Please enter your Email ",
                     },
                     qualification: {

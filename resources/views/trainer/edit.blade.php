@@ -677,8 +677,8 @@
                                                             <label for="terms & conditon">Terms & Conditions:</label>
                                                         </div>
                                                     </div>
-                                                    <label for="status" class="col-sm-3 col-form-label">Status:</label>
-                                                    <div class="col-sm-9 d-flex justify-content-evenly">
+                                                    <label for="status" class="col-sm-1 col-form-label">Status:</label>
+                                                    <div class="col-sm-9 mt-2 d-flex justify-content-evenly">
                                                         <div class="custom-control custom-radio">
                                                             <input class="custom-control-input" type="radio"
                                                                    id="customRadio1"
@@ -745,7 +745,7 @@
                     phone: {
                         required: true,
                     },
-                    email: {
+                    email_id: {
                         required: true,
                     },
                     qualification: {
@@ -791,7 +791,7 @@
                     phone: {
                         required: "Please enter a Contact ",
                     },
-                    email: {
+                    email_id: {
                         required: "Please enter your Email ",
                     },
                     qualification: {
