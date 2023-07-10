@@ -107,34 +107,7 @@
                                                             @enderror
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6 mb-1">
-                                                        <div class="form-group">
-                                                            <label for="gender">Gender:</label>
-                                                            <br/>
-                                                            <div class="form-check form-check-inline">
-                                                                <input class="form-check" type="radio" name="gender"
-                                                                       id="gender_male" required
-                                                                       {{ old("gender") == 'male' ? 'checked' : '' }}
-                                                                       value="male">
-                                                                <label class="form-check-label" for="gender_male">
-                                                                    Male
-                                                                </label>
-                                                            </div>
-                                                            <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio"
-                                                                       name="gender"
-                                                                       id="gender_female" required
-                                                                       {{ old("gender") == 'female' ? 'checked' : '' }}
-                                                                       value="female">
-                                                                <label class="form-check-label" for="gender_female">
-                                                                    Female
-                                                                </label>
-                                                            </div>
-                                                            @error('gender')
-                                                            <span class="text-danger">{{$message}}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
+
                                                     <div class="col-sm-6">
                                                         <div class="form-group mb-3">
                                                             <label for="email">Email ID:</label>
@@ -182,6 +155,34 @@
                                                                    placeholder="enter standard"
                                                                    value="{{ old('standard') }}">
                                                             @error('standard')
+                                                            <span class="text-danger">{{$message}}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 mb-1">
+                                                        <div class="form-group">
+                                                            <label for="gender">Gender:</label>
+                                                            <br/>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check" type="radio" name="gender"
+                                                                       id="gender_male" required
+                                                                       {{ old("gender") == 'male' ? 'checked' : '' }}
+                                                                       value="male">
+                                                                <label class="form-check-label" for="gender_male">
+                                                                    Male
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio"
+                                                                       name="gender"
+                                                                       id="gender_female" required
+                                                                       {{ old("gender") == 'female' ? 'checked' : '' }}
+                                                                       value="female">
+                                                                <label class="form-check-label" for="gender_female">
+                                                                    Female
+                                                                </label>
+                                                            </div>
+                                                            @error('gender')
                                                             <span class="text-danger">{{$message}}</span>
                                                             @enderror
                                                         </div>

@@ -160,8 +160,10 @@ class SlotController extends Controller
 
     public function gettrainerdata(Request $request)
     {
-        $trainer = Trainer::where('branch_id', $request->branch_id)->orderBy('id', 'DESC')->get();
-        $rtc = Rtc::where('branch_id', $request->branch_id)->orderBy('id', 'DESC')->get();
+        $trainer = Trainer::where('branch_id', $request->branch_id)
+                    ->where('is_active',0)->orderBy('id', 'DESC')->get();
+        $rtc = Rtc::where('branch_id', $request->branch_id)
+                    ->where('is_active',0)->orderBy('id', 'DESC')->get();
         return response()->json(['trainer' => $trainer, 'rtc' => $rtc]);
     }
 

@@ -103,7 +103,9 @@
                                                                    class="form-control "
                                                                    value="{{ old('surname') }}"
                                                                    name="surname" placeholder="Enter Surname">
-
+                                                            @error('surname')
+                                                                <span class="text-danger">{{ $surname }}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 mb-1">
@@ -113,7 +115,9 @@
                                                                    name="name"
                                                                    value="{{ old('name') }}"
                                                                    placeholder="Enter Name">
-
+                                                            @error('name')
+                                                                <span class="text-danger">{{ $name }}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 mb-1">
@@ -123,7 +127,9 @@
                                                                    name="father_name"
                                                                    value="{{ old('father_name') }}"
                                                                    placeholder="Enter Father Name">
-
+                                                            @error('father_name')
+                                                                <span class="text-danger">{{ $father_name }}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 mb-1">
@@ -133,7 +139,9 @@
                                                                    placeholder="12345 67890" value="{{ old('phone') }}"
                                                                    class="form-control"
                                                                    pattern="[0-9]{5}[\s]{1}[0-9]{5}">
-
+                                                            @error('phone')
+                                                                <span class="text-danger">{{ $phone }}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 mb-1">
@@ -143,7 +151,9 @@
                                                                    class="form-control"
                                                                    placeholder="Enter Email Address"
                                                                    value="{{ old('email_id') }}">
-
+                                                            @error('email_id')
+                                                                <span class="text-danger">{{ $email_id }}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 mb-1">
@@ -154,7 +164,9 @@
                                                                    placeholder="Enter Your Qualification"
                                                                    id="qualification"
                                                                    value="{{ old('qualification') }}">
-
+                                                            @error('qualification')
+                                                                <span class="text-danger">{{ $qualification }}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 mb-1">
@@ -163,7 +175,9 @@
                                                             <input type="date" class="form-control" name="dob"
                                                                    placeholder="Enter Birthdate"
                                                                    value="{{ old('dob') }}">
-
+                                                            @error('dob')
+                                                                <span class="text-danger">{{ $dob }}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 mb-1">
@@ -177,6 +191,7 @@
                                                                            value="1" {{ old('marital_status')}}>
                                                                     <label for="customRadio1"
                                                                            style="font-weight: normal">Married</label>
+
                                                                 </div>
                                                             </div>
                                                             <div class="form-check form-check-inline">
@@ -188,6 +203,9 @@
                                                                            style="font-weight: normal">Unmarried</label>
                                                                 </div>
                                                             </div>
+                                                            @error('marital_status')
+                                                                <span class="text-danger">{{ $marital_status }}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-12">
@@ -196,7 +214,9 @@
                                                             <textarea name="address" class="form-control"
                                                                       placeholder="Enter Address"
                                                             >{{ old('address') }}</textarea>
-
+                                                            @error('address')
+                                                                <span class="text-danger">{{ $address }}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                 </div>
@@ -215,6 +235,9 @@
                                                             <input type="text" class="form-control" name="emer_fullName"
                                                                    placeholder="Enter Your FullName"
                                                                    value="{{ old('emer_fullName') }}">
+                                                            @error('emer_fullName')
+                                                                <span class="text-danger">{{ $emer_fullName }}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 mb-1">
@@ -225,6 +248,9 @@
                                                                    value="{{ old('emer_phone') }}"
                                                                    class="form-control"
                                                                    pattern="[0-9]{5}[\s]{1}[0-9]{5}">
+                                                            @error('emer_phone')
+                                                                <span class="text-danger">{{ $emer_phone }}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
@@ -234,7 +260,9 @@
                                                                    placeholder="Relationship"
                                                                    name="emer_relationship"
                                                                    value="{{ old('emer_relationship') }}">
-
+                                                            @error('emer_relationship')
+                                                                <span class="text-danger">{{ $emer_relationship }}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-md-12">
@@ -301,7 +329,7 @@
                                                     </div>
                                                     <div class="col-md-6 ">
                                                         <div class="form-group mb-3">
-                                                            <label for="simpleinput">Email Address:</label>
+                                                            <label for="simpleinput">Office use Email Address:</label>
                                                             <input type="email" class="form-control"
                                                                    placeholder="email address"
                                                                    name="office_use_email"
@@ -557,6 +585,9 @@
                                                                        name="photo" accept="image/*">
                                                                 <label class="custom-file-label" for="customFile">Choose
                                                                     file</label>
+                                                                @error('photo')
+                                                                    <span class="text-danger">{{ $photo }}</span>
+                                                                @enderror
                                                             </div>
                                                         </div>
                                                     </div>
@@ -568,6 +599,9 @@
                                                                        name="aadhaar_card" accept="image/*">
                                                                 <label class="custom-file-label" for="customFile">Choose
                                                                     file</label>
+                                                                @error('photo')
+                                                                    <span class="text-danger">{{ $photo }}</span>
+                                                                @enderror
                                                             </div>
                                                         </div>
                                                     </div>
@@ -579,6 +613,9 @@
                                                                        name="last_edu_markSheet" accept="image/*">
                                                                 <label class="custom-file-label" for="customFile">Choose
                                                                     file</label>
+                                                                @error('last_edu_markSheet')
+                                                                    <span class="text-danger">{{ $last_edu_markSheet }}</span>
+                                                                @enderror
                                                             </div>
                                                         </div>
                                                     </div>
@@ -590,6 +627,9 @@
                                                                        name="bank_passbook" accept="image/*">
                                                                 <label class="custom-file-label" for="customFile">Choose
                                                                     file</label>
+                                                                @error('bank_passbook')
+                                                                    <span class="text-danger">{{ $bank_passbook }}</span>
+                                                                @enderror
                                                             </div>
                                                         </div>
                                                     </div>
@@ -613,6 +653,9 @@
                                                                    @if(old('terms_conditions') == '1')checked @endif
                                                                    class="m-2" required>
                                                             <label for="terms & conditon">Terms & Conditions:</label>
+                                                            @error('terms_conditions')
+                                                                <span class="text-danger">{{ $terms_conditions }}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     {{--                                                    <div class="form-group row">--}}
