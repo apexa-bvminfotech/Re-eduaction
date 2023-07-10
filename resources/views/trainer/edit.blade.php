@@ -563,8 +563,9 @@
                                                                 <option value="">--- Select Course ---</option>
                                                                 @if ($course)
                                                                     @foreach($course as $key => $c)
-                                                                        <option
-                                                                            value="{{$c->id}}" {{ in_array($c->id, json_decode($selectedCourses)) ? 'selected' : '' }}>{{$c->course_name}}</option>
+{{--                                                                        <option--}}
+{{--                                                                            value="{{$c->id}}" {{ in_array($c->id, json_decode($selectedCourses)) ? 'selected' : '' }}>{{$c->course_name}}</option>--}}
+                                                                        <option value="{{$c->id}}" {{ is_array(json_decode($selectedCourses)) && in_array($c->id, json_decode($selectedCourses)) ? 'selected' : '' }}>{{$c->course_name}}</option>
                                                                     @endforeach
                                                                 @endif
                                                             </select>
@@ -582,6 +583,26 @@
                                                                             @if($trainer->user->roles->first()->id == $r->id) selected @endif>{{$r->name}}</option>
                                                                 @endforeach
                                                             </select>
+                                                        </div>
+                                                    </div>
+                                                    <label for="status" class="col-sm-1 col-form-label">Status:</label>
+                                                    <div class="col-sm-9 mt-2 d-flex justify-content-evenly">
+                                                        <div class="custom-control custom-radio">
+                                                            <input class="custom-control-input" type="radio"
+                                                                   id="customRadio1"
+                                                                   name="is_active" value="0"
+                                                                   @if($trainer->is_active == 0) checked @endif>
+                                                            <label for="customRadio1"
+                                                                   class="custom-control-label">Active</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio ml-2">
+                                                            <input
+                                                                class="custom-control-input custom-control-input-danger"
+                                                                value="1"
+                                                                type="radio" id="customRadio4" name="is_active"
+                                                                @if($trainer->is_active == 1) checked @endif>
+                                                            <label for="customRadio4"
+                                                                   class="custom-control-label">Deactive</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -675,26 +696,6 @@
                                                                    @endif
                                                                    class="m-2">
                                                             <label for="terms & conditon">Terms & Conditions:</label>
-                                                        </div>
-                                                    </div>
-                                                    <label for="status" class="col-sm-1 col-form-label">Status:</label>
-                                                    <div class="col-sm-9 mt-2 d-flex justify-content-evenly">
-                                                        <div class="custom-control custom-radio">
-                                                            <input class="custom-control-input" type="radio"
-                                                                   id="customRadio1"
-                                                                   name="is_active" value="0"
-                                                                   @if($trainer->is_active == 0) checked @endif>
-                                                            <label for="customRadio1"
-                                                                   class="custom-control-label">Active</label>
-                                                        </div>
-                                                        <div class="custom-control custom-radio ml-2">
-                                                            <input
-                                                                class="custom-control-input custom-control-input-danger"
-                                                                value="1"
-                                                                type="radio" id="customRadio4" name="is_active"
-                                                                @if($trainer->is_active == 1) checked @endif>
-                                                            <label for="customRadio4"
-                                                                   class="custom-control-label">Deactive</label>
                                                         </div>
                                                     </div>
                                                 </div>
