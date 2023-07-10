@@ -99,7 +99,7 @@
                                         <label for="name">Staff Name: </label>
                                         <select class="form-control staff_id" name="trainer_id" required>
                                             <option value="0">------Select Trainer-----</option>
-                                            @foreach($trainers as $key=>$trainer)
+                                            @foreach($trainers as $key =>$trainer)
                                                 @if($trainer->is_active == 0)
                                                     <option
                                                         value="{{$trainer->id}}" {{old('name')==$trainer->id}}>{{$trainer->trainer_name}}</option>

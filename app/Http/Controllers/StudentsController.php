@@ -3,18 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
-use App\Models\Rtc;
-use App\Models\Staff;
-use App\Models\Student;
-use App\Models\Trainer;
-use App\Models\User;
 use App\Models\Slot;
+use App\Models\Trainer;
 use App\Models\StudentStaffAssign;
+use App\Models\Rtc;
+use App\Models\Student;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
-
+use Carbon\Carbon;
 class StudentsController extends Controller
 {
     /**
@@ -26,7 +24,7 @@ class StudentsController extends Controller
     {
         $slots = Slot::orderBy('id', 'desc')->get();
         $trainers = Trainer::orderBy('id', 'desc')->get();
-        $students = Student::with('course')->orderBy('id')->get();
+        $students = Student::with('course')->orderBy('id')->paginate(10);
         return view('student.index', compact('students','trainers','slots'))->with('i');
     }
 
@@ -37,11 +35,11 @@ class StudentsController extends Controller
      */
     public function create()
     {
-        $students = Student::orderBy('id', 'desc')->get();
+        $student = Student::orderBy('id', 'desc')->get();
         $role = Role::orderBy('id', 'desc')->get();
         $course = Course::orderBy('id', 'desc')->get();
-        $trainer = Trainer::orderBy('id')->get();
-        return view('student.create', compact('students', 'role', 'course', 'trainer'));
+        $trainer = Trainer::orderBy('id')->where('is_active',0)->get();
+        return view('student.create', compact('student', 'role', 'course', 'trainer'));
     }
 
     /**
@@ -59,37 +57,42 @@ class StudentsController extends Controller
             'address' => 'required',
             'gender' => 'required',
             'email_id' => 'required|email|unique:users,email',
-            'father_contact_no' => 'required',
-            'mother_contact_no' => 'required',
-            'standard' => 'required|numeric|between:1,12',
+            'father_contact_no' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
+            'mother_contact_no' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
+            'standard' => 'required|numeric|max:12',
             'medium' => 'required',
             'school_name' => 'required|max:255',
             'school_time_to' => 'required',
             'school_time_from' => 'required',
-            'age'=>'required|between:1,20',
-            'fees'=>'required',
-            'upload_analysis'=>'required',
-            'upload_student_image'=>'required',
+            'extra_tuition_time_to' => 'required',
+            'extra_tuition_time_from' => 'required',
+            'dob' => 'required',
+            'age' => 'required',
+            'payment_condition' => 'required|max:255',
+            'reference_by' => 'required',
+            'demo_trainer_id' => 'required',
+            'fees' => 'required',
+            'extra_note' => 'required',
+            'analysis_trainer_id'=>'required|exists:trainers,id',
+            'course_id'=>'required|exists:courses,id'
         ]);
-
         $user = User::Create([
-            'name' => $request->name,
             'surname' => $request->surname,
-            'father_name'=>$request->father_name,
+            'father_name' => $request->father_name,
+            'contact' => $request->father_contact_no,
+            'name' => $request->name,
             'email' => $request->email_id,
-            'contact'=>$request->contact,
-            'password'=>Hash::make(strtolower($request->name) . '@123'),
+            'password' => Hash::make(strtolower($request->name) . '@123'),
             'type' => 2,
         ]);
+//        dd($user);
         $user->assignRole($request->input('role'));
-
         $upload_student_image = null;
         if ($request->upload_student_image) {
             $filename = $request->name . '_' . date_default_timezone_get() . '.' . $request->upload_student_image->getClientOriginalExtension();
             $request->upload_student_image->move(public_path('assets/student'), $filename);
             $upload_student_image = 'assets/student' . '/' . $filename;
         }
-
         $upload_analysis = null;
         if ($request->upload_analysis) {
             $filename = $request->name . '-' . $request->upload_analysis->getClientOriginalExtension();
@@ -99,7 +102,6 @@ class StudentsController extends Controller
         $time = $request->input('school_time_to') . " - " . $request->input('school_time_from');
         $tuition = $request->input('extra_tuition_time_to') . "-" . $request->input('extra_tuition_time_from');
         $last_id = Student::latest()->first() ? Student::latest()->first()->value('id') + 1 : 1;
-
         $student = Student::create([
             'form_no' => 'RE/' . $last_id,
             'surname' => $request->surname,
@@ -128,7 +130,7 @@ class StudentsController extends Controller
             'upload_student_image' => $upload_student_image,
             'user_id' => $user->id,
         ]);
-        return redirect()->route('student.index')->with('success', 'Student created successfully');
+        return redirect()->route('student.index')->with('success', 'student created successfully');
     }
 
     /**
@@ -137,8 +139,9 @@ class StudentsController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Student $student)
+    public function show($id)
     {
+        $student = Student::find($id);
         return view('student.show', compact('student'));
     }
 
@@ -172,15 +175,24 @@ class StudentsController extends Controller
             'address' => 'required',
             'gender' => 'required',
             'email_id' => 'required|email',
-            'father_contact_no' => 'required',
-            'mother_contact_no' => 'required',
-            'standard' => 'required|numeric|between:1,12',
+            'father_contact_no' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
+            'mother_contact_no' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
+            'standard' => 'required|min:1|max:12',
             'medium' => 'required',
             'school_name' => 'required|max:255',
             'school_time_to' => 'required',
             'school_time_from' => 'required',
-            'age'=>'required|between:1,20',
-            'fees'=>'required',
+            'extra_tuition_time_to' => 'required',
+            'extra_tuition_time_from'=>'required',
+            'dob' => 'required',
+            'age' => 'required',
+            'payment_condition' => 'required|max:255',
+            'reference_by' => 'required',
+            'demo_trainer_id' => 'required',
+            'fees' => 'required',
+            'extra_note' => 'required',
+            'analysis_trainer_id'=>'required|exists:trainers,id',
+            'course_id'=>'required|exists:courses,id'
         ]);
         $upload_student_image = $student->upload_student_image;
         if ($request->upload_student_image) {
@@ -196,18 +208,16 @@ class StudentsController extends Controller
         }
         $time = $request->input('school_time_to') . " - " . $request->input('school_time_from');
         $tuition = $request->input('extra_tuition_time_to') . "-" . $request->input('extra_tuition_time_from');
-
-        $user =$student->user()->update([
+        $user = User::Create([
             'name' => $request->name,
             'surname' => $request->surname,
             'father_name'=>$request->father_name,
             'email' => $request->email_id,
-            'contact'=>$request->contact,
+            'contact'=>$request->father_contact_no,
             'password' =>Hash::make(strtolower($request->name) . '@123'),
             'type' => 2,
         ]);
-//        $user->assignRole($request->input('role'));
-
+        $user->assignRole($request->input('role'));
         $student->update([
             'surname' => $request->surname,
             'name' => $request->name,
@@ -249,7 +259,6 @@ class StudentsController extends Controller
         return redirect()->route('student.index')
             ->with('success', 'student deleted successfully');
     }
-
     public function slot($id)
     {
         $slots = Slot::where('trainer_id', $id)
