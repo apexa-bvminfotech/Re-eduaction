@@ -194,6 +194,16 @@ class StudentsController extends Controller
             'analysis_trainer_id'=>'required|exists:trainers,id',
             'course_id'=>'required|exists:courses,id'
         ]);
+        $user = $student->user;
+        $user->update([
+            'name' => $request->name,
+            'surname' => $request->surname,
+            'father_name'=>$request->father_name,
+            'email' => $request->email_id,
+            'contact'=>$request->father_contact_no,
+            'password' =>Hash::make(strtolower($request->name) . '@123'),
+            'type' => 2,
+        ]);
         $upload_student_image = $student->upload_student_image;
         if ($request->upload_student_image) {
             $filename = $request->name . '_' . date_default_timezone_get() . '.' . $request->upload_student_image->getClientOriginalExtension();
@@ -208,15 +218,6 @@ class StudentsController extends Controller
         }
         $time = $request->input('school_time_to') . " - " . $request->input('school_time_from');
         $tuition = $request->input('extra_tuition_time_to') . "-" . $request->input('extra_tuition_time_from');
-        $user = User::Create([
-            'name' => $request->name,
-            'surname' => $request->surname,
-            'father_name'=>$request->father_name,
-            'email' => $request->email_id,
-            'contact'=>$request->father_contact_no,
-            'password' =>Hash::make(strtolower($request->name) . '@123'),
-            'type' => 2,
-        ]);
         $user->assignRole($request->input('role'));
         $student->update([
             'surname' => $request->surname,

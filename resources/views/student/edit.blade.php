@@ -108,38 +108,12 @@
                                                             @enderror
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6 mb-1">
-                                                        <div class="form-group">
-                                                            <label for="gender">Gender:</label>
-                                                            <br/>
-                                                            <div class="form-check form-check-inline">
-                                                                <input class="form-check" type="radio" name="gender"
-                                                                       id="gender_male"
-                                                                       value="male" {{ $student->gender =='male' ?'checked' : '' }} >
-                                                                <label class="form-check-label" for="gender_male">
-                                                                    Male
-                                                                </label>
-                                                            </div>
-                                                            <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio"
-                                                                       name="gender"
-                                                                       id="gender_female"
-                                                                       value="female" {{ $student->gender =='female' ?'checked' : '' }} >
-                                                                <label class="form-check-label" for="gender_female">
-                                                                    Female
-                                                                </label>
-                                                            </div>
-                                                            @error('gender')
-                                                            <span class="text-danger">{{$message}}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
                                                     <div class="col-sm-6">
                                                         <div class="form-group mb-3">
-                                                            <label for="email">Email ID:</label>
+                                                            <label for="inputMailForm">Email ID:</label>
                                                             <input type="email" class="form-control" name="email_id"
                                                                    placeholder="enter email"
-                                                                   value="{{ $student->email_id }}" required>
+                                                                   value="{{ $student->email_id }}" >
                                                             @error('email_id')
                                                             <span class="text-danger">{{$message}}</span>
                                                             @enderror
@@ -187,11 +161,37 @@
                                                     </div>
                                                     <div class="col-md-6 mb-1">
                                                         <div class="form-group">
+                                                            <label for="gender">Gender:</label>
+                                                            <br/>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check" type="radio" name="gender"
+                                                                       id="gender_male"
+                                                                       value="male" {{ $student->gender =='male' ?'checked' : '' }} >
+                                                                <label class="form-check-label" for="gender_male">&nbsp;&nbsp;
+                                                                    Male
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio"
+                                                                       name="gender"
+                                                                       id="gender_female"
+                                                                       value="female" {{ $student->gender =='female' ?'checked' : '' }} >
+                                                                <label class="form-check-label" for="gender_female">
+                                                                    Female
+                                                                </label>
+                                                            </div>
+                                                            @error('gender')
+                                                            <span class="text-danger">{{$message}}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 mb-1">
+                                                        <div class="form-group">
                                                             <label for="medium">Medium:</label>
                                                             <br>
                                                             <div class="form-check form-check-inline">
-                                                                <input type="checkbox" value="gujarati"
-                                                                       {{ $student->medium == 'gujarati'?'checked' :'' }} name="medium"
+                                                                <input type="checkbox" name="medium" value="gujarati"
+                                                                       {{ $student->medium == 'gujarati' ? 'checked' :'' }}
                                                                        class="form-check-input">
                                                                 <label class="form-check-label"
                                                                        for="medium_gujarati">
@@ -199,16 +199,16 @@
                                                                 </label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <input type="checkbox" value="hindi"
-                                                                       {{ $student->medium == 'hindi'?'checked' :'' }} name="medium"
+                                                                <input type="checkbox" name="medium" value="hindi"
+                                                                       {{ $student->medium == 'hindi' ? 'checked' :'' }}
                                                                        class="form-check-input">
                                                                 <label class="form-check-label" for="medium_hindi">
                                                                     Hindi
                                                                 </label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <input type="checkbox" value="english"
-                                                                       {{ $student->medium == 'english'?'checked' :'' }} name="medium"
+                                                                <input type="checkbox" name="medium" value="english"
+                                                                       {{ $student->medium == 'english' ? 'checked' :'' }}
                                                                        class="form-check-input">
                                                                 <label class="form-check-label"
                                                                        for="medium_english">
@@ -460,7 +460,7 @@
                                                         <div class="form-check form-check-inline">
                                                             <input type="radio" value="paid"
                                                                    {{$student->fees == 'paid'?'checked' :''}} name="fees"
-                                                                   class="form-check">
+                                                                   class="form-check">&nbsp;&nbsp;
                                                             <label class="form-check-label"
                                                                    for="medium_hindi" {{ old("fees") == 'paid' ? 'checked' : '' }}>
                                                                 Paid

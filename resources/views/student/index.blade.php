@@ -102,7 +102,7 @@
                                             @foreach($trainers as $key =>$trainer)
                                                 @if($trainer->is_active == 0)
                                                     <option
-                                                        value="{{$trainer->id}}" {{old('name')==$trainer->id}}>{{$trainer->trainer_name}}</option>
+                                                        value="{{$trainer->id}}" {{old('name')==$trainer->id}}>{{$trainer->name}}</option>
                                                 @endif
                                             @endforeach
                                         </select>

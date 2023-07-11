@@ -43,14 +43,14 @@
                                                         <form action="{{route('course.destroy',$course->id)}}"
                                                               method="POST">
 
-                                                            <a class="btn btn-outline-success btn-sm fa fa-edit"
+                                                            <a class="btn btn-success btn-sm fa fa-edit"
                                                                href="{{ route('course.edit',$course->id) }}"></a>
 
                                                             @csrf
                                                             @method('DELETE')
 
                                                             <button type="submit"
-                                                                    class="btn btn-outline-danger fa fa-trash-alt btn-sm show_confirm"></button>
+                                                                    class="btn btn-danger fa fa-trash-alt btn-sm show_confirm"></button>
                                                         </form>
                                                     </td>
                                                 </tr>

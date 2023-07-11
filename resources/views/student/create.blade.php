@@ -233,23 +233,26 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group  col-md-6">
-                                                        <label for="inputEmail3" class=" col-form-label">School
+                                                        <label for="inputEmail3" class="col-form-label">School
                                                             Time:</label>
                                                         <div class="row">
                                                             <div class="col-sm-5">
-                                                                <div class="input-group date" id="timepicker"
-                                                                     data-target-input="nearest">
-                                                                    <input type="text"
-                                                                           class="form-control datetimepicker-input"
-                                                                           name="school_time_to"
-                                                                           value="{{ old('school_time_to') }}"
-                                                                           aria-describedby="button-addon2"
-                                                                           data-target="#timepicker"/>
-                                                                    <div class="input-group-append"
-                                                                         data-target="#timepicker"
-                                                                         data-toggle="datetimepicker">
-                                                                        <div class="input-group-text"><i
-                                                                                class="far fa-clock"></i></div>
+                                                                <div class="form-group">
+                                                                    <div class="input-group date" id="timepicker"
+                                                                         data-target-input="nearest">
+                                                                        <input type="text"
+                                                                               class="form-control datetimepicker-input"
+                                                                               name="school_time_to"
+                                                                               value="{{ old('school_time_to') }}"
+                                                                               aria-describedby="button-addon2"
+                                                                               data-target="#timepicker"/>
+                                                                        <div class="input-group-append"
+                                                                             data-target="#timepicker"
+                                                                             data-toggle="datetimepicker">
+                                                                            <div class="input-group-text"><i
+                                                                                    class="far fa-clock"></i>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -258,19 +261,21 @@
                                                                 <p>to</p>
                                                             </div>
                                                             <div class="col-sm-5">
-                                                                <div class="input-group date" id="timepicker1"
-                                                                     data-target-input="nearest">
-                                                                    <input type="text"
-                                                                           class="form-control datetimepicker-input"
-                                                                           name="school_time_from"
-                                                                           value="{{ old('school_time_from') }}"
-                                                                           aria-describedby="button-addon2"
-                                                                           data-target="#timepicker1"/>
-                                                                    <div class="input-group-append"
-                                                                         data-target="#timepicker1"
-                                                                         data-toggle="datetimepicker">
-                                                                        <div class="input-group-text"><i
-                                                                                class="far fa-clock"></i></div>
+                                                                <div class="form-group">
+                                                                    <div class="input-group date" id="timepicker1"
+                                                                         data-target-input="nearest">
+                                                                        <input type="text"
+                                                                               class="form-control datetimepicker-input"
+                                                                               name="school_time_from"
+                                                                               value="{{ old('school_time_from') }}"
+                                                                               aria-describedby="button-addon2"
+                                                                               data-target="#timepicker1"/>
+                                                                        <div class="input-group-append"
+                                                                             data-target="#timepicker1"
+                                                                             data-toggle="datetimepicker">
+                                                                            <div class="input-group-text"><i
+                                                                                    class="far fa-clock"></i></div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -282,19 +287,21 @@
                                                             Time:</label>
                                                         <div class="row">
                                                             <div class="col-sm-5">
-                                                                <div class="input-group date" id="timepicker2"
-                                                                     data-target-input="nearest">
-                                                                    <input type="text"
-                                                                           class="form-control datetimepicker-input"
-                                                                           name="extra_tuition_time_to"
-                                                                           value="{{ old('extra_tuition_time_to') }}"
-                                                                           aria-describedby="button-addon2"
-                                                                           data-target="#timepicker2"/>
-                                                                    <div class="input-group-append"
-                                                                         data-target="#timepicker2"
-                                                                         data-toggle="datetimepicker">
-                                                                        <div class="input-group-text"><i
-                                                                                class="far fa-clock"></i></div>
+                                                                <div class="form-group">
+                                                                    <div class="input-group date" id="timepicker2"
+                                                                         data-target-input="nearest">
+                                                                        <input type="text"
+                                                                               class="form-control datetimepicker-input"
+                                                                               name="extra_tuition_time_to"
+                                                                               value="{{ old('extra_tuition_time_to') }}"
+                                                                               aria-describedby="button-addon2"
+                                                                               data-target="#timepicker2"/>
+                                                                        <div class="input-group-append"
+                                                                             data-target="#timepicker2"
+                                                                             data-toggle="datetimepicker">
+                                                                            <div class="input-group-text"><i
+                                                                                    class="far fa-clock"></i></div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -303,19 +310,21 @@
                                                                 <p>to</p>
                                                             </div>
                                                             <div class="col-sm-5">
-                                                                <div class="input-group date" id="timepicker3"
-                                                                     data-target-input="nearest">
-                                                                    <input type="text"
-                                                                           class="form-control datetimepicker-input"
-                                                                           name="extra_tuition_time_from"
-                                                                           value="{{ old('extra_tuition_time_from') }}"
-                                                                           aria-describedby="button-addon2"
-                                                                           data-target="#timepicker3"/>
-                                                                    <div class="input-group-append"
-                                                                         data-target="#timepicker3"
-                                                                         data-toggle="datetimepicker">
-                                                                        <div class="input-group-text"><i
-                                                                                class="far fa-clock"></i></div>
+                                                                <div class="form-group">
+                                                                    <div class="input-group date" id="timepicker3"
+                                                                         data-target-input="nearest">
+                                                                        <input type="text"
+                                                                               class="form-control datetimepicker-input"
+                                                                               name="extra_tuition_time_from"
+                                                                               value="{{ old('extra_tuition_time_from') }}"
+                                                                               aria-describedby="button-addon2"
+                                                                               data-target="#timepicker3"/>
+                                                                        <div class="input-group-append"
+                                                                             data-target="#timepicker3"
+                                                                             data-toggle="datetimepicker">
+                                                                            <div class="input-group-text"><i
+                                                                                    class="far fa-clock"></i></div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -442,34 +451,40 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 mb-1">
-                                                        <label for="fees">Form Fees:</label>
-                                                        <br>
-                                                        <div class="form-check form-check-inline">
-                                                            <input type="radio" value="paid" name="fees"
-                                                                   class="form-check">&nbsp;&nbsp;
-                                                            <label class="form-check-label"
-                                                                   for="medium_hindi" {{ old("fees") == 'paid' ? 'checked' : '' }}>
-                                                                Paid
-                                                            </label>
+                                                        <div class="form-group">
+                                                            <label for="fees">Form Fees:</label>
+                                                            <br>
+                                                            <div class="form-check form-check-inline">
+                                                                <input type="radio" value="paid" name="fees"
+                                                                       {{ old('fees') == 'paid' ? 'checked' : '' }}
+                                                                       class="form-check" required>&nbsp;&nbsp;
+                                                                <label class="form-check-label"
+                                                                       for="medium_hindi">
+                                                                    Paid
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input type="radio" value="unpaid" name="fees"
+                                                                       class="form-check-input"
+                                                                       {{ old('fees') == 'unpaid' ? 'checked' : '' }} required>
+                                                                <label class="form-check-label" for="medium_hindi">
+                                                                    Unpaid
+                                                                </label>
+                                                            </div>
+                                                            @error('fees')
+                                                            <span class="text-danger">{{$message}}</span>
+                                                            @enderror
                                                         </div>
-                                                        <div class="form-check form-check-inline">
-                                                            <input type="radio" value="unpaid" name="fees"
-                                                                   class="form-check-input" {{ old("fees") == 'unpaid' ? 'checked' : '' }}>
-                                                            <label class="form-check-label" for="medium_hindi">
-                                                                Unpaid
-                                                            </label>
-                                                        </div>
-                                                        @error('fees')
-                                                        <span class="text-danger">{{$message}}</span>
-                                                        @enderror
                                                     </div>
                                                     <div class="col-md-12 mb-4">
-                                                        <label for="note">Extra Note:</label>
-                                                        <textarea name="extra_note"
-                                                                  class="form-control">{{ old('extra_note') }}</textarea>
-                                                        @error('extra_note')
-                                                        <span class="text-danger">{{$message}}</span>
-                                                        @enderror
+                                                        <div class="form-group">
+                                                            <label for="note">Extra Note:</label>
+                                                            <textarea name="extra_note"
+                                                                      class="form-control">{{ old('extra_note') }}</textarea>
+                                                            @error('extra_note')
+                                                            <span class="text-danger">{{$message}}</span>
+                                                            @enderror
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <button type="button"
@@ -490,6 +505,7 @@
                                                         <input type="file" class="form-control"
                                                                name="upload_student_image"
                                                                accept="image/*"
+                                                               value="{{old('upload_student_image')}}"
                                                                onchange="loadFile(event)"/>
                                                         @error('upload_student_image')
                                                         <span class="text-danger"> {{$message}} </span>
@@ -510,7 +526,8 @@
                                                 <button type="submit"
                                                         class="btn btn-success float-right ml-2 next-btn1">Submit
                                                 </button>
-                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2"
+                                                <button type="button"
+                                                        class="btn btn-primary prvBtn float-right ml-2"
                                                         onclick="stepper.previous()">Previous
                                                 </button>
                                             </div>
@@ -680,6 +697,18 @@
                     },
                     school_name: {
                         required: "Please enter a school_name ",
+                    },
+                    school_time_to: {
+                        required: "Please enter a school_time ",
+                    },
+                    school_time_from: {
+                        required: "Please enter a school_time ",
+                    },
+                    extra_tuition_time_to: {
+                        required: "Please enter a Tuition_time ",
+                    },
+                    extra_tuition_time_from: {
+                        required: "Please enter a Tuition_time ",
                     },
                     dob: {
                         required: "Please enter a dob ",
