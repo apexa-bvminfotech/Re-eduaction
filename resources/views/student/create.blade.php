@@ -124,9 +124,9 @@
                                                             <label for="contact number">Father Contact No:</label>
                                                             <input type="tel" class="form-control"
                                                                    name="father_contact_no"
-                                                                   placeholder="enter father's no."
+                                                                   placeholder="12345 67890"
+                                                                   pattern="[0-9]{5}[\s]{1}[0-9]{5}"
                                                                    id="father_contact_no"
-                                                                   onkeypress="return isNumber(event)"
                                                                    value="{{ old('father_contact_no') }}">
                                                             @error('father_contact_no')
                                                             <span class="text-danger">{{$message}}</span>
@@ -138,9 +138,9 @@
                                                             <label for="contact number">Mother Contact No:</label>
                                                             <input type="tel" class="form-control"
                                                                    name="mother_contact_no"
-                                                                   placeholder="enter mother's no."
+                                                                   placeholder="12345 67890"
+                                                                   pattern="[0-9]{5}[\s]{1}[0-9]{5}"
                                                                    id="mother_contact_no"
-                                                                   onkeypress="return isNumber(event)"
                                                                    value="{{ old('mother_contact_no') }}">
                                                             @error('mother_contact_no')
                                                             <span class="text-danger">{{$message}}</span>
@@ -167,7 +167,7 @@
                                                                 <input class="form-check" type="radio" name="gender"
                                                                        id="gender_male" required
                                                                        {{ old("gender") == 'male' ? 'checked' : '' }}
-                                                                       value="male">
+                                                                       value="male">&nbsp;&nbsp;
                                                                 <label class="form-check-label" for="gender_male">
                                                                     Male
                                                                 </label>
@@ -196,7 +196,7 @@
                                                                        name="medium"
                                                                        class="form-check" {{ old("medium") == 'gujarati' ? 'checked' : '' }}>
                                                                 <label class="form-check-label"
-                                                                       for="medium_gujarati">
+                                                                       for="medium_gujarati">&nbsp;&nbsp;
                                                                     Gujarati
                                                                 </label>
                                                             </div>
@@ -381,7 +381,7 @@
                                                                 <option value="">------ Select Trainer -----</option>
                                                                 @foreach($trainer as $key=>$t)
                                                                     <option
-                                                                        value="{{$t->id}}" {{ old('name')==$t->id?'selected':'' }}>{{$t->name}}</option>
+                                                                        value="{{$t->id}}" {{ old('analysis_trainer_id')==$t->id?'selected':'' }}>{{$t->name}}</option>
                                                                 @endforeach
                                                             </select>
                                                             @error('analysis_trainer_id')
@@ -422,9 +422,6 @@
                                                             <input type="text" class="form-control"
                                                                    name="reference_by"
                                                                    value="{{ old('reference_by') }}">
-                                                            @error('reference_by')
-                                                            <span class="text-danger"> {{$message}}</span>
-                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 mb-1">
@@ -449,7 +446,7 @@
                                                         <br>
                                                         <div class="form-check form-check-inline">
                                                             <input type="radio" value="paid" name="fees"
-                                                                   class="form-check">
+                                                                   class="form-check">&nbsp;&nbsp;
                                                             <label class="form-check-label"
                                                                    for="medium_hindi" {{ old("fees") == 'paid' ? 'checked' : '' }}>
                                                                 Paid
@@ -479,7 +476,7 @@
                                                         class="btn btn-primary float-right nxtbt  ml-2 next-btn">
                                                     Next
                                                 </button>
-                                                <button class="btn btn-primary prvBtn float-right"
+                                                <button type="button" class="btn btn-primary prvBtn float-right"
                                                         onclick="stepper.previous()">Previous
                                                 </button>
                                             </div>
@@ -513,7 +510,7 @@
                                                 <button type="submit"
                                                         class="btn btn-success float-right ml-2 next-btn1">Submit
                                                 </button>
-                                                <button class="btn btn-primary prvBtn float-right ml-2"
+                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2"
                                                         onclick="stepper.previous()">Previous
                                                 </button>
                                             </div>
@@ -593,11 +590,10 @@
                     },
                     father_contact_no: {
                         required: true,
-                        phoneUS: true,
+                        // phoneUS: true,
                     },
                     mother_contact_no: {
                         required: true,
-                        phoneUS: true,
                     },
                     standard: {
                         required: true,

@@ -150,9 +150,9 @@
                                                             <label for="contact number">Father Contact No:</label>
                                                             <input type="tel" class="form-control"
                                                                    name="father_contact_no"
-                                                                   placeholder="enter father's no."
+                                                                   placeholder="12345 67890"
+                                                                   pattern="[0-9]{5}[\s]{1}[0-9]{5}"
                                                                    id="father_contact_no"
-                                                                   onkeypress="return isNumber(event)"
                                                                    value="{{ $student->father_contact_no }}">
                                                             @error('father_contact_no')
                                                             <span class="text-danger">{{$message}}</span>
@@ -164,9 +164,9 @@
                                                             <label for="contact number">Mother Contact No:</label>
                                                             <input type="tel" class="form-control"
                                                                    name="mother_contact_no"
-                                                                   placeholder="enter mother's no."
+                                                                   placeholder="12345 67890"
+                                                                   pattern="[0-9]{5}[\s]{1}[0-9]{5}"
                                                                    id="mother_contact_no"
-                                                                   onkeypress="return isNumber(event)"
                                                                    value="{{ $student->mother_contact_no }}">
                                                             @error('mother_contact_no')
                                                             <span class="text-danger">{{$message}}</span>
@@ -491,7 +491,7 @@
                                                         class="btn btn-primary float-right nxtbt  ml-2 next-btn">
                                                     Next
                                                 </button>
-                                                <button class="btn btn-primary prvBtn float-right"
+                                                <button type="button" class="btn btn-primary prvBtn float-right"
                                                         onclick="stepper.previous()">Previous
                                                 </button>
                                             </div>
@@ -527,7 +527,7 @@
                                                 <button type="submit"
                                                         class="btn btn-success float-right ml-2 next-btn1">Update
                                                 </button>
-                                                <button class="btn btn-primary prvBtn float-right ml-2"
+                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2"
                                                         onclick="stepper.previous()">Previous
                                                 </button>
                                             </div>
@@ -657,12 +657,6 @@
                     extra_note: {
                         required: true,
                     },
-                    // upload_analysis: {
-                    //     required: true,
-                    // },
-                    // upload_student_image: {
-                    //     required: true,
-                    // },
                 },
                 messages: {
                     surname: {
@@ -719,12 +713,6 @@
                     extra_note: {
                         required: "Please enter extra note",
                     },
-                    // upload_analysis: {
-                    //     required: " Please enter pdf",
-                    // },
-                    // upload_student_image: {
-                    //     required: "Please enter student image"
-                    // },
                 },
                 errorElement: 'span',
                 errorPlacement: function (error, element) {
