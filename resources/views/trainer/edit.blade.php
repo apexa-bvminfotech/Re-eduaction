@@ -563,8 +563,7 @@
                                                                 <option value="">--- Select Course ---</option>
                                                                 @if ($course)
                                                                     @foreach($course as $key => $c)
-{{--                                                                        <option--}}
-{{--                                                                            value="{{$c->id}}" {{ in_array($c->id, json_decode($selectedCourses)) ? 'selected' : '' }}>{{$c->course_name}}</option>--}}
+
                                                                         <option value="{{$c->id}}" {{ is_array(json_decode($selectedCourses)) && in_array($c->id, json_decode($selectedCourses)) ? 'selected' : '' }}>{{$c->course_name}}</option>
                                                                     @endforeach
                                                                 @endif
