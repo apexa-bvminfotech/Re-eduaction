@@ -564,6 +564,23 @@
                                                             </select>
                                                         </div>
                                                     </div>
+                                                    <label for="status" class="col-sm-1 col-form-label">Status :</label>
+                                                    <div class="col-sm-9 mt-2 d-flex justify-content-evenly">
+                                                        <div class="custom-control custom-radio">
+                                                            <input class="custom-control-input" type="radio"
+                                                                   id="customRadio1" name="is_active" value="0"
+                                                                   {{ old('is_active') == 0 ? 'checked' : '' }} checked>
+                                                            <label for="customRadio1" class="custom-control-label">Active</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio ml-2">
+                                                            <input
+                                                                class="custom-control-input custom-control-input-danger"
+                                                                value="1" type="radio" id="customRadio4"
+                                                                name="is_active" {{ old('is_active') == 1 ? 'checked' : '' }}>
+                                                            <label for="customRadio4" class="custom-control-label">Deactive</label>
+                                                        </div>
+                                                        {{--                                                        </div>--}}
+                                                    </div>
                                                 </div>
                                                 <button type="button" class="btn btn-primary float-right next-btn ml-2">
                                                     Next
@@ -659,23 +676,7 @@
                                                         </div>
                                                     </div>
                                                     {{--                                                    <div class="form-group row">--}}
-                                                    <label for="status" class="col-sm-3 col-form-label">Status </label>
-                                                    <div class="col-sm-9 d-flex justify-content-evenly">
-                                                        <div class="custom-control custom-radio">
-                                                            <input class="custom-control-input" type="radio"
-                                                                   id="customRadio1" name="is_active" value="0"
-                                                                   {{ old('is_active') == 0 ? 'checked' : '' }} checked>
-                                                            <label for="customRadio1" class="custom-control-label">Active</label>
-                                                        </div>
-                                                        <div class="custom-control custom-radio ml-2">
-                                                            <input
-                                                                class="custom-control-input custom-control-input-danger"
-                                                                value="1" type="radio" id="customRadio4"
-                                                                name="is_active" {{ old('is_active') == 1 ? 'checked' : '' }}>
-                                                            <label for="customRadio4" class="custom-control-label">Deactive</label>
-                                                        </div>&nbsp;
-                                                        {{--                                                        </div>--}}
-                                                    </div>
+
                                                 </div>
                                                 <button type="submit" name="submit"
                                                         class="btn btn-success float-right next-btn  ml-2">
@@ -723,7 +724,7 @@
                     phone: {
                         required: true,
                     },
-                    email: {
+                    email_id: {
                         required: true,
                     },
                     qualification: {
@@ -780,7 +781,7 @@
                     phone: {
                         required: "Please enter a Contact ",
                     },
-                    email: {
+                    email_id: {
                         required: "Please enter your Email ",
                     },
                     qualification: {
