@@ -148,10 +148,15 @@ class TrainerController extends Controller
 
     public function show(Trainer $trainer)
     {
-        $courseIds = json_decode($trainer->course_id);
-        $courseNames = Course::whereIn('id', $courseIds)->pluck('course_name');
+        if (json_decode($trainer->course_id) != null){
+            $courseIds = json_decode($trainer->course_id);
+            $courseNames = Course::whereIn('id', $courseIds)->pluck('course_name');
 
-        return view('trainer.show', compact('trainer', 'courseNames'));
+            return view('trainer.show', compact('trainer', 'courseNames'));
+        }
+        else{
+            return view('trainer.show', compact('trainer'));
+        }
     }
 
     public function edit(Trainer $trainer)

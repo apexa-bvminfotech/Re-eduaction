@@ -179,11 +179,12 @@
                                                         </tr>
                                                         <tr>
                                                             <th>I-Card</th>
-                                                            <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d',$trainer->i_card_date )->format('d/m/Y') }}</td>
+                                                            <td>{{ $trainer->i_card_date }}</td>
+{{--                                                            <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d',$trainer->i_card_date )->format('d/m/Y') }}</td>--}}
                                                         </tr>
                                                         <tr>
                                                             <th>I-Card Return Date</th>
-                                                            <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d',$trainer->i_card_return_date )->format('d/m/Y') }}</td>
+                                                            <td>{{ $trainer->i_card_return_date }}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>I-Card Note</th>
@@ -191,11 +192,11 @@
                                                         </tr>
                                                         <tr>
                                                             <th>Uniform</th>
-                                                            <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d',$trainer->uniform_date )->format('d/m/Y') }}</td>
+                                                            <td>{{ $trainer->uniform_date }}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Uniform Return Date</th>
-                                                            <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d',$trainer->uniform_return_date )->format('d/m/Y') }}</td>
+                                                            <td>{{$trainer->uniform_return_date }}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Uniform Note</th>
@@ -209,11 +210,11 @@
                                                     <table class="table table-hover">
                                                         <tr>
                                                             <th>Material</th>
-                                                            <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d',$trainer->material_date )->format('d/m/Y') }}</td>
+                                                            <td>{{ $trainer->material_date }}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Material Return Date</th>
-                                                            <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d',$trainer->material_return_date )->format('d/m/Y') }}</td>
+                                                            <td>{{ $trainer->material_return_date }}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Material Note</th>
@@ -250,7 +251,7 @@
                                                         <tr>
                                                             <th>Course(s)</th>
                                                             <td>
-                                                                @if ($courseNames && $courseNames->count() > 0)
+                                                                @if (json_decode($trainer->course_id) != null)
                                                                     <ul>
                                                                         @foreach ($courseNames as $courseName)
                                                                             <li>{{ $courseName }}</li>
@@ -258,6 +259,7 @@
                                                                     </ul>
                                                                 @else
                                                                     No courses assigned
+
                                                                 @endif
                                                             </td>
                                                         </tr>
