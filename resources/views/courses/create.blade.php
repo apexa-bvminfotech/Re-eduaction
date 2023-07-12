@@ -35,13 +35,13 @@
                                     <form action="{{route('course.store')}}" method="POST">
                                         @csrf
                                         <div class="form-group row">
-                                            <div class="col-sm-1"></div>
-                                            <label for="inputEmail3" class="col-sm-1 col-form-label">Course Name</label>
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-0"></div>
+                                            <label for="inputEmail3" class="col-sm-2 col-form-label">Course Name</label>
+                                            <div class="col-sm-8">
                                                 <input type="text" name="course_name" class="form-control"
                                                        placeholder="Add Course" required>
                                             </div>
-                                            <div class="col-sm-1">
+                                            <div class="col-sm-2">
                                                 <button type="button" name="add" id="add" class="btn btn-primary">
                                                     Add SubCourse
                                                 </button>
@@ -75,8 +75,8 @@
             $("#add").click(function () {
 
                 let html = '<div class="form-group row remove' + i + '" >'
-                html += '<div class="col-sm-2"></div>'
-                html += '<label for="subcourse" class="col-sm-1 col-form-label">Sub Course Name</label>'
+                html += '<div class="col-sm-1"></div>'
+                html += '<label for="subcourse" class="col-sm-2 col-form-label">Sub Course Name</label>'
                 html += '<div class="col-sm-7">'
                 html += '<input type="text" name="sub_course_name[]" class="form-control" placeholder="Add SubCourse" required>'
                 html += '</div>'

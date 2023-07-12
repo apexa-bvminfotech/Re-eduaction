@@ -36,9 +36,9 @@
                                         @csrf
                                         @method('PUT')
                                         <div class="form-group row">
-                                            <div class="col-sm-1"></div>
-                                            <label for="inputEmail3" class="col-sm-1 col-form-label">Course Name</label>
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-0"></div>
+                                            <label for="inputEmail3" class="col-sm-2 col-form-label">Course Name</label>
+                                            <div class="col-sm-8">
                                                 <input type="text" name="course_name" class="form-control"
                                                        placeholder="Add Course"
                                                        value="{{ old('course_name', $course->course_name) }}">
@@ -46,7 +46,7 @@
                                             @error('course_name')
                                             <span class="text-danger">{{$message}}</span>
                                             @enderror
-                                            <div class="col-sm-1">
+                                            <div class="col-sm-2">
                                                 <button type="button" name="add" id="add" class="btn btn-primary add">
                                                     Add SubCourse
                                                 </button>
@@ -61,8 +61,8 @@
                                                 $count++;
                                             @endphp
                                             <div class="form-group row remove{{$count}}">
-                                                <div class="col-sm-2"></div>
-                                                <label for="subcourse" class="col-sm-1 col-form-label">SubCourse
+                                                <div class="col-sm-1"></div>
+                                                <label for="subcourse" class="col-sm-2 col-form-label">SubCourse
                                                     Name</label>
                                                 <div class="col-sm-7">
 
@@ -153,8 +153,8 @@
                 i++;
 
                 let html = '<div class="form-group row remove' + i + '" >'
-                html += '<div class="col-sm-2"></div>'
-                html += '<label for="subcourse" class="col-sm-1 col-form-label">Sub Course Name</label>'
+                html += '<div class="col-sm-1"></div>'
+                html += '<label for="subcourse" class="col-sm-2 col-form-label">Sub Course Name</label>'
                 html += '<div class="col-sm-7">'
                 html += '<input type="text" name="sub_course_name[' + i + '][name]" class="form-control" value="{{ old("sub_course_name.' + i + '.name") }}" placeholder="Add SubCourse" required>'
                 html += '<input type="hidden" name="sub_course_name[' + i + '][id]" class="form-control" value="">'
