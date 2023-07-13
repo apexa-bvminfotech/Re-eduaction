@@ -35,9 +35,10 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+
                                         @foreach($users as $key=>$u)
                                             <tr>
-                                                <td>{{$u->id}}</td>
+                                                <td>{{ ++$i }}</td>
                                                 <td>{{$u->surname}} {{$u->name}} {{$u->father_name}}</td>
                                                 <td>{{$u->email}}</td>
                                                 <td>{{$u->contact}}</td>
@@ -79,7 +80,7 @@
         $(function () {
             $("#example1").DataTable({
                 "responsive": true, "lengthChange": false, "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                "buttons": ["csv", "excel", "pdf", "print"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
             $('.checkStatus').change(function () {

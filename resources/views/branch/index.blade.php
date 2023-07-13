@@ -38,7 +38,7 @@
                                     <tbody>
                                         @foreach($branches as $key=>$u)
                                             <tr>
-                                                <td>{{$u->id}}</td>
+                                                <td>{{ ++$i }}</td>
                                                 <td>{{$u->name}}</td>
                                                 <td>{{$u->address}}</td>
                                                 <td>{{$u->authorized_person_name}}</td>
@@ -67,7 +67,7 @@
         $(function () {
             $("#example1").DataTable({
                 "responsive": true, "lengthChange": false, "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                "buttons": ["csv", "excel", "pdf", "print"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
         })

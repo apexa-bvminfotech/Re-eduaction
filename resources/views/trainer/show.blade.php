@@ -175,16 +175,16 @@
                                                         </tr>
                                                         <tr>
                                                             <th>Joining Date</th>
-                                                            <td>{{ $trainer->joining_date }}</td>
+                                                            <td>{{ $str = str_replace(',', ' to ', $trainer->joining_date) }}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>I-Card</th>
-                                                            <td>{{ $trainer->i_card_date }}</td>
+                                                            <td>{{ date('d-m-Y', strtotime($trainer->i_card_date)) }}</td>
 {{--                                                            <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d',$trainer->i_card_date )->format('d/m/Y') }}</td>--}}
                                                         </tr>
                                                         <tr>
                                                             <th>I-Card Return Date</th>
-                                                            <td>{{ $trainer->i_card_return_date }}</td>
+                                                            <td>{{ date('d-m-Y', strtotime($trainer->i_card_return_date)) }}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>I-Card Note</th>
@@ -192,11 +192,11 @@
                                                         </tr>
                                                         <tr>
                                                             <th>Uniform</th>
-                                                            <td>{{ $trainer->uniform_date }}</td>
+                                                            <td>{{ date('d-m-Y', strtotime($trainer->uniform_date)) }}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Uniform Return Date</th>
-                                                            <td>{{$trainer->uniform_return_date }}</td>
+                                                            <td>{{ date('d-m-Y', strtotime($trainer->uniform_return_date)) }}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Uniform Note</th>
@@ -210,11 +210,11 @@
                                                     <table class="table table-hover">
                                                         <tr>
                                                             <th>Material</th>
-                                                            <td>{{ $trainer->material_date }}</td>
+                                                            <td>{{ date('d-m-Y', strtotime($trainer->material_date)) }}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Material Return Date</th>
-                                                            <td>{{ $trainer->material_return_date }}</td>
+                                                            <td>{{ date('d-m-Y', strtotime($trainer->material_return_date)) }}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Material Note</th>
@@ -222,7 +222,7 @@
                                                         </tr>
                                                         <tr>
                                                             <th>Offer Letter</th>
-                                                            <td>{{ $trainer->offer_letter_date }}</td>
+                                                            <td>{{ date('d-m-Y', strtotime($trainer->offer_letter_date)) }}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Offer Letter Note</th>
@@ -230,7 +230,7 @@
                                                         </tr>
                                                         <tr>
                                                             <th>Bond</th>
-                                                            <td>{{ $trainer->bond_date }}</td>
+                                                            <td>{{ date('d-m-Y', strtotime($trainer->bond_date)) }}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Bond Note</th>

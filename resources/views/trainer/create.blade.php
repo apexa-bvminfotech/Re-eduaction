@@ -174,7 +174,7 @@
                                                             <label for="dob">Date Of Birth:</label>
                                                             <input type="date" class="form-control" name="dob"
                                                                    placeholder="Enter Birthdate"
-                                                                   value="{{ old('dob') }}">
+                                                                   value="{{ old('dob','1999-'.date('m-d')) }}" max="{{ date('Y-m-d') }}">
                                                             @error('dob')
                                                                 <span class="text-danger">{{ $dob }}</span>
                                                             @enderror
@@ -186,20 +186,20 @@
                                                             <br/>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio mt-2">
-                                                                    <input type="radio" id="married"
+                                                                    <input type="radio" id="married" class="custom-control-input"
                                                                            name="marital_status"
                                                                            value="1" {{ old('marital_status')}}>
-                                                                    <label for="customRadio1"
+                                                                    <label for="married" class="custom-control-label"
                                                                            style="font-weight: normal">Married</label>
 
                                                                 </div>
                                                             </div>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio mt-1">
-                                                                    <input type="radio" id="unmarried"
+                                                                    <input type="radio" id="unmarried" class="custom-control-input"
                                                                            name="marital_status" checked
                                                                            value="0" {{ old('marital_status')}}>
-                                                                    <label for="customRadio2"
+                                                                    <label for="unmarried" class="custom-control-label"
                                                                            style="font-weight: normal">Unmarried</label>
                                                                 </div>
                                                             </div>
@@ -312,21 +312,25 @@
                                                         <div class="form-group">
                                                             <label for="trainerType">Trainer Type</label>
                                                             <br>
-                                                            <div class="form-check form-check-inline mt-1">
-                                                                <input class="form-check-input" type="radio"
+                                                            <div class="form-check form-check-inline">
+                                                                <div class="custom-control custom-radio">
+                                                                    <input class="custom-control-input" type="radio"
                                                                        id="freelancerRadio" name="emp_type"
                                                                        value="1" {{ old('emp_type') == 1 ? 'checked' : '' }}>
-                                                                <label class="form-check-label" for="freelancerRadio">Freelancer</label>
+                                                                    <label for="freelancerRadio" class="custom-control-label">Freelancer</label>
+                                                                </div>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio"
-                                                                       id="fixedRadio" name="emp_type"
-                                                                       value="0" {{ old('emp_type') == 0 ? 'checked' : '' }} >
-                                                                <label class="form-check-label"
-                                                                       for="fixedRadio">Fixed</label>
+                                                                <div class="custom-control custom-radio ml-2">
+                                                                    <input class="custom-control-input" type="radio"
+                                                                           id="fixedRadio" name="emp_type"
+                                                                           value="0" {{ old('emp_type') == 0 ? 'checked' : '' }} >
+                                                                    <label for="fixedRadio" class="custom-control-label">Fixed</label>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
+
                                                     <div class="col-md-6 ">
                                                         <div class="form-group mb-3">
                                                             <label for="simpleinput">Office use Email Address:</label>
@@ -381,7 +385,7 @@
                                                                            name="i_card_date"
                                                                            type="date"
                                                                            id="date"
-                                                                           value="{{ old('i_card_date', date('Y-m-d')) }}"/>
+                                                                           value="{{ old('i_card_date', date('Y-m-d')) }}" max="{{ date('Y-m-d') }}"/>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
@@ -389,7 +393,7 @@
                                                                     <input type="date" class="form-control textbox-n"
                                                                            name="i_card_return_date"
                                                                            placeholder="i-card return date"
-                                                                           value="{{ old('i_card_return_date') }}">
+                                                                           value="{{ old('i_card_return_date') }}" max="{{ date('Y-m-d') }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
@@ -409,7 +413,7 @@
                                                                            name="uniform_date"
                                                                            type="date"
                                                                            id="date"
-                                                                           value="{{ old('uniform_date', date('Y-m-d')) }}"/>
+                                                                           value="{{ old('uniform_date', date('Y-m-d')) }}" max="{{ date('Y-m-d') }}"/>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
@@ -417,7 +421,7 @@
                                                                     <input type="date" class="form-control textbox-n"
                                                                            name="uniform_return_date"
                                                                            placeholder="uniform return date"
-                                                                           value="{{ old('uniform_return_date') }}">
+                                                                           value="{{ old('uniform_return_date') }}" max="{{ date('Y-m-d') }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
@@ -437,7 +441,7 @@
                                                                            name="material_date"
                                                                            type="date"
                                                                            id="date"
-                                                                           value="{{ old('material_date', date('Y-m-d')) }}"/>
+                                                                           value="{{ old('material_date', date('Y-m-d')) }}" max="{{ date('Y-m-d') }}"/>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
@@ -445,7 +449,7 @@
                                                                     <input type="date" class="form-control textbox-n"
                                                                            name="material_return_date"
                                                                            placeholder="material return date"
-                                                                           value="{{ old('material_return_date') }}">
+                                                                           value="{{ old('material_return_date') }}" max="{{ date('Y-m-d') }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
@@ -465,7 +469,7 @@
                                                                            name="offer_letter_date"
                                                                            type="date"
                                                                            id="date"
-                                                                           value="{{ old('offer_letter_date', date('Y-m-d')) }}"/>
+                                                                           value="{{ old('offer_letter_date', date('Y-m-d')) }}" max="{{ date('Y-m-d') }}"/>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">
@@ -486,7 +490,7 @@
                                                                            name="bond_date"
                                                                            type="date"
                                                                            id="date"
-                                                                           value="{{ old('bond_date', date('Y-m-d')) }}"/>
+                                                                           value="{{ old('bond_date', date('Y-m-d')) }}" max="{{ date('Y-m-d') }}"/>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">
@@ -703,136 +707,136 @@
     <script type="text/javascript">
         $(document).ready(function () {
             var form = $('#quickForm');
-            var validator = form.validate({
-                rules: {
-                    surname: {
-                        required: true,
-                        maxlength: 255,
-                    },
-                    emer_fullName: {
-                        required: true,
-                        maxlength: 255,
-                    },
-                    name: {
-                        required: true,
-                        maxlength: 255,
-                    },
-                    father_name: {
-                        required: true,
-                        maxlength: 255,
-                    },
-                    phone: {
-                        required: true,
-                    },
-                    email_id: {
-                        required: true,
-                    },
-                    qualification: {
-                        required: true,
-                    },
-                    address: {
-                        required: true,
-                    },
-                    emer_phone: {
-                        required: true,
-                    },
-                    emer_relationship: {
-                        required: true,
-                    },
-                    emer_address: {
-                        required: true,
-                    },
-                    photo: {
-                        required: true,
-                    },
-                    aadhaar_card: {
-                        required: true,
-                    },
-                    last_edu_markSheet: {
-                        required: true,
-                    },
-                    bank_passbook: {
-                        required: true,
-                    },
-                    dob: {
-                        required: true,
-                    },
-                    marital_status: {
-                        required: true,
-                    },
-                    terms_conditions: {
-                        required: true,
-                    }
-
-                },
-                messages: {
-                    surname: {
-                        required: 'Please enter your surname.'
-                    },
-                    emer_fullName: {
-                        required: 'Please enter your emer_fullName.'
-                    },
-                    name: {
-                        required: 'Please enter your name.'
-                    },
-                    father_name: {
-                        required: "Please enter your father name ",
-                    },
-                    phone: {
-                        required: "Please enter a Contact ",
-                    },
-                    email_id: {
-                        required: "Please enter your Email ",
-                    },
-                    qualification: {
-                        required: "Please enter your Qualification ",
-                    },
-                    address: {
-                        required: "Please enter a Address ",
-                    },
-                    emer_phone: {
-                        required: "Please enter Emergency contact Number",
-                    },
-                    emer_relationship: {
-                        required: "Please enter Relationship",
-                    },
-                    emer_address: {
-                        required: "Please Enter Address",
-                    },
-                    photo: {
-                        required: "Please choose Passport size ",
-                    },
-                    aadhaar_card: {
-                        required: "Please choose Aadhaar card ",
-                    },
-                    last_edu_markSheet: {
-                        required: "Please choose Education MarkSheet ",
-                    },
-                    bank_passbook: {
-                        required: "Please choose Aadhaar card ",
-                    },
-                    dob: {
-                        required: "Please choose Date Of Birth ",
-                    },
-                    marital_status: {
-                        required: "Please fill this field ",
-                    },
-                    terms_conditions: {
-                        required: 'Please read terms and condition and select this checkbox for submit data',
-                    }
-                },
-                errorElement: 'span',
-                errorPlacement: function (error, element) {
-                    error.addClass('invalid-feedback');
-                    element.closest('.form-group').append(error);
-                },
-                highlight: function (element, errorClass, validClass) {
-                    $(element).addClass('is-invalid');
-                },
-                unhighlight: function (element, errorClass, validClass) {
-                    $(element).removeClass('is-invalid');
-                }
-            });
+            // var validator = form.validate({
+            //     rules: {
+            //         surname: {
+            //             required: true,
+            //             maxlength: 255,
+            //         },
+            //         emer_fullName: {
+            //             required: true,
+            //             maxlength: 255,
+            //         },
+            //         name: {
+            //             required: true,
+            //             maxlength: 255,
+            //         },
+            //         father_name: {
+            //             required: true,
+            //             maxlength: 255,
+            //         },
+            //         phone: {
+            //             required: true,
+            //         },
+            //         email_id: {
+            //             required: true,
+            //         },
+            //         qualification: {
+            //             required: true,
+            //         },
+            //         address: {
+            //             required: true,
+            //         },
+            //         emer_phone: {
+            //             required: true,
+            //         },
+            //         emer_relationship: {
+            //             required: true,
+            //         },
+            //         emer_address: {
+            //             required: true,
+            //         },
+            //         photo: {
+            //             required: true,
+            //         },
+            //         aadhaar_card: {
+            //             required: true,
+            //         },
+            //         last_edu_markSheet: {
+            //             required: true,
+            //         },
+            //         bank_passbook: {
+            //             required: true,
+            //         },
+            //         dob: {
+            //             required: true,
+            //         },
+            //         marital_status: {
+            //             required: true,
+            //         },
+            //         terms_conditions: {
+            //             required: true,
+            //         }
+            //
+            //     },
+            //     messages: {
+            //         surname: {
+            //             required: 'Please enter your surname.'
+            //         },
+            //         emer_fullName: {
+            //             required: 'Please enter your emer_fullName.'
+            //         },
+            //         name: {
+            //             required: 'Please enter your name.'
+            //         },
+            //         father_name: {
+            //             required: "Please enter your father name ",
+            //         },
+            //         phone: {
+            //             required: "Please enter a Contact ",
+            //         },
+            //         email_id: {
+            //             required: "Please enter your Email ",
+            //         },
+            //         qualification: {
+            //             required: "Please enter your Qualification ",
+            //         },
+            //         address: {
+            //             required: "Please enter a Address ",
+            //         },
+            //         emer_phone: {
+            //             required: "Please enter Emergency contact Number",
+            //         },
+            //         emer_relationship: {
+            //             required: "Please enter Relationship",
+            //         },
+            //         emer_address: {
+            //             required: "Please Enter Address",
+            //         },
+            //         photo: {
+            //             required: "Please choose Passport size ",
+            //         },
+            //         aadhaar_card: {
+            //             required: "Please choose Aadhaar card ",
+            //         },
+            //         last_edu_markSheet: {
+            //             required: "Please choose Education MarkSheet ",
+            //         },
+            //         bank_passbook: {
+            //             required: "Please choose Aadhaar card ",
+            //         },
+            //         dob: {
+            //             required: "Please choose Date Of Birth ",
+            //         },
+            //         marital_status: {
+            //             required: "Please fill this field ",
+            //         },
+            //         terms_conditions: {
+            //             required: 'Please read terms and condition and select this checkbox for submit data',
+            //         }
+            //     },
+            //     errorElement: 'span',
+            //     errorPlacement: function (error, element) {
+            //         error.addClass('invalid-feedback');
+            //         element.closest('.form-group').append(error);
+            //     },
+            //     highlight: function (element, errorClass, validClass) {
+            //         $(element).addClass('is-invalid');
+            //     },
+            //     unhighlight: function (element, errorClass, validClass) {
+            //         $(element).removeClass('is-invalid');
+            //     }
+            // });
             $('.next-btn').click(function () {
                 var isValid = form.valid();
                 if (isValid) {

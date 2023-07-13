@@ -320,17 +320,20 @@
                                                             <label for="trainerType">Trainer Type</label>
                                                             <br>
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio"
-                                                                       id="freelancerRadio" name="emp_type"
-                                                                       value="1" {{ old('emp_type',$trainer->emp_type) == 1 ? 'checked' : '' }}>
-                                                                <label class="form-check-label" for="freelancerRadio">Freelancer</label>
+                                                                <div class="custom-control custom-radio">
+                                                                    <input class="custom-control-input" type="radio"
+                                                                           id="freelancerRadio" name="emp_type"
+                                                                           value="1" {{ old('emp_type',$trainer->emp_type) == 1 ? 'checked' : '' }}>
+                                                                    <label for="freelancerRadio" class="custom-control-label">Freelancer</label>
+                                                                </div>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio"
-                                                                       id="fixedRadio" name="emp_type"
-                                                                       value="0" {{ old('emp_type',$trainer->emp_type) == 0 ? 'checked' : '' }} >
-                                                                <label class="form-check-label"
-                                                                       for="fixedRadio">Fixed</label>
+                                                                <div class="custom-control custom-radio ml-2">
+                                                                    <input class="custom-control-input" type="radio"
+                                                                           id="fixedRadio" name="emp_type"
+                                                                           value="0" {{ old('emp_type',$trainer->emp_type) == 0 ? 'checked' : '' }} >
+                                                                    <label for="fixedRadio" class="custom-control-label">Fixed</label>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>

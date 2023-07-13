@@ -36,7 +36,7 @@
                                     <tbody>
                                     @foreach ($trainer as $key => $t)
                                         <tr>
-                                            <td>{{ $t->id }}</td>
+                                            <td>{{ ++$i }}</td>
                                             <td>{{ $t->name }}</td>
                                             <td>{{$t->branch ? $t->branch->name : ''}}</td>
                                             <td>
@@ -78,7 +78,7 @@
         $(function () {
             $("#example1").DataTable({
                 "responsive": true, "lengthChange": false, "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                "buttons": ["csv", "excel", "pdf", "print"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
             $('.checkStatus').change(function () {
                 var status = $(this).prop('checked') == true ? 0 : 1;

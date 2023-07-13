@@ -24,7 +24,7 @@ class TrainerController extends Controller
     public function index()
     {
         $trainer = Trainer::orderBy('id', 'DESC')->get();
-        return view('trainer.index', compact('trainer'));
+        return view('trainer.index', compact('trainer'))->with('i');
     }
 
     public function create()
@@ -151,7 +151,6 @@ class TrainerController extends Controller
         if (json_decode($trainer->course_id) != null){
             $courseIds = json_decode($trainer->course_id);
             $courseNames = Course::whereIn('id', $courseIds)->pluck('course_name');
-
             return view('trainer.show', compact('trainer', 'courseNames'));
         }
         else{
