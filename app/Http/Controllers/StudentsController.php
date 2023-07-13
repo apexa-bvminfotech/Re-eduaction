@@ -6,6 +6,7 @@ use App\Models\Course;
 use App\Models\Slot;
 use App\Models\Trainer;
 use App\Models\StudentStaffAssign;
+use App\Models\StudentProxyStaffAssign;
 use App\Models\Rtc;
 use App\Models\Student;
 use App\Models\User;
@@ -142,7 +143,9 @@ class StudentsController extends Controller
     public function show($id)
     {
         $student = Student::find($id);
-        return view('student.show', compact('student'));
+        $proxy_staff_detail = StudentProxyStaffAssign::find($id);
+//        dd($proxy_staff_detail);
+        return view('student.show', compact('student','proxy_staff_detail'));
     }
 
     /**
@@ -270,21 +273,51 @@ class StudentsController extends Controller
     }
     public function assignStaff(Request $request)
     {
+//        dd($request->all());
         $validatedData = $request->validate([
             'student_id' => 'required|integer',
-            'staff_id' => 'required|integer',
+            'trainer_id' => 'required|integer',
             'slot' => 'required|integer',
             'type' => 'required|in:proxy,regular',
         ]);
 
         $assignStaff = new StudentStaffAssign();
         $assignStaff->student_id = $validatedData['student_id'];
-        $assignStaff->staff_id = $validatedData['staff_id'];
+        $assignStaff->trainer_id = $validatedData['trainer_id'];
         $assignStaff->slot_id = $validatedData['slot'];
         $assignStaff->type = $validatedData['type'];
         $assignStaff->date = Carbon::now()->toDateString();
         $assignStaff->save();
 
-        return redirect()->back()->with('success', 'Staff assigned successfully');
+        return redirect()->back()->with('success', 'Trainer assigned successfully');
+    }
+    public function proxySlot($id)
+    {
+        $proxy_slots = Slot::where('trainer_id', $id)
+            ->with('rtc')
+            ->get();
+        return response()->json(['slots'=>$proxy_slots]);
+    }
+    public function proxyStaff(Request $request)
+    {
+//        dd($request->all());
+        $validatedData = $request->validate([
+            'student_id' => 'required|integer',
+            'trainer_id' => 'required|integer',
+            'slot_id' => 'required|integer',
+            'starting_date' => 'required',
+            'ending_date' => 'required',
+        ]);
+
+        $proxyStaff = new StudentProxyStaffAssign();
+        $proxyStaff->student_id = $validatedData['student_id'];
+        $proxyStaff->trainer_id = $validatedData['trainer_id'];
+        $proxyStaff->slot_id = $validatedData['slot_id'];
+        $proxyStaff->starting_date = $validatedData['starting_date'];
+        $proxyStaff->ending_date = $validatedData['ending_date'];
+        $proxyStaff->save();
+//        dd($proxyStaff);
+
+        return redirect()->back()->with('success', 'Proxy-Trainer assigned successfully');
     }
 }

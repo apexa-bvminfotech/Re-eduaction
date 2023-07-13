@@ -24,8 +24,11 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::group(['middleware'=>['auth']],function (){
     Route::resource('student', 'StudentsController');;
     Route::group(['prefix'=>'student'],function (){
-        Route::get('/staff-slot/{id}','StudentsController@sloat');
+        Route::get('/staff-slot/{id}','StudentsController@slot');
         Route::post('/assign-staff', 'StudentsController@assignStaff')->name('student.assignStaff');
+        //proxy-staff-route
+        Route::get('/proxy-slot/{id}','StudentsController@proxySlot');
+        Route::post('/proxy-staff', 'StudentsController@proxyStaff')->name('student.proxyStaff');
     });
     Route::resource('roles', 'RoleController');
     Route::resource('trainer', 'TrainerController');
@@ -41,7 +44,7 @@ Route::group(['middleware'=>['auth']],function (){
 
     Route::get('changeRtcStatus', 'RtcController@changeRtcStatus');
     Route::get('changeSlotStatus', 'SlotController@changeSlotStatus');
-    Route::get('changeStaffStatus', 'StaffController@changeStaffStatus');
+//    Route::get('changeStaffStatus', 'StaffController@changeStaffStatus');
     Route::get('changeUserStatus','UserController@changeUserStatus');
     Route::get('changeTrainerStatus','TrainerController@changeTrainerStatus');
 

@@ -53,6 +53,7 @@
                                             Information</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">School
                                             Detail</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#proxy_detail" data-toggle="tab">Proxy staff Details</a></li>
                                 </ul>
                                 <a href="{{ route('student.index') }}"
                                    class="col-1 btn btn-primary float-right">Back</a>
@@ -136,6 +137,32 @@
                                                 <tr>
                                                     <th><b>Demo Taken By:</b></th>
                                                     <td>{{$student->trainer->name}}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="proxy_detail">
+                                        <div class="post">
+                                            <table class="table">
+                                                <tr>
+                                                    <th><b>Student name:</b></th>
+                                                    <td>{{$proxy_staff_detail->student_id}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th><b>Trainer name:</b></th>
+                                                    <td>{{$student->trainer->name}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th><b>Slot name:</b></th>
+                                                    <td>{{$proxy_staff_detail->slot_id}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th><b>Starting Date:</b></th>
+                                                    <td>{{$proxy_staff_detail->starting_date}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th><b>Ending Date:</b></th>
+                                                    <td>{{$proxy_staff_detail->ending_date}}</td>
                                                 </tr>
                                             </table>
                                         </div>
