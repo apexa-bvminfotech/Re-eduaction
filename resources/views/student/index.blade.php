@@ -96,8 +96,8 @@
                                 <div class="modal-body">
                                     <input type="hidden" name="student_id" class="form-control student_id" value="">
                                     <div class="col-md-12 mb-1">
-                                        <label for="name">Staff Name: </label>
-                                        <select class="form-control staff_id" name="trainer_id" required>
+                                        <label for="name">Trainer Name: </label>
+                                        <select class="form-control staff_id" name="trainers_id" required>
                                             <option value="0">------Select Trainer-----</option>
                                             @foreach($trainers as $key =>$trainer)
                                                 @if($trainer->is_active == 0)
@@ -109,30 +109,15 @@
                                     </div>
                                     <div class="col-md-12 mb-1">
                                         <label for="name">Slot: </label>
-                                        <select class="form-control slot" name="slot" required>
+                                        <select class="form-control slot" name="slots_id" required>
                                             <option value="">------Select Slot-----</option>
+                                            @foreach($slots as $key =>$s)
+                                                @if($s->is_active == 0)
+                                                    <option
+                                                        value="{{$s->id}}" {{old('slots_id')==$s->id}}>{{$s->name}}</option>
+                                                @endif
+                                            @endforeach
                                         </select>
-                                    </div>
-                                    <div class="col-md-12 mb-1">
-                                        <div class="form-group">
-                                            <label for="gender">lecture Type:</label>
-                                            <br/>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="type" id="type_proxy"
-                                                       value="proxy" required>
-                                                <label class="form-check-label" for="type_proxy">
-                                                    Proxy Lecture
-                                                </label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="type"
-                                                       id="type_regular"
-                                                       value="regular" required>
-                                                <label class="form-check-label" for="type_regular">
-                                                    Regular Lecture
-                                                </label>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                                 <div class="modal-footer">

@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
+
 class StudentsController extends Controller
 {
     /**
@@ -25,7 +26,7 @@ class StudentsController extends Controller
         $slots = Slot::orderBy('id', 'desc')->get();
         $trainers = Trainer::orderBy('id', 'desc')->get();
         $students = Student::with('course')->orderBy('id')->paginate(10);
-        return view('student.index', compact('students','trainers','slots'))->with('i');
+        return view('student.index', compact('students', 'trainers', 'slots'))->with('i');
     }
 
     /**
@@ -38,7 +39,7 @@ class StudentsController extends Controller
         $student = Student::orderBy('id', 'desc')->get();
         $role = Role::orderBy('id', 'desc')->get();
         $course = Course::orderBy('id', 'desc')->get();
-        $trainer = Trainer::orderBy('id')->where('is_active',0)->get();
+        $trainer = Trainer::orderBy('id')->where('is_active', 0)->get();
         return view('student.create', compact('student', 'role', 'course', 'trainer'));
     }
 
@@ -56,7 +57,6 @@ class StudentsController extends Controller
             'father_name' => 'required|max:255',
             'address' => 'required',
             'gender' => 'required',
-            'email_id' => 'required|email|unique:users,email',
             'father_contact_no' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
             'mother_contact_no' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
             'standard' => 'required|numeric|max:12',
@@ -68,13 +68,7 @@ class StudentsController extends Controller
             'extra_tuition_time_from' => 'required',
             'dob' => 'required',
             'age' => 'required',
-            'payment_condition' => 'required|max:255',
-            'reference_by' => 'required',
-            'demo_trainer_id' => 'required',
-            'fees' => 'required',
-            'extra_note' => 'required',
-            'analysis_trainer_id'=>'required|exists:trainers,id',
-            'course_id'=>'required|exists:courses,id'
+            'course_id' => 'required|exists:courses,id'
         ]);
         $user = User::Create([
             'surname' => $request->surname,
@@ -174,7 +168,6 @@ class StudentsController extends Controller
             'father_name' => 'required|max:255',
             'address' => 'required',
             'gender' => 'required',
-            'email_id' => 'required|email',
             'father_contact_no' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
             'mother_contact_no' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
             'standard' => 'required|min:1|max:12',
@@ -183,25 +176,19 @@ class StudentsController extends Controller
             'school_time_to' => 'required',
             'school_time_from' => 'required',
             'extra_tuition_time_to' => 'required',
-            'extra_tuition_time_from'=>'required',
+            'extra_tuition_time_from' => 'required',
             'dob' => 'required',
             'age' => 'required',
-            'payment_condition' => 'required|max:255',
-            'reference_by' => 'required',
-            'demo_trainer_id' => 'required',
-            'fees' => 'required',
-            'extra_note' => 'required',
-            'analysis_trainer_id'=>'required|exists:trainers,id',
-            'course_id'=>'required|exists:courses,id'
+            'course_id' => 'required|exists:courses,id'
         ]);
         $user = $student->user;
         $user->update([
             'name' => $request->name,
             'surname' => $request->surname,
-            'father_name'=>$request->father_name,
+            'father_name' => $request->father_name,
             'email' => $request->email_id,
-            'contact'=>$request->father_contact_no,
-            'password' =>Hash::make(strtolower($request->name) . '@123'),
+            'contact' => $request->father_contact_no,
+            'password' => Hash::make(strtolower($request->name) . '@123'),
             'type' => 2,
         ]);
         $upload_student_image = $student->upload_student_image;
@@ -260,30 +247,54 @@ class StudentsController extends Controller
         return redirect()->route('student.index')
             ->with('success', 'student deleted successfully');
     }
+
     public function slot($id)
     {
         $slots = Slot::where('trainer_id', $id)
             ->where('is_active', 0)
             ->with('rtc')
             ->get();
-        return response()->json(['slots'=>$slots]);
+        return response()->json(['slots' => $slots]);
     }
+
     public function assignStaff(Request $request)
     {
         $validatedData = $request->validate([
             'student_id' => 'required|integer',
-            'staff_id' => 'required|integer',
-            'slot' => 'required|integer',
-            'type' => 'required|in:proxy,regular',
+            'trainers_id' => 'required|integer',
+            'slots_id' => 'required|integer',
         ]);
+        $student = StudentStaffAssign::where('student_id', $request->student_id)->where('is_active', 0)->first();
 
-        $assignStaff = new StudentStaffAssign();
-        $assignStaff->student_id = $validatedData['student_id'];
-        $assignStaff->staff_id = $validatedData['staff_id'];
-        $assignStaff->slot_id = $validatedData['slot'];
-        $assignStaff->type = $validatedData['type'];
-        $assignStaff->date = Carbon::now()->toDateString();
-        $assignStaff->save();
+        if ($student) {
+            if ($student->trainers_id == $request->trainers_id) {
+                return back()->with('error', 'Trainer is already Assigned');
+            }
+            $student->update([
+                'is_active' => 1,
+            ]);
+            $check = StudentStaffAssign::where(['student_id' => $request->student_id, 'trainers_id' => $validatedData['trainers_id']])->where('is_active', 1)->first();
+            if ($check) {
+                $check->update([
+                    'is_active' => 0,
+                ]);
+            } else {
+                $assignStaff = new StudentStaffAssign();
+                $assignStaff->student_id = $validatedData['student_id'];
+                $assignStaff->trainers_id = $validatedData['trainers_id'];
+                $assignStaff->slots_id = $validatedData['slots_id'];
+                $assignStaff->date = Carbon::now()->toDateString();
+                $assignStaff->save();
+            }
+
+        } else {
+            $assignStaff = new StudentStaffAssign();
+            $assignStaff->student_id = $validatedData['student_id'];
+            $assignStaff->trainers_id = $validatedData['trainers_id'];
+            $assignStaff->slots_id = $validatedData['slots_id'];
+            $assignStaff->date = Carbon::now()->toDateString();
+            $assignStaff->save();
+        }
 
         return redirect()->back()->with('success', 'Staff assigned successfully');
     }

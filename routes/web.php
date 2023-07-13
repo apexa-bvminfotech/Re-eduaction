@@ -24,7 +24,7 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::group(['middleware'=>['auth']],function (){
     Route::resource('student', 'StudentsController');;
     Route::group(['prefix'=>'student'],function (){
-        Route::get('/staff-slot/{id}','StudentsController@sloat');
+        Route::get('/staff-slot/{id}','StudentsController@slot');
         Route::post('/assign-staff', 'StudentsController@assignStaff')->name('student.assignStaff');
     });
     Route::resource('roles', 'RoleController');
