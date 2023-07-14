@@ -26,7 +26,7 @@ class StudentsController extends Controller
         $slots = Slot::orderBy('id', 'desc')->get();
         $trainers = Trainer::orderBy('id', 'desc')->get();
         $students = Student::with('course')->orderBy('id')->paginate(10);
-        return view('student.index', compact('students','trainers','slots'))->with('i');
+        return view('student.index', compact('students', 'trainers', 'slots'))->with('i');
     }
 
     /**
@@ -39,7 +39,7 @@ class StudentsController extends Controller
         $student = Student::orderBy('id', 'desc')->get();
         $role = Role::orderBy('id', 'desc')->get();
         $course = Course::orderBy('id', 'desc')->get();
-        $trainer = Trainer::orderBy('id')->where('is_active',0)->get();
+        $trainer = Trainer::orderBy('id')->where('is_active', 0)->get();
         return view('student.create', compact('student', 'role', 'course', 'trainer'));
     }
 
@@ -74,8 +74,8 @@ class StudentsController extends Controller
             'demo_trainer_id' => 'required',
             'fees' => 'required',
             'extra_note' => 'required',
-            'analysis_trainer_id'=>'required|exists:trainers,id',
-            'course_id'=>'required|exists:courses,id'
+            'analysis_trainer_id' => 'required|exists:trainers,id',
+            'course_id' => 'required|exists:courses,id'
         ]);
         $user = User::Create([
             'surname' => $request->surname,
@@ -143,9 +143,10 @@ class StudentsController extends Controller
     public function show($id)
     {
         $student = Student::find($id);
-        $proxy_staff_detail = StudentProxyStaffAssign::find($id);
-//        dd($proxy_staff_detail);
-        return view('student.show', compact('student','proxy_staff_detail'));
+        $proxy_staff_details = $student->proxyStaffAssignments;
+//                $proxy_staff_detail = StudentProxyStaffAssign::where('student_id',$student->id)->first();
+
+        return view('student.show', compact('student', 'proxy_staff_details'));
     }
 
     /**
@@ -186,7 +187,7 @@ class StudentsController extends Controller
             'school_time_to' => 'required',
             'school_time_from' => 'required',
             'extra_tuition_time_to' => 'required',
-            'extra_tuition_time_from'=>'required',
+            'extra_tuition_time_from' => 'required',
             'dob' => 'required',
             'age' => 'required',
             'payment_condition' => 'required|max:255',
@@ -194,17 +195,17 @@ class StudentsController extends Controller
             'demo_trainer_id' => 'required',
             'fees' => 'required',
             'extra_note' => 'required',
-            'analysis_trainer_id'=>'required|exists:trainers,id',
-            'course_id'=>'required|exists:courses,id'
+            'analysis_trainer_id' => 'required|exists:trainers,id',
+            'course_id' => 'required|exists:courses,id'
         ]);
         $user = $student->user;
         $user->update([
             'name' => $request->name,
             'surname' => $request->surname,
-            'father_name'=>$request->father_name,
+            'father_name' => $request->father_name,
             'email' => $request->email_id,
-            'contact'=>$request->father_contact_no,
-            'password' =>Hash::make(strtolower($request->name) . '@123'),
+            'contact' => $request->father_contact_no,
+            'password' => Hash::make(strtolower($request->name) . '@123'),
             'type' => 2,
         ]);
         $upload_student_image = $student->upload_student_image;
@@ -263,14 +264,16 @@ class StudentsController extends Controller
         return redirect()->route('student.index')
             ->with('success', 'student deleted successfully');
     }
+
     public function slot($id)
     {
         $slots = Slot::where('trainer_id', $id)
             ->where('is_active', 0)
             ->with('rtc')
             ->get();
-        return response()->json(['slots'=>$slots]);
+        return response()->json(['slots' => $slots]);
     }
+
     public function assignStaff(Request $request)
     {
 //        dd($request->all());
@@ -291,16 +294,17 @@ class StudentsController extends Controller
 
         return redirect()->back()->with('success', 'Trainer assigned successfully');
     }
+
     public function proxySlot($id)
     {
         $proxy_slots = Slot::where('trainer_id', $id)
             ->with('rtc')
             ->get();
-        return response()->json(['slots'=>$proxy_slots]);
+        return response()->json(['slots' => $proxy_slots]);
     }
+
     public function proxyStaff(Request $request)
     {
-//        dd($request->all());
         $validatedData = $request->validate([
             'student_id' => 'required|integer',
             'trainer_id' => 'required|integer',
@@ -309,6 +313,17 @@ class StudentsController extends Controller
             'ending_date' => 'required',
         ]);
 
+        $existingProxyStaff = StudentProxyStaffAssign::where('student_id', $request->student_id)
+            ->where('starting_date', $request->starting_date)
+            ->where('ending_date', $request->ending_date)
+            ->first();
+
+        if ($existingProxyStaff) {
+            if ($existingProxyStaff->trainer_id == $request->trainer_id) {
+                return back()->with('error', 'Trainer is already assigned as proxy staff for the specified dates');
+            }
+        }
+
         $proxyStaff = new StudentProxyStaffAssign();
         $proxyStaff->student_id = $validatedData['student_id'];
         $proxyStaff->trainer_id = $validatedData['trainer_id'];
@@ -316,8 +331,8 @@ class StudentsController extends Controller
         $proxyStaff->starting_date = $validatedData['starting_date'];
         $proxyStaff->ending_date = $validatedData['ending_date'];
         $proxyStaff->save();
-//        dd($proxyStaff);
 
         return redirect()->back()->with('success', 'Proxy-Trainer assigned successfully');
     }
+
 }

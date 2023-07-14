@@ -184,13 +184,13 @@
                                     <div class="col-md-12 mb-1">
                                         <div class="form-group">
                                             <label for="start_date">Starting Date:</label>
-                                            <input type="date" class="form-control" name="starting_date">
+                                            <input type="date" class="form-control" name="starting_date" value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}">
                                         </div>
                                     </div>
                                     <div class="col-md-12 mb-1">
                                         <div class="form-group">
                                             <label for="end_date">Ending Date:</label>
-                                            <input type="date" class="form-control" name="ending_date">
+                                            <input type="date" class="form-control" name="ending_date" value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}">
                                         </div>
                                     </div>
                                 </div>

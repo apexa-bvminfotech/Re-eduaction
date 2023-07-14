@@ -53,7 +53,8 @@
                                             Information</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">School
                                             Detail</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#proxy_detail" data-toggle="tab">Proxy staff Details</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#proxy_detail" data-toggle="tab">Proxy
+                                            staff Details</a></li>
                                 </ul>
                                 <a href="{{ route('student.index') }}"
                                    class="col-1 btn btn-primary float-right">Back</a>
@@ -143,27 +144,29 @@
                                     </div>
                                     <div class="tab-pane" id="proxy_detail">
                                         <div class="post">
-                                            <table class="table">
+                                            <table class="table table-striped">
+                                                <thead>
                                                 <tr>
-                                                    <th><b>Student name:</b></th>
-                                                    <td>{{$proxy_staff_detail->student_id}}</td>
-                                                </tr>
-                                                <tr>
+                                                    <th><b>Student Id:</b></th>
                                                     <th><b>Trainer name:</b></th>
-                                                    <td>{{$student->trainer->name}}</td>
-                                                </tr>
-                                                <tr>
                                                     <th><b>Slot name:</b></th>
-                                                    <td>{{$proxy_staff_detail->slot_id}}</td>
-                                                </tr>
-                                                <tr>
                                                     <th><b>Starting Date:</b></th>
-                                                    <td>{{$proxy_staff_detail->starting_date}}</td>
-                                                </tr>
-                                                <tr>
                                                     <th><b>Ending Date:</b></th>
-                                                    <td>{{$proxy_staff_detail->ending_date}}</td>
                                                 </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                @foreach($proxy_staff_details as $psd)
+                                                    <tr>
+                                                        <td>{{$psd->student_id}}</td>
+                                                        <td>{{$psd->trainer_id}}</td>
+                                                        <td>{{$psd->slot_id}}</td>
+                                                        <td>{{$psd->starting_date}}</td>
+                                                        <td>{{$psd->ending_date}}</td>
+                                                    </tr>
+                                                @endforeach
+
+                                                </tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -181,7 +184,8 @@
                             <div class="card-body">
                                 <table class="table table-bordered table-striped">
                                     <tr>
-                                        <th class="text-center bg-info" colspan="4" style="font-size: 20px">Gujarati</th>
+                                        <th class="text-center bg-info" colspan="4" style="font-size: 20px">Gujarati
+                                        </th>
                                     </tr>
                                     <tr>
                                         <td style="padding-top: 15px; padding-left: 120px">Before</td>

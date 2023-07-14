@@ -25,4 +25,10 @@ class Student extends Model
     {
         return $this->hasMany(StudentAttendance::class);
     }
+
+    public function proxyStaffAssignments()
+    {
+        return $this->hasMany(StudentProxyStaffAssign::class, 'student_id');
+    }
+
 }
