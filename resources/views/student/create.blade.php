@@ -191,31 +191,35 @@
                                                             <br>
                                                             <div class="form-check form-check-inline">
                                                                 <input type="checkbox" value="gujarati"
+                                                                       {{ old("medium") === 'gujarati' ? 'checked' : '' }}
                                                                        name="medium"
-                                                                       class="form-check" {{ old("medium") == 'gujarati' ? 'checked' : '' }}>
+                                                                       class="form-check medium-list">
                                                                 <label class="form-check-label"
                                                                        for="medium_gujarati">&nbsp;&nbsp;
                                                                     Gujarati
                                                                 </label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <input type="checkbox" value="hindi" name="medium"
-                                                                       class="form-check-input" {{ old("medium") == 'hindi' ? 'checked' : '' }}>
+                                                                <input type="checkbox" value="hindi"
+                                                                       {{ old("medium") === 'hindi' ? 'checked' : '' }} name="medium"
+                                                                       class="form-check-input medium-list">
                                                                 <label class="form-check-label" for="medium_hindi">
                                                                     Hindi
                                                                 </label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <input type="checkbox" value="english" name="medium"
-                                                                       class="form-check-input" {{ old("medium") == 'english' ? 'checked' : '' }}>
+                                                                <input type="checkbox" value="english"
+                                                                       {{ old("medium") === 'english' ? 'checked' : '' }} name="medium"
+                                                                       class="form-check-input medium-list">
                                                                 <label class="form-check-label"
                                                                        for="medium_english">
                                                                     English
                                                                 </label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <input type="checkbox" value="gujlish" name="medium"
-                                                                       class="form-check-input" {{ old("medium") == 'gujlish' ? 'checked' : '' }}>
+                                                                <input type="checkbox" value="gujlish"
+                                                                       {{ old("medium") === 'gujlish' ? 'checked' : '' }} name="medium"
+                                                                       class="form-check-input medium-list">
                                                                 <label class="form-check-label"
                                                                        for="medium_gujlish">
                                                                     Gujlish
@@ -547,12 +551,10 @@
     </div>
 @endsection
 @push('scripts')
-    <script>
-        // var loadFile = function (event) {
-        //     var image = document.getElementById("profilePic");
-        //     image.src = URL.createObjectURL(event.target.files[0]);
-        // };
-
+    <script type="text/javascript">
+        $('.medium-list').on('change', function() {
+            $('.medium-list').not(this).prop('checked', false);
+        });
         function isNumber(evt) {
             evt = (evt) ? evt : window.event;
             var charCode = (evt.which) ? evt.which : evt.keyCode;
@@ -561,14 +563,12 @@
             }
             return true;
         }
-
         function ageValidation() {
             var x = document.getElementById("txtAge").value;
             if (x < 1 || x > 20) {
                 alert("enter age between 1 to 20")
             }
         }
-
         $(document).ready(function () {
 
             $('#timepicker').datetimepicker({

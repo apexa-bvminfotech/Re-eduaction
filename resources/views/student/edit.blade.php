@@ -193,7 +193,7 @@
                                                             <div class="form-check form-check-inline">
                                                                 <input type="checkbox" name="medium" value="gujarati"
                                                                        {{ $student->medium == 'gujarati' ? 'checked' :'' }}
-                                                                       class="form-check-input">
+                                                                       class="form-check-input medium-list">
                                                                 <label class="form-check-label"
                                                                        for="medium_gujarati">
                                                                     Gujarati
@@ -202,7 +202,7 @@
                                                             <div class="form-check form-check-inline">
                                                                 <input type="checkbox" name="medium" value="hindi"
                                                                        {{ $student->medium == 'hindi' ? 'checked' :'' }}
-                                                                       class="form-check-input">
+                                                                       class="form-check-input medium-list">
                                                                 <label class="form-check-label" for="medium_hindi">
                                                                     Hindi
                                                                 </label>
@@ -210,7 +210,7 @@
                                                             <div class="form-check form-check-inline">
                                                                 <input type="checkbox" name="medium" value="english"
                                                                        {{ $student->medium == 'english' ? 'checked' :'' }}
-                                                                       class="form-check-input">
+                                                                       class="form-check-input medium-list">
                                                                 <label class="form-check-label"
                                                                        for="medium_english">
                                                                     English
@@ -219,7 +219,7 @@
                                                             <div class="form-check form-check-inline">
                                                                 <input type="checkbox" name="medium" value="gujlish"
                                                                        {{ $student->medium == 'gujlish' ? 'checked' :'' }}
-                                                                       class="form-check-input">
+                                                                       class="form-check-input medium-list">
                                                                 <label class="form-check-label"
                                                                        for="medium_gujlish">
                                                                     Gujlish
@@ -527,9 +527,7 @@
                                         </div>
                                     </form>
                                 </div>
-                                <!-- /.card-body -->
                             </div>
-                            {{--                            {!! Form::close() !!}--}}
                         </div>
                     </div>
                 </div>
@@ -538,7 +536,11 @@
     </div>
 @endsection
 @push('scripts')
-    <script>
+    <script type="text/javascript">
+        $('.medium-list').on('change', function() {
+            $('.medium-list').not(this).prop('checked', false);
+        });
+
         function isNumber(evt) {
             evt = (evt) ? evt : window.event;
             var charCode = (evt.which) ? evt.which : evt.keyCode;

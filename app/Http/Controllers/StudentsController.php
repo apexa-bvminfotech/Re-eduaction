@@ -136,7 +136,10 @@ class StudentsController extends Controller
     public function show($id)
     {
         $student = Student::find($id);
-        return view('student.show', compact('student'));
+        $trainer = Trainer::find($id);
+        $assignStaff = StudentStaffAssign::orderBy('id')->where('student_id', $student->id)
+                                            ->where('trainers_id',$trainer->id)->get();
+        return view('student.show', compact('student', 'assignStaff','trainer'));
     }
 
     /**

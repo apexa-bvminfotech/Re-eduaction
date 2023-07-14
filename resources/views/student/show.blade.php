@@ -37,7 +37,7 @@
                                         <b>Course:</b> <a class="float-right">{{$student->course->course_name}}</a>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>Demo taken:</b> <a class="float-right">{{$student->trainer->name}}</a>
+                                        <b>Demo taken:</b> <a class="float-right">{{$student->trainer->name ?? ''}}</a>
                                     </li>
                                 </ul>
                             </div>
@@ -53,6 +53,8 @@
                                             Information</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">School
                                             Detail</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#timeline1" data-toggle="tab">Assign
+                                            Staff</a></li>
                                 </ul>
                                 <a href="{{ route('student.index') }}"
                                    class="col-1 btn btn-primary float-right">Back</a>
@@ -108,8 +110,8 @@
                                                 <tr>
                                                     <th><b>Upload PDF:</b></th>
                                                     <td>{{$student->upload_analysis}}</td>
-                                                    <th><b>Reference By:</b></th>
-                                                    <td>{{$student->reference_by}}</td>
+                                                    <th><b>Courses:</b></th>
+                                                    <td>{{$student->course->course_name}}</td>
                                                 </tr>
                                             </table>
                                         </div>
@@ -118,8 +120,8 @@
                                         <div class="post">
                                             <table class="table">
                                                 <tr>
-                                                    <th><b>Courses:</b></th>
-                                                    <td>{{$student->course->course_name}}</td>
+                                                    <th><b>Reference By:</b></th>
+                                                    <td>{{$student->reference_by}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th><b>Role:</b></th>
@@ -131,12 +133,36 @@
                                                 </tr>
                                                 <tr>
                                                     <th><b>Analysis Staff Name:</b></th>
-                                                    <td>{{$student->trainer->name}}</td>
+                                                    <td>{{$student->trainer->name ?? ''}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th><b>Demo Taken By:</b></th>
-                                                    <td>{{$student->trainer->name}}</td>
+                                                    <td>{{$student->trainer->name ?? ''}}</td>
                                                 </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="timeline1">
+                                        <div class="post">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                <tr>
+                                                    <th><b>Assign Staff name</b></th>
+                                                    <th><b>Slot:</b></th>
+                                                    <th><b>Date:</b></th>
+                                                    <th><b>Status</b></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                @foreach($assignStaff as $key => $as)
+                                                    <tr>
+                                                        <td>{{$as->trainers_id}}</td>
+                                                        <td>{{$as->slots_id}}</td>
+                                                        <td>{{$as->date}}</td>
+                                                        <td>{!! $as->is_active === 0 ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
+                                                    </tr>
+                                                @endforeach
+                                                </tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -154,7 +180,8 @@
                             <div class="card-body">
                                 <table class="table table-bordered table-striped">
                                     <tr>
-                                        <th class="text-center bg-info" colspan="4" style="font-size: 20px">Gujarati</th>
+                                        <th class="text-center bg-info" colspan="4" style="font-size: 20px">Gujarati
+                                        </th>
                                     </tr>
                                     <tr>
                                         <td style="padding-top: 15px; padding-left: 120px">Before</td>

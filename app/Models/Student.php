@@ -25,4 +25,8 @@ class Student extends Model
     {
         return $this->hasMany(StudentAttendance::class);
     }
+    public function studentAssign()
+    {
+        return $this->hasOne(StudentStaffAssign::class);
+    }
 }

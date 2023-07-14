@@ -97,7 +97,7 @@
                                     <input type="hidden" name="student_id" class="form-control student_id" value="">
                                     <div class="col-md-12 mb-1">
                                         <label for="name">Trainer Name: </label>
-                                        <select class="form-control staff_id" name="trainers_id" required>
+                                        <select class="form-control select2 staff_id" name="trainers_id" required>
                                             <option value="0">------Select Trainer-----</option>
                                             @foreach($trainers as $key =>$trainer)
                                                 @if($trainer->is_active == 0)
@@ -109,7 +109,7 @@
                                     </div>
                                     <div class="col-md-12 mb-1">
                                         <label for="name">Slot: </label>
-                                        <select class="form-control slot" name="slots_id" required>
+                                        <select class="form-control select2 slot" name="slots_id" required>
                                             <option value="">------Select Slot-----</option>
                                             @foreach($slots as $key =>$s)
                                                 @if($s->is_active == 0)
