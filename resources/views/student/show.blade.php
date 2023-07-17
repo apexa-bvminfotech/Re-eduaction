@@ -55,6 +55,8 @@
                                             Detail</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#timeline1" data-toggle="tab">Assign
                                             Staff</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#timeline2" data-toggle="tab">Student
+                                            Attendance Show</a></li>
                                 </ul>
                                 <a href="{{ route('student.index') }}"
                                    class="col-1 btn btn-primary float-right">Back</a>
@@ -156,11 +158,33 @@
                                                 <tbody>
                                                 @foreach($assignStaff as $key => $as)
                                                     <tr>
-                                                        <td>{{$as->trainers_id}}</td>
-                                                        <td>{{$as->slots_id}}</td>
+                                                        <td>{{$as->trainer->name}}</td>
+                                                        <td>{{$as->slot->slot_time}}</td>
                                                         <td>{{$as->date}}</td>
                                                         <td>{!! $as->is_active === 0 ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
                                                     </tr>
+                                                @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="timeline2">
+                                        <div class="post">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                <tr>
+                                                    <th><b>Absent Date:</b></th>
+                                                    <th><b>Absent Reason:</b></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                @foreach($studentAttendance as $key => $st)
+                                                    @if ($st->absent_reason)
+                                                        <tr>
+                                                            <td>{{$st->attendance_date}}</td>
+                                                            <td>{{$st->absent_reason}}</td>
+                                                        </tr>
+                                                    @endif
                                                 @endforeach
                                                 </tbody>
                                             </table>

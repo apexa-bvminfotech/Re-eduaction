@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\Slot;
+use App\Models\StudentAttendance;
 use App\Models\Trainer;
 use App\Models\StudentStaffAssign;
 use App\Models\Rtc;
@@ -124,7 +125,7 @@ class StudentsController extends Controller
             'upload_student_image' => $upload_student_image,
             'user_id' => $user->id,
         ]);
-        return redirect()->route('student.index')->with('success', 'student created successfully');
+           return redirect()->route('student.index')->with('success', 'student created successfully');
     }
 
     /**
@@ -136,10 +137,9 @@ class StudentsController extends Controller
     public function show($id)
     {
         $student = Student::find($id);
-        $trainer = Trainer::find($id);
-        $assignStaff = StudentStaffAssign::orderBy('id')->where('student_id', $student->id)
-                                            ->where('trainers_id',$trainer->id)->get();
-        return view('student.show', compact('student', 'assignStaff','trainer'));
+        $assignStaff = StudentStaffAssign::orderBy('id')->where('student_id', $student->id)->With('Trainer','Slot')->get();
+        $studentAttendance = StudentAttendance::orderBy('id')->where('student_id',$student->id)->get();
+        return view('student.show', compact('student', 'assignStaff','studentAttendance'));
     }
 
     /**
@@ -264,19 +264,20 @@ class StudentsController extends Controller
     {
         $validatedData = $request->validate([
             'student_id' => 'required|integer',
-            'trainers_id' => 'required|integer',
-            'slots_id' => 'required|integer',
+            'trainer_id' => 'required|integer',
+            'slot_id' => 'required|integer',
         ]);
+//        dd($validatedData);
         $student = StudentStaffAssign::where('student_id', $request->student_id)->where('is_active', 0)->first();
 
         if ($student) {
-            if ($student->trainers_id == $request->trainers_id) {
+            if ($student->trainer_id == $request->trainer_id) {
                 return back()->with('error', 'Trainer is already Assigned');
             }
             $student->update([
                 'is_active' => 1,
             ]);
-            $check = StudentStaffAssign::where(['student_id' => $request->student_id, 'trainers_id' => $validatedData['trainers_id']])->where('is_active', 1)->first();
+            $check = StudentStaffAssign::where(['student_id' => $request->student_id, 'trainer_id' => $validatedData['trainer_id']])->where('is_active', 1)->first();
             if ($check) {
                 $check->update([
                     'is_active' => 0,
@@ -284,8 +285,8 @@ class StudentsController extends Controller
             } else {
                 $assignStaff = new StudentStaffAssign();
                 $assignStaff->student_id = $validatedData['student_id'];
-                $assignStaff->trainers_id = $validatedData['trainers_id'];
-                $assignStaff->slots_id = $validatedData['slots_id'];
+                $assignStaff->trainer_id = $validatedData['trainer_id'];
+                $assignStaff->slot_id = $validatedData['slot_id'];
                 $assignStaff->date = Carbon::now()->toDateString();
                 $assignStaff->save();
             }
@@ -293,8 +294,8 @@ class StudentsController extends Controller
         } else {
             $assignStaff = new StudentStaffAssign();
             $assignStaff->student_id = $validatedData['student_id'];
-            $assignStaff->trainers_id = $validatedData['trainers_id'];
-            $assignStaff->slots_id = $validatedData['slots_id'];
+            $assignStaff->trainer_id = $validatedData['trainer_id'];
+            $assignStaff->slot_id = $validatedData['slot_id'];
             $assignStaff->date = Carbon::now()->toDateString();
             $assignStaff->save();
         }

@@ -19,5 +19,9 @@ class StudentStaffAssign extends Model
     {
         return $this->belongsTo(Trainer::class);
     }
+    public function slot()
+    {
+        return $this->belongsTo(Slot::class);
+    }
 
 }

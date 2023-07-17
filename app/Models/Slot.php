@@ -27,4 +27,8 @@ class Slot extends Model
     public function branch(){
         return $this->belongsTo(Branch::class);
     }
+    public function studentAssign()
+    {
+        return $this->hasOne(StudentStaffAssign::class);
+    }
 }

@@ -130,7 +130,7 @@
 
                                         </div>
                                         <div class="form-group mb-2 float-right">
-                                            <button type="submit" class="btn btn-primary mr-2">Update</button>
+                                            <button type="submit" class="btn btn-success mr-2">Update</button>
                                             <a href="{{ route('course.index') }}" class="btn btn-danger">Cancel</a>
                                         </div>
                                     </form>

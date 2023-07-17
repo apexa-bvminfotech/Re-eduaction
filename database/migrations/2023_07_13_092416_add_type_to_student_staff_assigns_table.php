@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('student_staff_assigns', function (Blueprint $table) {
-            $table->string('type');
+            $table->dropColumn('type');
         });
     }
 
@@ -26,7 +26,6 @@ return new class extends Migration
     public function down()
     {
         Schema::table('student_staff_assigns', function (Blueprint $table) {
-            $table->dropColumn('type');
         });
     }
 };

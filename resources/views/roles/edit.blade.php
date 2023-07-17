@@ -57,7 +57,7 @@
                                 </div>
                             </div>
                             <div class="card-footer justify-content-end d-flex" >
-                                <button type="submit" class="btn btn-primary mr-2">Update</button>
+                                <button type="submit" class="btn btn-success mr-2">Update</button>
                                 <a href="{{ route('roles.index') }}" class="btn btn-danger">Cancel</a>
                             </div>
                             {!! Form::close() !!}
