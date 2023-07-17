@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\StudentProxyStaffAssign;
 use App\Models\Trainer;
 use App\Models\TrainerAttendance;
 use Illuminate\Http\Request;
@@ -46,7 +47,13 @@ class TrainerAttendanceController extends Controller
     public function create()
     {
         $trainer = Trainer::orderBy('id','DESC')->get();
-        return view('trainer_attendance.create',compact('trainer'));
+
+        $proxyStaff = StudentProxyStaffAssign::orderBy('id','DESC')->whereDate('starting_date', now()->format('Y-m-d'))->with('trainer')
+            ->get()->groupBy('trainer.name');
+//        dd($proxyStaff);
+//        $trainerSlots = $proxyStaff->groupBy('trainer_id');
+//        dd($trainerSlots);
+        return view(    'trainer_attendance.create',compact('trainer','proxyStaff'));
     }
 
     /**
@@ -101,8 +108,9 @@ class TrainerAttendanceController extends Controller
             ->join('trainers','trainers.id','trainer_attendance.trainers_id')
             ->orderBy('trainer_attendance.id','DESC')->get();
         $trainer = Trainer::orderBy('id','DESC')->get();
+        $proxyStaff = StudentProxyStaffAssign::orderBy('id','DESC')->whereDate('starting_date', now()->format('Y-m-d'))->with('trainer')->get();
         if($trainerAttendance){
-            return view('trainer_attendance.edit',compact('trainerAttendance','EditDate'));
+            return view('trainer_attendance.edit',compact('trainerAttendance','EditDate','proxyStaff'));
         } else {
             return view('trainer_attendance.create',compact('trainer'));
         }

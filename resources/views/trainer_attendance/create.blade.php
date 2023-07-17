@@ -41,7 +41,8 @@
                                             <div class="form-group col-md-4">
                                                 <div class="form-group mb-3">
                                                     <label for="example-date">Date</label>
-                                                    <input class="form-control" type="date" value="{{ date('Y-m-d') }}" max="{{now()->format('Y-m-d')}}"
+                                                    <input class="form-control" type="date" value="{{ date('Y-m-d') }}"
+                                                           max="{{now()->format('Y-m-d')}}"
                                                            name="date" required>
                                                 </div>
                                             </div>
@@ -84,9 +85,68 @@
                                                     </div>
                                                 </div>
                                             @endforeach
+                                            @foreach($proxyStaff as $key => $proxy)
+                                                <div class="row">
+                                                <div class="col-md-2">
+                                                    <div class="form-group mb-3">
+                                                        <label for="simpleinput">Proxy-Trainer name</label>
+
+                                                        <input type="text" readonly
+                                                               name="data[{{ $key }}][trainer_name]"
+                                                               value="{{ $key }}"
+                                                               class="form-control">
+                                                    </div>
+                                                </div>
+                                                </div>
+                                                @foreach($proxy as $proxykey => $p)
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <div class="form-group mb-3">
+                                                                <label for="simpleinput">Proxy-slot Time</label>
+                                                                <input type="hidden" readonly
+                                                                       name="data[{{ $proxykey }}][trainer_id]"
+                                                                       value="{{ $p->trainer_id }}"
+                                                                       class="form-control">
+                                                                <input type="text" readonly
+                                                                       name="data[{{ $proxykey }}][trainer_name]"
+                                                                       value="{{ $p->slot->slot_time }}"
+                                                                       class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="form-group mb-3">
+                                                                <label for="simpleinput">Attendance</label>
+                                                                <br>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio"
+                                                                           name="data[{{ $proxykey }}][attendance]"
+                                                                           value="0"
+                                                                           checked>
+                                                                    <label class="form-check-label" for="inlineRadio1">Present</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio"
+                                                                           name="data[{{ $proxykey }}][attendance]"
+                                                                           value="1">
+                                                                    <label class="form-check-label" for="inlineRadio2">Absent</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group mb-3">
+                                                                <label for="simpleinput">Absent reason</label>
+                                                                <input type="text"
+                                                                       name="data[{{ $proxykey }}][absent_reason]"
+                                                                       class="form-control">
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                @endforeach
+                                            @endforeach
                                         </div>
                                         <div class="form-group mb-2 float-right">
-                                            <button type="submit" class="btn btn-success mr-2">Create</button>
+                                            <button type="submit" class="btn btn-success mr-1">Create</button>
                                             <a href="{{ route('trainer_attendance.index') }}" class="btn btn-danger">Cancel</a>
                                         </div>
                                         {!! Form::close() !!}
