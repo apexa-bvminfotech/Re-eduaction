@@ -147,9 +147,8 @@
                                             <table class="table table-striped">
                                                 <thead>
                                                 <tr>
-                                                    <th><b>Student Id:</b></th>
-                                                    <th><b>Trainer name:</b></th>
-                                                    <th><b>Slot name:</b></th>
+                                                    <th><b>ProxyTrainer Name:</b></th>
+                                                    <th><b>Slot Time:</b></th>
                                                     <th><b>Starting Date:</b></th>
                                                     <th><b>Ending Date:</b></th>
                                                 </tr>
@@ -158,9 +157,8 @@
                                                 <tbody>
                                                 @foreach($proxy_staff_details as $psd)
                                                     <tr>
-                                                        <td>{{$psd->student_id}}</td>
-                                                        <td>{{$psd->trainer_id}}</td>
-                                                        <td>{{$psd->slot_id}}</td>
+                                                        <td>{{$psd->trainer->name}}</td>
+                                                        <td>{{$psd->slot->slot_time}}</td>
                                                         <td>{{$psd->starting_date}}</td>
                                                         <td>{{$psd->ending_date}}</td>
                                                     </tr>

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\StudentProxyStaffAssign;
+use App\Models\StudentStaffAssign;
 use App\Models\Trainer;
 use App\Models\TrainerAttendance;
+use App\Models\TrainerSlotWiseAttendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -30,13 +32,15 @@ class TrainerAttendanceController extends Controller
      */
     public function index()
     {
-        $trainerAttendance = DB::table("trainer_attendance")
-            ->select('trainer_attendance.date',DB::raw('count(IF(attendance = 0, 1, NULL)) as present'),
-                DB::raw('count(IF(attendance = 1, 1, NULL)) as absent'))
-            ->groupBy('trainer_attendance.date')
-            ->orderBy('trainer_attendance.id','DESC')->get();
+//        $trainerAttendance = DB::table("trainer_attendances")
+//            ->select('trainer_attendances.date',DB::raw('count(IF(attendance = 0, 1, NULL)) as present'),
+//                DB::raw('count(IF(attendance = 1, 1, NULL)) as absent'))
+//            ->groupBy('trainer_attendances.date')
+//            ->orderBy('trainer_attendances.id','DESC')->get();
+        $trainerAttendance = TrainerAttendance::orderBy('id','DESC');
 
-        return view('trainer_attendance.index',compact('trainerAttendance'))->with('i');
+
+        return view('trainer_attendance.index',compact('trainerAttendance'));
     }
 
     /**
@@ -47,13 +51,15 @@ class TrainerAttendanceController extends Controller
     public function create()
     {
         $trainer = Trainer::orderBy('id','DESC')->get();
-
+        $studentStaffAssign = StudentStaffAssign::orderBy('id','DESC')->with('trainer')->get()->groupBy('trainer.name');
+//        dd($studentStaffAssign);
         $proxyStaff = StudentProxyStaffAssign::orderBy('id','DESC')->whereDate('starting_date', now()->format('Y-m-d'))->with('trainer')
             ->get()->groupBy('trainer.name');
 //        dd($proxyStaff);
-//        $trainerSlots = $proxyStaff->groupBy('trainer_id');
+        $trainerSlotWise = TrainerSlotWiseAttendance::orderBy('id','DESC')->get();
+
 //        dd($trainerSlots);
-        return view(    'trainer_attendance.create',compact('trainer','proxyStaff'));
+        return view(    'trainer_attendance.create',compact('trainer','proxyStaff','studentStaffAssign','trainerSlotWise'));
     }
 
     /**

@@ -13,13 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('trainer_attendance', function (Blueprint $table) {
+        Schema::create('trainer_slot_wise_attendances', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('trainers_id')->constrained('trainers')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->integer('attendance');
+            $table->foreignId('trainer_attendance_id')->constrained('trainer_attendances')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('slot_id')->constrained('slots')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->boolean('status');
             $table->string('absent_reason')->nullable();
-            $table->date('date');
-            $table->bigInteger('user_id');
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('trainer_attendance');
+        Schema::dropIfExists('trainer_slot_wise_attendances');
     }
 };

@@ -11,5 +11,14 @@ class StudentStaffAssign extends Model
 
     protected $guarded = ['id'];
 
+    public function trainer()
+    {
+        return $this->belongsTo(Trainer::class);
+    }
+    public function slot()
+    {
+        return $this->belongsTo(Slot::class);
+    }
+
 
 }
