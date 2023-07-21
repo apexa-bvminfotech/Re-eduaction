@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Models\Slot;
 use App\Models\StudentAttendance;
+use App\Models\StudentCourseComplete;
+use App\Models\SubCourse;
+use App\Models\SubCoursePoint;
 use App\Models\Trainer;
 use App\Models\StudentStaffAssign;
 use App\Models\Rtc;
@@ -125,7 +128,7 @@ class StudentsController extends Controller
             'upload_student_image' => $upload_student_image,
             'user_id' => $user->id,
         ]);
-           return redirect()->route('student.index')->with('success', 'student created successfully');
+        return redirect()->route('student.index')->with('success', 'student created successfully');
     }
 
     /**
@@ -137,9 +140,9 @@ class StudentsController extends Controller
     public function show($id)
     {
         $student = Student::find($id);
-        $assignStaff = StudentStaffAssign::orderBy('id')->where('student_id', $student->id)->With('Trainer','Slot')->get();
-        $studentAttendance = StudentAttendance::orderBy('id')->where('student_id',$student->id)->get();
-        return view('student.show', compact('student', 'assignStaff','studentAttendance'));
+        $assignStaff = StudentStaffAssign::orderBy('id')->where('student_id', $student->id)->With('Trainer', 'Slot')->get();
+        $studentAttendance = StudentAttendance::orderBy('id')->where('student_id', $student->id)->get();
+        return view('student.show', compact('student', 'assignStaff', 'studentAttendance'));
     }
 
     /**
@@ -281,6 +284,7 @@ class StudentsController extends Controller
             if ($check) {
                 $check->update([
                     'is_active' => 0,
+                    'date' => now(),
                 ]);
             } else {
                 $assignStaff = new StudentStaffAssign();
@@ -290,7 +294,6 @@ class StudentsController extends Controller
                 $assignStaff->date = Carbon::now()->toDateString();
                 $assignStaff->save();
             }
-
         } else {
             $assignStaff = new StudentStaffAssign();
             $assignStaff->student_id = $validatedData['student_id'];
@@ -302,4 +305,36 @@ class StudentsController extends Controller
 
         return redirect()->back()->with('success', 'Staff assigned successfully');
     }
+
+    public function saveData(Request $request)
+    {
+//        dd($request->all());
+        $validatedData = $request->validate([
+            'student_id' => 'required',
+//            'trainer_id'=>'required',
+            'course_id' => 'required',
+            'subCourseId' => 'required',
+            'pointId' => 'required',
+            'trainer_confirm_date'=>'required',
+        ]);
+
+//        dd($request->all());
+        $studentCourseComplete = new StudentCourseComplete();
+        $studentCourseComplete->student_id = $validatedData['student_id'];
+        // Add any other relevant data fields here
+        $studentCourseComplete->course_id = $validatedData['course_id'];
+        $studentCourseComplete->sub_course_id = $validatedData['subCourseId'];
+        $studentCourseComplete->sub_course_point_id = $validatedData['pointId'];
+        $studentCourseComplete->trainer_confirm_date = $validatedData['trainer_confirm_date'];
+
+        // Save the data into the database
+        $studentCourseComplete->save();
+        return response()->json([
+            'message' => 'Data saved successfully',
+        ]);
+    }
 }
+
+
+
+

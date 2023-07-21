@@ -26,6 +26,7 @@ Route::group(['middleware'=>['auth']],function (){
     Route::group(['prefix'=>'student'],function (){
         Route::get('/staff-slot/{id}','StudentsController@slot');
         Route::post('/assign-staff', 'StudentsController@assignStaff')->name('student.assignStaff');
+        Route::post('/save-checkbox-data','StudentsController@saveData')->name('student.saveData');
     });
     Route::resource('roles', 'RoleController');
     Route::resource('trainer', 'TrainerController');
@@ -38,10 +39,9 @@ Route::group(['middleware'=>['auth']],function (){
     Route::resource('subCourse', 'SubCourseController')->only(['destroy']);
     Route::resource('user','UserController');
     Route::resource('branch','BranchController');
-
     Route::get('changeRtcStatus', 'RtcController@changeRtcStatus');
     Route::get('changeSlotStatus', 'SlotController@changeSlotStatus');
-    Route::get('changeStaffStatus', 'StaffController@changeStaffStatus');
+//    Route::get('changeStaffStatus', 'StaffController@changeStaffStatus');
     Route::get('changeUserStatus','UserController@changeUserStatus');
     Route::get('changeTrainerStatus','TrainerController@changeTrainerStatus');
 

@@ -197,67 +197,74 @@
                 </div>
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="text-dark"><b><i>Courses</i></b></h2></div>
+                        <h2 class="text-dark" ><b><i>Courses</i></b></h2></div>
                     <div class="row">
                         <div class="col-sm-12">
                             {{--                            <div class="card">--}}
                             <div class="card-body">
-                                <table class="table table-bordered table-striped">
+                                <table class="table table-bordered table-striped" id="courseTable" data-CourseId ="{{$student->course->id}}">
                                     @foreach($student->course->subcourses as $key =>$sc)
                                         <tr>
                                             <th class="bg-info">
-                                                <div class="custom-control custom-checkbox"
-                                                     style="padding-left: 140px;">
-                                                    <input class="custom-control-input" type="checkbox"
-                                                           id="customCheckbox">
-                                                    <label for="customCheckbox" class="custom-control-label"></label>
+                                                <div class="custom-control custom-checkbox text-center">
+                                                    <input class="custom-control-input sub-course-checkbox"
+                                                           type="checkbox"
+                                                           id="customCheckbox_{{$loop->iteration}}">
+                                                    <label for="customCheckbox_{{$loop->iteration}}"
+                                                           class="custom-control-label"></label>
                                                 </div>
                                             </th>
-                                            <th class="text-center bg-info" colspan="2"
+                                            <th class="text-center bg-info" colspan="3"
                                                 style="font-size: 20px">{{$sc->sub_course_name}}
                                             </th>
                                             <th class="bg-info">
-                                                <div class="custom-control custom-checkbox"
-                                                     style="padding-left: 40px;">
-                                                    <input class="custom-control-input" type="checkbox"
-                                                           id="customCheckbox">
-                                                    <label for="customCheckbox" class="custom-control-label"></label>
+                                                <div class="custom-control custom-checkbox text-center">
+                                                    <input class="custom-control-input sub-course-checkbox"
+                                                           type="checkbox"
+                                                           id="customCheckbox1_{{$loop->iteration}}"
+                                                           data-subCourseId="{{$sc->id}}" data-pointId="0">
+                                                    <label for="customCheckbox1_{{$loop->iteration}}"
+                                                           class="custom-control-label"></label>
                                                 </div>
                                             </th>
                                         </tr>
                                         <tr>
-                                            <td style="padding-top: 15px; padding-left: 120px">
-                                                Before
+                                            <td class="text-center">
+                                                <b> Before </b>
                                             </td>
                                             <td class="text-center"
-                                                style="padding-top: 35px"><b></b></td>
-                                            <td style="padding-top: 15px; padding-left: 120px">
-                                                After
+                                            ><b>Points</b></td>
+                                            <td class="text-center"><b>Trainer Confirm Date</b></td>
+                                            <td class="text-center"><b>User Confirm Date</b></td>
+                                            <td class="text-center">
+                                                <b> After </b>
                                             </td>
-                                            <td class="text-center" style="padding-top: 35px">Date</td>
                                         </tr>
                                         @foreach($sc->points as $key =>$sp)
                                             <tr>
                                                 <td>
-                                                    <div class="custom-control custom-checkbox"
-                                                         style="padding-left: 150px;">
-                                                        <input class="custom-control-input" type="checkbox"
-                                                               id="customCheckbox2">
-                                                        <label for="customCheckbox2"
+                                                    <div class="custom-control custom-checkbox text-center">
+                                                        <input class="custom-control-input point-checkbox"
+                                                               type="checkbox"
+                                                               id="customCheckbox2_{{$loop->iteration}}">
+                                                        <label for="customCheckbox2_{{$loop->iteration}}"
                                                                class="custom-control-label"></label>
                                                     </div>
                                                 </td>
                                                 <td class="text-center">{{$sp->sub_point_name}}</td>
+                                                <td class="text-center">{{\Carbon\Carbon::now()}}</td>
+                                                <td class="text-center">{{\Carbon\Carbon::now()}}</td>
                                                 <td>
-                                                    <div class="custom-control custom-checkbox"
-                                                         style="padding-left: 150px;">
-                                                        <input class="custom-control-input" type="checkbox"
-                                                               id="customCheckbox3">
-                                                        <label for="customCheckbox3"
+                                                    <div class="custom-control custom-checkbox text-center">
+                                                        <input class="custom-control-input point-checkbox"
+                                                               type="checkbox"
+                                                               id="customCheckbox3_{{$loop->iteration}}"
+                                                               data-subCourseId="{{$sc->id}}"
+                                                               data-pointId="{{$sp->id}}">
+                                                        <label for="customCheckbox3_{{$loop->iteration}}"
                                                                class="custom-control-label"></label>
                                                     </div>
                                                 </td>
-                                                <td class="text-center">--</td>
                                             </tr>
                                         @endforeach
                                     @endforeach
@@ -266,11 +273,13 @@
                             {{--                            </div>--}}
                         </div>
                     </div>
+                    <div id="result"></div>
                 </div>
             </div>
             {{--            </div>--}}
         </section>
     </div>
+    {{--    <div id="result"></div>--}}
 @endsection
 @push('styles')
     <style>
@@ -283,6 +292,38 @@
         .topics {
             padding-top: 300px;
         }
-
     </style>
+@endpush
+@push('scripts')
+    <script>
+
+        $(document).ready(function () {
+            $(document).on('click', '.custom-control-input', function () {
+
+                $.ajax({
+                    url: "{{route('student.saveData')}}", // Replace with the correct route URL
+                    method: 'POST',
+                    data: {
+                        "_token": "{{csrf_token()}}",
+                        "student_id": "{{$student->id}}",
+                        "course_id":"{{$student->course->id}}",
+                        "subCourseId": $(this).data('subcourseid'),
+                        "pointId": $(this).data('pointid'),
+                    },
+                    success: function (data) {
+                        var student = data.student;
+                        var trainer = data.trainer;
+
+                        // Update the content of the 'result' div with the fetched data
+                        $('#result').html('<p>Student: ' + student + '</p><p>Trainer: ' + trainer + '</p>');
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+
+                });
+            });
+        });
+    </script>
+
 @endpush
