@@ -11,5 +11,8 @@ class TrainerAttendance extends Model
 
     protected $guarded = ['id'];
 
-
+    public function trainer()
+    {
+        return $this->belongsTo(Trainer::class);
+    }
 }

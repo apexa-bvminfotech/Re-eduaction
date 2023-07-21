@@ -264,7 +264,7 @@
                         },
                         success: function (data) {
                             console.log("Slot display done.", data);
-                            let slotOption = '<option value="">------Select Slot-----</option>'
+                            let slotOption = '<option value="">------Select Slot-----</option>';
                             $.each(data.slots, function (index, slot) {
                                 slotOption += '<option value="' + slot.id + '">' + slot.slot_time + '  (' + slot.rtc.rtc_name + ')</option>'
                             })
