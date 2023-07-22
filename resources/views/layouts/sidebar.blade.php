@@ -59,17 +59,16 @@
                         </li>
                     </ul>
                 </li>
-
-                <li class="nav-item">
-                    <a href="{{ route('roles.index') }}" class="nav-link @if(Route::currentRouteName() == 'roles.index')active  @endif">
-                        <i class="nav-icon fas fa-users"></i>
-                        <p>Roles</p>
-                    </a>
-                </li>
                 <li class="nav-item">
                     <a href="{{ route('user.index') }}" class="nav-link @if(Route::currentRouteName() == 'user.index')active  @endif">
                         <i class="nav-icon fas fa-user-alt"></i>
                         <p>Users</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('roles.index') }}" class="nav-link @if(Route::currentRouteName() == 'roles.index')active  @endif">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>Roles</p>
                     </a>
                 </li>
                 <li class="nav-item">

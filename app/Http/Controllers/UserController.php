@@ -17,9 +17,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $branches = Branch::orderBy('id')->get();
-        $users = User::orderBy('id')->where('type', 0)->get();
-        return view('user.index', compact('users','branches'));
+        $branches = Branch::orderBy('id', 'DESC')->get();
+        $users = User::where('type', 0)->orderBy('id', 'DESC')->get();
+        return view('user.index', compact('users','branches'))->with('i');
     }
 
     /**
