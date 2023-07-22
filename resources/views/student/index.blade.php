@@ -141,7 +141,7 @@
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="verticalModalTitle">Assign Staff</h5>
+                                    <h5 class="modal-title" id="verticalModalTitle">Assign ProxyStaff</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">×</span>
                                     </button>
@@ -169,13 +169,13 @@
                                     <div class="col-md-12 mb-1">
                                         <div class="form-group">
                                             <label for="start_date">Starting Date:</label>
-                                            <input type="date" class="form-control" name="starting_date">
+                                            <input type="date" class="form-control" name="starting_date" value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}">
                                         </div>
                                     </div>
                                     <div class="col-md-12 mb-1">
                                         <div class="form-group">
                                             <label for="end_date">Ending Date:</label>
-                                            <input type="date" class="form-control" name="ending_date">
+                                            <input type="date" class="form-control" name="ending_date" value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}">
                                         </div>
                                     </div>
                                 </div>
@@ -196,6 +196,8 @@
 @push('scripts')
     <script>
         $(document).ready(function () {
+            {{--let regularStaffAssignedSlots = @json($regularStaffAssignedSlots);--}}
+
             $(document).on('click', '.btn-assign', function () {
                 let id = parseInt($(this).data('id'));
                 $('.student_id').val(id)
@@ -238,6 +240,7 @@
                 $('.proxy_class').val($('.proxy_class').children().eq(0).val());
                 $('.slot').html('<option value="">------Select Slot-----</option>')
             });
+
             $(document).on('change', '.proxy_class', function () {
                 let proxy = ($(this).val());
                 if (proxy != "") {
@@ -249,9 +252,15 @@
                         },
                         success: function (data) {
                             console.log("Slot display done.", data);
-                            let slotOption = '<option value="">------Select Slot-----</option>'
+                            let slotOption = '<option value="">------Select Slot-----</option>';
+
+
                             $.each(data.slots, function (index, slot) {
-                                slotOption += '<option value="' + slot.id + '">' + slot.slot_time + '  (' + slot.rtc.rtc_name + ')</option>'
+                                // if (regularStaffAssignedSlots.includes(slot.id) == '') {
+
+                                    slotOption += '<option value="' + slot.id + '">' + slot.slot_time + '  (' + slot.rtc.rtc_name + ')</option>';
+                                // }
+
                             })
                             $('.slot').html("")
                             $('.slot').html(slotOption)

@@ -23,5 +23,4 @@ class StudentStaffAssign extends Model
     {
         return $this->belongsTo(Slot::class);
     }
-
 }

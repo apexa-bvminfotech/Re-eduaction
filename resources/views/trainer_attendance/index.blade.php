@@ -20,43 +20,29 @@
             <div class="container-fluid">
                 <div class="row justify-content-center">
                     <div class="col-12">
-{{--                        @if ($message = Session::get('success'))--}}
-{{--                            <div class="alert alert-success">--}}
-{{--                                <p>{{ $message }}</p>--}}
-{{--                            </div>--}}
-{{--                        @endif--}}
                         <div class="row my-4">
                             <!-- Small table -->
                             <div class="col-md-12">
                                 <div class="card shadow">
-{{--                                    <div class="card-header">--}}
-{{--                                        <div class="buttonAlign d-flex justify-content-between">--}}
-{{--                                            <h2 class="mb-0 page-title">Trainer Attendance</h2>--}}
-{{--                                            @can('trainer-attendance-create')--}}
-{{--                                                <a href="{{route('trainer_attendance.create')}}"--}}
-{{--                                                   class="btn btn-primary float-right">Today Attendance</a>--}}
-{{--                                            @endcan--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
                                     <div class="card-body">
                                         <!-- table -->
                                         <table class="table table-bordered table-striped datatables" id="example1">
                                             <thead>
                                             <tr>
                                                 <th>No</th>
+                                                <th>Trainer Id</th>
+                                                <th>Trainer Name</th>
                                                 <th>Date</th>
-                                                <th>Total present Trainer</th>
-                                                <th>Total absent Trainer</th>
                                                 <th width="280px">Action</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             @foreach ($trainerAttendance as $key => $s)
                                                 <tr>
-                                                    <td>{{ ++$i }}</td>
+                                                    <td>{{ $s->id }}</td>
+                                                    <td>{{ $s->trainer_id }}</td>
+                                                    <td>{{ $s->trainer_name }}</td>
                                                     <td>{{ date('d-m-Y', strtotime($s->date))}}</td>
-                                                    <td>{{ $s->present }}</td>
-                                                    <td>{{ $s->absent }}</td>
                                                     <td>
                                                         @can('trainer-attendance-edit')
                                                             <a href="{{ route('trainer_attendance.edit',$s->date) }}"

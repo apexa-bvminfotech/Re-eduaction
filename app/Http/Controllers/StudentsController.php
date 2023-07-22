@@ -73,6 +73,12 @@ class StudentsController extends Controller
             'extra_tuition_time_from' => 'required',
             'dob' => 'required',
             'age' => 'required',
+            'payment_condition' => 'required|max:255',
+            'reference_by' => 'required',
+            'demo_trainer_id' => 'required',
+            'fees' => 'required',
+            'extra_note' => 'required',
+            'analysis_trainer_id' => 'required|exists:trainers,id',
             'course_id' => 'required|exists:courses,id'
         ]);
         $user = User::Create([
@@ -143,7 +149,8 @@ class StudentsController extends Controller
         $student = Student::find($id);
         $assignStaff = StudentStaffAssign::orderBy('id')->where('student_id', $student->id)->With('Trainer', 'Slot')->get();
         $studentAttendance = StudentAttendance::orderBy('id')->where('student_id', $student->id)->get();
-        return view('student.show', compact('student', 'assignStaff', 'studentAttendance'));
+        $proxy_staff_details = $student->proxyStaffAssignments;
+        return view('student.show', compact('student', 'assignStaff', 'studentAttendance','proxy_staff_details'));
     }
 
     /**
@@ -186,6 +193,13 @@ class StudentsController extends Controller
             'extra_tuition_time_from' => 'required',
             'dob' => 'required',
             'age' => 'required',
+            'course_id' => 'required|exists:courses,id'
+            'payment_condition' => 'required|max:255',
+            'reference_by' => 'required',
+            'demo_trainer_id' => 'required',
+            'fees' => 'required',
+            'extra_note' => 'required',
+            'analysis_trainer_id' => 'required|exists:trainers,id',
             'course_id' => 'required|exists:courses,id'
         ]);
         $user = $student->user;
@@ -306,16 +320,17 @@ class StudentsController extends Controller
 
         return redirect()->back()->with('success', 'Trainer assigned successfully');
     }
+
     public function proxySlot($id)
     {
         $proxy_slots = Slot::where('trainer_id', $id)
             ->with('rtc')
             ->get();
-        return response()->json(['slots'=>$proxy_slots]);
+        return response()->json(['slots' => $proxy_slots]);
     }
+
     public function proxyStaff(Request $request)
     {
-//        dd($request->all());
         $validatedData = $request->validate([
             'student_id' => 'required|integer',
             'trainer_id' => 'required|integer',
@@ -324,6 +339,17 @@ class StudentsController extends Controller
             'ending_date' => 'required',
         ]);
 
+        $existingProxyStaff = StudentProxyStaffAssign::where('student_id', $request->student_id)
+            ->where('starting_date', $request->starting_date)
+            ->where('ending_date', $request->ending_date)
+            ->first();
+
+        if ($existingProxyStaff) {
+            if ($existingProxyStaff->trainer_id == $request->trainer_id) {
+                return back()->with('error', 'Trainer is already assigned as proxy staff for the specified dates');
+            }
+        }
+
         $proxyStaff = new StudentProxyStaffAssign();
         $proxyStaff->student_id = $validatedData['student_id'];
         $proxyStaff->trainer_id = $validatedData['trainer_id'];
@@ -331,10 +357,10 @@ class StudentsController extends Controller
         $proxyStaff->starting_date = $validatedData['starting_date'];
         $proxyStaff->ending_date = $validatedData['ending_date'];
         $proxyStaff->save();
-//        dd($proxyStaff);
 
         return redirect()->back()->with('success', 'Proxy-Trainer assigned successfully');
     }
+
 
     public function saveData(Request $request)
     {

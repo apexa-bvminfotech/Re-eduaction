@@ -10,7 +10,7 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active"><a href="{{ route('student_attendance.index') }}">Show
+                            <li class="breadcrumb-item active"><a href="{{ route('trainer_attendance.index') }}">Show
                                     trainerAttendance List</a>
                             </li>
                         </ol>
@@ -37,9 +37,10 @@
                                     @endif
                                     <div class="card-body">
                                         {!! Form::model($trainerAttendance, ['method' => 'PATCH','route' => ['trainer_attendance.update',$EditDate]]) !!}
-
+{{--                                        @dd($trainerAttendance)--}}
                                         <div class="col-md-12">
                                             @foreach($trainerAttendance as $key => $s)
+
                                                 <div class="row">
                                                     <div class="col-md-3">
                                                         <div class="form-group mb-3">
@@ -81,6 +82,55 @@
                                                     </div>
                                                 </div>
                                             @endforeach
+                                                @foreach($proxyStaff as $key => $proxy)
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <div class="form-group mb-3">
+                                                                <label for="simpleinput">Proxy-Trainer name</label>
+                                                                <input type="hidden" readonly
+                                                                       name="data[{{ $key }}][trainer_id]"
+                                                                       value="{{ $proxy->trainer_id }}" class="form-control">
+                                                                <input type="text" readonly
+                                                                       name="data[{{ $key }}][trainer_name]"
+                                                                       value="{{ $proxy->trainer->name }}" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group mb-3">
+                                                            <label for="simpleinput">Proxy-Trainer Date</label>
+                                                            <input type="hidden" readonly
+                                                                   name="data[{{ $key }}][trainer_id]"
+                                                                   value="{{ $proxy->trainer_id }}" class="form-control">
+                                                            <input type="text" readonly
+                                                                   name="data[{{ $key }}][trainer_name]"
+                                                                   value="{{ $proxy->    starting_date }}" class="form-control">
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group mb-3">
+                                                                <label for="simpleinput">Attendance</label>
+                                                                <br>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio"
+                                                                           name="data[{{ $key }}][attendance]" value="0"
+                                                                           checked>
+                                                                    <label class="form-check-label" for="inlineRadio1">Present</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio"
+                                                                           name="data[{{ $key }}][attendance]" value="1">
+                                                                    <label class="form-check-label" for="inlineRadio2">Absent</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group mb-3">
+                                                                <label for="simpleinput">Absent reason</label>
+                                                                <input type="text" name="data[{{ $key }}][absent_reason]"
+                                                                       class="form-control">
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                @endforeach
                                         </div>
                                         <div class="form-group mb-2 buttonEnd">
                                             <button type="submit" class="btn btn-success float-right mr-2">Update</button>

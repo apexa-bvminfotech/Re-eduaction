@@ -53,6 +53,8 @@
                                             Information</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">School
                                             Detail</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#proxy_detail" data-toggle="tab">Proxy
+                                            staff Details</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#timeline1" data-toggle="tab">Assign
                                             Staff</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#timeline2" data-toggle="tab">Student
@@ -146,27 +148,27 @@
                                     </div>
                                     <div class="tab-pane" id="proxy_detail">
                                         <div class="post">
-                                            <table class="table">
+                                            <table class="table table-striped">
+                                                <thead>
                                                 <tr>
-                                                    <th><b>Student name:</b></th>
-                                                    <td>{{$proxy_staff_detail->student_id}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th><b>Trainer name:</b></th>
-                                                    <td>{{$student->trainer->name}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th><b>Slot name:</b></th>
-                                                    <td>{{$proxy_staff_detail->slot_id}}</td>
-                                                </tr>
-                                                <tr>
+                                                    <th><b>ProxyTrainer Name:</b></th>
+                                                    <th><b>Slot Time:</b></th>
                                                     <th><b>Starting Date:</b></th>
-                                                    <td>{{$proxy_staff_detail->starting_date}}</td>
-                                                </tr>
-                                                <tr>
                                                     <th><b>Ending Date:</b></th>
-                                                    <td>{{$proxy_staff_detail->ending_date}}</td>
                                                 </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                @foreach($proxy_staff_details as $psd)
+                                                    <tr>
+                                                        <td>{{$psd->trainer->name}}</td>
+                                                        <td>{{$psd->slot->slot_time}}</td>
+                                                        <td>{{$psd->starting_date}}</td>
+                                                        <td>{{$psd->ending_date}}</td>
+                                                    </tr>
+                                                @endforeach
+
+                                                </tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -226,6 +228,82 @@
                         <h2 class="text-dark" ><b><i>Courses</i></b></h2></div>
                     <div class="row">
                         <div class="col-sm-12">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="text-dark"><b><i>Courses</i></b></h2></div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            {{--                            <div class="card">--}}
+                            <div class="card-body">
+                                <table class="table table-bordered table-striped">
+                                    <tr>
+                                        <th class="text-center bg-info" colspan="4" style="font-size: 20px">Gujarati
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-top: 15px; padding-left: 120px">Before</td>
+                                        <td rowspan="2" class="text-center" style="padding-top: 35px">Topics</td>
+                                        <td style="padding-top: 15px; padding-left: 120px">After</td>
+                                        <td rowspan="2" class="text-center" style="padding-top: 35px">Date</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-top: 10px; padding-left: 140px">0</td>
+                                        <td style="padding-top: 10px; padding-left: 140px">0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="custom-control custom-checkbox"
+                                                 style="padding-left: 150px;">
+                                                <input class="custom-control-input" type="checkbox"
+                                                       id="customCheckbox2">
+                                                <label for="customCheckbox2" class="custom-control-label"></label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            ગુજરાતી k,kh,g
+                                        </td>
+                                        <td>
+                                            <div class="custom-control custom-checkbox"
+                                                 style="padding-left: 150px;">
+                                                <input class="custom-control-input" type="checkbox"
+                                                       id="customCheckbox3">
+                                                <label for="customCheckbox3" class="custom-control-label"></label>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">--</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="custom-control custom-checkbox"
+                                                 style="padding-left: 150px;">
+                                                <input class="custom-control-input" type="checkbox"
+                                                       id="customCheckbox4">
+                                                <label for="customCheckbox4" class="custom-control-label"></label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            a ની માત્ર વાળા શબ્દ
+                                        </td>
+                                        <td>
+                                            <div class="custom-control custom-checkbox"
+                                                 style="padding-left: 150px;">
+                                                <input class="custom-control-input" type="checkbox"
+                                                       id="customCheckbox5">
+                                                <label for="customCheckbox5" class="custom-control-label"></label>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">--</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            {{--                            </div>--}}
+                        </div>
+                        <div class="col-sm-6">
                             {{--                            <div class="card">--}}
                             <div class="card-body">
                                 <table class="table table-bordered table-striped" id="courseTable" data-CourseId ="{{$student->course->id}}">
