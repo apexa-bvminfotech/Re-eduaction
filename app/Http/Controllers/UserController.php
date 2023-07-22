@@ -46,7 +46,7 @@ class UserController extends Controller
             'name' => 'required|max:255',
             'surname' => 'required|max:255',
             'father_name' => 'required|max:255',
-            'email' => 'required|unique:users,email|email',
+//            'email' => 'required|unique:users,email|email',
             'contact' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
             'role' => 'required',
             'is_active' => 'required'
@@ -104,7 +104,6 @@ class UserController extends Controller
             'surname' => 'required|max:255',
             'name' => 'required|max:255',
             'father_name' => 'required|max:255',
-            'email' => 'required|email',
             'contact' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
             'role' => 'required',
         ]);

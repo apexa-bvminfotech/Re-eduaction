@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\Slot;
+use App\Models\StudentAttendance;
+use App\Models\StudentCourseComplete;
+use App\Models\SubCourse;
+use App\Models\SubCoursePoint;
 use App\Models\Trainer;
 use App\Models\StudentStaffAssign;
 use App\Models\StudentProxyStaffAssign;
@@ -14,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
+
 class StudentsController extends Controller
 {
     /**
@@ -26,7 +31,7 @@ class StudentsController extends Controller
         $slots = Slot::orderBy('id', 'desc')->get();
         $trainers = Trainer::orderBy('id', 'desc')->get();
         $students = Student::with('course')->orderBy('id')->paginate(10);
-        return view('student.index', compact('students','trainers','slots'))->with('i');
+        return view('student.index', compact('students', 'trainers', 'slots'))->with('i');
     }
 
     /**
@@ -39,7 +44,7 @@ class StudentsController extends Controller
         $student = Student::orderBy('id', 'desc')->get();
         $role = Role::orderBy('id', 'desc')->get();
         $course = Course::orderBy('id', 'desc')->get();
-        $trainer = Trainer::orderBy('id')->where('is_active',0)->get();
+        $trainer = Trainer::orderBy('id')->where('is_active', 0)->get();
         return view('student.create', compact('student', 'role', 'course', 'trainer'));
     }
 
@@ -57,7 +62,6 @@ class StudentsController extends Controller
             'father_name' => 'required|max:255',
             'address' => 'required',
             'gender' => 'required',
-            'email_id' => 'required|email|unique:users,email',
             'father_contact_no' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
             'mother_contact_no' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
             'standard' => 'required|numeric|max:12',
@@ -69,13 +73,7 @@ class StudentsController extends Controller
             'extra_tuition_time_from' => 'required',
             'dob' => 'required',
             'age' => 'required',
-            'payment_condition' => 'required|max:255',
-            'reference_by' => 'required',
-            'demo_trainer_id' => 'required',
-            'fees' => 'required',
-            'extra_note' => 'required',
-            'analysis_trainer_id'=>'required|exists:trainers,id',
-            'course_id'=>'required|exists:courses,id'
+            'course_id' => 'required|exists:courses,id'
         ]);
         $user = User::Create([
             'surname' => $request->surname,
@@ -143,9 +141,9 @@ class StudentsController extends Controller
     public function show($id)
     {
         $student = Student::find($id);
-        $proxy_staff_detail = StudentProxyStaffAssign::find($id);
-//        dd($proxy_staff_detail);
-        return view('student.show', compact('student','proxy_staff_detail'));
+        $assignStaff = StudentStaffAssign::orderBy('id')->where('student_id', $student->id)->With('Trainer', 'Slot')->get();
+        $studentAttendance = StudentAttendance::orderBy('id')->where('student_id', $student->id)->get();
+        return view('student.show', compact('student', 'assignStaff', 'studentAttendance'));
     }
 
     /**
@@ -177,7 +175,6 @@ class StudentsController extends Controller
             'father_name' => 'required|max:255',
             'address' => 'required',
             'gender' => 'required',
-            'email_id' => 'required|email',
             'father_contact_no' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
             'mother_contact_no' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
             'standard' => 'required|min:1|max:12',
@@ -186,25 +183,19 @@ class StudentsController extends Controller
             'school_time_to' => 'required',
             'school_time_from' => 'required',
             'extra_tuition_time_to' => 'required',
-            'extra_tuition_time_from'=>'required',
+            'extra_tuition_time_from' => 'required',
             'dob' => 'required',
             'age' => 'required',
-            'payment_condition' => 'required|max:255',
-            'reference_by' => 'required',
-            'demo_trainer_id' => 'required',
-            'fees' => 'required',
-            'extra_note' => 'required',
-            'analysis_trainer_id'=>'required|exists:trainers,id',
-            'course_id'=>'required|exists:courses,id'
+            'course_id' => 'required|exists:courses,id'
         ]);
         $user = $student->user;
         $user->update([
             'name' => $request->name,
             'surname' => $request->surname,
-            'father_name'=>$request->father_name,
+            'father_name' => $request->father_name,
             'email' => $request->email_id,
-            'contact'=>$request->father_contact_no,
-            'password' =>Hash::make(strtolower($request->name) . '@123'),
+            'contact' => $request->father_contact_no,
+            'password' => Hash::make(strtolower($request->name) . '@123'),
             'type' => 2,
         ]);
         $upload_student_image = $student->upload_student_image;
@@ -263,31 +254,55 @@ class StudentsController extends Controller
         return redirect()->route('student.index')
             ->with('success', 'student deleted successfully');
     }
+
     public function slot($id)
     {
         $slots = Slot::where('trainer_id', $id)
             ->where('is_active', 0)
             ->with('rtc')
             ->get();
-        return response()->json(['slots'=>$slots]);
+        return response()->json(['slots' => $slots]);
     }
+
     public function assignStaff(Request $request)
     {
-//        dd($request->all());
         $validatedData = $request->validate([
             'student_id' => 'required|integer',
             'trainer_id' => 'required|integer',
-            'slot' => 'required|integer',
-            'type' => 'required|in:proxy,regular',
+            'slot_id' => 'required|integer',
         ]);
+//        dd($validatedData);
+        $student = StudentStaffAssign::where('student_id', $request->student_id)->where('is_active', 0)->first();
 
-        $assignStaff = new StudentStaffAssign();
-        $assignStaff->student_id = $validatedData['student_id'];
-        $assignStaff->trainer_id = $validatedData['trainer_id'];
-        $assignStaff->slot_id = $validatedData['slot'];
-        $assignStaff->type = $validatedData['type'];
-        $assignStaff->date = Carbon::now()->toDateString();
-        $assignStaff->save();
+        if ($student) {
+            if ($student->trainer_id == $request->trainer_id) {
+                return back()->with('error', 'Trainer is already Assigned');
+            }
+            $student->update([
+                'is_active' => 1,
+            ]);
+            $check = StudentStaffAssign::where(['student_id' => $request->student_id, 'trainer_id' => $validatedData['trainer_id']])->where('is_active', 1)->first();
+            if ($check) {
+                $check->update([
+                    'is_active' => 0,
+                    'date' => now(),
+                ]);
+            } else {
+                $assignStaff = new StudentStaffAssign();
+                $assignStaff->student_id = $validatedData['student_id'];
+                $assignStaff->trainer_id = $validatedData['trainer_id'];
+                $assignStaff->slot_id = $validatedData['slot_id'];
+                $assignStaff->date = Carbon::now()->toDateString();
+                $assignStaff->save();
+            }
+        } else {
+            $assignStaff = new StudentStaffAssign();
+            $assignStaff->student_id = $validatedData['student_id'];
+            $assignStaff->trainer_id = $validatedData['trainer_id'];
+            $assignStaff->slot_id = $validatedData['slot_id'];
+            $assignStaff->date = Carbon::now()->toDateString();
+            $assignStaff->save();
+        }
 
         return redirect()->back()->with('success', 'Trainer assigned successfully');
     }
@@ -320,4 +335,36 @@ class StudentsController extends Controller
 
         return redirect()->back()->with('success', 'Proxy-Trainer assigned successfully');
     }
+
+    public function saveData(Request $request)
+    {
+//        dd($request->all());
+        $validatedData = $request->validate([
+            'student_id' => 'required',
+//            'trainer_id'=>'required',
+            'course_id' => 'required',
+            'subCourseId' => 'required',
+            'pointId' => 'required',
+            'trainer_confirm_date'=>'required',
+        ]);
+
+//        dd($request->all());
+        $studentCourseComplete = new StudentCourseComplete();
+        $studentCourseComplete->student_id = $validatedData['student_id'];
+        // Add any other relevant data fields here
+        $studentCourseComplete->course_id = $validatedData['course_id'];
+        $studentCourseComplete->sub_course_id = $validatedData['subCourseId'];
+        $studentCourseComplete->sub_course_point_id = $validatedData['pointId'];
+        $studentCourseComplete->trainer_confirm_date = $validatedData['trainer_confirm_date'];
+
+        // Save the data into the database
+        $studentCourseComplete->save();
+        return response()->json([
+            'message' => 'Data saved successfully',
+        ]);
+    }
 }
+
+
+
+

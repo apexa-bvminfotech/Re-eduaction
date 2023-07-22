@@ -33,21 +33,23 @@
 
             <form action="{{route('login')}}" method="post">
                 @csrf
-                {{--                @method('GET')--}}
                 <div class="input-group mb-3">
-                    <label for="inputEmail" class="sr-only">{{ __('Email Address') }}</label>
-                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="inputEmail"
-                           name="email" placeholder="Email" value="{{ old('email') }}" autofocus>
+                    <label for="inputEmail" class="sr-only"> {{ __('Username or Email') }}</label>
+                    <input type="text"
+                           class="form-control {{ $errors->has('username') || $errors->has('email') ? ' is-invalid' : '' }}"
+                           id="login"
+                           name="login" placeholder="EmailOrName" value="{{ old('username') ?: old('email') }}" required
+                           autofocus>
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <i class="fas fa-envelope"></i>
                         </div>
                     </div>
-                    @error('email')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
+                    @if ($errors->has('username') || $errors->has('email'))
+                        <span class="invalid-feedback">
+                <strong>{{ $errors->first('username') ?: $errors->first('email') }}</strong>
+            </span>
+                    @endif
                 </div>
                 <div class="input-group mb-3">
                     <label for="inputPassword" class="sr-only">{{ __('Password') }}</label>
@@ -60,7 +62,7 @@
                         </div>
                     </div>
                     @error('password')
-                        <span class="invalid-feedback" role="alert">
+                    <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
                     @enderror

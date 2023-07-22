@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('student_staff_assigns', function (Blueprint $table) {
             $table->id();
             $table->foreignId('student_id')->constrained('students')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('trainers_id')->constrained('trainers')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('slots_id')->constrained('slots')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('trainer_id')->constrained('trainers')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('slot_id')->constrained('slots')->cascadeOnUpdate()->cascadeOnDelete();
             $table->date('date');
             $table->integer('is_active')->default(0);
             $table->string('type');

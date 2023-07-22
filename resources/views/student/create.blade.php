@@ -113,22 +113,17 @@
                                                             <label for="email">Email ID:</label>
                                                             <input type="email" class="form-control" name="email_id"
                                                                    placeholder="enter email"
-                                                                   value="{{ old('email_id') }}" required>
-                                                            @error('email_id')
-                                                            <span class="text-danger">{{$message}}</span>
-                                                            @enderror
+                                                                   value="{{ old('email_id') }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 mb-1">
-                                                        <div class="form-group mb-3">
-                                                            <label for="contact number">Father Contact No:</label>
-                                                            <input type="tel" class="form-control"
-                                                                   name="father_contact_no"
-                                                                   placeholder="12345 67890"
-                                                                   pattern="[0-9]{5}[\s]{1}[0-9]{5}"
-                                                                   id="father_contact_no"
-                                                                   value="{{ old('father_contact_no') }}">
-                                                            @error('father_contact_no')
+                                                        <div class="form-group">
+                                                            <label for="standard">Standard:</label>
+                                                            <input type="number" class="form-control" max="12" min="1"
+                                                                   name="standard"
+                                                                   placeholder="enter standard"
+                                                                   value="{{ old('standard') }}">
+                                                            @error('standard')
                                                             <span class="text-danger">{{$message}}</span>
                                                             @enderror
                                                         </div>
@@ -148,17 +143,20 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 mb-1">
-                                                        <div class="form-group">
-                                                            <label for="standard">Standard:</label>
-                                                            <input type="number" class="form-control" max="12" min="1"
-                                                                   name="standard"
-                                                                   placeholder="enter standard"
-                                                                   value="{{ old('standard') }}">
-                                                            @error('standard')
+                                                        <div class="form-group mb-3">
+                                                            <label for="contact number">Father Contact No:</label>
+                                                            <input type="tel" class="form-control"
+                                                                   name="father_contact_no"
+                                                                   placeholder="12345 67890"
+                                                                   pattern="[0-9]{5}[\s]{1}[0-9]{5}"
+                                                                   id="father_contact_no"
+                                                                   value="{{ old('father_contact_no') }}">
+                                                            @error('father_contact_no')
                                                             <span class="text-danger">{{$message}}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
+
                                                     <div class="col-md-6 mb-1">
                                                         <div class="form-group">
                                                             <label for="gender">Gender:</label>
@@ -193,26 +191,38 @@
                                                             <br>
                                                             <div class="form-check form-check-inline">
                                                                 <input type="checkbox" value="gujarati"
+                                                                       {{ old("medium") === 'gujarati' ? 'checked' : '' }}
                                                                        name="medium"
-                                                                       class="form-check" {{ old("medium") == 'gujarati' ? 'checked' : '' }}>
+                                                                       class="form-check medium-list">
                                                                 <label class="form-check-label"
                                                                        for="medium_gujarati">&nbsp;&nbsp;
                                                                     Gujarati
                                                                 </label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <input type="checkbox" value="hindi" name="medium"
-                                                                       class="form-check-input" {{ old("medium") == 'hindi' ? 'checked' : '' }}>
+                                                                <input type="checkbox" value="hindi"
+                                                                       {{ old("medium") === 'hindi' ? 'checked' : '' }} name="medium"
+                                                                       class="form-check-input medium-list">
                                                                 <label class="form-check-label" for="medium_hindi">
                                                                     Hindi
                                                                 </label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <input type="checkbox" value="english" name="medium"
-                                                                       class="form-check-input" {{ old("medium") == 'english' ? 'checked' : '' }}>
+                                                                <input type="checkbox" value="english"
+                                                                       {{ old("medium") === 'english' ? 'checked' : '' }} name="medium"
+                                                                       class="form-check-input medium-list">
                                                                 <label class="form-check-label"
                                                                        for="medium_english">
                                                                     English
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input type="checkbox" value="gujlish"
+                                                                       {{ old("medium") === 'gujlish' ? 'checked' : '' }} name="medium"
+                                                                       class="form-check-input medium-list">
+                                                                <label class="form-check-label"
+                                                                       for="medium_gujlish">
+                                                                    Gujlish
                                                                 </label>
                                                             </div>
                                                             @error('medium')
@@ -370,50 +380,6 @@
                                                             @enderror
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6 mb-1">
-                                                        <div class="form-group">
-                                                            <label for="payment">Payment Condition:</label>
-                                                            <input type="text" name="payment_condition"
-                                                                   class="form-control"
-                                                                   placeholder="enter payment condition"
-                                                                   value="{{ old('payment_condition') }}">
-                                                            @error('payment_condition')
-                                                            <span class="text-danger"> {{$message}}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6 mb-1">
-                                                        <div class="form-group">
-                                                            <label for="name">Analysis Trainer Name: </label>
-                                                            <select class="form-control select2"
-                                                                    name="analysis_trainer_id">
-                                                                <option value="">------ Select Trainer -----</option>
-                                                                @foreach($trainer as $key=>$t)
-                                                                    <option
-                                                                        value="{{$t->id}}" {{ old('analysis_trainer_id')==$t->id?'selected':'' }}>{{$t->name}}</option>
-                                                                @endforeach
-                                                            </select>
-                                                            @error('analysis_trainer_id')
-                                                            <span class="text-danger"> {{$message}}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3 mb-1">
-                                                        <div class="form-group">
-                                                            <label for="role">Role name:</label>
-                                                            <select class="form-control select2" name="role"
-                                                                    required>
-                                                                <option value="">------ Select Role ------</option>
-                                                                @foreach($role as $key=> $r)
-                                                                    <option
-                                                                        value="{{$r->id}}"{{ old('role')==$r->id?'selected':'' }}>{{$r->name}}</option>
-                                                                @endforeach
-                                                            </select>
-                                                            @error('role')
-                                                            <span class="text-danger"> {{$message}}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
                                                 </div>
                                                 <button type="button"
                                                         class="btn btn-primary float-right btn-next-form nxtbt next-btn">
@@ -445,19 +411,38 @@
                                                                         value="{{$t->id}}"{{ old('demo_trainer_id')==$t->id?'selected':'' }}>{{$t->name}}</option>
                                                                 @endforeach
                                                             </select>
-                                                            @error('demo_trainer_id')
-                                                            <span class="text-danger"> {{$message}}</span>
-                                                            @enderror
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-4 mb-1">
+                                                    <div class="col-md-6 mb-1">
+                                                        <div class="form-group">
+                                                            <label for="name">Analysis Trainer Name: </label>
+                                                            <select class="form-control select2"
+                                                                    name="analysis_trainer_id">
+                                                                <option value="">------ Select Trainer -----</option>
+                                                                @foreach($trainer as $key=>$t)
+                                                                    <option
+                                                                        value="{{$t->id}}" {{ old('analysis_trainer_id')==$t->id?'selected':'' }}>{{$t->name}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 mb-1">
+                                                        <div class="form-group">
+                                                            <label for="payment">Payment Condition:</label>
+                                                            <input type="text" name="payment_condition"
+                                                                   class="form-control"
+                                                                   placeholder="enter payment condition"
+                                                                   value="{{ old('payment_condition') }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 mb-1">
                                                         <div class="form-group">
                                                             <label for="fees">Form Fees:</label>
                                                             <br>
                                                             <div class="form-check form-check-inline">
                                                                 <input type="radio" value="paid" name="fees"
                                                                        {{ old('fees') == 'paid' ? 'checked' : '' }}
-                                                                       class="form-check" required>&nbsp;&nbsp;
+                                                                       class="form-check">&nbsp;&nbsp;
                                                                 <label class="form-check-label"
                                                                        for="medium_hindi">
                                                                     Paid
@@ -466,13 +451,25 @@
                                                             <div class="form-check form-check-inline">
                                                                 <input type="radio" value="unpaid" name="fees"
                                                                        class="form-check-input"
-                                                                       {{ old('fees') == 'unpaid' ? 'checked' : '' }} required>
+                                                                       {{ old('fees') == 'unpaid' ? 'checked' : '' }} checked>
                                                                 <label class="form-check-label" for="medium_hindi">
                                                                     Unpaid
                                                                 </label>
                                                             </div>
-                                                            @error('fees')
-                                                            <span class="text-danger">{{$message}}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 mb-1">
+                                                        <div class="form-group">
+                                                            <label for="role">Role name:</label>
+                                                            <select class="form-control select2" name="role" required>
+                                                                <option value="">------ Select Role ------</option>
+                                                                @foreach($role as $key=> $r)
+                                                                    <option
+                                                                        value="{{$r->id}}"{{ old('role')==$r->id?'selected':'' }}>{{$r->name}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                            @error('role')
+                                                            <span class="text-danger"> {{$message}}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
@@ -481,9 +478,6 @@
                                                             <label for="note">Extra Note:</label>
                                                             <textarea name="extra_note"
                                                                       class="form-control">{{ old('extra_note') }}</textarea>
-                                                            @error('extra_note')
-                                                            <span class="text-danger">{{$message}}</span>
-                                                            @enderror
                                                         </div>
                                                     </div>
                                                 </div>
@@ -500,27 +494,39 @@
                                              aria-labelledby="office-use-part-trigger">
                                             <div class="card-body">
                                                 <div class="row">
-                                                    <div class="col-md-6 mb-4">
-                                                        <label for="student image">Student Image:</label>
-                                                        <input type="file" class="form-control"
-                                                               name="upload_student_image"
-                                                               accept="image/*"
-                                                               value="{{old('upload_student_image')}}"
-                                                               onchange="loadFile(event)"/>
-                                                        @error('upload_student_image')
-                                                        <span class="text-danger"> {{$message}} </span>
-                                                        @enderror
+                                                    <div class="col-md-6">
+                                                        <div class="form-group mb-2">
+                                                            <label for="student image">Student Image:</label>
+                                                            <div class="custom-file">
+                                                                <input type="file" class="custom-file-input"
+                                                                       name="upload_student_image"
+                                                                       accept="image/*"
+                                                                       value="{{old('upload_student_image')}}"/>
+                                                                <label class="custom-file-label" for="customFile">Choose
+                                                                    file</label>
+                                                                {{--                                                               onchange="loadFile(event)"--}}
+                                                                @error('upload_student_image')
+                                                                <span class="text-danger"> {{$message}} </span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-6 mb-4">
-                                                        <label for="pdf">Upload PDF:</label>
-                                                        <input type="file" name="upload_analysis"
-                                                               class="form-control"
-                                                               accept="application/pdf"
-                                                               value="{{ old('upload_analysis') }}"
-                                                               placeholder="enter pdf">
-                                                        @error('upload_analysis')
-                                                        <span class="text-danger">{{$message}}</span>
-                                                        @enderror
+                                                    <div class="col-md-6">
+                                                        <div class="form-group mb-2">
+                                                            <label for="pdf">Upload PDF:</label>
+                                                            <div class="custom-file">
+                                                                <input type="file" name="upload_analysis"
+                                                                       class="custom-file-input"
+                                                                       accept="application/pdf"
+                                                                       value="{{ old('upload_analysis') }}"
+                                                                       placeholder="enter pdf">
+                                                                <label class="custom-file-label" for="customFile">Choose
+                                                                    file</label>
+                                                                @error('upload_analysis')
+                                                                <span class="text-danger">{{$message}}</span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <button type="submit"
@@ -545,12 +551,10 @@
     </div>
 @endsection
 @push('scripts')
-    <script>
-        var loadFile = function (event) {
-            var image = document.getElementById("profilePic");
-            image.src = URL.createObjectURL(event.target.files[0]);
-        };
-
+    <script type="text/javascript">
+        $('.medium-list').on('change', function() {
+            $('.medium-list').not(this).prop('checked', false);
+        });
         function isNumber(evt) {
             evt = (evt) ? evt : window.event;
             var charCode = (evt.which) ? evt.which : evt.keyCode;
@@ -559,14 +563,12 @@
             }
             return true;
         }
-
         function ageValidation() {
             var x = document.getElementById("txtAge").value;
             if (x < 1 || x > 20) {
                 alert("enter age between 1 to 20")
             }
         }
-
         $(document).ready(function () {
 
             $('#timepicker').datetimepicker({
@@ -600,10 +602,6 @@
                     },
                     gender: {
                         required: true,
-                    },
-                    email_id: {
-                        required: true,
-                        email: true,
                     },
                     father_contact_no: {
                         required: true,
@@ -642,27 +640,6 @@
                     course_id: {
                         required: true,
                     },
-                    payment_condition: {
-                        required: true,
-                    },
-                    analysis_trainer_id: {
-                        required: true,
-                    },
-                    reference_by: {
-                        required: true,
-                    },
-                    fees: {
-                        required: true,
-                    },
-                    extra_note: {
-                        required: true,
-                    },
-                    upload_analysis: {
-                        required: true,
-                    },
-                    upload_student_image: {
-                        required: true,
-                    },
                 },
                 messages: {
                     surname: {
@@ -678,10 +655,7 @@
                         required: "Please enter a address ",
                     },
                     gender: {
-                        required: "Please enter a gender ",
-                    },
-                    email_id: {
-                        required: "Please enter a email ",
+                        required: "Please select a gender ",
                     },
                     father_contact_no: {
                         required: "Please enter a father_contact_no ",
@@ -693,7 +667,7 @@
                         required: "Please enter a standard ",
                     },
                     medium: {
-                        required: "Please enter a medium ",
+                        required: "Please select a medium ",
                     },
                     school_name: {
                         required: "Please enter a school_name ",
@@ -718,24 +692,6 @@
                     },
                     course_id: {
                         required: "Please enter a course_id ",
-                    },
-                    payment_condition: {
-                        required: "Please enter a payment_condition ",
-                    },
-                    reference_by: {
-                        required: "please enter reference name"
-                    },
-                    fees: {
-                        required: "Please enter a fees",
-                    },
-                    extra_note: {
-                        required: "Please enter extra note",
-                    },
-                    upload_analysis: {
-                        required: " Please enter pdf",
-                    },
-                    upload_student_image: {
-                        required: "Please enter student image"
                     },
                 },
                 errorElement: 'span',

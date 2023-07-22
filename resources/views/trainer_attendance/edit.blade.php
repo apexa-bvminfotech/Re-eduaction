@@ -83,7 +83,7 @@
                                             @endforeach
                                         </div>
                                         <div class="form-group mb-2 buttonEnd">
-                                            <button type="submit" class="btn btn-success float-right mr-2">Edit</button>
+                                            <button type="submit" class="btn btn-success float-right mr-2">Update</button>
                                             <a href="{{ route('trainer_attendance.index') }}"
                                                class="btn btn-danger float-right mr-2">Cancel</a>
                                         </div>

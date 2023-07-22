@@ -29,6 +29,7 @@ Route::group(['middleware'=>['auth']],function (){
         //proxy-staff-route
         Route::get('/proxy-slot/{id}','StudentsController@proxySlot');
         Route::post('/proxy-staff', 'StudentsController@proxyStaff')->name('student.proxyStaff');
+        Route::post('/save-checkbox-data','StudentsController@saveData')->name('student.saveData');
     });
     Route::resource('roles', 'RoleController');
     Route::resource('trainer', 'TrainerController');
@@ -41,7 +42,6 @@ Route::group(['middleware'=>['auth']],function (){
     Route::resource('subCourse', 'SubCourseController')->only(['destroy']);
     Route::resource('user','UserController');
     Route::resource('branch','BranchController');
-
     Route::get('changeRtcStatus', 'RtcController@changeRtcStatus');
     Route::get('changeSlotStatus', 'SlotController@changeSlotStatus');
 //    Route::get('changeStaffStatus', 'StaffController@changeStaffStatus');

@@ -37,7 +37,7 @@
                                         <b>Course:</b> <a class="float-right">{{$student->course->course_name}}</a>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>Demo taken:</b> <a class="float-right">{{$student->trainer->name}}</a>
+                                        <b>Demo taken:</b> <a class="float-right">{{$student->trainer->name ?? ''}}</a>
                                     </li>
                                 </ul>
                             </div>
@@ -53,7 +53,10 @@
                                             Information</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">School
                                             Detail</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#proxy_detail" data-toggle="tab">Proxy staff Details</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#timeline1" data-toggle="tab">Assign
+                                            Staff</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#timeline2" data-toggle="tab">Student
+                                            Attendance Show</a></li>
                                 </ul>
                                 <a href="{{ route('student.index') }}"
                                    class="col-1 btn btn-primary float-right">Back</a>
@@ -109,8 +112,8 @@
                                                 <tr>
                                                     <th><b>Upload PDF:</b></th>
                                                     <td>{{$student->upload_analysis}}</td>
-                                                    <th><b>Reference By:</b></th>
-                                                    <td>{{$student->reference_by}}</td>
+                                                    <th><b>Courses:</b></th>
+                                                    <td>{{$student->course->course_name}}</td>
                                                 </tr>
                                             </table>
                                         </div>
@@ -119,8 +122,8 @@
                                         <div class="post">
                                             <table class="table">
                                                 <tr>
-                                                    <th><b>Courses:</b></th>
-                                                    <td>{{$student->course->course_name}}</td>
+                                                    <th><b>Reference By:</b></th>
+                                                    <td>{{$student->reference_by}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th><b>Role:</b></th>
@@ -132,11 +135,11 @@
                                                 </tr>
                                                 <tr>
                                                     <th><b>Analysis Staff Name:</b></th>
-                                                    <td>{{$student->trainer->name}}</td>
+                                                    <td>{{$student->trainer->name ?? ''}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th><b>Demo Taken By:</b></th>
-                                                    <td>{{$student->trainer->name}}</td>
+                                                    <td>{{$student->trainer->name ?? ''}}</td>
                                                 </tr>
                                             </table>
                                         </div>
@@ -167,6 +170,52 @@
                                             </table>
                                         </div>
                                     </div>
+                                    <div class="tab-pane" id="timeline1">
+                                        <div class="post">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                <tr>
+                                                    <th><b>Assign Staff name</b></th>
+                                                    <th><b>Slot:</b></th>
+                                                    <th><b>Date:</b></th>
+                                                    <th><b>Status</b></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                @foreach($assignStaff as $key => $as)
+                                                    <tr>
+                                                        <td>{{$as->trainer->name}}</td>
+                                                        <td>{{$as->slot->slot_time}}</td>
+                                                        <td>{{$as->date}}</td>
+                                                        <td>{!! $as->is_active === 0 ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
+                                                    </tr>
+                                                @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="timeline2">
+                                        <div class="post">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                <tr>
+                                                    <th><b>Absent Date:</b></th>
+                                                    <th><b>Absent Reason:</b></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                @foreach($studentAttendance as $key => $st)
+                                                    @if ($st->absent_reason)
+                                                        <tr>
+                                                            <td>{{$st->attendance_date}}</td>
+                                                            <td>{{$st->absent_reason}}</td>
+                                                        </tr>
+                                                    @endif
+                                                @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -174,139 +223,89 @@
                 </div>
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="text-dark"><b><i>Courses</i></b></h2></div>
+                        <h2 class="text-dark" ><b><i>Courses</i></b></h2></div>
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
                             {{--                            <div class="card">--}}
                             <div class="card-body">
-                                <table class="table table-bordered table-striped">
-                                    <tr>
-                                        <th class="text-center bg-info" colspan="4" style="font-size: 20px">Gujarati</th>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding-top: 15px; padding-left: 120px">Before</td>
-                                        <td rowspan="2" class="text-center" style="padding-top: 35px">Topics</td>
-                                        <td style="padding-top: 15px; padding-left: 120px">After</td>
-                                        <td rowspan="2" class="text-center" style="padding-top: 35px">Date</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding-top: 10px; padding-left: 140px">0</td>
-                                        <td style="padding-top: 10px; padding-left: 140px">0</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="custom-control custom-checkbox"
-                                                 style="padding-left: 150px;">
-                                                <input class="custom-control-input" type="checkbox"
-                                                       id="customCheckbox2">
-                                                <label for="customCheckbox2" class="custom-control-label"></label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            ગુજરાતી k,kh,g
-                                        </td>
-                                        <td>
-                                            <div class="custom-control custom-checkbox"
-                                                 style="padding-left: 150px;">
-                                                <input class="custom-control-input" type="checkbox"
-                                                       id="customCheckbox3">
-                                                <label for="customCheckbox3" class="custom-control-label"></label>
-                                            </div>
-                                        </td>
-                                        <td class="text-center">--</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="custom-control custom-checkbox"
-                                                 style="padding-left: 150px;">
-                                                <input class="custom-control-input" type="checkbox"
-                                                       id="customCheckbox4">
-                                                <label for="customCheckbox4" class="custom-control-label"></label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            a ની માત્ર વાળા શબ્દ
-                                        </td>
-                                        <td>
-                                            <div class="custom-control custom-checkbox"
-                                                 style="padding-left: 150px;">
-                                                <input class="custom-control-input" type="checkbox"
-                                                       id="customCheckbox5">
-                                                <label for="customCheckbox5" class="custom-control-label"></label>
-                                            </div>
-                                        </td>
-                                        <td class="text-center">--</td>
-                                    </tr>
+                                <table class="table table-bordered table-striped" id="courseTable" data-CourseId ="{{$student->course->id}}">
+                                    @foreach($student->course->subcourses as $key =>$sc)
+                                        <tr>
+                                            <th class="bg-info">
+                                                <div class="custom-control custom-checkbox text-center">
+                                                    <input class="custom-control-input sub-course-checkbox"
+                                                           type="checkbox"
+                                                           id="customCheckbox_{{$loop->iteration}}">
+                                                    <label for="customCheckbox_{{$loop->iteration}}"
+                                                           class="custom-control-label"></label>
+                                                </div>
+                                            </th>
+                                            <th class="text-center bg-info" colspan="3"
+                                                style="font-size: 20px">{{$sc->sub_course_name}}
+                                            </th>
+                                            <th class="bg-info">
+                                                <div class="custom-control custom-checkbox text-center">
+                                                    <input class="custom-control-input sub-course-checkbox"
+                                                           type="checkbox"
+                                                           id="customCheckbox1_{{$loop->iteration}}"
+                                                           data-subCourseId="{{$sc->id}}" data-pointId="0">
+                                                    <label for="customCheckbox1_{{$loop->iteration}}"
+                                                           class="custom-control-label"></label>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">
+                                                <b> Before </b>
+                                            </td>
+                                            <td class="text-center"
+                                            ><b>Points</b></td>
+                                            <td class="text-center"><b>Trainer Confirm Date</b></td>
+                                            <td class="text-center"><b>User Confirm Date</b></td>
+                                            <td class="text-center">
+                                                <b> After </b>
+                                            </td>
+                                        </tr>
+                                        @foreach($sc->points as $key =>$sp)
+                                            <tr>
+                                                <td>
+                                                    <div class="custom-control custom-checkbox text-center">
+                                                        <input class="custom-control-input point-checkbox"
+                                                               type="checkbox"
+                                                               id="customCheckbox2_{{$loop->iteration}}">
+                                                        <label for="customCheckbox2_{{$loop->iteration}}"
+                                                               class="custom-control-label"></label>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">{{$sp->sub_point_name}}</td>
+                                                <td class="text-center">{{\Carbon\Carbon::now()}}</td>
+                                                <td class="text-center">{{\Carbon\Carbon::now()}}</td>
+                                                <td>
+                                                    <div class="custom-control custom-checkbox text-center">
+                                                        <input class="custom-control-input point-checkbox"
+                                                               type="checkbox"
+                                                               id="customCheckbox3_{{$loop->iteration}}"
+                                                               data-subCourseId="{{$sc->id}}"
+                                                               data-pointId="{{$sp->id}}">
+                                                        <label for="customCheckbox3_{{$loop->iteration}}"
+                                                               class="custom-control-label"></label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endforeach
                                 </table>
                             </div>
                             {{--                            </div>--}}
                         </div>
-                        <div class="col-sm-6">
-                            {{--                            <div class="card">--}}
-                            <div class="card-body">
-                                <table class="table table-bordered table-striped">
-                                    <tr>
-                                        <th class="text-center bg-info" colspan="4" style="font-size: 20px">Hindi</th>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding-top: 15px; padding-left: 120px">Before</td>
-                                        <td rowspan="2" class="text-center" style="padding-top: 35px">Topics</td>
-                                        <td style="padding-top: 15px; padding-left: 120px">After</td>
-                                        <td rowspan="2" class="text-center" style="padding-top: 35px">Date</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding-top: 10px; padding-left: 140px">0</td>
-                                        <td style="padding-top: 10px; padding-left: 140px">0</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="custom-control custom-checkbox" style="padding-left: 150px;">
-                                                <input class="custom-control-input" type="checkbox"
-                                                       id="customCheckbox6">
-                                                <label for="customCheckbox6" class="custom-control-label"></label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            हिंदी क,ख,ग
-                                        </td>
-                                        <td>
-                                            <div class="custom-control custom-checkbox" style="padding-left: 150px;">
-                                                <input class="custom-control-input" type="checkbox"
-                                                       id="customCheckbox7">
-                                                <label for="customCheckbox7" class="custom-control-label"></label>
-                                            </div>
-                                        </td>
-                                        <td class="text-center">--</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="custom-control custom-checkbox" style="padding-left: 150px;">
-                                                <input class="custom-control-input" type="checkbox"
-                                                       id="customCheckbox8">
-                                                <label for="customCheckbox8" class="custom-control-label"></label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            ए की मात्रा वाले शब्द
-                                        </td>
-                                        <td>
-                                            <div class="custom-control custom-checkbox" style="padding-left: 150px;">
-                                                <input class="custom-control-input" type="checkbox"
-                                                       id="customCheckbox9">
-                                                <label for="customCheckbox9" class="custom-control-label"></label>
-                                            </div>
-                                        </td>
-                                        <td class="text-center">--</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
                     </div>
+                    <div id="result"></div>
                 </div>
             </div>
             {{--            </div>--}}
         </section>
     </div>
+    {{--    <div id="result"></div>--}}
 @endsection
 @push('styles')
     <style>
@@ -319,6 +318,38 @@
         .topics {
             padding-top: 300px;
         }
-
     </style>
+@endpush
+@push('scripts')
+    <script>
+
+        $(document).ready(function () {
+            $(document).on('click', '.custom-control-input', function () {
+
+                $.ajax({
+                    url: "{{route('student.saveData')}}", // Replace with the correct route URL
+                    method: 'POST',
+                    data: {
+                        "_token": "{{csrf_token()}}",
+                        "student_id": "{{$student->id}}",
+                        "course_id":"{{$student->course->id}}",
+                        "subCourseId": $(this).data('subcourseid'),
+                        "pointId": $(this).data('pointid'),
+                    },
+                    success: function (data) {
+                        var student = data.student;
+                        var trainer = data.trainer;
+
+                        // Update the content of the 'result' div with the fetched data
+                        $('#result').html('<p>Student: ' + student + '</p><p>Trainer: ' + trainer + '</p>');
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+
+                });
+            });
+        });
+    </script>
+
 @endpush

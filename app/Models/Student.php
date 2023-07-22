@@ -20,9 +20,16 @@ class Student extends Model
     public function trainer(){
         return $this->belongsTo(Trainer::class,'analysis_trainer_id');
     }
-
     public function attendance()
     {
         return $this->hasMany(StudentAttendance::class);
+    }
+    public function studentAssign()
+    {
+        return $this->hasOne(StudentStaffAssign::class);
+    }
+    public function saveData()
+    {
+        return $this->hasMany(StudentCourseComplete::class);
     }
 }
