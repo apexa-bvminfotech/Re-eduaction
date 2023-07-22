@@ -211,6 +211,8 @@
 @push('scripts')
     <script>
         $(document).ready(function () {
+            {{--let regularStaffAssignedSlots = @json($regularStaffAssignedSlots);--}}
+
             $(document).on('click', '.btn-assign', function () {
                 let id = parseInt($(this).data('id'));
                 $('.student_id').val(id)
@@ -253,6 +255,7 @@
                 $('.proxy_class').val($('.proxy_class').children().eq(0).val());
                 $('.slot').html('<option value="">------Select Slot-----</option>')
             });
+
             $(document).on('change', '.proxy_class', function () {
                 let proxy = ($(this).val());
                 if (proxy != "") {
@@ -265,8 +268,14 @@
                         success: function (data) {
                             console.log("Slot display done.", data);
                             let slotOption = '<option value="">------Select Slot-----</option>';
+
+
                             $.each(data.slots, function (index, slot) {
-                                slotOption += '<option value="' + slot.id + '">' + slot.slot_time + '  (' + slot.rtc.rtc_name + ')</option>'
+                                // if (regularStaffAssignedSlots.includes(slot.id) == '') {
+
+                                    slotOption += '<option value="' + slot.id + '">' + slot.slot_time + '  (' + slot.rtc.rtc_name + ')</option>';
+                                // }
+
                             })
                             $('.slot').html("")
                             $('.slot').html(slotOption)

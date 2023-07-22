@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Slot;
 use App\Models\StudentProxyStaffAssign;
 use App\Models\StudentStaffAssign;
 use App\Models\Trainer;
@@ -32,15 +33,16 @@ class TrainerAttendanceController extends Controller
      */
     public function index()
     {
-        $trainerAttendance = DB::table("trainer_attendances")
-            ->select('trainer_attendances.date',DB::raw('count(IF(attendance = 0, 1, NULL)) as present'),
-                DB::raw('count(IF(attendance = 1, 1, NULL)) as absent'))
-            ->groupBy('trainer_attendances.date')
-            ->orderBy('trainer_attendances.id','DESC')->get();
+//        $trainerAttendance = DB::table("trainer_attendances")
+//            ->select('trainer_attendances.date',DB::raw('count(IF(attendance = 0, 1, NULL)) as present'),
+//                DB::raw('count(IF(attendance = 1, 1, NULL)) as absent'))
+//            ->groupBy('trainer_attendances.date')
+//            ->orderBy('trainer_attendances.id','DESC')->get();
         $trainerAttendance = TrainerAttendance::orderBy('id', 'DESC');
+//        $regularStaffAssignedSlots = Slot::orderBy('id','DESC');
 
 
-        return view('trainer_attendance.index', compact('trainerAttendance'));
+        return view('trainer_attendance.index', compact('trainerAttendance',));
     }
 
     /**
