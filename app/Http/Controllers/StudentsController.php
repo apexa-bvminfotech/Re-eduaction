@@ -30,7 +30,7 @@ class StudentsController extends Controller
     {
         $slots = Slot::orderBy('id', 'desc')->get();
         $trainers = Trainer::orderBy('id', 'desc')->get();
-        $students = Student::with('course')->orderBy('id')->paginate(10);
+        $students = Student::with('course')->orderBy('id')->get();
         return view('student.index', compact('students', 'trainers', 'slots'))->with('i');
     }
 
@@ -193,14 +193,13 @@ class StudentsController extends Controller
             'extra_tuition_time_from' => 'required',
             'dob' => 'required',
             'age' => 'required',
-            'course_id' => 'required|exists:courses,id'
+            'course_id' => 'required|exists:courses,id',
             'payment_condition' => 'required|max:255',
             'reference_by' => 'required',
             'demo_trainer_id' => 'required',
             'fees' => 'required',
             'extra_note' => 'required',
             'analysis_trainer_id' => 'required|exists:trainers,id',
-            'course_id' => 'required|exists:courses,id'
         ]);
         $user = $student->user;
         $user->update([

@@ -64,6 +64,17 @@ class SlotController extends Controller
             'slot_time_to' => 'required',
             'slot_time_from' => 'required',
         ]);
+        $time = $request->slot_time_to . " - " . $request->slot_time_from;
+        $existingTrainerSlot = Slot::where('slot_time', $time)
+            ->where('trainer_id', $request->trainer_id)
+            ->first();
+
+        if ($existingTrainerSlot) {
+            if ($existingTrainerSlot->trainer_id == $request->trainer_id) {
+                return back()->with('error', 'Trainer slot already create please select other time');
+            }
+        }
+
         $time = $request->input('slot_time_to') . " - " . $request->input('slot_time_from');
         $data = [
             'trainer_id' => $request->input('trainer_id'),

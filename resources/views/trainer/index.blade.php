@@ -9,8 +9,7 @@
                     </div>
                     <div class="col-sm-6">
                         @can('branch-create')
-                            <a href="{{route('trainer.create')}}" class="btn btn-primary float-right">Create New
-                                Trainer</a>
+                            <a href="{{route('trainer.create')}}" class="btn btn-primary float-right"><i class="fa fa-plus pr-2"></i> Add</a>
                         @endcan
                     </div>
                 </div>
@@ -51,13 +50,11 @@
                                             </td>
                                             <td>
                                                 <a href="{{ route('trainer.show',$t->id) }}"
-                                                   class="btn btn-info btn-sm" title="show"><i
-                                                        class="fa fa-eye"></i></a>
+                                                   class="btn btn-info btn-sm" title="show"><i class="fa fa-eye"></i> View</a>
 
                                                 @can('trainer-edit')
                                                     <a href="{{ route('trainer.edit',$t->id) }}"
-                                                       class="btn btn-success btn-sm" title="Edit"><i
-                                                            class="fa fa-edit"></i></a>
+                                                       class="btn btn-success btn-sm" title="Edit"><i class="fa fa-edit"></i> Edit</a>
                                                 @endcan
                                             </td>
                                         </tr>

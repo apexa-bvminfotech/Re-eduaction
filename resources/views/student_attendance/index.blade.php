@@ -8,9 +8,8 @@
                         <h1>Students Attendance Management</h1>
                     </div>
                     <div class="col-sm-6">
-                        @can('branch-create')
-                            <a href="{{route('student_attendance.create')}}" class="btn btn-primary float-right">Create
-                                New StudentAttendance</a>
+                        @can('student-attendance-create')
+                            <a href="{{route('student_attendance.create')}}" class="btn btn-primary float-right"><i class="fa fa-plus pr-2"></i> Add</a>
                         @endcan
                     </div>
                 </div>
@@ -42,15 +41,21 @@
                                             <td>{{$s->absent}}</td>
                                             <td>
                                                 @can('student-attendance-edit')
-                                                    <a href="{{route('student_attendance.edit',$s->attendance_date)}}"
-                                                       class="btn btn-success" title="Edit"><i
-                                                            class="fa fa-edit"></i></a>
+                                                    @if($s->attendance_date == date('Y-m-d') && \Illuminate\Support\Facades\Auth::user()->type !=0)
+                                                        <a href="{{route('student_attendance.edit',$s->attendance_date)}}"
+                                                           class="btn btn-success btn-sm" title="Edit">
+                                                            <i class="fa fa-edit"></i> Edit</a>
+                                                    @elseif(\Illuminate\Support\Facades\Auth::user()->type == 0)
+                                                        <a href="{{route('student_attendance.edit',$s->attendance_date)}}"
+                                                           class="btn btn-success btn-sm" title="Edit">
+                                                            <i class="fa fa-edit"></i> Edit</a>
+                                                    @endif
                                                 @endcan
                                                 @can('student-attendance-delete')
                                                     {!! Form::open(['method' => 'DELETE','route' => ['student_attendance.destroy', $s->attendance_date],'style'=>'display:inline']) !!}
-                                                    <button type="submit" class="btn btn-danger" title="Delete"
+                                                    <button type="submit" class="btn btn-danger btn-sm" title="Delete"
                                                             onclick="return confirm('Are you sure you want to delete?')">
-                                                        <i class="fa fa-trash"></i></button>
+                                                        <i class="fa fa-trash"></i> Delete</button>
                                                     {!! Form::close() !!}
                                                 @endcan
 

@@ -9,7 +9,7 @@
                     </div>
                     <div class="col-sm-6">
                         @can('branch-create')
-                            <a href="{{route('branch.create')}}" class="btn btn-primary float-right">Create New Branch</a>
+                            <a href="{{route('branch.create')}}" class="btn btn-primary float-right"><i class="fa fa-plus pr-2"></i> Add</a>
                         @endcan
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                                                 <td>
                                                     @can('branch-edit')
                                                         <a href="{{route('branch.edit',$u->id)}}" class="btn btn-success btn-sm"
-                                                           title="Edit"><i class="fa fa-edit"></i></a>
+                                                           title="Edit"><i class="fa fa-edit"></i> Edit</a>
                                                     @endcan
                                                 </td>
                                             </tr>

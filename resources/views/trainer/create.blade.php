@@ -707,136 +707,136 @@
     <script type="text/javascript">
         $(document).ready(function () {
             var form = $('#quickForm');
-            // var validator = form.validate({
-            //     rules: {
-            //         surname: {
-            //             required: true,
-            //             maxlength: 255,
-            //         },
-            //         emer_fullName: {
-            //             required: true,
-            //             maxlength: 255,
-            //         },
-            //         name: {
-            //             required: true,
-            //             maxlength: 255,
-            //         },
-            //         father_name: {
-            //             required: true,
-            //             maxlength: 255,
-            //         },
-            //         phone: {
-            //             required: true,
-            //         },
-            //         email_id: {
-            //             required: true,
-            //         },
-            //         qualification: {
-            //             required: true,
-            //         },
-            //         address: {
-            //             required: true,
-            //         },
-            //         emer_phone: {
-            //             required: true,
-            //         },
-            //         emer_relationship: {
-            //             required: true,
-            //         },
-            //         emer_address: {
-            //             required: true,
-            //         },
-            //         photo: {
-            //             required: true,
-            //         },
-            //         aadhaar_card: {
-            //             required: true,
-            //         },
-            //         last_edu_markSheet: {
-            //             required: true,
-            //         },
-            //         bank_passbook: {
-            //             required: true,
-            //         },
-            //         dob: {
-            //             required: true,
-            //         },
-            //         marital_status: {
-            //             required: true,
-            //         },
-            //         terms_conditions: {
-            //             required: true,
-            //         }
-            //
-            //     },
-            //     messages: {
-            //         surname: {
-            //             required: 'Please enter your surname.'
-            //         },
-            //         emer_fullName: {
-            //             required: 'Please enter your emer_fullName.'
-            //         },
-            //         name: {
-            //             required: 'Please enter your name.'
-            //         },
-            //         father_name: {
-            //             required: "Please enter your father name ",
-            //         },
-            //         phone: {
-            //             required: "Please enter a Contact ",
-            //         },
-            //         email_id: {
-            //             required: "Please enter your Email ",
-            //         },
-            //         qualification: {
-            //             required: "Please enter your Qualification ",
-            //         },
-            //         address: {
-            //             required: "Please enter a Address ",
-            //         },
-            //         emer_phone: {
-            //             required: "Please enter Emergency contact Number",
-            //         },
-            //         emer_relationship: {
-            //             required: "Please enter Relationship",
-            //         },
-            //         emer_address: {
-            //             required: "Please Enter Address",
-            //         },
-            //         photo: {
-            //             required: "Please choose Passport size ",
-            //         },
-            //         aadhaar_card: {
-            //             required: "Please choose Aadhaar card ",
-            //         },
-            //         last_edu_markSheet: {
-            //             required: "Please choose Education MarkSheet ",
-            //         },
-            //         bank_passbook: {
-            //             required: "Please choose Aadhaar card ",
-            //         },
-            //         dob: {
-            //             required: "Please choose Date Of Birth ",
-            //         },
-            //         marital_status: {
-            //             required: "Please fill this field ",
-            //         },
-            //         terms_conditions: {
-            //             required: 'Please read terms and condition and select this checkbox for submit data',
-            //         }
-            //     },
-            //     errorElement: 'span',
-            //     errorPlacement: function (error, element) {
-            //         error.addClass('invalid-feedback');
-            //         element.closest('.form-group').append(error);
-            //     },
-            //     highlight: function (element, errorClass, validClass) {
-            //         $(element).addClass('is-invalid');
-            //     },
-            //     unhighlight: function (element, errorClass, validClass) {
-            //         $(element).removeClass('is-invalid');
-            //     }
-            // });
+            var validator = form.validate({
+                rules: {
+                    surname: {
+                        required: true,
+                        maxlength: 255,
+                    },
+                    emer_fullName: {
+                        required: true,
+                        maxlength: 255,
+                    },
+                    name: {
+                        required: true,
+                        maxlength: 255,
+                    },
+                    father_name: {
+                        required: true,
+                        maxlength: 255,
+                    },
+                    phone: {
+                        required: true,
+                    },
+                    email_id: {
+                        required: true,
+                    },
+                    qualification: {
+                        required: true,
+                    },
+                    address: {
+                        required: true,
+                    },
+                    emer_phone: {
+                        required: true,
+                    },
+                    emer_relationship: {
+                        required: true,
+                    },
+                    emer_address: {
+                        required: true,
+                    },
+                    photo: {
+                        required: true,
+                    },
+                    aadhaar_card: {
+                        required: true,
+                    },
+                    last_edu_markSheet: {
+                        required: true,
+                    },
+                    bank_passbook: {
+                        required: true,
+                    },
+                    dob: {
+                        required: true,
+                    },
+                    marital_status: {
+                        required: true,
+                    },
+                    terms_conditions: {
+                        required: true,
+                    }
+
+                },
+                messages: {
+                    surname: {
+                        required: 'Please enter your surname.'
+                    },
+                    emer_fullName: {
+                        required: 'Please enter your emer_fullName.'
+                    },
+                    name: {
+                        required: 'Please enter your name.'
+                    },
+                    father_name: {
+                        required: "Please enter your father name ",
+                    },
+                    phone: {
+                        required: "Please enter a Contact ",
+                    },
+                    email_id: {
+                        required: "Please enter your Email ",
+                    },
+                    qualification: {
+                        required: "Please enter your Qualification ",
+                    },
+                    address: {
+                        required: "Please enter a Address ",
+                    },
+                    emer_phone: {
+                        required: "Please enter Emergency contact Number",
+                    },
+                    emer_relationship: {
+                        required: "Please enter Relationship",
+                    },
+                    emer_address: {
+                        required: "Please Enter Address",
+                    },
+                    photo: {
+                        required: "Please choose Passport size ",
+                    },
+                    aadhaar_card: {
+                        required: "Please choose Aadhaar card ",
+                    },
+                    last_edu_markSheet: {
+                        required: "Please choose Education MarkSheet ",
+                    },
+                    bank_passbook: {
+                        required: "Please choose Aadhaar card ",
+                    },
+                    dob: {
+                        required: "Please choose Date Of Birth ",
+                    },
+                    marital_status: {
+                        required: "Please fill this field ",
+                    },
+                    terms_conditions: {
+                        required: 'Please read terms and condition and select this checkbox for submit data',
+                    }
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
             $('.next-btn').click(function () {
                 var isValid = form.valid();
                 if (isValid) {

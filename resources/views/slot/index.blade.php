@@ -9,7 +9,7 @@
                     </div>
                     <div class="col-sm-6">
                         @can('branch-create')
-                            <a href="{{route('slot.create')}}" class="btn btn-primary float-right">Create New Slot</a>
+                            <a href="{{route('slot.create')}}" class="btn btn-primary float-right"><i class="fa fa-plus pr-2"></i> Add</a>
                         @endcan
                     </div>
                 </div>
@@ -57,8 +57,8 @@
                                                 <td>
                                                     @can('slot-edit')
                                                         <a href="{{ route('slot.edit',$s->id) }}"
-                                                           class="btn btn-success btn-sm" title="Edit"><i
-                                                                class="fa fa-edit"></i></a>
+                                                           class="btn btn-success btn-sm" title="Edit">
+                                                            <i class="fa fa-edit"></i> Edit</a>
                                                     @endcan
                                                 </td>
                                             </tr>
@@ -79,7 +79,7 @@
         $(function () {
             $("#example1").DataTable({
                 "responsive": true, "lengthChange": false, "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                "buttons": ["csv", "excel", "pdf", "print"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
             $('.checkStatus').change(function () {

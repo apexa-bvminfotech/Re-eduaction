@@ -30,12 +30,22 @@ class StudentAttendanceController extends Controller
      */
     public function index()
     {
-        $studenAttendance = DB::table("students_attendance")
-            ->select('students_attendance.attendance_date', DB::raw('count(IF(attendance_type = 0, 1, NULL)) as present'),
-                DB::raw('count(IF(attendance_type = 1, 1, NULL)) as absent'))
-            ->where('students_attendance.user_id', auth()->id())
-            ->groupBy('students_attendance.attendance_date')
-            ->orderBy('students_attendance.id', 'DESC')->get();
+        if(Auth::user()->type == 0) {
+            $studenAttendance = DB::table("students_attendance")
+                ->select('students_attendance.attendance_date', DB::raw('count(IF(attendance_type = 0, 1, NULL)) as present'),
+                    DB::raw('count(IF(attendance_type = 1, 1, NULL)) as absent'))
+                ->groupBy('students_attendance.attendance_date')
+                ->orderBy('students_attendance.attendance_date', 'DESC')->get();
+        } else {
+            $studenAttendance = DB::table("students_attendance")
+                ->select('students_attendance.attendance_date', DB::raw('count(IF(attendance_type = 0, 1, NULL)) as present'),
+                    DB::raw('count(IF(attendance_type = 1, 1, NULL)) as absent'))
+                ->join('student_staff_assigns', 'student_staff_assigns.trainer_id','students_attendance.user_id')
+                ->where('student_staff_assigns.is_active', 0)
+                ->groupBy('students_attendance.attendance_date')
+                ->orderBy('students_attendance.attendance_date', 'DESC')->get();
+        }
+
         $user = auth()->user();
         return view('student_attendance.index', compact('user', 'studenAttendance'));
     }

@@ -120,7 +120,7 @@
 
                             <div class="card-footer justify-content-end d-flex" >
                                 <button type="submit" class="btn btn-primary mr-2">Create</button>
-                                <a href="{{ route('rtc.index') }}" class="btn btn-danger">Cancel</a>
+                                <a href="{{ route('slot.index') }}" class="btn btn-danger">Cancel</a>
                             </div>
                             {!! Form::close() !!}
                         </div>

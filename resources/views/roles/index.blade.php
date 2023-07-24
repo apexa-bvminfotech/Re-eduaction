@@ -9,7 +9,7 @@
                     </div>
                     <div class="col-sm-6">
                         @can('role-create')
-                            <a href="{{route('roles.create')}}" class="btn btn-primary float-right">Create New Role</a>
+                            <a href="{{route('roles.create')}}" class="btn btn-primary float-right"><i class="fa fa-plus pr-2"></i> Add</a>
                         @endcan
                     </div>
                 </div>
@@ -36,12 +36,12 @@
                                                 <td>{{ $role->name }}</td>
                                                 <td>
                                                     <button type="button" class="btn btn-info btn-sm showDetail" data-id="{{ $role->id }}" data-toggle="modal" data-target="#modal-lg">
-                                                        <i class="fa fa-eye"></i>
+                                                        <i class="fa fa-eye"></i> View
                                                     </button>
                                                     @can('role-edit')
                                                         <a href="{{ route('roles.edit',$role->id) }}"
                                                            class="btn btn-success btn-sm" title="Edit"><i
-                                                                class="fa fa-edit"></i></a>
+                                                                class="fa fa-edit"></i> Edit</a>
                                                     @endcan
                                                 </td>
                                             </tr>
@@ -77,7 +77,7 @@
         $(function () {
             $("#example1").DataTable({
                 "responsive": true, "lengthChange": false, "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                "buttons": ["csv", "excel", "pdf", "print"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
 

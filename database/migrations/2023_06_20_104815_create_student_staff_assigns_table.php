@@ -7,10 +7,10 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+        * Run the migrations.
      *
      * @return void
-     */
+        */
     public function up()
     {
         Schema::create('student_staff_assigns', function (Blueprint $table) {
@@ -20,7 +20,6 @@ return new class extends Migration
             $table->foreignId('slot_id')->constrained('slots')->cascadeOnUpdate()->cascadeOnDelete();
             $table->date('date');
             $table->integer('is_active')->default(0);
-            $table->string('type');
             $table->timestamps();
         });
     }

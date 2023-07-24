@@ -9,7 +9,7 @@
                     </div>
                     <div class="col-sm-6">
                         @can('branch-create')
-                            <a href="{{route('course.create')}}" class="btn btn-primary float-right">Create New Course</a>
+                            <a href="{{route('course.create')}}" class="btn btn-primary float-right"><i class="fa fa-plus pr-2"></i> Add</a>
                         @endcan
                     </div>
                 </div>
@@ -42,15 +42,12 @@
                                                     <td>
                                                         <form action="{{route('course.destroy',$course->id)}}"
                                                               method="POST">
-
                                                             <a class="btn btn-success btn-sm fa fa-edit"
-                                                               href="{{ route('course.edit',$course->id) }}"></a>
-
+                                                               href="{{ route('course.edit',$course->id) }}"> Edit</a>
                                                             @csrf
                                                             @method('DELETE')
-
                                                             <button type="submit"
-                                                                    class="btn btn-danger fa fa-trash-alt btn-sm show_confirm"></button>
+                                                                    class="btn btn-danger fa fa-trash-alt btn-sm show_confirm"> Delete</button>
                                                         </form>
                                                     </td>
                                                 </tr>

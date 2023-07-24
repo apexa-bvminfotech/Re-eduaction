@@ -9,7 +9,7 @@
                     </div>
                     <div class="col-sm-6">
                         @can('user-create')
-                            <a href="{{route('user.create')}}" class="btn btn-primary float-right">Create New User</a>
+                            <a href="{{route('user.create')}}" class="btn btn-primary float-right"><i class="fa fa-plus pr-2"></i> Add</a>
                         @endcan
                     </div>
                 </div>
@@ -60,7 +60,7 @@
                                                 <td>
                                                     @can('user-edit')
                                                         <a href="{{route('user.edit',$u->id)}}" class="btn btn-success btn-sm"
-                                                           title="Edit"><i class="fa fa-edit"></i></a>
+                                                           title="Edit"><i class="fa fa-edit"></i> Edit</a>
                                                     @endcan
                                                 </td>
                                             </tr>

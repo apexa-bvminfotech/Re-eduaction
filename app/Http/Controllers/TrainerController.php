@@ -65,7 +65,7 @@ class TrainerController extends Controller
             'father_name' => $request->father_name,
             'email' => $request->email_id,
             'contact' => $request->phone,
-            'password' => Hash::make(strtolower($request->name) . '@123'),
+            'password' => Hash::make(strtolower($request->name) . '@2121'),
             'type' => 1,
             'branch_id' => $request->input('branch_id'),
         ]);
@@ -199,7 +199,7 @@ class TrainerController extends Controller
             'father_name' => $request->father_name,
             'email' => $request->email_id,
             'contact' => $request->phone,
-            'password' => Hash::make(($request->name) . '@123'),
+            'password' => Hash::make(($request->name) . '@2121'),
             'type' => 1,
             'branch_id' => $request->input('branch_id'),
         ]);
