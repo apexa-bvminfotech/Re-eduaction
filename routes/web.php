@@ -29,7 +29,9 @@ Route::group(['middleware'=>['auth']],function (){
         //proxy-staff-route
         Route::get('/proxy-slot/{id}','StudentsController@proxySlot');
         Route::post('/proxy-staff', 'StudentsController@proxyStaff')->name('student.proxyStaff');
-        Route::post('/save-checkbox-data','StudentsController@saveData')->name('student.saveData');
+//        Route::post('/save-checkbox-data','StudentsController@saveData')->name('student.saveData');
+        Route::post('/send-notification', 'StudentsController@sendNotification')->name('student.sendNotification');
+
     });
     Route::resource('roles', 'RoleController');
     Route::resource('trainer', 'TrainerController');

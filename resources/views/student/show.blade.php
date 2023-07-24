@@ -223,84 +223,84 @@
                         </div>
                     </div>
                 </div>
+{{--                <div class="card">--}}
+{{--                    <div class="card-header">--}}
+{{--                        <h3 class="text-dark"><b><i>Courses</i></b></h3></div>--}}
+{{--                    <div class="row">--}}
+{{--                        <div class="col-sm-12">--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="text-dark" ><b><i>Courses</i></b></h2></div>
+                        <h3 class="text-dark"><b><i>Courses</i></b></h3></div>
                     <div class="row">
-                        <div class="col-sm-12">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="text-dark"><b><i>Courses</i></b></h2></div>
-                    <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             {{--                            <div class="card">--}}
-                            <div class="card-body">
-                                <table class="table table-bordered table-striped">
-                                    <tr>
-                                        <th class="text-center bg-info" colspan="4" style="font-size: 20px">Gujarati
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding-top: 15px; padding-left: 120px">Before</td>
-                                        <td rowspan="2" class="text-center" style="padding-top: 35px">Topics</td>
-                                        <td style="padding-top: 15px; padding-left: 120px">After</td>
-                                        <td rowspan="2" class="text-center" style="padding-top: 35px">Date</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding-top: 10px; padding-left: 140px">0</td>
-                                        <td style="padding-top: 10px; padding-left: 140px">0</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="custom-control custom-checkbox"
-                                                 style="padding-left: 150px;">
-                                                <input class="custom-control-input" type="checkbox"
-                                                       id="customCheckbox2">
-                                                <label for="customCheckbox2" class="custom-control-label"></label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            ગુજરાતી k,kh,g
-                                        </td>
-                                        <td>
-                                            <div class="custom-control custom-checkbox"
-                                                 style="padding-left: 150px;">
-                                                <input class="custom-control-input" type="checkbox"
-                                                       id="customCheckbox3">
-                                                <label for="customCheckbox3" class="custom-control-label"></label>
-                                            </div>
-                                        </td>
-                                        <td class="text-center">--</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="custom-control custom-checkbox"
-                                                 style="padding-left: 150px;">
-                                                <input class="custom-control-input" type="checkbox"
-                                                       id="customCheckbox4">
-                                                <label for="customCheckbox4" class="custom-control-label"></label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            a ની માત્ર વાળા શબ્દ
-                                        </td>
-                                        <td>
-                                            <div class="custom-control custom-checkbox"
-                                                 style="padding-left: 150px;">
-                                                <input class="custom-control-input" type="checkbox"
-                                                       id="customCheckbox5">
-                                                <label for="customCheckbox5" class="custom-control-label"></label>
-                                            </div>
-                                        </td>
-                                        <td class="text-center">--</td>
-                                    </tr>
-                                </table>
-                            </div>
+{{--                            <div class="card-body">--}}
+{{--                                <table class="table table-bordered table-striped">--}}
+{{--                                    <tr>--}}
+{{--                                        <th class="text-center bg-info" colspan="4" style="font-size: 20px">Gujarati--}}
+{{--                                        </th>--}}
+{{--                                    </tr>--}}
+{{--                                    <tr>--}}
+{{--                                        <td style="padding-top: 15px; padding-left: 120px">Before</td>--}}
+{{--                                        <td rowspan="2" class="text-center" style="padding-top: 35px">Topics</td>--}}
+{{--                                        <td style="padding-top: 15px; padding-left: 120px">After</td>--}}
+{{--                                        <td rowspan="2" class="text-center" style="padding-top: 35px">Date</td>--}}
+{{--                                    </tr>--}}
+{{--                                    <tr>--}}
+{{--                                        <td style="padding-top: 10px; padding-left: 140px">0</td>--}}
+{{--                                        <td style="padding-top: 10px; padding-left: 140px">0</td>--}}
+{{--                                    </tr>--}}
+{{--                                    <tr>--}}
+{{--                                        <td>--}}
+{{--                                            <div class="custom-control custom-checkbox"--}}
+{{--                                                 style="padding-left: 150px;">--}}
+{{--                                                <input class="custom-control-input" type="checkbox"--}}
+{{--                                                       id="customCheckbox2">--}}
+{{--                                                <label for="customCheckbox2" class="custom-control-label"></label>--}}
+{{--                                            </div>--}}
+{{--                                        </td>--}}
+{{--                                        <td>--}}
+{{--                                            ગુજરાતી k,kh,g--}}
+{{--                                        </td>--}}
+{{--                                        <td>--}}
+{{--                                            <div class="custom-control custom-checkbox"--}}
+{{--                                                 style="padding-left: 150px;">--}}
+{{--                                                <input class="custom-control-input" type="checkbox"--}}
+{{--                                                       id="customCheckbox3">--}}
+{{--                                                <label for="customCheckbox3" class="custom-control-label"></label>--}}
+{{--                                            </div>--}}
+{{--                                        </td>--}}
+{{--                                        <td class="text-center">--</td>--}}
+{{--                                    </tr>--}}
+{{--                                    <tr>--}}
+{{--                                        <td>--}}
+{{--                                            <div class="custom-control custom-checkbox"--}}
+{{--                                                 style="padding-left: 150px;">--}}
+{{--                                                <input class="custom-control-input" type="checkbox"--}}
+{{--                                                       id="customCheckbox4">--}}
+{{--                                                <label for="customCheckbox4" class="custom-control-label"></label>--}}
+{{--                                            </div>--}}
+{{--                                        </td>--}}
+{{--                                        <td>--}}
+{{--                                            a ની માત્ર વાળા શબ્દ--}}
+{{--                                        </td>--}}
+{{--                                        <td>--}}
+{{--                                            <div class="custom-control custom-checkbox"--}}
+{{--                                                 style="padding-left: 150px;">--}}
+{{--                                                <input class="custom-control-input" type="checkbox"--}}
+{{--                                                       id="customCheckbox5">--}}
+{{--                                                <label for="customCheckbox5" class="custom-control-label"></label>--}}
+{{--                                            </div>--}}
+{{--                                        </td>--}}
+{{--                                        <td class="text-center">--</td>--}}
+{{--                                    </tr>--}}
+{{--                                </table>--}}
+{{--                            </div>--}}
                             {{--                            </div>--}}
                         </div>
                         <div class="col-sm-6">
@@ -310,25 +310,32 @@
                                     @foreach($student->course->subcourses as $key =>$sc)
                                         <tr>
                                             <th class="bg-info">
-                                                <div class="custom-control custom-checkbox text-center">
-                                                    <input class="custom-control-input sub-course-checkbox"
+                                                <input type="hidden" name="trainer_id" class="form-control trainer_id" value="{{$student->trainer->id}}">
+                                                <div class="form-check checkbox-xl custom-checkbox text-center">
+                                                    @can('student-course-complete-before')
+                                                    <input class="form-check-input sub-course-checkbox"
                                                            type="checkbox"
                                                            id="customCheckbox_{{$loop->iteration}}">
+                                                    @else
+                                                        <input class="form-check-input sub-course-checkbox"
+                                                               type="checkbox" disabled
+                                                               id="customCheckbox_{{$loop->iteration}}">
+                                                    @endcan
                                                     <label for="customCheckbox_{{$loop->iteration}}"
-                                                           class="custom-control-label"></label>
+                                                           class="form-check-label"></label>
                                                 </div>
                                             </th>
-                                            <th class="text-center bg-info" colspan="3"
+                                            <th class="text-center bg-info"
                                                 style="font-size: 20px">{{$sc->sub_course_name}}
                                             </th>
                                             <th class="bg-info">
-                                                <div class="custom-control custom-checkbox text-center">
-                                                    <input class="custom-control-input sub-course-checkbox"
+                                                <div class="form-check checkbox-xl custom-checkbox text-center">
+                                                    <input class="form-check-input sub-course-checkbox"
                                                            type="checkbox"
                                                            id="customCheckbox1_{{$loop->iteration}}"
                                                            data-subCourseId="{{$sc->id}}" data-pointId="0">
                                                     <label for="customCheckbox1_{{$loop->iteration}}"
-                                                           class="custom-control-label"></label>
+                                                           class="form-check-label"></label>
                                                 </div>
                                             </th>
                                         </tr>
@@ -336,10 +343,9 @@
                                             <td class="text-center">
                                                 <b> Before </b>
                                             </td>
-                                            <td class="text-center"
-                                            ><b>Points</b></td>
-                                            <td class="text-center"><b>Trainer Confirm Date</b></td>
-                                            <td class="text-center"><b>User Confirm Date</b></td>
+                                            <td class="text-center">
+                                                <b>Points</b>
+                                            </td>
                                             <td class="text-center">
                                                 <b> After </b>
                                             </td>
@@ -347,26 +353,30 @@
                                         @foreach($sc->points as $key =>$sp)
                                             <tr>
                                                 <td>
-                                                    <div class="custom-control custom-checkbox text-center">
-                                                        <input class="custom-control-input point-checkbox"
+                                                    <div class="form-check checkbox-xl custom-checkbox text-center">
+                                                        @can('student-course-complete-before')
+                                                        <input class="form-check-input point-checkbox"
                                                                type="checkbox"
                                                                id="customCheckbox2_{{$loop->iteration}}">
+                                                        @else
+                                                            <input class="form-check-input point-checkbox"
+                                                                   type="checkbox" disabled
+                                                                   id="customCheckbox2_{{$loop->iteration}}">
+                                                        @endcan
                                                         <label for="customCheckbox2_{{$loop->iteration}}"
-                                                               class="custom-control-label"></label>
+                                                               class="form-check-label"></label>
                                                     </div>
                                                 </td>
                                                 <td class="text-center">{{$sp->sub_point_name}}</td>
-                                                <td class="text-center">{{\Carbon\Carbon::now()}}</td>
-                                                <td class="text-center">{{\Carbon\Carbon::now()}}</td>
                                                 <td>
-                                                    <div class="custom-control custom-checkbox text-center">
-                                                        <input class="custom-control-input point-checkbox"
+                                                    <div class="form-check checkbox-xl custom-checkbox text-center">
+                                                        <input class="form-check-input point-checkbox"
                                                                type="checkbox"
                                                                id="customCheckbox3_{{$loop->iteration}}"
                                                                data-subCourseId="{{$sc->id}}"
                                                                data-pointId="{{$sp->id}}">
                                                         <label for="customCheckbox3_{{$loop->iteration}}"
-                                                               class="custom-control-label"></label>
+                                                               class="form-check-label"></label>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -402,23 +412,25 @@
     <script>
 
         $(document).ready(function () {
-            $(document).on('click', '.custom-control-input', function () {
+            $(document).on('click', '.point-checkbox', function () {
+                var subCourseId = $(this).data('subcourseid');
+                var pointId = $(this).data('pointid');
 
                 $.ajax({
-                    url: "{{route('student.saveData')}}", // Replace with the correct route URL
+                    url: "{{route('student.sendNotification')}}",
                     method: 'POST',
                     data: {
-                        "_token": "{{csrf_token()}}",
+                        "_token": "{{ csrf_token() }}",
                         "student_id": "{{$student->id}}",
                         "course_id":"{{$student->course->id}}",
-                        "subCourseId": $(this).data('subcourseid'),
-                        "pointId": $(this).data('pointid'),
+                        "sub_course_id": subCourseId,
+                        "sub_course_point_id": pointId
                     },
                     success: function (data) {
                         var student = data.student;
                         var trainer = data.trainer;
+                        alert(data.message);
 
-                        // Update the content of the 'result' div with the fetched data
                         $('#result').html('<p>Student: ' + student + '</p><p>Trainer: ' + trainer + '</p>');
                     },
                     error: function (error) {
@@ -430,4 +442,4 @@
         });
     </script>
 
-@endpush
+    @endpush

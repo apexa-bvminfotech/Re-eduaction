@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class StudentsController extends Controller
 {
@@ -361,32 +362,39 @@ class StudentsController extends Controller
     }
 
 
-    public function saveData(Request $request)
+    public function sendNotification(Request $request)
     {
 //        dd($request->all());
         $validatedData = $request->validate([
             'student_id' => 'required',
 //            'trainer_id'=>'required',
             'course_id' => 'required',
-            'subCourseId' => 'required',
-            'pointId' => 'required',
-            'trainer_confirm_date'=>'required',
+            'sub_course_id' => 'required',
+            'sub_course_point_id' => 'required',
+//            'trainer_confirm_date'=>'required',
         ]);
+//dd(Auth::user()->id);
 
-//        dd($request->all());
         $studentCourseComplete = new StudentCourseComplete();
         $studentCourseComplete->student_id = $validatedData['student_id'];
-        // Add any other relevant data fields here
         $studentCourseComplete->course_id = $validatedData['course_id'];
-        $studentCourseComplete->sub_course_id = $validatedData['subCourseId'];
-        $studentCourseComplete->sub_course_point_id = $validatedData['pointId'];
-        $studentCourseComplete->trainer_confirm_date = $validatedData['trainer_confirm_date'];
+        $studentCourseComplete->sub_course_id = $validatedData['sub_course_id'];
+        $studentCourseComplete->sub_course_point_id = $validatedData['sub_course_point_id'];
+        $studentCourseComplete->trainer_confirm_date = Carbon::now()->toDateString();
+        $studentCourseComplete->admin_confirm_date = Carbon::now()->toDateString();
+//        $userType = Auth::user()->role;
+        $userType = Auth::user()->type;
+//dd($userType);
+        if ($userType == 0) {
+            $studentCourseComplete->user_id = Auth::user()->id;
+        } elseif ($userType == 1) {
+            $studentCourseComplete->trainer_id = Auth::user()->id;
+        }
 
-        // Save the data into the database
+
+//        dd($studentCourseComplete);
         $studentCourseComplete->save();
-        return response()->json([
-            'message' => 'Data saved successfully',
-        ]);
+        return response()->json(['message' => 'Notification sent to admin.']);
     }
 }
 
