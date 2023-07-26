@@ -28,11 +28,6 @@ class Student extends Model
     {
         return $this->hasOne(StudentStaffAssign::class);
     }
-    public function saveData()
-    {
-        return $this->hasMany(StudentCourseComplete::class);
-    }
-
     public function proxyStaffAssignments()
     {
         return $this->hasMany(StudentProxyStaffAssign::class, 'student_id');

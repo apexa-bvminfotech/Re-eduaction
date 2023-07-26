@@ -46,7 +46,7 @@ class UserController extends Controller
             'name' => 'required|max:255',
             'surname' => 'required|max:255',
             'father_name' => 'required|max:255',
-//            'email' => 'required|unique:users,email|email',
+            'email' => 'nullable',
             'contact' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
             'role' => 'required',
             'is_active' => 'required'

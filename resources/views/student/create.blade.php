@@ -16,14 +16,13 @@
                         </ol>
                     </div>
                 </div>
-            </div><!-- /.container-fluid -->
+            </div>
         </section>
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card card-primary">
-                            {{--                            {!! Form::open(array('route' => 'student.store','method'=>'POST')) !!}--}}
                             <div class="bs-stepper">
                                 <div class="bs-stepper-header" role="tablist">
                                     <div class="step" data-target="#logins-part">
@@ -35,16 +34,14 @@
                                     </div>
                                     <div class="line"></div>
                                     <div class="step" data-target="#information-part">
-                                        <button type="button" class="step-trigger" role="tab"
-                                                aria-controls="information-part" id="information-part-trigger">
+                                        <button type="button" class="step-trigger" role="tab" aria-controls="information-part" id="information-part-trigger">
                                             <span class="bs-stepper-circle">2</span>
                                             <span class="bs-stepper-label">Office Use Only</span>
                                         </button>
                                     </div>
                                     <div class="line"></div>
                                     <div class="step" data-target="#office-use-part">
-                                        <button type="button" class="step-trigger" role="tab"
-                                                aria-controls="office-use-part" id="office-use-part-trigger">
+                                        <button type="button" class="step-trigger" role="tab" aria-controls="office-use-part" id="office-use-part-trigger">
                                             <span class="bs-stepper-circle">3</span>
                                             <span class="bs-stepper-label">Image and Upload file</span>
                                         </button>
@@ -52,22 +49,15 @@
                                 </div>
                                 <div class="bs-stepper-content">
                                     <!-- your steps content here -->
-                                    <form method="POST" id="quickForm" action="{{route('student.store')}}"
-                                          enctype="multipart/form-data"
-                                          class="needs-validation" novalidate>
+                                    <form action="{{route('student.store')}}" method="POST" id="quickForm" class="needs-validation" novalidate enctype="multipart/form-data">
                                         @csrf
-                                        <div id="logins-part" class="content" role="tabpanel"
-                                             aria-labelledby="logins-part-trigger">
+                                        <div id="logins-part" class="content" role="tabpanel" aria-labelledby="logins-part-trigger">
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-4 mb-1">
                                                         <div class="form-group mb-3">
                                                             <label for="simpleinput">Surname:</label>
-                                                            <input type="text" id="simpleinput"
-                                                                   class="form-control "
-                                                                   value="{{ old('surname') }}"
-                                                                   name="surname" placeholder="enter surname"
-                                                                   required>
+                                                            <input type="text" id="simpleinput" class="form-control " value="{{ old('surname') }}" name="surname" placeholder="enter surname" required>
                                                             @error('surname')
                                                             <span class="text-danger">{{$message}}</span>
                                                             @enderror
@@ -76,10 +66,7 @@
                                                     <div class="col-md-4 mb-1">
                                                         <div class="form-group mb-3">
                                                             <label for="simpleinput">Student Name:</label>
-                                                            <input type="text" id="simpleinput" class="form-control"
-                                                                   name="name"
-                                                                   value="{{ old('name') }}"
-                                                                   placeholder="enter name" required>
+                                                            <input type="text" id="simpleinput" class="form-control" name="name" value="{{ old('name') }}" placeholder="enter name" required>
                                                             @error('name')
                                                             <span class="text-danger">{{$message}}</span>
                                                             @enderror
@@ -88,10 +75,7 @@
                                                     <div class="col-md-4 mb-1">
                                                         <div class="form-group mb-3">
                                                             <label for="simpleinput">Father Name:</label>
-                                                            <input type="text" id="simpleinput" class="form-control"
-                                                                   name="father_name"
-                                                                   value="{{ old('father_name') }}"
-                                                                   placeholder="enter father name" required>
+                                                            <input type="text" id="simpleinput" class="form-control" name="father_name" value="{{ old('father_name') }}" placeholder="enter father name" required>
                                                             @error('father_name')
                                                             <span class="text-danger">{{$message}}</span>
                                                             @enderror
@@ -381,14 +365,10 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button type="button"
-                                                        class="btn btn-primary float-right btn-next-form nxtbt next-btn">
-                                                    Next
-                                                </button>
+                                                <button type="button" class="btn btn-primary float-right btn-next-form nxtbt next-btn">Next</button>
                                             </div>
                                         </div>
-                                        <div id="information-part" class="content" role="tabpanel"
-                                             aria-labelledby="information-part-trigger">
+                                        <div id="information-part" class="content" role="tabpanel" aria-labelledby="information-part-trigger">
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-6 mb-1">
@@ -481,17 +461,11 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button type="button"
-                                                        class="btn btn-primary float-right nxtbt  ml-2 next-btn">
-                                                    Next
-                                                </button>
-                                                <button type="button" class="btn btn-primary prvBtn float-right"
-                                                        onclick="stepper.previous()">Previous
-                                                </button>
+                                                <button type="button" class="btn btn-primary float-right nxtbt  ml-2 next-btn">Next</button>
+                                                <button type="button" class="btn btn-primary prvBtn float-right" onclick="stepper.previous()">Previous</button>
                                             </div>
                                         </div>
-                                        <div id="office-use-part" class="content" role="tabpanel"
-                                             aria-labelledby="office-use-part-trigger">
+                                        <div id="office-use-part" class="content" role="tabpanel" aria-labelledby="office-use-part-trigger">
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-6">
@@ -540,9 +514,7 @@
                                         </div>
                                     </form>
                                 </div>
-                                <!-- /.card-body -->
                             </div>
-                            {{--                            {!! Form::close() !!}--}}
                         </div>
                     </div>
                 </div>
@@ -551,38 +523,9 @@
     </div>
 @endsection
 @push('scripts')
-    <script type="text/javascript">
-        $('.medium-list').on('change', function() {
-            $('.medium-list').not(this).prop('checked', false);
-        });
-        function isNumber(evt) {
-            evt = (evt) ? evt : window.event;
-            var charCode = (evt.which) ? evt.which : evt.keyCode;
-            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-                return false;
-            }
-            return true;
-        }
-        function ageValidation() {
-            var x = document.getElementById("txtAge").value;
-            if (x < 1 || x > 20) {
-                alert("enter age between 1 to 20")
-            }
-        }
-        $(document).ready(function () {
-
-            $('#timepicker').datetimepicker({
-                format: 'LT'
-            })
-            $('#timepicker1').datetimepicker({
-                format: 'LT'
-            })
-            $('#timepicker2').datetimepicker({
-                format: 'LT'
-            })
-            $('#timepicker3').datetimepicker({
-                format: 'LT'
-            })
+    <script>
+        $(document).ready(function ()
+        {
             var form = $('#quickForm');
             var validator = form.validate({
                 rules: {
@@ -605,7 +548,6 @@
                     },
                     father_contact_no: {
                         required: true,
-                        // phoneUS: true,
                     },
                     mother_contact_no: {
                         required: true,
@@ -706,6 +648,18 @@
                     $(element).removeClass('is-invalid');
                 }
             });
+            $('#timepicker').datetimepicker({
+                format: 'LT'
+            })
+            $('#timepicker1').datetimepicker({
+                format: 'LT'
+            })
+            $('#timepicker2').datetimepicker({
+                format: 'LT'
+            })
+            $('#timepicker3').datetimepicker({
+                format: 'LT'
+            })
             $('.next-btn').click(function () {
                 var isValid = form.valid();
                 if (isValid) {
@@ -714,7 +668,6 @@
                 }
             });
             $('.next-btn1').click(function () {
-                // alert('s')
                 var isValid = form.valid();
                 if (isValid) {
                     form.submit()
@@ -724,6 +677,25 @@
             function resetValidation(form) {
                 form.find('.is-invalid').removeClass('is-invalid');
                 form.find('.invalid-feedback').remove();
+            }
+            $('.medium-list').on('change', function () {
+                $('.medium-list').not(this).prop('checked', false);
+            });
+
+            function isNumber(evt) {
+                evt = (evt) ? evt : window.event;
+                var charCode = (evt.which) ? evt.which : evt.keyCode;
+                if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                    return false;
+                }
+                return true;
+            }
+
+            function ageValidation() {
+                var x = document.getElementById("txtAge").value;
+                if (x < 1 || x > 20) {
+                    alert("enter age between 1 to 20")
+                }
             }
         });
         document.addEventListener('DOMContentLoaded', function () {

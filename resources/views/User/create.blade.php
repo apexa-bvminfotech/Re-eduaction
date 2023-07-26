@@ -55,7 +55,11 @@
                                     <label for="email" class="col-sm-3 col-form-label">Email</label>
                                     <div class="col-sm-9">
                                         <input type="email" name="email" value="{{ old('email') }}" placeholder="Enter email address" class="form-control" >
+                                        @error('email')
+                                        <span class="text-danger">{{$message}}</span>
+                                        @enderror
                                     </div>
+
                                 </div>
                                 <div class="form-group row">
                                     <label for="simpleinput" class="col-sm-3 col-form-label">Contact</label>

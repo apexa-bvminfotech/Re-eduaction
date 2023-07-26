@@ -18,4 +18,11 @@ class StudentCourseComplete extends Model
         return $this->belongsTo(Student::class);
     }
 
+
+    public function subCourses()
+    {
+        return $this->belongsToMany(SubCourse::class);
+    }
+
+
 }

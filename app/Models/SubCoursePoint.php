@@ -10,7 +10,10 @@ class SubCoursePoint extends Model
     use HasFactory;
 
     public $guarded = ['id'];
-    public function subCourse(){
-        return $this->belongsTo(SubCourse::class,'sub_point_name','id');
+
+    public function subCourse()
+    {
+        return $this->belongsTo(SubCourse::class,'sub_course_id','id');
     }
+
 }

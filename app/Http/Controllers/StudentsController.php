@@ -6,12 +6,10 @@ use App\Models\Course;
 use App\Models\Slot;
 use App\Models\StudentAttendance;
 use App\Models\StudentCourseComplete;
-use App\Models\SubCourse;
 use App\Models\SubCoursePoint;
 use App\Models\Trainer;
 use App\Models\StudentStaffAssign;
 use App\Models\StudentProxyStaffAssign;
-use App\Models\Rtc;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -22,11 +20,7 @@ use Illuminate\Support\Facades\Auth;
 
 class StudentsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $slots = Slot::orderBy('id', 'desc')->get();
@@ -35,11 +29,6 @@ class StudentsController extends Controller
         return view('student.index', compact('students', 'trainers', 'slots'))->with('i');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $student = Student::orderBy('id', 'desc')->get();
@@ -49,12 +38,6 @@ class StudentsController extends Controller
         return view('student.create', compact('student', 'role', 'course', 'trainer'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -63,6 +46,7 @@ class StudentsController extends Controller
             'father_name' => 'required|max:255',
             'address' => 'required',
             'gender' => 'required',
+            'email_id' => 'nullable|email',
             'father_contact_no' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
             'mother_contact_no' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
             'standard' => 'required|numeric|max:12',
@@ -74,24 +58,26 @@ class StudentsController extends Controller
             'extra_tuition_time_from' => 'required',
             'dob' => 'required',
             'age' => 'required',
+            'course_id' => 'required|exists:courses,id',
             'payment_condition' => 'required|max:255',
             'reference_by' => 'required',
             'demo_trainer_id' => 'required',
             'fees' => 'required',
             'extra_note' => 'required',
             'analysis_trainer_id' => 'required|exists:trainers,id',
-            'course_id' => 'required|exists:courses,id'
+            'upload_analysis' => 'nullable',
+            'upload_student_image' => 'nullable',
         ]);
         $user = User::Create([
+            'name' => $request->name,
             'surname' => $request->surname,
             'father_name' => $request->father_name,
-            'contact' => $request->father_contact_no,
-            'name' => $request->name,
             'email' => $request->email_id,
+            'contact' => $request->father_contact_no,
             'password' => Hash::make(strtolower($request->name) . '@123'),
             'type' => 2,
         ]);
-//        dd($user);
+
         $user->assignRole($request->input('role'));
         $upload_student_image = null;
         if ($request->upload_student_image) {
@@ -108,7 +94,7 @@ class StudentsController extends Controller
         $time = $request->input('school_time_to') . " - " . $request->input('school_time_from');
         $tuition = $request->input('extra_tuition_time_to') . "-" . $request->input('extra_tuition_time_from');
         $last_id = Student::latest()->first() ? Student::latest()->first()->value('id') + 1 : 1;
-        $student = Student::create([
+        Student::create([
             'form_no' => 'RE/' . $last_id,
             'surname' => $request->surname,
             'name' => $request->name,
@@ -139,27 +125,15 @@ class StudentsController extends Controller
         return redirect()->route('student.index')->with('success', 'student created successfully');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $student = Student::find($id);
         $assignStaff = StudentStaffAssign::orderBy('id')->where('student_id', $student->id)->With('Trainer', 'Slot')->get();
         $studentAttendance = StudentAttendance::orderBy('id')->where('student_id', $student->id)->get();
         $proxy_staff_details = $student->proxyStaffAssignments;
-        return view('student.show', compact('student', 'assignStaff', 'studentAttendance','proxy_staff_details'));
+        return view('student.show', compact('student', 'assignStaff', 'studentAttendance', 'proxy_staff_details'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Student $student)
     {
         $role = Role::orderBy('id', 'desc')->get();
@@ -168,13 +142,6 @@ class StudentsController extends Controller
         return view('student.edit', compact('student', 'role', 'course', 'trainer'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Student $student)
     {
         $request->validate([
@@ -256,12 +223,6 @@ class StudentsController extends Controller
         return redirect()->route('student.index')->with('success', 'Student updated successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         Student::where('id', $id)->delete();
@@ -366,35 +327,36 @@ class StudentsController extends Controller
     {
 //        dd($request->all());
         $validatedData = $request->validate([
-            'student_id' => 'required',
-//            'trainer_id'=>'required',
-            'course_id' => 'required',
-            'sub_course_id' => 'required',
-            'sub_course_point_id' => 'required',
-//            'trainer_confirm_date'=>'required',
-        ]);
-//dd(Auth::user()->id);
+            'student_id' => 'required|integer',
+            'course_id' => 'required|integer',
+//            'sub_course_id' => 'nullable',
+//            'subCourse_point_after' => 'nullable|array',
 
-        $studentCourseComplete = new StudentCourseComplete();
-        $studentCourseComplete->student_id = $validatedData['student_id'];
-        $studentCourseComplete->course_id = $validatedData['course_id'];
-        $studentCourseComplete->sub_course_id = $validatedData['sub_course_id'];
-        $studentCourseComplete->sub_course_point_id = $validatedData['sub_course_point_id'];
-        $studentCourseComplete->trainer_confirm_date = Carbon::now()->toDateString();
-        $studentCourseComplete->admin_confirm_date = Carbon::now()->toDateString();
-//        $userType = Auth::user()->role;
-        $userType = Auth::user()->type;
-//dd($userType);
-        if ($userType == 0) {
-            $studentCourseComplete->user_id = Auth::user()->id;
-        } elseif ($userType == 1) {
-            $studentCourseComplete->trainer_id = Auth::user()->id;
+        ]);
+
+
+        foreach ($request->subCourse_point_after as $key => $value)
+        {
+            $point = SubCoursePoint::find($key);
+            $studentCourseComplete = new StudentCourseComplete();
+            $studentCourseComplete->student_id = $validatedData['student_id'];
+
+            if (Auth::user()->roles()->first()->value('name') == "Admin") {
+                $studentCourseComplete->user_id = Auth::user()->id;
+            } else {
+                $studentCourseComplete->trainer_id = Auth::user()->id;
+            }
+
+            $studentCourseComplete->course_id = $validatedData['course_id'];
+            $studentCourseComplete->sub_course_id = $point->sub_course_id;
+            $studentCourseComplete->sub_course_point_id = $key;
+            $studentCourseComplete->after = 1;
+            $studentCourseComplete->trainer_confirm_date = Carbon::now()->toDateString();
+            $studentCourseComplete->admin_confirm_date = Carbon::now()->toDateString();
+            $studentCourseComplete->save();
         }
 
-
-//        dd($studentCourseComplete);
-        $studentCourseComplete->save();
-        return response()->json(['message' => 'Notification sent to admin.']);
+        return redirect()->route('student.show', $validatedData['student_id'])->with('success', 'notification sent to admin.');
     }
 }
 
