@@ -55,7 +55,7 @@
                                 <div class="form-group row">
                                     <label for="email" class="col-sm-3 col-form-label">Email:</label>
                                     <div class="col-sm-9">
-                                        <input type="email" name="email" value="{{ $user->email }}" placeholder="email" class="form-control" required>
+                                        <input type="email" name="email" value="{{ $user->email }}" placeholder="email" class="form-control">
                                         @error('email')
                                             <span class="text-danger">{{$message}}</span>
                                         @enderror

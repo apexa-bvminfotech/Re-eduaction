@@ -64,9 +64,7 @@ class StudentsController extends Controller
             'demo_trainer_id' => 'required',
             'fees' => 'required',
             'extra_note' => 'required',
-            'analysis_trainer_id' => 'required|exists:trainers,id',
-            'upload_analysis' => 'nullable',
-            'upload_student_image' => 'nullable',
+            'analysis_trainer_id' => 'required|exists:trainers,id'
         ]);
         $user = User::Create([
             'name' => $request->name,
@@ -335,8 +333,7 @@ class StudentsController extends Controller
         ]);
 
 
-        foreach ($request->subCourse_point_after as $key => $value)
-        {
+        foreach ($request->subCourse_point_after as $key => $value) {
             $point = SubCoursePoint::find($key);
             $studentCourseComplete = new StudentCourseComplete();
             $studentCourseComplete->student_id = $validatedData['student_id'];
@@ -355,6 +352,34 @@ class StudentsController extends Controller
             $studentCourseComplete->admin_confirm_date = Carbon::now()->toDateString();
             $studentCourseComplete->save();
         }
+
+
+        foreach ($request->subCourse_point_before as $key1 => $value1) {
+//            dd($key1);
+            $point_before = SubCoursePoint::find($key1);
+//            dump($point_before);
+            $studentCourseComplete = new StudentCourseComplete();
+            $studentCourseComplete->student_id = $validatedData['student_id'];
+
+            if (Auth::user()->roles()->first()->value('name') == "Admin") {
+                $studentCourseComplete->user_id = Auth::user()->id;
+            } else {
+                $studentCourseComplete->trainer_id = Auth::user()->id;
+            }
+
+            $studentCourseComplete->course_id = $validatedData['course_id'];
+            $studentCourseComplete->sub_course_id = $point_before->sub_course_id;
+            $studentCourseComplete->sub_course_point_id = $key1;
+            $studentCourseComplete->before = 1;
+            $studentCourseComplete->trainer_confirm_date = Carbon::now()->toDateString();
+            $studentCourseComplete->admin_confirm_date = Carbon::now()->toDateString();
+            $studentCourseComplete->save();
+//            dump($point_before);
+//dd($point_before);
+        }
+
+
+//            dd($point_before);
 
         return redirect()->route('student.show', $validatedData['student_id'])->with('success', 'notification sent to admin.');
     }

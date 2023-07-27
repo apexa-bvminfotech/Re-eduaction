@@ -46,19 +46,13 @@
                         <div class="card">
                             <div class="card-header p-2 d-flex">
                                 <ul class="nav nav-pills col-11">
-                                    <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Personal
-                                            Information</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">School
-                                            Detail</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#proxy_detail" data-toggle="tab">Proxy
-                                            staff Details</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#timeline1" data-toggle="tab">Assign
-                                            Staff</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#timeline2" data-toggle="tab">Student
-                                            Attendance Show</a></li>
+                                    <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Personal Information</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">School Detail</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#proxy_detail" data-toggle="tab">Proxy staff Details</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#timeline1" data-toggle="tab">Assign Staff</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#timeline2" data-toggle="tab">Student Attendance Show</a></li>
                                 </ul>
-                                <a href="{{ route('student.index') }}"
-                                   class="col-1 btn btn-primary float-right">Back</a>
+                                <a href="{{ route('student.index') }}" class="col-1 btn btn-primary float-right">Back</a>
                             </div>
                             <div class="card-body">
                                 <div class="tab-content">
@@ -240,7 +234,7 @@
                                             <tr>
                                                 <th class="bg-info">
                                                     <!--Before-->
-                                                    @if($sc->points->count() < 0)
+                                                    @if($sc->points->count() == 0)
 
                                                         <div class="form-check checkbox-xl custom-checkbox text-center">
                                                             @can('student-course-complete-before')
@@ -251,61 +245,63 @@
                                                         </div>
                                                     @endif
                                                 </th>
-                                                <th class="text-center bg-info"
-                                                    style="font-size: 20px">{{$sc->sub_course_name}}
-                                                </th>
+                                                <th class="text-center bg-info" style="font-size: 20px">{{$sc->sub_course_name}}</th>
+
                                                 <!--After-->
                                                 <th class="bg-info">
-                                                    @if($sc->points->count() < 0)
+                                                    @if($sc->points->count() == 0)
                                                         <div class="form-check checkbox-xl custom-checkbox text-center">
                                                             @can('student-course-complete-after')
-                                                                <input class="form-check-input sub-course-checkbox sub-course-checkbox_after" name="subCourse_after[{{$sc->id}}]" type="checkbox" data-id="{{ $sc->id }}" data-subCourseId="{{ $sc->id }}" data-pointId="0">
+                                                                <input @if(\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_id'=>$sc->id])->first()) checked @endif
+                                                                    class="form-check-input sub-course-checkbox sub-course-checkbox_after" name="subCourse_after[{{$sc->id}}]" type="checkbox" data-id="{{ $sc->id }}" data-subCourseId="{{ $sc->id }}" data-pointId="0">
                                                             @else
-                                                                <input class="form-check-input sub-course-checkbox sub-course-checkbox_after" type="checkbox" disabled data-id="{{ $sc->id }}" data-subCourseId="{{ $sc->id }}" data-pointId="0">
+                                                                <input @if(\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_id'=>$sc->id])->first()) checked @endif
+                                                                    class="form-check-input sub-course-checkbox sub-course-checkbox_after" type="checkbox" disabled data-id="{{ $sc->id }}" data-subCourseId="{{ $sc->id }}" data-pointId="0">
                                                             @endcan
                                                         </div>
                                                     @endif
                                                 </th>
                                             </tr>
                                             <tr>
-                                                <td class="text-center">
-                                                    <b> Before </b>
-                                                </td>
-                                                <td class="text-center">
-                                                    <b>Points</b>
-                                                </td>
-                                                <td class="text-center">
-                                                    <b> After </b>
-                                                </td>
+                                                @if($sc->points->count() > 0)
+                                                    <td class="text-center">
+                                                        <b> Before </b>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <b>Points</b>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <b> After </b>
+                                                    </td>
+                                                @endif
                                             </tr>
+
 
                                             @forelse($sc->points as $key =>$sp)
                                                 <tr>
                                                     <td>
                                                         <!--Before -->
-                                                        <div
-                                                            class="form-check checkbox-xl custom-checkbox text-center">
-                                                            @can('student-course-complete-before')
-                                                                <input class="form-check-input point-checkbox subcourse_before_{{ $sc->id }}" type="checkbox" data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}" name="subCourse_point_before[{{$sc->id}}][{{$sp->id}}]">
-                                                            @else
-                                                                <input class="form-check-input point-checkbox subcourse_before_{{ $sc->id }}" type="checkbox" disabled data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}">
-                                                            @endcan
-                                                            <label for="customCheckbox2_{{ $sc->id }}_{{ $sp->id }}" class="form-check-label"></label>
-                                                        </div>
+                                                        @if($sc->points->count() > 0)
+                                                            <div class="form-check checkbox-xl custom-checkbox text-center">
+                                                                @can('student-course-complete-before')
+                                                                    <input class="form-check-input point-checkbox subcourse_before_{{ $sc->id }}" type="checkbox" data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}" name="subCourse_point_before[{{$sc->id}}][{{$sp->id}}]">
+                                                                @else
+                                                                    <input class="form-check-input point-checkbox subcourse_before_{{ $sc->id }}" type="checkbox" disabled data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}">
+                                                                @endcan
+                                                                <label for="customCheckbox2_{{ $sc->id }}_{{ $sp->id }}" class="form-check-label"></label>
+                                                            </div>
+                                                        @endif
                                                     </td>
                                                     <td class="text-center">{{$sp->sub_point_name}}</td>
                                                     <!--After-->
-
                                                     <td>
-                                                        <div
-                                                            class="form-check checkbox-xl custom-checkbox text-center">
+                                                        <div class="form-check checkbox-xl custom-checkbox text-center">
                                                             @can('student-course-complete-before')
                                                                 <input @if(\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id])->first()) checked @endif
                                                                 class="form-check-input point-checkbox subcourse_{{ $sc->id }}" name="subCourse_point_after[{{$sp->id}}]" type="checkbox" data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}">
                                                             @else
-                                                                <input
-                                                                    @if(\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id])->first()) checked @endif
-                                                                    class="form-check-input point-checkbox subcourse_{{ $sc->id }}" type="checkbox" disabled data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}">
+                                                                <input @if(\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id])->first()) checked @endif
+                                                                class="form-check-input point-checkbox subcourse_{{ $sc->id }}" type="checkbox" disabled data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}">
                                                             @endcan
                                                         </div>
                                                     </td>
@@ -314,9 +310,7 @@
                                             @endforelse
                                         @endforeach
                                     </table>
-                                    <button type="submit" class="btn btn-primary float-right mt-2 saveChanges">
-                                        SaveChanges
-                                    </button>
+                                    <button type="submit" class="btn btn-primary float-right mt-2 saveChanges">SaveChanges</button>
                                 </form>
                             </div>
                         </div>
@@ -331,47 +325,47 @@
 @push('scripts')
     <script>
 
-        $(document).ready(function () {
-            // $(document).on("click", ".sub-course-checkbox_before", function () {
-            //     if ($(this).prop('checked')) {
-            //         $('.subcourse_before_' + $(this).data('id')).prop('checked', true)
-            //     } else {
-            //         $('.subcourse_before_' + $(this).data('id')).prop('checked', false)
-            //     }
-            // });
-            // $(document).on("click", ".sub-course-checkbox_after", function () {
-            //     if ($(this).prop('checked')) {
-            //         $('.subcourse_' + $(this).data('id')).prop('checked', true)
-            //     } else {
-            //         $('.subcourse_' + $(this).data('id')).prop('checked', false)
-            //     }
-            // });
+        // $(document).ready(function () {
+        // $(document).on("click", ".sub-course-checkbox_before", function () {
+        //     if ($(this).prop('checked')) {
+        //         $('.subcourse_before_' + $(this).data('id')).prop('checked', true)
+        //     } else {
+        //         $('.subcourse_before_' + $(this).data('id')).prop('checked', false)
+        //     }
+        // });
+        // $(document).on("click", ".sub-course-checkbox_after", function () {
+        //     if ($(this).prop('checked')) {
+        //         $('.subcourse_' + $(this).data('id')).prop('checked', true)
+        //     } else {
+        //         $('.subcourse_' + $(this).data('id')).prop('checked', false)
+        //     }
+        // });
 
 
-            {{--$(document).on('click', '.saveChanges', function () {--}}
-            {{--    $.ajax({--}}
-            {{--        url: "{{route('student.sendNotification')}}",--}}
-            {{--        method: 'POST',--}}
-            {{--        data: {--}}
-            {{--            "_token": "{{ csrf_token() }}",--}}
-            {{--            "student_id": "{{$student->id}}",--}}
-            {{--            "course_id": "{{$student->course->id}}",--}}
-            {{--            "sub_course_id": $(this).attr('data-subCourseId'),--}}
-            {{--            "sub_course_point_id": $(this).data('pointId'),--}}
-            {{--        },--}}
-            {{--        success: function (data) {--}}
-            {{--            var student = data.student;--}}
-            {{--            var trainer = data.trainer;--}}
-            {{--            alert(data.message);--}}
+        {{--$(document).on('click', '.saveChanges', function () {--}}
+        {{--    $.ajax({--}}
+        {{--        url: "{{route('student.sendNotification')}}",--}}
+        {{--        method: 'POST',--}}
+        {{--        data: {--}}
+        {{--            "_token": "{{ csrf_token() }}",--}}
+        {{--            "student_id": "{{$student->id}}",--}}
+        {{--            "course_id": "{{$student->course->id}}",--}}
+        {{--            "sub_course_id": $(this).attr('data-subCourseId'),--}}
+        {{--            "sub_course_point_id": $(this).data('pointId'),--}}
+        {{--        },--}}
+        {{--        success: function (data) {--}}
+        {{--            var student = data.student;--}}
+        {{--            var trainer = data.trainer;--}}
+        {{--            alert(data.message);--}}
 
-            {{--            $('#result').html('<p>Student: ' + student + '</p><p>Trainer: ' + trainer + '</p>');--}}
-            {{--        },--}}
-            {{--        error: function (error) {--}}
-            {{--            console.log(error);--}}
-            {{--        }--}}
-            {{--    });--}}
-            {{--});--}}
-        });
+        {{--            $('#result').html('<p>Student: ' + student + '</p><p>Trainer: ' + trainer + '</p>');--}}
+        {{--        },--}}
+        {{--        error: function (error) {--}}
+        {{--            console.log(error);--}}
+        {{--        }--}}
+        {{--    });--}}
+        {{--});--}}
+        // });
     </script>
 
 @endpush
