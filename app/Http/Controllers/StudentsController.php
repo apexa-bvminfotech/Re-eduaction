@@ -444,9 +444,21 @@ class StudentsController extends Controller
         } elseif (!empty($request->subCourse_after)) {
             $status = 1; // If only 'after' checkboxes are selected, set status to 1.
         }
+
+        //subPoints
+
+        if (!empty($request->subCourse_point_before) && !empty($request->subCourse_point_after)) {
+            $status = 2; // If both 'before' and 'after' checkboxes are selected, set status to 2.
+        } elseif (!empty($request->subCourse_point_before)) {
+            $status = 2; // If only 'before' checkboxes are selected, set status to 2.
+        } elseif (!empty($request->subCourse_point_after)) {
+            $status = 1; // If only 'after' checkboxes are selected, set status to 1.
+        }
+
         StudentCourseComplete::where('student_id', $validatedData['student_id'])
             ->where('course_id', $validatedData['course_id'])
             ->update(['status' => $status]);
+
 
         return redirect()->route('student.show', $validatedData['student_id'])->with('success', 'notification sent to admin.');
     }

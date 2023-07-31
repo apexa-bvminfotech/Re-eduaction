@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -142,5 +143,10 @@ class UserController extends Controller
         $user->is_active = $request->status;
         $user->save();
         return response()->json(['success' => $request->status ? 'User de-active' : 'User active']);
+    }
+
+    public function profile(){
+        $user = User::find(Auth::user()->id);
+        return view('layouts.profile', compact('user'));
     }
 }
