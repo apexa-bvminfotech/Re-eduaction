@@ -230,6 +230,7 @@
                                         <input type="hidden" name="course_id" class="form-control course_id" value="{{$student->course_id}}">
                                         {{-- //subCourse before after--}}
                                         @foreach($student->course->subcourses as $key =>$sc)
+                                            {{--                                            @dd($sc)--}}
                                             <tr>
                                                 <th class="bg-info">
                                                     <!--Before-->
@@ -237,11 +238,12 @@
                                                         <div class="form-check checkbox-xl custom-checkbox text-center">
                                                             @can('student-course-complete-before')
                                                                 <input @if(\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_id'=>$sc->id,'before'=>1])->first()) checked @endif
-                                                                type="checkbox" class="form-check-input sub-course-checkbox sub-course-checkbox_before" name="subCourse_before[{{$sc->id}}]" data-id="{{ $sc->id }}"
-                                                                       data-subCourseId="{{ $sc->id }}" data-pointId="0" >
+                                                                type="checkbox" class="form-check-input sub-course-checkbox_before" name="subCourse_before[{{$sc->id}}]" data-id="{{ $sc->id }}"
+                                                                       data-subCourseId="{{ $sc->id }}" data-pointId="{{$sc->id}}">
                                                             @else
                                                                 <input @if(\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_id'=>$sc->id,'before'=>1])->first()) checked @endif
-                                                                type="checkbox" class="form-check-input sub-course-checkbox sub-course-checkbox_before" disabled data-id="{{ $sc->id }}" data-subCourseId="{{ $sc->id }}" data-pointId="0">
+                                                                type="checkbox" class="form-check-input sub-course-checkbox_before" disabled data-id="{{ $sc->id }}"
+                                                                       data-subCourseId="{{ $sc->id }}" data-pointId="0">
                                                             @endcan
                                                         </div>
                                                     @endif
@@ -254,12 +256,13 @@
                                                     @if($sc->points->count() == 0)
                                                         <div class="form-check checkbox-xl custom-checkbox text-center">
                                                             @can('student-course-complete-after')
-                                                                <input @if(\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_id'=>$sc->id])->first()) checked @endif
-                                                                type="checkbox" class="form-check-input sub-course-checkbox sub-course-checkbox_after" name="subCourse_after[{{$sc->id}}]" data-id="{{ $sc->id }}"
-                                                                       data-subCourseId="{{ $sc->id }}" data-pointId="0">
+                                                                <input @if(\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_id'=>$sc->id,'after'=>1])->first()) checked @endif
+                                                                type="checkbox" class="form-check-input  sub-course-checkbox_after" name="subCourse_after[{{$sc->id}}]" data-id="{{ $sc->id }}"
+                                                                       data-subCourseId="{{ $sc->id }}" data-pointId="{{$sc->id}}">
                                                             @else
-                                                                <input @if(\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_id'=>$sc->id])->first()) checked @endif
-                                                                type="checkbox" class="form-check-input sub-course-checkbox sub-course-checkbox_after" disabled data-id="{{ $sc->id }}" data-subCourseId="{{ $sc->id }}" data-pointId="0">
+                                                                <input @if(\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_id'=>$sc->id,'after'=>1])->first()) checked @endif
+                                                                type="checkbox" class="form-check-input  sub-course-checkbox_after" disabled data-id="{{ $sc->id }}"
+                                                                       data-subCourseId="{{ $sc->id }}" data-pointId="0">
                                                             @endcan
                                                         </div>
                                                     @endif
@@ -301,11 +304,11 @@
                                                         <!--After-->
                                                         <div class="form-check checkbox-xl custom-checkbox text-center">
                                                             @can('student-course-complete-before')
-                                                                <input @if(\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id])->first()) checked @endif
+                                                                <input @if(\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'after'=>1])->first()) checked @endif
                                                                 class="form-check-input point-checkbox subcourse_{{ $sc->id }}" name="subCourse_point_after[{{$sp->id}}]" type="checkbox" data-subCourseId="{{ $sc->id }}"
                                                                        data-pointId="{{ $sp->id }}" >
                                                             @else
-                                                                <input @if(\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id])->first()) checked @endif
+                                                                <input @if(\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'after'=>1])->first()) checked @endif
                                                                 class="form-check-input point-checkbox subcourse_{{ $sc->id }}" type="checkbox" disabled data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}">
                                                             @endcan
                                                         </div>
