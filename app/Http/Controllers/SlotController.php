@@ -7,6 +7,7 @@ use App\Models\Rtc;
 use App\Models\Slot;
 use App\Models\Trainer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SlotController extends Controller
 {
@@ -31,6 +32,9 @@ class SlotController extends Controller
     public function index()
     {
         $slot = Slot::orderBy('id', 'DESC')->get();
+        if(Auth::user()->type == 1){
+            $slot = Slot::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'DESC')->get();
+        }
         return view('slot.index', compact('slot'))->with('i');
     }
 
@@ -41,10 +45,11 @@ class SlotController extends Controller
      */
     public function create()
     {
-        $trainer = Trainer::orderBy('id', 'DESC')->get();
         $branch = Branch::orderBy('id', 'DESC')->get();
-        $rtc = Rtc::orderBy('id', 'DESC')->get();
-        return view('slot.create', compact('trainer', 'rtc', 'branch'));
+        if(Auth::user()->type == 1) {
+            $branch = Branch::where('id', Auth::user()->branch_id)->orderBy('id', 'DESC')->get();
+        }
+        return view('slot.create', compact( 'branch'));
     }
 
     /**
@@ -110,6 +115,9 @@ class SlotController extends Controller
     public function edit(Slot $slot)
     {
         $branch = Branch::orderBy('id', 'DESC')->get();
+        if(Auth::user()->type == 1){
+            $branch = Branch::where('id', Auth::user()->branch_id)->orderBy('id', 'DESC')->get();
+        }
         $trainer = Trainer::where('branch_id', $slot->branch_id)->orderBy('id', 'DESC')->get();
         $rtc = Rtc::where('branch_id', $slot->branch_id)->orderBy('id', 'DESC')->get();
         return view('slot.edit', compact('slot', 'trainer', 'rtc', 'branch'));

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
 use App\Models\Course;
 use App\Models\Slot;
 use App\Models\StudentAttendance;
@@ -25,19 +26,34 @@ class StudentsController extends Controller
 
     public function index()
     {
-        $slots = Slot::orderBy('id', 'desc')->get();
-        $trainers = Trainer::orderBy('id', 'desc')->get();
+        $slots = Slot::where('is_active', 0)->orderBy('id', 'desc')->get();
+        $trainers = Trainer::where('is_active', 0)->orderBy('id', 'desc')->get();
         $students = Student::with('course')->orderBy('id')->get();
+        if(Auth::user()->type == 1) {
+            $slots = Slot::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'desc')->get();
+            $trainers = Trainer::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'desc')->get();
+            $students = Student::
+                select('students.surname', 'students.name','students.standard','students.medium','students.course_id','students.id','students.father_contact_no')
+                ->with('course')
+                ->join('student_staff_assigns', 'student_staff_assigns.student_id', 'students.id')
+                ->join('trainers','trainers.id', 'student_staff_assigns.trainer_id')
+                ->where(['trainers.user_id' => Auth::user()->id,'student_staff_assigns.is_active' => 0])
+                ->orderBy('students.id')->get();
+        }
         return view('student.index', compact('students', 'trainers', 'slots'))->with('i');
     }
 
     public function create()
     {
-        $student = Student::orderBy('id', 'desc')->get();
         $role = Role::orderBy('id', 'desc')->get();
         $course = Course::orderBy('id', 'desc')->get();
         $trainer = Trainer::orderBy('id')->where('is_active', 0)->get();
-        return view('student.create', compact('student', 'role', 'course', 'trainer'));
+        $branch = Branch::orderBy('id', 'DESC')->get();
+        if(Auth::user()->type == 1) {
+            $trainer = Trainer::orderBy('id')->where(['is_active' => 0, 'branch_id' => Auth::user()->branch_id])->get();
+            $branch = Branch::where('id', Auth::user()->branch_id)->orderBy('id', 'DESC')->get();
+        }
+        return view('student.create', compact('role', 'course', 'trainer','branch'));
     }
 
     public function store(Request $request)
@@ -61,12 +77,7 @@ class StudentsController extends Controller
             'dob' => 'required',
             'age' => 'required',
             'course_id' => 'required|exists:courses,id',
-            'payment_condition' => 'required|max:255',
-            'reference_by' => 'required',
-            'demo_trainer_id' => 'required',
-            'fees' => 'required',
-            'extra_note' => 'required',
-            'analysis_trainer_id' => 'required|exists:trainers,id'
+            'branch_id' => 'required',
         ]);
         $user = User::Create([
             'name' => $request->name,
@@ -75,6 +86,7 @@ class StudentsController extends Controller
             'email' => $request->email_id,
             'contact' => $request->father_contact_no,
             'password' => Hash::make(strtolower($request->name) . '@123'),
+            'branch_id' => $request->input('branch_id'),
             'type' => 2,
         ]);
 
@@ -114,10 +126,11 @@ class StudentsController extends Controller
             'course_id' => $request->course_id,
             'payment_condition' => $request->payment_condition,
             'reference_by' => $request->reference_by,
-            'demo_trainer_id' => $request->demo_trainer_id,
+            'demo_trainer_id' => $request->demo_trainer_id ? $request->demo_trainer_id : 0,
+            'branch_id' => $request->input('branch_id'),
             'fees' => $request->fees,
             'extra_note' => $request->extra_note,
-            'analysis_trainer_id' => $request->analysis_trainer_id,
+            'analysis_trainer_id' => $request->analysis_trainer_id ? $request->analysis_trainer_id : 0,
             'upload_analysis' => $upload_analysis,
             'upload_student_image' => $upload_student_image,
             'user_id' => $user->id,
@@ -138,8 +151,13 @@ class StudentsController extends Controller
     {
         $role = Role::orderBy('id', 'desc')->get();
         $course = Course::orderBy('id', 'desc')->get();
-        $trainer = Trainer::orderBy('id')->get();
-        return view('student.edit', compact('student', 'role', 'course', 'trainer'));
+        $trainer = Trainer::where('is_active', 0)->orderBy('id')->get();
+        $branch = Branch::orderBy('id', 'DESC')->get();
+        if(Auth::user()->type == 1) {
+            $trainer = Trainer::orderBy('id')->where(['is_active' => 0, 'branch_id' => Auth::user()->branch_id])->get();
+            $branch = Branch::where('id', Auth::user()->branch_id)->orderBy('id', 'DESC')->get();
+        }
+        return view('student.edit', compact('student', 'role', 'course', 'trainer','branch'));
     }
 
     public function update(Request $request, Student $student)
@@ -161,13 +179,7 @@ class StudentsController extends Controller
             'extra_tuition_time_from' => 'required',
             'dob' => 'required',
             'age' => 'required',
-            'course_id' => 'required|exists:courses,id',
-            'payment_condition' => 'required|max:255',
-            'reference_by' => 'required',
-            'demo_trainer_id' => 'required',
-            'fees' => 'required',
-            'extra_note' => 'required',
-            'analysis_trainer_id' => 'required|exists:trainers,id',
+            'course_id' => 'required|exists:courses,id'
         ]);
         $user = $student->user;
         $user->update([
@@ -213,10 +225,11 @@ class StudentsController extends Controller
             'course_id' => $request->course_id,
             'payment_condition' => $request->payment_condition,
             'reference_by' => $request->reference_by,
-            'demo_trainer_id' => $request->demo_trainer_id,
+            'demo_trainer_id' => $request->demo_trainer_id ? $request->demo_trainer_id : 0,
+            'branch_id' => $request->input('branch_id'),
             'fees' => $request->fees,
             'extra_note' => $request->extra_note,
-            'analysis_trainer_id' => $request->analysis_trainer_id,
+            'analysis_trainer_id' => $request->analysis_trainer_id ? $request->analysis_trainer_id : 0,
             'upload_analysis' => $upload_analysis,
             'upload_student_image' => $upload_student_image,
         ]);
@@ -247,30 +260,17 @@ class StudentsController extends Controller
             'slot_id' => 'required|integer',
         ]);
 //        dd($validatedData);
-        $student = StudentStaffAssign::where('student_id', $request->student_id)->where('is_active', 0)->first();
+        $student = StudentStaffAssign::where(['student_id' => $request->student_id, 'trainer_id' => $request->trainer_id, 'slot_id' => $request->slot_id])->where('is_active', 0)->first();
 
         if ($student) {
-            if ($student->trainer_id == $request->trainer_id) {
                 return back()->with('error', 'Trainer is already Assigned');
-            }
-            $student->update([
+        } else {
+
+            $studentUpdate = StudentStaffAssign::where(['student_id' => $request->student_id, 'is_active' => 0])->first();
+            $studentUpdate->update([
                 'is_active' => 1,
             ]);
-            $check = StudentStaffAssign::where(['student_id' => $request->student_id, 'trainer_id' => $validatedData['trainer_id']])->where('is_active', 1)->first();
-            if ($check) {
-                $check->update([
-                    'is_active' => 0,
-                    'date' => now(),
-                ]);
-            } else {
-                $assignStaff = new StudentStaffAssign();
-                $assignStaff->student_id = $validatedData['student_id'];
-                $assignStaff->trainer_id = $validatedData['trainer_id'];
-                $assignStaff->slot_id = $validatedData['slot_id'];
-                $assignStaff->date = Carbon::now()->toDateString();
-                $assignStaff->save();
-            }
-        } else {
+
             $assignStaff = new StudentStaffAssign();
             $assignStaff->student_id = $validatedData['student_id'];
             $assignStaff->trainer_id = $validatedData['trainer_id'];
@@ -284,7 +284,7 @@ class StudentsController extends Controller
 
     public function proxySlot($id)
     {
-        $proxy_slots = Slot::where('trainer_id', $id)
+        $proxy_slots = Slot::where(['trainer_id' => $id, 'is_active' => 0])
             ->with('rtc')
             ->get();
         return response()->json(['slots' => $proxy_slots]);
@@ -301,14 +301,16 @@ class StudentsController extends Controller
         ]);
 
         $existingProxyStaff = StudentProxyStaffAssign::where('student_id', $request->student_id)
-            ->where('starting_date', $request->starting_date)
-            ->where('ending_date', $request->ending_date)
+            ->where('starting_date' ,'>=', $request->starting_date)
+            ->where('ending_date', '<=', $request->ending_date)
+            ->where('trainer_id',  $request->trainer_id)
             ->first();
 
+        $checkIsregularTrainer = StudentStaffAssign::where(['student_id' => $request->student_id, 'trainer_id' => $request->trainer_id, 'is_active' => 0])->first();
         if ($existingProxyStaff) {
-            if ($existingProxyStaff->trainer_id == $request->trainer_id) {
                 return back()->with('error', 'Trainer is already assigned as proxy staff for the specified dates');
-            }
+        } elseif($checkIsregularTrainer) {
+            return back()->with('error', 'Trainer is already assigned as regular staff');
         }
 
         $proxyStaff = new StudentProxyStaffAssign();
@@ -325,7 +327,6 @@ class StudentsController extends Controller
 
     public function sendNotification(Request $request)
     {
-//        dd($request->all());
         $validatedData = $request->validate([
             'student_id' => 'required|integer',
             'course_id' => 'required|integer',
@@ -338,8 +339,7 @@ class StudentsController extends Controller
         if (!empty($request->subCourse_before) && is_array($request->subCourse_before)) {
             foreach ($request->subCourse_before as $subCourseBefore_key => $subCourseBefore_value) {
                 $subCourseBefore = SubCourse::find($subCourseBefore_key);
-//            dd($subCourseBefore_key);
-//            dd($subCourseBefore);
+
                 if ($subCourseBefore) {
                     StudentCourseComplete::updateOrCreate(
                         [

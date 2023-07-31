@@ -6,6 +6,7 @@ use App\Models\Branch;
 use Illuminate\Http\Request;
 use App\Models\Rtc;
 use DB;
+use Illuminate\Support\Facades\Auth;
 
 class RtcController extends Controller
 {
@@ -30,6 +31,9 @@ class RtcController extends Controller
     public function index()
     {
         $rtc = Rtc::orderBy('id','DESC')->get();
+        if(Auth::user()->type == 1){
+            $rtc = Rtc::where('branch_id', Auth::user()->branch_id)->orderBy('id','DESC')->get();
+        }
         return view('rtc.index',compact('rtc'))->with('i');
     }
 
@@ -41,6 +45,9 @@ class RtcController extends Controller
     public function create()
     {
         $branch = Branch::orderBy('id','DESC')->get();
+        if(Auth::user()->type == 1){
+            $branch = Branch::where('id', Auth::user()->branch_id)->orderBy('id', 'DESC')->get();
+        }
         return view('rtc.create',compact('branch'));
     }
 
@@ -96,6 +103,9 @@ class RtcController extends Controller
     {
         $rtc = Rtc::find($id);
         $branch = Branch::orderBy('id','DESC')->get();
+        if(Auth::user()->type == 1){
+            $branch = Branch::where('id', Auth::user()->branch_id)->orderBy('id', 'DESC')->get();
+        }
         if($rtc){
             return view('rtc.edit',compact('rtc','branch'));
         } else {

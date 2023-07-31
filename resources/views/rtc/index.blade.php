@@ -31,8 +31,10 @@
                                             <th>RTc Name</th>
                                             <th>Person Name</th>
                                             <th>RTc Address</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
+                                            @can('rtc-edit')
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            @endcan
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -44,23 +46,21 @@
                                                 <td>{{ $r->rtc_name }}</td>
                                                 <td>{{$r->person_name}}<br>{{$r->contact}}</td>
                                                 <td>{{ $r->address }}</td>
-                                                <td>
-                                                    <div class="custom-control custom-switch">
-                                                        @can('rtc-edit')
+                                                @can('rtc-edit')
+                                                    <td>
+                                                        <div class="custom-control custom-switch">
                                                             <input type="checkbox" data-id="{{$r->id}}"
                                                                    class="custom-control-input checkStatus"
                                                                    id="c{{$key+1}}" {{ $r->is_active ? '' : 'checked' }}>
                                                             <label class="custom-control-label" for="c{{$key+1}}"></label>
-                                                        @endcan
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    @can('rtc-edit')
+                                                        </div>
+                                                    </td>
+                                                    <td>
                                                         <a href="{{ route('rtc.edit',$r->id) }}"
                                                            class="btn btn-success btn-sm" title="Edit"><i
                                                                 class="fa fa-edit"></i> Edit</a>
-                                                    @endcan
-                                                </td>
+                                                    </td>
+                                                @endcan
                                             </tr>
                                         @endforeach
                                     </tbody>

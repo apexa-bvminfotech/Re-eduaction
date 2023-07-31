@@ -9,8 +9,7 @@
                     </div>
                     <div class="col-sm-6">
                         @can('student-create')
-                            <a href="{{route('student.create')}}" class="btn btn-primary float-right">Create New
-                                Student</a>
+                            <a href="{{route('student.create')}}" class="btn btn-primary float-right"><i class="fa fa-plus pr-2"></i> Add</a>
                         @endcan
                     </div>
                 </div>
@@ -41,7 +40,7 @@
                                     @foreach($students as $key=>$s)
                                         <tr>
                                             <td>{{++$i}}</td>
-                                            <td>{{$s->name}}</td>
+                                            <td>{{$s->surname}} {{$s->name}}</td>
                                             <td>{{$s->course->course_name}}</td>
                                             <td>{{$s->father_contact_no}}</td>
                                             <td>{{$s->standard}}</td>
@@ -65,14 +64,16 @@
                                                             <i class="fa fa-trash"></i></button>
                                                         {!! Form::close() !!}
                                                     @endcan
-                                                    <button type="button"
-                                                            class="btn  btn-secondary btn-assign btn-sm"
-                                                            data-id="{{$s->id}}"> Assign Staff
-                                                    </button>
-                                                    <button type="button"
-                                                            class="btn btn-secondary btn-proxy btn-sm"
-                                                            data-id="{{$s->id}}"> Assign Proxy Staff
-                                                    </button>
+                                                    @can('student-edit')
+                                                        <button type="button"
+                                                                class="btn  btn-secondary btn-assign btn-sm"
+                                                                data-id="{{$s->id}}"> Assign Staff
+                                                        </button>
+                                                        <button type="button"
+                                                                class="btn btn-secondary btn-proxy btn-sm"
+                                                                data-id="{{$s->id}}"> Assign Proxy Staff
+                                                        </button>
+                                                    @endcan
                                                 </div>
                                             </td>
                                         </tr>
@@ -147,10 +148,10 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <input type="hidden" name="student_id" class="form-control student_id" value="">
+                                    <input type="hidden" name="student_id" class="form-control student_id " value="">
                                     <div class="col-md-12 mb-1">
                                         <label for="name">Trainer Name(Proxy): </label>
-                                        <select class="form-control proxy_class" name="trainer_id" required>
+                                        <select class="form-control proxy_class select2" name="trainer_id" required>
                                             <option value="0">------Select Trainer-----</option>
                                             @foreach($trainers as $key =>$trainer)
                                                 @if($trainer->is_active == 0)
@@ -162,7 +163,7 @@
                                     </div>
                                     <div class="col-md-12 mb-1">
                                         <label for="name">Slot: </label>
-                                        <select class="form-control slot" name="slot_id" required>
+                                        <select class="form-control slot select2" name="slot_id" required>
                                             <option value="">------Select Slot-----</option>
                                         </select>
                                     </div>
@@ -275,7 +276,7 @@
 
             $("#example1").DataTable({
                 "responsive": true, "lengthChange": false, "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                "buttons": ["csv", "excel", "pdf", "print"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         })
     </script>

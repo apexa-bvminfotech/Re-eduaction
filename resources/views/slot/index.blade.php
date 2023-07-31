@@ -31,8 +31,10 @@
                                             <th>RTC Name</th>
                                             <th>Time</th>
                                             <th>WhatsApp group Name</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
+                                            @can('slot-edit')
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            @endcan
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -44,23 +46,21 @@
                                                 <td>{{$s->rtc->rtc_name}}</td>
                                                 <td>{{ $s->slot_time }}</td>
                                                 <td>{{$s->whatsapp_group_name}}</td>
-                                                <td>
-                                                    <div class="custom-control custom-switch">
-                                                        @can('slot-edit')
+                                                @can('slot-edit')
+                                                    <td>
+                                                        <div class="custom-control custom-switch">
                                                             <input type="checkbox" data-id="{{$s->id}}"
                                                                    class="custom-control-input checkStatus"
                                                                    id="c{{$key+1}}" {{ $s->is_active ? '' : 'checked' }}>
                                                             <label class="custom-control-label" for="c{{$key+1}}"></label>
-                                                        @endcan
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    @can('slot-edit')
+                                                        </div>
+                                                    </td>
+                                                    <td>
                                                         <a href="{{ route('slot.edit',$s->id) }}"
                                                            class="btn btn-success btn-sm" title="Edit">
                                                             <i class="fa fa-edit"></i> Edit</a>
-                                                    @endcan
-                                                </td>
+                                                    </td>
+                                                @endcan
                                             </tr>
                                         @endforeach
                                     </tbody>

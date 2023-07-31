@@ -38,7 +38,6 @@
                                                 <tr>
                                                     <td>{{$course->id}}</td>
                                                     <td>{{$course->course_name}}</td>
-
                                                     <td>
                                                         <form action="{{route('course.destroy',$course->id)}}"
                                                               method="POST">

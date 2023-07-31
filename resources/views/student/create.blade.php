@@ -415,7 +415,37 @@
                                                                    value="{{ old('payment_condition') }}">
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6 mb-1">
+                                                    <div class="col-md-4 mb-1">
+                                                        <div class="form-group">
+                                                            <label for="role">Role name:</label>
+                                                            <select class="form-control select2" name="role" required>
+                                                                <option value="">------ Select Role ------</option>
+                                                                @foreach($role as $key=> $r)
+                                                                    <option
+                                                                        value="{{$r->id}}"{{ old('role')==$r->id?'selected':'' }}>{{$r->name}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                            @error('role')
+                                                            <span class="text-danger"> {{$message}}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4 mb-1">
+                                                        <div class="form-group mb-3">
+                                                            <label for="inputtext" class="col-sm-3 col-form-label">Branch
+                                                                Name:</label>
+                                                            <select class="form-control select2" name="branch_id"
+                                                                    required>
+                                                                <option value="">--- Select Branch ---</option>
+                                                                @foreach($branch as $key => $b)
+                                                                    <option
+                                                                        value="{{ $b->id }}" {{ old('branch_id')==$b->id?'selected':'' }}>{{ $b->name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4 mb-1">
                                                         <div class="form-group">
                                                             <label for="fees">Form Fees:</label>
                                                             <br>
@@ -438,21 +468,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6 mb-1">
-                                                        <div class="form-group">
-                                                            <label for="role">Role name:</label>
-                                                            <select class="form-control select2" name="role" required>
-                                                                <option value="">------ Select Role ------</option>
-                                                                @foreach($role as $key=> $r)
-                                                                    <option
-                                                                        value="{{$r->id}}"{{ old('role')==$r->id?'selected':'' }}>{{$r->name}}</option>
-                                                                @endforeach
-                                                            </select>
-                                                            @error('role')
-                                                            <span class="text-danger"> {{$message}}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
+
                                                     <div class="col-md-12 mb-4">
                                                         <div class="form-group">
                                                             <label for="note">Extra Note:</label>
@@ -529,112 +545,112 @@
             var form = $('#quickForm');
             var validator = form.validate({
                 rules: {
-                    surname: {
-                        required: true,
-                        maxlength: 255,
-                    },
-                    name: {
-                        required: true,
-                        maxlength: 255,
-                    },
-                    father_name: {
-                        required: true,
-                    },
-                    address: {
-                        required: true,
-                    },
-                    gender: {
-                        required: true,
-                    },
-                    father_contact_no: {
-                        required: true,
-                    },
-                    mother_contact_no: {
-                        required: true,
-                    },
-                    standard: {
-                        required: true,
-                    },
-                    medium: {
-                        required: true,
-                    },
-                    school_name: {
-                        required: true,
-                    },
-                    school_time_to: {
-                        required: true,
-                    },
-                    school_time_from: {
-                        required: true,
-                    },
-                    extra_tuition_time_to: {
-                        required: true,
-                    },
-                    extra_tuition_time_from: {
-                        required: true,
-                    },
-                    dob: {
-                        required: true,
-                    },
-                    age: {
-                        required: true,
-                    },
-                    course_id: {
-                        required: true,
-                    },
+                    // surname: {
+                    //     required: true,
+                    //     maxlength: 255,
+                    // },
+                    // name: {
+                    //     required: true,
+                    //     maxlength: 255,
+                    // },
+                    // father_name: {
+                    //     required: true,
+                    // },
+                    // address: {
+                    //     required: true,
+                    // },
+                    // gender: {
+                    //     required: true,
+                    // },
+                    // father_contact_no: {
+                    //     required: true,
+                    // },
+                    // mother_contact_no: {
+                    //     required: true,
+                    // },
+                    // standard: {
+                    //     required: true,
+                    // },
+                    // medium: {
+                    //     required: true,
+                    // },
+                    // school_name: {
+                    //     required: true,
+                    // },
+                    // school_time_to: {
+                    //     required: true,
+                    // },
+                    // school_time_from: {
+                    //     required: true,
+                    // },
+                    // extra_tuition_time_to: {
+                    //     required: true,
+                    // },
+                    // extra_tuition_time_from: {
+                    //     required: true,
+                    // },
+                    // dob: {
+                    //     required: true,
+                    // },
+                    // age: {
+                    //     required: true,
+                    // },
+                    // course_id: {
+                    //     required: true,
+                    // },
                 },
                 messages: {
-                    surname: {
-                        required: "Please enter a surname ",
-                    },
-                    name: {
-                        required: "Please enter a name ",
-                    },
-                    father_name: {
-                        required: "Please enter a father name ",
-                    },
-                    address: {
-                        required: "Please enter a address ",
-                    },
-                    gender: {
-                        required: "Please select a gender ",
-                    },
-                    father_contact_no: {
-                        required: "Please enter a father_contact_no ",
-                    },
-                    mother_contact_no: {
-                        required: "Please enter a mother_contact_no ",
-                    },
-                    standard: {
-                        required: "Please enter a standard ",
-                    },
-                    medium: {
-                        required: "Please select a medium ",
-                    },
-                    school_name: {
-                        required: "Please enter a school_name ",
-                    },
-                    school_time_to: {
-                        required: "Please enter a school_time ",
-                    },
-                    school_time_from: {
-                        required: "Please enter a school_time ",
-                    },
-                    extra_tuition_time_to: {
-                        required: "Please enter a Tuition_time ",
-                    },
-                    extra_tuition_time_from: {
-                        required: "Please enter a Tuition_time ",
-                    },
-                    dob: {
-                        required: "Please enter a dob ",
-                    },
-                    age: {
-                        required: "Please enter a age ",
-                    },
-                    course_id: {
-                        required: "Please enter a course_id ",
-                    },
+                    // surname: {
+                    //     required: "Please enter a surname ",
+                    // },
+                    // name: {
+                    //     required: "Please enter a name ",
+                    // },
+                    // father_name: {
+                    //     required: "Please enter a father name ",
+                    // },
+                    // address: {
+                    //     required: "Please enter a address ",
+                    // },
+                    // gender: {
+                    //     required: "Please select a gender ",
+                    // },
+                    // father_contact_no: {
+                    //     required: "Please enter a father_contact_no ",
+                    // },
+                    // mother_contact_no: {
+                    //     required: "Please enter a mother_contact_no ",
+                    // },
+                    // standard: {
+                    //     required: "Please enter a standard ",
+                    // },
+                    // medium: {
+                    //     required: "Please select a medium ",
+                    // },
+                    // school_name: {
+                    //     required: "Please enter a school_name ",
+                    // },
+                    // school_time_to: {
+                    //     required: "Please enter a school_time ",
+                    // },
+                    // school_time_from: {
+                    //     required: "Please enter a school_time ",
+                    // },
+                    // extra_tuition_time_to: {
+                    //     required: "Please enter a Tuition_time ",
+                    // },
+                    // extra_tuition_time_from: {
+                    //     required: "Please enter a Tuition_time ",
+                    // },
+                    // dob: {
+                    //     required: "Please enter a dob ",
+                    // },
+                    // age: {
+                    //     required: "Please enter a age ",
+                    // },
+                    // course_id: {
+                    //     required: "Please enter a course_id ",
+                    // },
                 },
                 errorElement: 'span',
                 errorPlacement: function (error, element) {

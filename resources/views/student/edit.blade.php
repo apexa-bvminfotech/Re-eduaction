@@ -435,7 +435,34 @@
                                                                    value="{{$student->payment_condition}}">
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6 mb-1">
+                                                    <div class="col-md-4 mb-1">
+                                                        <div class="form-group">
+                                                            <label for="role">Role name:</label>
+                                                            <select class="form-control select2" name="role" required>
+                                                                <option value="">------ Select Role ------</option>
+                                                                @foreach($role as $key=> $r)
+                                                                    <option
+                                                                        value="{{$r->id}}"
+                                                                        @if($student->user->roles->first()->id == $r->id) selected @endif>{{$r->name}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4 mb-1">
+                                                        <div class="form-group mb-3">
+                                                            <label for="inputtext" class="col-sm-3 col-form-label">Branch
+                                                                Name:</label>
+                                                            <select class="form-control select2" name="branch_id"
+                                                                    required>
+                                                                <option value="">--- Select Branch ---</option>
+                                                                @foreach($branch as $key => $b)
+                                                                    <option
+                                                                        value="{{ $b->id }}" {{ old('branch_id',$student->branch_id)==$b->id?'selected':'' }}>{{ $b->name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4 mb-1">
                                                         <label for="fees">Form Fees:</label>
                                                         <br>
                                                         <div class="form-check form-check-inline">
@@ -456,19 +483,7 @@
                                                             </label>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6 mb-1">
-                                                        <div class="form-group">
-                                                            <label for="role">Role name:</label>
-                                                            <select class="form-control select2" name="role" required>
-                                                                <option value="">------ Select Role ------</option>
-                                                                @foreach($role as $key=> $r)
-                                                                    <option
-                                                                        value="{{$r->id}}"
-                                                                        @if($student->user->roles->first()->id == $r->id) selected @endif>{{$r->name}}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                    </div>
+
                                                     <div class="col-md-12 mb-4">
                                                         <label for="note">Extra Note:</label>
                                                         <textarea name="extra_note"
