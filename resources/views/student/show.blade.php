@@ -180,7 +180,7 @@
                                                         <td>{{$as->trainer->name}}</td>
                                                         <td>{{$as->slot->slot_time}}</td>
                                                         <td>{{$as->date}}</td>
-                                                        <td>{!! $as->is_active === 0 ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
+                                                        <td>{!! $as->is_active == 0 ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
                                                     </tr>
                                                 @endforeach
                                                 </tbody>
