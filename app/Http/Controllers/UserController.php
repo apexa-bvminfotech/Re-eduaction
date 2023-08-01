@@ -53,12 +53,21 @@ class UserController extends Controller
             'is_active' => 'required'
         ]);
 
+        $user_profile = null;
+        if ($request->user_profile) {
+            $filename = $request->user_profile->getClientOriginalName();
+//            dd($filename);
+            $request->user_profile->move('assets/user', $filename);
+            $user_profile = $filename;
+        }
+
         $user = User::Create([
             'name' => $request->name,
             'surname' => $request->surname,
             'father_name' => $request->father_name,
             'email' => $request->email,
             'password' => bcrypt(strtolower($request->name) . '@2121'),
+            'user_profile' =>$user_profile,
             'contact' => $request->contact,
             'branch_id' => $request->branch_id ? $request->branch_id : 0,
             'type' => 0,
@@ -105,9 +114,20 @@ class UserController extends Controller
             'surname' => 'required|max:255',
             'name' => 'required|max:255',
             'father_name' => 'required|max:255',
+            'user_profile' =>  'nullable',
             'contact' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
             'role' => 'required',
         ]);
+
+        $user_profile = $user->user_profile;
+
+        if ($user->user_profile) {
+            $filename = $request->user_profile->getClientOriginalName();
+            $request->user_profile->move('assets/user', $filename);
+            $user_profile = $filename;
+            dd($user_profile);
+
+        }
 
         $user->update([
             'surname' => $request->surname,
@@ -115,6 +135,7 @@ class UserController extends Controller
             'father_name' => $request->father_name,
             'email' => $request->email,
             'password' => bcrypt(strtolower($request->name) . '@2121'),
+            'user_profile' => $user_profile,
             'contact' => $request->contact,
             'branch_id' => $request->branch_id ? $request->branch_id : 0,
             'type' => 0,

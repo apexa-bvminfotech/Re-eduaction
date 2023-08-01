@@ -23,8 +23,19 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="card card-primary">
-                            {!! Form::model($user, ['method' => 'PATCH','route' => ['user.update', $user->id]]) !!}
+                            {!! Form::model($user, ['method' => 'PATCH','route' => ['user.update', $user->id], 'enctype' => 'multipart/form-data']) !!}
                             <div class="card-body">
+                                <div class="form-group row">
+                                    <label for="customFile" class="col-sm-3 col-form-label">Profile Photo</label>
+                                    <div class="col-sm-9">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="customFile" name="user_profile" value="{{$user->user_profile}}" accept="image/*">
+                                            <label class="custom-file-label" for="customFile">Choose Profile Photo</label>
+                                        </div>
+                                        <img src="{{asset('assets/user/' . $user->user_profile)}}" width="100" height="100">
+
+                                    </div>
+                                </div>
                                 <div class="form-group row">
                                     <label for="surname" class="col-sm-3 col-form-label">Surname </label>
                                     <div class="col-sm-9">

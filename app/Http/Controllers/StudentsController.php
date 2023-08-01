@@ -73,6 +73,7 @@ class StudentsController extends Controller
             'surname' => $request->surname,
             'father_name' => $request->father_name,
             'email' => $request->email_id,
+            'user_profile' => $request->user_profile,
             'contact' => $request->father_contact_no,
             'password' => Hash::make(strtolower($request->name) . '@123'),
             'type' => 2,
@@ -175,10 +176,12 @@ class StudentsController extends Controller
             'surname' => $request->surname,
             'father_name' => $request->father_name,
             'email' => $request->email_id,
+            'user_profile' => $request->user_profile,
             'contact' => $request->father_contact_no,
             'password' => Hash::make(strtolower($request->name) . '@123'),
             'type' => 2,
         ]);
+
         $upload_student_image = $student->upload_student_image;
         if ($request->upload_student_image) {
             $filename = $request->name . '_' . date_default_timezone_get() . '.' . $request->upload_student_image->getClientOriginalExtension();

@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->integer('type')->default(1)->comment('0-Admin, 1-Teacher, 2-Student')->after('email');
+            $table->string('user_profile')->after('password');
         });
     }
 
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('type');
+            $table->dropColumn('user_profile');
         });
     }
 };
