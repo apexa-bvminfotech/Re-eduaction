@@ -51,5 +51,6 @@ Route::group(['middleware'=>['auth']],function (){
     Route::get('changeTrainerStatus','TrainerController@changeTrainerStatus');
 
     Route::get('get-trainer-data','SlotController@gettrainerdata')->name('get-trainer-data');
+    Route::get('myprofile', 'UserController@profile')->name('profile');
 });
 

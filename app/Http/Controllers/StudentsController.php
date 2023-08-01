@@ -330,6 +330,8 @@ class StudentsController extends Controller
         $validatedData = $request->validate([
             'student_id' => 'required|integer',
             'course_id' => 'required|integer',
+            'sub_course_id' => 'nullable|array',
+            'sub_course_point_id ' => 'nullable|array',
             'subCourse_before' => 'nullable|array',
             'subCourse_after' => 'nullable|array',
             'subCourse_point_after' => 'nullable|array',
@@ -346,12 +348,12 @@ class StudentsController extends Controller
                             'student_id' => $validatedData['student_id'],
                             'course_id' => $validatedData['course_id'],
                             'sub_course_id' => $subCourseBefore_key,
-                            'before' => 1,
+
                         ],
                         [
                             'user_id' => Auth::user()->roles()->first()->value('name') == "Admin" ? Auth::user()->id : null,
                             'trainer_id' => Auth::user()->roles()->first()->value('name') != "Admin" ? Auth::user()->id : null,
-//                            'sub_course_id' => $subCourseBefore,
+                            'before' => 1,
                             'trainer_confirm_date' => Carbon::now()->toDateString(),
                             'admin_confirm_date' => Carbon::now()->toDateString(),
                         ]
@@ -364,19 +366,19 @@ class StudentsController extends Controller
         if (!empty($request->subCourse_after) && is_array($request->subCourse_after)) {
             foreach ($request->subCourse_after as $subCourseAfter_key => $subCourseAfter_value) {
                 $subCourseAfter = SubCourse::find($subCourseAfter_key);
-//            dd($subCourseAfter);
+
                 if ($subCourseAfter) {
                     StudentCourseComplete::updateOrCreate(
                         [
                             'student_id' => $validatedData['student_id'],
                             'course_id' => $validatedData['course_id'],
                             'sub_course_id' => $subCourseAfter_key,
-                            'after' => 1,
+
                         ],
                         [
                             'user_id' => Auth::user()->roles()->first()->value('name') == "Admin" ? Auth::user()->id : null,
                             'trainer_id' => Auth::user()->roles()->first()->value('name') != "Admin" ? Auth::user()->id : null,
-//                            'sub_course_id' => $subCourseAfter,
+                            'after' => 1,
                             'trainer_confirm_date' => Carbon::now()->toDateString(),
                             'admin_confirm_date' => Carbon::now()->toDateString(),
                         ]
@@ -433,6 +435,30 @@ class StudentsController extends Controller
                 }
             }
         }
+        $status = 0;
+
+        if (!empty($request->subCourse_before) && !empty($request->subCourse_after)) {
+            $status = 2; // If both 'before' and 'after' checkboxes are selected, set status to 2.
+        } elseif (!empty($request->subCourse_before)) {
+            $status = 2; // If only 'before' checkboxes are selected, set status to 2.
+        } elseif (!empty($request->subCourse_after)) {
+            $status = 1; // If only 'after' checkboxes are selected, set status to 1.
+        }
+
+        //subPoints
+
+        if (!empty($request->subCourse_point_before) && !empty($request->subCourse_point_after)) {
+            $status = 2; // If both 'before' and 'after' checkboxes are selected, set status to 2.
+        } elseif (!empty($request->subCourse_point_before)) {
+            $status = 2; // If only 'before' checkboxes are selected, set status to 2.
+        } elseif (!empty($request->subCourse_point_after)) {
+            $status = 1; // If only 'after' checkboxes are selected, set status to 1.
+        }
+
+        StudentCourseComplete::where('student_id', $validatedData['student_id'])
+            ->where('course_id', $validatedData['course_id'])
+            ->update(['status' => $status]);
+
 
         return redirect()->route('student.show', $validatedData['student_id'])->with('success', 'notification sent to admin.');
     }
