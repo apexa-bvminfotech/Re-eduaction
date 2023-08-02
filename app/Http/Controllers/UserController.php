@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -18,9 +19,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $branches = Branch::orderBy('id', 'DESC')->get();
-        $users = User::where('type', 0)->orderBy('id', 'DESC')->get();
-        return view('user.index', compact('users','branches'))->with('i');
+        $branches = Branch::orderBy('id', 'ASC')->get();
+        $users = User::where('type', 0)->orderBy('id', 'ASC')->get();
+        return view('user.index', compact('users', 'branches'))->with('i');
     }
 
     /**
@@ -32,7 +33,7 @@ class UserController extends Controller
     {
         $branches = Branch::orderBy('id')->get();
         $role = Role::orderBy('id')->get();
-        return view('user.create', compact('role','branches'));
+        return view('user.create', compact('role', 'branches'));
     }
 
     /**
@@ -50,13 +51,13 @@ class UserController extends Controller
             'email' => 'nullable',
             'contact' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
             'role' => 'required',
-            'is_active' => 'required'
+            'is_active' => 'required',
+            'user_profile' => 'nullable|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $user_profile = null;
         if ($request->user_profile) {
             $filename = $request->user_profile->getClientOriginalName();
-//            dd($filename);
             $request->user_profile->move('assets/user', $filename);
             $user_profile = $filename;
         }
@@ -67,12 +68,12 @@ class UserController extends Controller
             'father_name' => $request->father_name,
             'email' => $request->email,
             'password' => bcrypt(strtolower($request->name) . '@2121'),
-            'user_profile' =>$user_profile,
+            'user_profile' => $user_profile,
             'contact' => $request->contact,
             'branch_id' => $request->branch_id ? $request->branch_id : 0,
-            'type' => 0,
-            'is_active' => $request->is_active,
+            'type'=> 0,
         ]);
+
         $user->assignRole($request->input('role'));
         return redirect()->route('user.index')->with('success', 'User created successfully');
     }
@@ -98,7 +99,7 @@ class UserController extends Controller
     {
         $branches = Branch::orderBy('id')->get();
         $role = Role::orderBy('id')->get();
-        return view('user.edit', compact('user', 'role','branches'));
+        return view('user.edit', compact('user', 'role', 'branches'));
     }
 
     /**
@@ -114,19 +115,24 @@ class UserController extends Controller
             'surname' => 'required|max:255',
             'name' => 'required|max:255',
             'father_name' => 'required|max:255',
-            'user_profile' =>  'nullable',
+            'user_profile' => 'nullable|mimes:jpeg,png,jpg|max:2048',
             'contact' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
             'role' => 'required',
         ]);
 
         $user_profile = $user->user_profile;
-
-        if ($user->user_profile) {
-            $filename = $request->user_profile->getClientOriginalName();
-            $request->user_profile->move('assets/user', $filename);
-            $user_profile = $filename;
-            dd($user_profile);
-
+        if ($request->hasFile('user_profile') && $request->file('user_profile')->isValid()) {
+            if ($user_profile) {
+                // Delete old profile image if exists
+                $existingFilePath = public_path('assets/user/' . $user_profile);
+                if (file_exists($existingFilePath)) {
+                    unlink($existingFilePath);
+                }
+                // Upload new profile image
+                $filename = $request->file('user_profile')->getClientOriginalName();
+                $request->file('user_profile')->move(public_path('assets/user'), $filename);
+                $user_profile = $filename;
+            }
         }
 
         $user->update([
@@ -141,7 +147,7 @@ class UserController extends Controller
             'type' => 0,
             'is_active' => $request->is_active,
         ]);
-        $user->assignRole($request->input('role'));
+        $user->syncRoles($request->input('role'));
         return redirect()->route('user.index')->with('success', 'User updated successfully');
     }
 
@@ -166,8 +172,31 @@ class UserController extends Controller
         return response()->json(['success' => $request->status ? 'User de-active' : 'User active']);
     }
 
-    public function profile(){
+    public function profile()
+    {
+        $branches = Branch::orderBy('id', 'ASC')->get();
         $user = User::find(Auth::user()->id);
-        return view('layouts.profile', compact('user'));
+        return view('layouts.profile', compact('user','branches'));
+    }
+    public function updateProfileImage(Request $request, User $user)
+    {
+        $request->validate([
+            'new_profile_image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        // Delete old profile image if exists
+        if ($user->user_profile) {
+            Storage::delete('public/assets/user/' . $user->user_profile);
+        }
+
+        // upload new profile
+        $image = null;
+        if ($request->new_profile_image) {
+            $filename = $request->new_profile_image->getClientOriginalName();
+            $request->new_profile_image->move('assets/user', $filename);
+            $image = $user->update(['user_profile' => $filename]);
+        }
+
+        return redirect()->back()->with('success', 'Profile image updated successfully');
     }
 }

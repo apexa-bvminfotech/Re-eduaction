@@ -68,24 +68,26 @@ class StudentsController extends Controller
             'extra_note' => 'required',
             'analysis_trainer_id' => 'required|exists:trainers,id'
         ]);
-        $user = User::Create([
-            'name' => $request->name,
-            'surname' => $request->surname,
-            'father_name' => $request->father_name,
-            'email' => $request->email_id,
-            'user_profile' => $request->user_profile,
-            'contact' => $request->father_contact_no,
-            'password' => Hash::make(strtolower($request->name) . '@123'),
-            'type' => 2,
-        ]);
 
-        $user->assignRole($request->input('role'));
         $upload_student_image = null;
         if ($request->upload_student_image) {
             $filename = $request->name . '_' . date_default_timezone_get() . '.' . $request->upload_student_image->getClientOriginalExtension();
             $request->upload_student_image->move(public_path('assets/student'), $filename);
             $upload_student_image = 'assets/student' . '/' . $filename;
         }
+        $user = User::Create([
+            'name' => $request->name,
+            'surname' => $request->surname,
+            'father_name' => $request->father_name,
+            'email' => $request->email_id,
+            'user_profile' => $upload_student_image,
+            'contact' => $request->father_contact_no,
+            'password' => Hash::make(strtolower($request->name) . '@123'),
+            'type' => 2,
+        ]);
+
+        $user->assignRole($request->input('role'));
+
         $upload_analysis = null;
         if ($request->upload_analysis) {
             $filename = $request->name . '-' . $request->upload_analysis->getClientOriginalExtension();
@@ -170,24 +172,25 @@ class StudentsController extends Controller
             'extra_note' => 'required',
             'analysis_trainer_id' => 'required|exists:trainers,id',
         ]);
+        $upload_student_image = $student->upload_student_image;
+        if ($request->upload_student_image) {
+            $filename = $request->upload_student_image->getClientOriginalName();
+            $request->upload_student_image->move('assets/student/images', $filename);
+            $upload_student_image = $filename;
+        }
         $user = $student->user;
         $user->update([
             'name' => $request->name,
             'surname' => $request->surname,
             'father_name' => $request->father_name,
             'email' => $request->email_id,
-            'user_profile' => $request->user_profile,
+            'user_profile' => $upload_student_image,
             'contact' => $request->father_contact_no,
             'password' => Hash::make(strtolower($request->name) . '@123'),
             'type' => 2,
         ]);
 
-        $upload_student_image = $student->upload_student_image;
-        if ($request->upload_student_image) {
-            $filename = $request->name . '_' . date_default_timezone_get() . '.' . $request->upload_student_image->getClientOriginalExtension();
-            $request->upload_student_image->move(public_path('assets/student/images'), $filename);
-            $upload_student_image = 'assets/student/images/' . $filename;
-        }
+
         $upload_analysis = $student->upload_analysis;
         if ($request->upload_analysis) {
             $filename = $request->name . '-' . $request->upload_analysis->getClientOriginalExtension();
@@ -249,7 +252,6 @@ class StudentsController extends Controller
             'trainer_id' => 'required|integer',
             'slot_id' => 'required|integer',
         ]);
-//        dd($validatedData);
         $student = StudentStaffAssign::where('student_id', $request->student_id)->where('is_active', 0)->first();
 
         if ($student) {
