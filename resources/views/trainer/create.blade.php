@@ -19,8 +19,7 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active"><a href="{{ route('trainer.index') }}">Show Trainer
-                                    List</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ route('trainer.index') }}">Show Trainer List</a></li>
                         </ol>
                     </div>
                 </div>
@@ -31,7 +30,6 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card card-primary">
-                            {{--                            {!! Form::open(array('route' => 'trainer.store','method'=>'POST')) !!}--}}
                             <div class="bs-stepper">
                                 <div class="bs-stepper-header" role="tablist">
                                     <div class="step" data-target="#logins-part">
@@ -77,8 +75,7 @@
                                 </div>
                                 <div class="bs-stepper-content">
                                     <!-- your steps content here -->
-                                    <form action="{{route('trainer.store')}}" method="POST" id="quickForm"
-                                          class="needs-validation" novalidate enctype="multipart/form-data">
+                                    <form action="{{route('trainer.store')}}" method="POST" id="quickForm" class="needs-validation" novalidate enctype="multipart/form-data">
                                         @csrf
                                         @method('POST')
                                         <div id="logins-part" class="content" role="tabpanel"
@@ -88,10 +85,7 @@
                                                     <div class="col-md-4 mb-1">
                                                         <div class="form-group mb-3">
                                                             <label for="simpleinput">Employee ID</label>
-                                                            <input type="text"
-                                                                   class="form-control "
-                                                                   value="REYB01E{{ $emp_id+1<10 ? '0'.$emp_id+1 : $emp_id+1 }}"
-                                                                   name="emp_id" readonly>
+                                                            <input type="text" class="form-control " value="REYB01E{{ $emp_id+1<10 ? '0'.$emp_id+1 : $emp_id+1 }}" name="emp_id" readonly>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -104,7 +98,7 @@
                                                                    value="{{ old('surname') }}"
                                                                    name="surname" placeholder="Enter Surname">
                                                             @error('surname')
-                                                                <span class="text-danger">{{ $surname }}</span>
+                                                            <span class="text-danger">{{ $surname }}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
@@ -116,7 +110,7 @@
                                                                    value="{{ old('name') }}"
                                                                    placeholder="Enter Name">
                                                             @error('name')
-                                                                <span class="text-danger">{{ $name }}</span>
+                                                            <span class="text-danger">{{ $name }}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
@@ -128,7 +122,7 @@
                                                                    value="{{ old('father_name') }}"
                                                                    placeholder="Enter Father Name">
                                                             @error('father_name')
-                                                                <span class="text-danger">{{ $father_name }}</span>
+                                                            <span class="text-danger">{{ $father_name }}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
@@ -140,7 +134,7 @@
                                                                    class="form-control"
                                                                    pattern="[0-9]{5}[\s]{1}[0-9]{5}">
                                                             @error('phone')
-                                                                <span class="text-danger">{{ $phone }}</span>
+                                                            <span class="text-danger">{{ $phone }}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
@@ -152,7 +146,7 @@
                                                                    placeholder="Enter Email Address"
                                                                    value="{{ old('email_id') }}">
                                                             @error('email_id')
-                                                                <span class="text-danger">{{ $email_id }}</span>
+                                                            <span class="text-danger">{{ $email_id }}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
@@ -165,7 +159,7 @@
                                                                    id="qualification"
                                                                    value="{{ old('qualification') }}">
                                                             @error('qualification')
-                                                                <span class="text-danger">{{ $qualification }}</span>
+                                                            <span class="text-danger">{{ $qualification }}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
@@ -176,7 +170,7 @@
                                                                    placeholder="Enter Birthdate"
                                                                    value="{{ old('dob','1999-'.date('m-d')) }}" max="{{ date('Y-m-d') }}">
                                                             @error('dob')
-                                                                <span class="text-danger">{{ $dob }}</span>
+                                                            <span class="text-danger">{{ $dob }}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
@@ -204,7 +198,7 @@
                                                                 </div>
                                                             </div>
                                                             @error('marital_status')
-                                                                <span class="text-danger">{{ $marital_status }}</span>
+                                                            <span class="text-danger">{{ $marital_status }}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
@@ -215,14 +209,12 @@
                                                                       placeholder="Enter Address"
                                                             >{{ old('address') }}</textarea>
                                                             @error('address')
-                                                                <span class="text-danger">{{ $address }}</span>
+                                                            <span class="text-danger">{{ $address }}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button type="button" class="btn btn-primary float-right next-btn"
-                                                        id="firstNext">Next
-                                                </button>
+                                                <button type="button" class="btn btn-primary float-right next-btn" id="firstNext">Next</button>
                                             </div>
                                         </div>
                                         <div id="information-part" class="content" role="tabpanel"
@@ -236,7 +228,7 @@
                                                                    placeholder="Enter Your FullName"
                                                                    value="{{ old('emer_fullName') }}">
                                                             @error('emer_fullName')
-                                                                <span class="text-danger">{{ $emer_fullName }}</span>
+                                                            <span class="text-danger">{{ $emer_fullName }}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
@@ -249,7 +241,7 @@
                                                                    class="form-control"
                                                                    pattern="[0-9]{5}[\s]{1}[0-9]{5}">
                                                             @error('emer_phone')
-                                                                <span class="text-danger">{{ $emer_phone }}</span>
+                                                            <span class="text-danger">{{ $emer_phone }}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
@@ -261,7 +253,7 @@
                                                                    name="emer_relationship"
                                                                    value="{{ old('emer_relationship') }}">
                                                             @error('emer_relationship')
-                                                                <span class="text-danger">{{ $emer_relationship }}</span>
+                                                            <span class="text-danger">{{ $emer_relationship }}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
@@ -273,13 +265,8 @@
 
                                                     </div>
                                                 </div>
-                                                <button type="button" class="btn btn-primary float-right next-btn ml-2">
-                                                    Next
-                                                </button>
-                                                <button type="button" class="btn btn-primary prvBtn float-right"
-                                                        onclick="stepper.previous()">Previous
-                                                </button>
-
+                                                <button type="button" class="btn btn-primary float-right next-btn ml-2">Next</button>
+                                                <button type="button" class="btn btn-primary prvBtn float-right" onclick="stepper.previous()">Previous</button>
                                             </div>
                                         </div>
                                         <div id="office-use-part" class="content" role="tabpanel"
@@ -315,8 +302,8 @@
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio">
                                                                     <input class="custom-control-input" type="radio"
-                                                                       id="freelancerRadio" name="emp_type"
-                                                                       value="1" {{ old('emp_type') == 1 ? 'checked' : '' }}>
+                                                                           id="freelancerRadio" name="emp_type"
+                                                                           value="1" {{ old('emp_type') == 1 ? 'checked' : '' }}>
                                                                     <label for="freelancerRadio" class="custom-control-label">Freelancer</label>
                                                                 </div>
                                                             </div>
@@ -586,12 +573,8 @@
                                                         {{--                                                        </div>--}}
                                                     </div>
                                                 </div>
-                                                <button type="button" class="btn btn-primary float-right next-btn ml-2">
-                                                    Next
-                                                </button>
-                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2"
-                                                        onclick="stepper.previous()">Previous
-                                                </button>
+                                                <button type="button" class="btn btn-primary float-right next-btn ml-2">Next</button>
+                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
                                             </div>
                                         </div>
                                         <div id="document-list-part" class="content" role="tabpanel"
@@ -607,7 +590,7 @@
                                                                 <label class="custom-file-label" for="customFile">Choose
                                                                     file</label>
                                                                 @error('photo')
-                                                                    <span class="text-danger">{{ $photo }}</span>
+                                                                <span class="text-danger">{{ $photo }}</span>
                                                                 @enderror
                                                             </div>
                                                         </div>
@@ -621,7 +604,7 @@
                                                                 <label class="custom-file-label" for="customFile">Choose
                                                                     file</label>
                                                                 @error('photo')
-                                                                    <span class="text-danger">{{ $photo }}</span>
+                                                                <span class="text-danger">{{ $photo }}</span>
                                                                 @enderror
                                                             </div>
                                                         </div>
@@ -635,7 +618,7 @@
                                                                 <label class="custom-file-label" for="customFile">Choose
                                                                     file</label>
                                                                 @error('last_edu_markSheet')
-                                                                    <span class="text-danger">{{ $last_edu_markSheet }}</span>
+                                                                <span class="text-danger">{{ $last_edu_markSheet }}</span>
                                                                 @enderror
                                                             </div>
                                                         </div>
@@ -649,19 +632,14 @@
                                                                 <label class="custom-file-label" for="customFile">Choose
                                                                     file</label>
                                                                 @error('bank_passbook')
-                                                                    <span class="text-danger">{{ $bank_passbook }}</span>
+                                                                <span class="text-danger">{{ $bank_passbook }}</span>
                                                                 @enderror
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button type="button"
-                                                        class="btn btn-primary float-right next-btn  ml-2">
-                                                    Next
-                                                </button>
-                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2"
-                                                        onclick="stepper.previous()">Previous
-                                                </button>
+                                                <button type="button" class="btn btn-primary float-right next-btn  ml-2">Next</button>
+                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
                                             </div>
                                         </div>
                                         <div id="terms-condition-part" class="content" role="tabpanel"
@@ -675,27 +653,18 @@
                                                                    class="m-2" required>
                                                             <label for="terms & conditon">Terms & Conditions:</label>
                                                             @error('terms_conditions')
-                                                                <span class="text-danger">{{ $terms_conditions }}</span>
+                                                            <span class="text-danger">{{ $terms_conditions }}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
-                                                    {{--                                                    <div class="form-group row">--}}
-
                                                 </div>
-                                                <button type="submit" name="submit"
-                                                        class="btn btn-success float-right next-btn  ml-2">
-                                                    Submit
-                                                </button>
-                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2"
-                                                        onclick="stepper.previous()">Previous
-                                                </button>
+                                                <button type="submit" name="submit" class="btn btn-success float-right next-btn  ml-2">Submit</button>
+                                                <button type="button" class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
-                                <!-- /.card-body -->
                             </div>
-                            {{--                            {!! Form::close() !!}--}}
                         </div>
                     </div>
                 </div>
@@ -850,11 +819,8 @@
                 form.find('.invalid-feedback').remove();
             }
         });
-
         document.addEventListener('DOMContentLoaded', function () {
             window.stepper = new Stepper(document.querySelector('.bs-stepper'))
         });
-
-
     </script>
 @endpush

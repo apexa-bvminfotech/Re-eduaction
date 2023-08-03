@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->integer('branch_id')->default('0');
+            $table->integer('branch_id')->default('0')->after('password');
             $table->string('surname')->after('id');
             $table->string('father_name')->after('name');
             $table->string('contact')->after('email');

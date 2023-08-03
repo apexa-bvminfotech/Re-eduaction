@@ -46,11 +46,11 @@ Route::group(['middleware'=>['auth']],function (){
     Route::resource('branch','BranchController');
     Route::get('changeRtcStatus', 'RtcController@changeRtcStatus');
     Route::get('changeSlotStatus', 'SlotController@changeSlotStatus');
-//    Route::get('changeStaffStatus', 'StaffController@changeStaffStatus');
     Route::get('changeUserStatus','UserController@changeUserStatus');
     Route::get('changeTrainerStatus','TrainerController@changeTrainerStatus');
 
     Route::get('get-trainer-data','SlotController@gettrainerdata')->name('get-trainer-data');
     Route::get('myprofile', 'UserController@profile')->name('profile');
+    Route::post('user/{user}/update-profile-image', 'UserController@updateProfileImage')->name('user.update-profile-image');
 });
 

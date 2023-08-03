@@ -512,8 +512,8 @@
                                                                        id="image" accept="image/*">
                                                                 <label class="custom-file-label" for="customFile">Choose
                                                                     file</label>
-                                                                <img src="{{asset( $student->upload_student_image )}}"
-                                                                     width="100">
+                                                                <img src="{{asset('assets/student/images/'. $student->upload_student_image )}}"
+                                                                     width="100" height="100">
                                                             </div>
                                                         </div>
                                                     </div>

@@ -59,6 +59,13 @@ class TrainerController extends Controller
             'terms_conditions' => 'required',
             'is_active' => 'required',
         ]);
+
+        $photo = null;
+        if ($request->photo) {
+            $filename = $request->photo->getClientOriginalName();
+            $request->photo->move('assets/trainer', $filename);
+            $photo = $filename;
+        }
         $user = User::Create([
             'surname' => $request->surname,
             'name' => $request->name,
@@ -68,15 +75,10 @@ class TrainerController extends Controller
             'password' => Hash::make(strtolower($request->name) . '@2121'),
             'type' => 1,
             'branch_id' => $request->input('branch_id'),
+            'user_profile' => $photo,
         ]);
         $user->assignRole($request->input('role_id'));
 
-        $photo = null;
-        if ($request->photo) {
-            $filename = $request->photo->getClientOriginalName();
-            $request->photo->move('assets/trainer', $filename);
-            $photo = $filename;
-        }
         $aadhaar_card = null;
         if ($request->aadhaar_card) {
             $filename = $request->aadhaar_card->getClientOriginalName();
@@ -142,8 +144,8 @@ class TrainerController extends Controller
             'terms_conditions' => $request->terms_conditions,
             'is_active' => $request->is_active,
         ]);
-        return redirect()->route('trainer.index')
-            ->with('success', 'Trainer created successfully');
+
+        return redirect()->route('trainer.index')->with('success', 'Trainer created successfully');
     }
 
     public function show(Trainer $trainer)
@@ -192,12 +194,19 @@ class TrainerController extends Controller
             'bank_passbook' => 'nullable',
             'terms_conditions' => 'required',
         ]);
+        $photo = $trainer->photo;
+        if ($request->photo) {
+            $filename = $request->photo->getClientOriginalName();
+            $request->photo->move('assets/trainer', $filename);
+            $photo = $filename;
+        }
         $user = $trainer->user;
         $user->update([
             'surname' => $request->surname,
             'name' => $request->name,
             'father_name' => $request->father_name,
             'email' => $request->email_id,
+            'user_profile' => $photo,
             'contact' => $request->phone,
             'password' => Hash::make(($request->name) . '@2121'),
             'type' => 1,
@@ -212,12 +221,6 @@ class TrainerController extends Controller
             $user->assignRole($request->role_id);
         }
 
-        $photo = $trainer->photo;
-        if ($request->photo) {
-            $filename = $request->photo->getClientOriginalName();
-            $request->photo->move('assets/trainer', $filename);
-            $photo = $filename;
-        }
         $aadhaar_card = $trainer->aadhaar_card;
         if ($request->aadhaar_card) {
             $filename = $request->aadhaar_card->getClientOriginalName();

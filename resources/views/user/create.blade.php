@@ -22,8 +22,20 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="card card-primary">
-                            {!! Form::open(array('route' => 'user.store','method'=>'POST')) !!}
+                            {!! Form::open(array('route' => 'user.store','method'=>'POST', 'enctype' => 'multipart/form-data')) !!}
                             <div class="card-body">
+                                <div class="form-group row">
+                                    <label for="customFile" class="col-sm-3 col-form-label">Profile Photo</label>
+                                    <div class="col-sm-9">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="customFile" name="user_profile" accept="image/*">
+                                            <label class="custom-file-label" for="customFile">Choose Profile Photo</label>
+                                        </div>
+                                        @error('user_profile')
+                                        <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
                                 <div class="form-group row">
                                     <label for="surname" class="col-sm-3 col-form-label">Surname</label>
                                     <div class="col-sm-9">
@@ -73,7 +85,7 @@
                                 <div class="form-group row">
                                     <label for="role" class="col-sm-3 col-form-label">Role</label>
                                     <div class="col-sm-9">
-                                        <select class="form-control select2" name="role" required>
+                                        <select class="form-control select2" name="role">
                                             <option value=""> Select Role </option>
                                             @foreach($role as $key=> $r)
                                                 <option value="{{$r->id}}" {{old('role')==$r->id?'selected':''}}>{{$r->name}}</option>
