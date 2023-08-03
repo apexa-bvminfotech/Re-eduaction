@@ -111,4 +111,12 @@ class BranchController extends Controller
     {
         //
     }
+
+    public function changeBranchStatus(Request $request)
+    {
+        $branch = Branch::find($request->branch_id);
+        $branch->is_active = $request->status;
+        $branch->save();
+        return response()->json(['success' => $request->status ? 'Branch de-active' : 'Branch active']);
+    }
 }

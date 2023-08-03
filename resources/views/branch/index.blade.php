@@ -32,6 +32,7 @@
                                             <th>Branch Address</th>
                                             <th>Authorized person name</th>
                                             <th>Authorized person Contact</th>
+                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -43,6 +44,14 @@
                                                 <td>{{$u->address}}</td>
                                                 <td>{{$u->authorized_person_name}}</td>
                                                 <td>{{$u->authorized_person_contact}}</td>
+                                                <td>
+                                                    @can('branch-edit')
+                                                        <div class="custom-control custom-switch">
+                                                            <input type="checkbox" data-id="{{$u->id}}" class="custom-control-input checkStatus" id="c{{$key+1}}" {{ $u->is_active ? '' : 'checked' }}>
+                                                            <label class="custom-control-label" for="c{{$key+1}}"></label>
+                                                        </div>
+                                                    @endcan
+                                                </td>
                                                 <td>
                                                     @can('branch-edit')
                                                         <a href="{{route('branch.edit',$u->id)}}" class="btn btn-success btn-sm"
@@ -91,6 +100,28 @@
                 }
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
+
+            $('.checkStatus').change(function () {
+                var status = $(this).prop('checked') == true ? 0 : 1;
+                var branch_id = $(this).data('id');
+                $.ajax({
+                    type: "GET",
+                    url: '/changeBranchStatus',
+                    data: {'status': status, 'branch_id': branch_id},
+                    success: function (data) {
+                        toastr.options =
+                            {
+                                "closeButton" : true,
+                                "progressBar" : true
+                            }
+                        if(status){
+                            toastr.error(data.success);
+                        } else {
+                            toastr.success(data.success);
+                        }
+                    }
+                });
+            });
         })
     </script>
 @endpush
