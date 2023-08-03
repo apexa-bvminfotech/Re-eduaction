@@ -57,6 +57,7 @@ class TrainerController extends Controller
             'last_edu_markSheet' => 'required',
             'bank_passbook' => 'required',
             'terms_conditions' => 'required',
+            'terms_conditions_detail'=> 'required',
             'is_active' => 'required',
         ]);
 
@@ -142,6 +143,7 @@ class TrainerController extends Controller
             'last_edu_markSheet' => $last_edu_markSheet,
             'bank_passbook' => $bank_passbook,
             'terms_conditions' => $request->terms_conditions,
+            'terms_conditions_detail' => $request->terms_conditions_detail,
             'is_active' => $request->is_active,
         ]);
 
@@ -167,7 +169,8 @@ class TrainerController extends Controller
         $roles = Role::orderBy('id', 'DESC')->get();
         $user = User::where('id', $trainer->user_id)->first();
         $userRole = $user->roles->first();
-        $selectedCourses = $trainer->course_id;
+        $selectedCourses = json_encode($trainer->course_id);
+
 
         return view('trainer.edit', compact('trainer', 'branch', 'course', 'roles', 'user','userRole','selectedCourses'));
     }
@@ -193,6 +196,7 @@ class TrainerController extends Controller
             'last_edu_markSheet' => 'nullable',
             'bank_passbook' => 'nullable',
             'terms_conditions' => 'required',
+            'terms_conditions_detail'=> 'required',
         ]);
         $photo = $trainer->photo;
         if ($request->photo) {
@@ -214,7 +218,7 @@ class TrainerController extends Controller
         ]);
 
         if ($user->roles()->count() > 0) {
-            if ($user->removeRole($user->roles()->first()->id)) {
+            if ($user->removeRole($user->roles()->first()->id)){
                 $user->assignRole($request->role_id);
             }
         } else {
@@ -285,6 +289,7 @@ class TrainerController extends Controller
             'last_edu_markSheet' => $last_edu_markSheet,
             'bank_passbook' => $bank_passbook,
             'terms_conditions' => $request->terms_conditions,
+            'terms_conditions_detail' => $request->terms_conditions_detail,
             'is_active' => $request->is_active,
         ]);
 

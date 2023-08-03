@@ -701,6 +701,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <textarea id="summernote" name="terms_conditions_detail" value="{{ old('terms_conditions_detail',$trainer->terms_conditions_detail) }}">{{ $trainer->terms_conditions_detail }}</textarea>
+
+
                                                 <button type="submit" name="submit"
                                                         class="btn btn-success float-right next-btn  ml-2">
                                                     Update
@@ -715,7 +718,6 @@
                                 </div>
                                 <!-- /.card-body -->
                             </div>
-                            {{--                            {!! Form::close() !!}--}}
                         </div>
                     </div>
                 </div>
@@ -726,6 +728,7 @@
 @push('scripts')
     <script type="text/javascript">
         $(document).ready(function () {
+            $('#summernote').summernote();
             var form = $('#quickForm');
             var validator = form.validate({
                 rules: {
@@ -766,7 +769,6 @@
                     emer_address: {
                         required: true,
                     },
-
                     dob: {
                         required: true,
                     },
@@ -774,6 +776,9 @@
                         required: true,
                     },
                     terms_conditions: {
+                        required: true,
+                    },
+                    terms_conditions_detail: {
                         required: true,
                     }
 
@@ -812,7 +817,6 @@
                     emer_address: {
                         required: "Please Enter Address",
                     },
-
                     dob: {
                         required: "Please choose Date Of Birth ",
                     },
@@ -821,6 +825,9 @@
                     },
                     terms_conditions: {
                         required: 'Please read terms and condition and select this checkbox for submit data',
+                    },
+                    terms_conditions_detail: {
+                        required: 'Please Add terms and condition',
                     }
                 },
                 errorElement: 'span',
@@ -851,7 +858,6 @@
         document.addEventListener('DOMContentLoaded', function () {
             window.stepper = new Stepper(document.querySelector('.bs-stepper'))
         });
-
 
     </script>
 @endpush

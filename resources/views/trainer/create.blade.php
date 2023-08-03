@@ -78,8 +78,7 @@
                                     <form action="{{route('trainer.store')}}" method="POST" id="quickForm" class="needs-validation" novalidate enctype="multipart/form-data">
                                         @csrf
                                         @method('POST')
-                                        <div id="logins-part" class="content" role="tabpanel"
-                                             aria-labelledby="logins-part-trigger">
+                                        <div id="logins-part" class="content" role="tabpanel" aria-labelledby="logins-part-trigger">
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-4 mb-1">
@@ -217,8 +216,7 @@
                                                 <button type="button" class="btn btn-primary float-right next-btn" id="firstNext">Next</button>
                                             </div>
                                         </div>
-                                        <div id="information-part" class="content" role="tabpanel"
-                                             aria-labelledby="information-part-trigger">
+                                        <div id="information-part" class="content" role="tabpanel" aria-labelledby="information-part-trigger">
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-12 ">
@@ -269,8 +267,7 @@
                                                 <button type="button" class="btn btn-primary prvBtn float-right" onclick="stepper.previous()">Previous</button>
                                             </div>
                                         </div>
-                                        <div id="office-use-part" class="content" role="tabpanel"
-                                             aria-labelledby="office-use-part-trigger">
+                                        <div id="office-use-part" class="content" role="tabpanel" aria-labelledby="office-use-part-trigger">
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-6">
@@ -334,7 +331,7 @@
                                                                  style="display: flex;justify-content: space-around;">
                                                                 <label for="simpleinput">From:</label>
                                                             </div>
-                                                            {{--                                                            <label for="simpleinput" class="m-2" style="justify-content: space-around; display: flex">From:</label>--}}
+                                                            <label for="simpleinput" class="m-2" style="justify-content: space-around; display: flex">From:</label>
                                                             <div class="col-sm-4">
                                                                 <div class="input-group date" id="timepicker2"
                                                                      data-target-input="nearest">
@@ -349,7 +346,6 @@
                                                                  style="display: flex;justify-content: space-around;">
                                                                 <label for="simpleinput">To:</label>
                                                             </div>
-                                                            {{--                                                            <label for="simpleinput" class="m-2"  style="justify-content: space-around; display: flex">To:</label>--}}
                                                             <div class="col-sm-4">
                                                                 <div class="input-group date" id="timepicker3"
                                                                      data-target-input="nearest">
@@ -530,9 +526,7 @@
                                                         <div class="form-group mb-3">
                                                             <label for="inputtext" class="col-sm-3 col-form-label">Course
                                                                 Name:</label>
-                                                            <select class="form-control select2" name="course_id[]"
-                                                                    multiple="multiple"
-                                                                    data-placeholder="Select a course">
+                                                            <select class="form-control select2" name="course_id[]" multiple="multiple" data-placeholder="Select a course">
                                                                 <option value="">--- Select Course ---</option>
                                                                 @foreach($course as $key=>$c)
                                                                     <option
@@ -570,15 +564,13 @@
                                                                 name="is_active" {{ old('is_active') == 1 ? 'checked' : '' }}>
                                                             <label for="customRadio4" class="custom-control-label">Deactive</label>
                                                         </div>
-                                                        {{--                                                        </div>--}}
                                                     </div>
                                                 </div>
                                                 <button type="button" class="btn btn-primary float-right next-btn ml-2">Next</button>
                                                 <button type="button" class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
                                             </div>
                                         </div>
-                                        <div id="document-list-part" class="content" role="tabpanel"
-                                             aria-labelledby="document-list-part-trigger">
+                                        <div id="document-list-part" class="content" role="tabpanel" aria-labelledby="document-list-part-trigger">
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-6">
@@ -642,8 +634,7 @@
                                                 <button type="button" class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
                                             </div>
                                         </div>
-                                        <div id="terms-condition-part" class="content" role="tabpanel"
-                                             aria-labelledby="terms-condition-part-trigger">
+                                        <div id="terms-condition-part" class="content" role="tabpanel" aria-labelledby="terms-condition-part-trigger">
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-12">
@@ -651,13 +642,15 @@
                                                             <input type="checkbox" name="terms_conditions" value="1"
                                                                    @if(old('terms_conditions') == '1')checked @endif
                                                                    class="m-2" required>
-                                                            <label for="terms & conditon">Terms & Conditions:</label>
+                                                            <label for="terms & condition">Terms & Conditions:</label>
                                                             @error('terms_conditions')
                                                             <span class="text-danger">{{ $terms_conditions }}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <textarea id="summernote" name="terms_conditions_detail"></textarea>
+
                                                 <button type="submit" name="submit" class="btn btn-success float-right next-btn  ml-2">Submit</button>
                                                 <button type="button" class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
                                             </div>
@@ -675,6 +668,7 @@
 @push('scripts')
     <script type="text/javascript">
         $(document).ready(function () {
+            $('#summernote').summernote();
             var form = $('#quickForm');
             var validator = form.validate({
                 rules: {
@@ -735,6 +729,9 @@
                     },
                     terms_conditions: {
                         required: true,
+                    },
+                    terms_conditions_detail: {
+                        required: true,
                     }
 
                 },
@@ -792,6 +789,9 @@
                     },
                     terms_conditions: {
                         required: 'Please read terms and condition and select this checkbox for submit data',
+                    },
+                    terms_conditions_detail: {
+                        required: 'Please Add terms and condition',
                     }
                 },
                 errorElement: 'span',
@@ -822,5 +822,6 @@
         document.addEventListener('DOMContentLoaded', function () {
             window.stepper = new Stepper(document.querySelector('.bs-stepper'))
         });
+
     </script>
 @endpush
