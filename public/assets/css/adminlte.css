@@ -7689,6 +7689,12 @@ button.bg-dark:focus {
   justify-content: space-around !important;
 }
 
+.justify-content-end {
+    -webkit-justify-content: space-around !important;
+    -ms-flex-pack: distribute !important;
+    justify-content: flex-end !important;
+}
+
 .align-items-start {
   -webkit-align-items: flex-start !important;
   -ms-flex-align: start !important;

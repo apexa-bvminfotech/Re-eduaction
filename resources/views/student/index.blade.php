@@ -28,9 +28,10 @@
                                     <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Student name</th>
+                                        <th><span></span></th>
                                         <th>Course name</th>
-                                        <th>Father Contact no.</th>
+                                        <th><span></span></th>
+                                        <th>Mother Contact no.</th>
                                         <th>Standard</th>
                                         <th>Medium</th>
                                         <th width="300px">Action</th>
@@ -39,12 +40,13 @@
                                     <tbody>
                                     @foreach($students as $key=>$s)
                                         <tr>
-                                            <td>{{++$i}}</td>
-                                            <td>{{$s->surname}} {{$s->name}}</td>
-                                            <td>{{$s->course->course_name}}</td>
-                                            <td>{{$s->father_contact_no}}</td>
-                                            <td>{{$s->standard}}</td>
-                                            <td>{{$s->medium}}</td>
+                                            <td>{{ ++$i }}</td>
+                                            <td>{{ $s->surname }} {{ $s->name }}</td>
+                                            <td>{{ $s->course->course_name }}</td>
+                                            <td>{{ $s->branch_name }}</td>
+                                            <td>{{ $s->mother_contact_no }}</td>
+                                            <td>{{ $s->standard }}</td>
+                                            <td>{{ $s->medium }}</td>
                                             <td>
                                                 <div class="flex justify-between">
                                                     <a href="{{ route('student.show',$s->id) }}"
@@ -254,14 +256,8 @@
                         success: function (data) {
                             console.log("Slot display done.", data);
                             let slotOption = '<option value="">------Select Slot-----</option>';
-
-
                             $.each(data.slots, function (index, slot) {
-                                // if (regularStaffAssignedSlots.includes(slot.id) == '') {
-
-                                    slotOption += '<option value="' + slot.id + '">' + slot.slot_time + '  (' + slot.rtc.rtc_name + ')</option>';
-                                // }
-
+                                slotOption += '<option value="' + slot.id + '">' + slot.slot_time + '  (' + slot.rtc.rtc_name + ')</option>';
                             })
                             $('.slot').html("")
                             $('.slot').html(slotOption)
@@ -276,7 +272,28 @@
 
             $("#example1").DataTable({
                 "responsive": true, "lengthChange": false, "autoWidth": false,
-                "buttons": ["csv", "excel", "pdf", "print"]
+                "buttons": ["csv", "excel", "pdf", "print"],
+                initComplete: function () {
+                    this.api().columns([1,3]).every( function () {
+                        var column = this;
+                        var select = $('<select class="form-control select2"><option value="">All</option></select>')
+                            .appendTo( $(column.header()).find('span').empty() )
+                            .on({ 'change': function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+                            column
+                                .search( val ? '^'+val+'$' : '', true, false ).draw();
+                            },
+                            'click': function(e) {
+                                e.stopPropagation();
+                            }
+                        });
+                        column.data().unique().sort().each( function ( d, j ) {
+                            select.append( '<option value="'+d+'">'+d+'</option>' )
+                        });
+                    });
+                }
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         })
     </script>

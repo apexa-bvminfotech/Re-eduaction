@@ -29,7 +29,7 @@
                                             <th>User Name</th>
                                             <th>Email</th>
                                             <th>Contact</th>
-                                            <th>Branch</th>
+                                            <th><span></span></th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -80,7 +80,28 @@
         $(function () {
             $("#example1").DataTable({
                 "responsive": true, "lengthChange": false, "autoWidth": false,
-                "buttons": ["csv", "excel", "pdf", "print"]
+                "buttons": ["csv", "excel", "pdf", "print"],
+                initComplete: function () {
+                    this.api().columns([4]).every( function () {
+                        var column = this;
+                        var select = $('<select class="form-control select2"><option value="">All</option></select>')
+                            .appendTo( $(column.header()).find('span').empty() )
+                            .on({ 'change': function () {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                    );
+                                    column
+                                        .search( val ? '^'+val+'$' : '', true, false ).draw();
+                                },
+                                'click': function(e) {
+                                    e.stopPropagation();
+                                }
+                            });
+                        column.data().unique().sort().each( function ( d, j ) {
+                            select.append( '<option value="'+d+'">'+d+'</option>' )
+                        });
+                    });
+                }
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
             $('.checkStatus').change(function () {

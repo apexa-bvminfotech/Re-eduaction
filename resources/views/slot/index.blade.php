@@ -7,13 +7,29 @@
                     <div class="col-sm-6">
                         <h1>Slot Management</h1>
                     </div>
-                    <div class="col-sm-6">
-                        @can('branch-create')
-                            <a href="{{route('slot.create')}}" class="btn btn-primary float-right"><i class="fa fa-plus pr-2"></i> Add</a>
+                    <div class="col-sm-6 row input-group-append justify-content-end">
+                        @can('slot-create')
+                            <div class="col-md-3 text-right">
+                                <a href="{{route('slot.create')}}" class="btn btn-primary"><i class="fa fa-plus pr-2"></i> Add</a>
+                            </div>
                         @endcan
+                        <div class="col-md-3">
+                            <div class="btn-group submitter-group float-right">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Status</div>
+                                </div>
+                                <select class="form-control status-dropdown">
+                                    <option value="0">Active</option>
+                                    <option value="1">De Active</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
+        </section>
+        <section>
+
         </section>
         <section class="content">
             <div class="container-fluid">
@@ -26,7 +42,7 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Branch Name</th>
+                                            <th><span></span></th>
                                             <th>Trainer Name</th>
                                             <th>RTC Name</th>
                                             <th>Time</th>
@@ -48,6 +64,7 @@
                                                 <td>{{$s->whatsapp_group_name}}</td>
                                                 @can('slot-edit')
                                                     <td>
+                                                        <span style="display: none">{{ $s->is_active }}</span>
                                                         <div class="custom-control custom-switch">
                                                             <input type="checkbox" data-id="{{$s->id}}"
                                                                    class="custom-control-input checkStatus"
@@ -77,10 +94,47 @@
 @push('scripts')
     <script>
         $(function () {
-            $("#example1").DataTable({
+            dataTable =  $("#example1").DataTable({
                 "responsive": true, "lengthChange": false, "autoWidth": false,
-                "buttons": ["csv", "excel", "pdf", "print"]
+                "buttons": ["csv", "excel", "pdf", "print"],
+                initComplete: function () {
+                    this.api().columns([1]).every( function () {
+                        var column = this;
+                        var select = $('<select class="form-control select2"><option value="">All</option></select>')
+                            .appendTo( $(column.header()).find('span').empty() )
+                            .on({ 'change': function () {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                    );
+                                    column
+                                        .search( val ? '^'+val+'$' : '', true, false ).draw();
+
+                                },
+                                'click': function(e) {
+                                    e.stopPropagation();
+                                }
+                            });
+                        column.data().unique().sort().each( function ( d, j ) {
+                            select.append( '<option value="'+d+'">'+d+'</option>' )
+                        });
+                    },
+                    this.api().columns([6]).every( function () {
+                            var column = this;
+                            var val = 0;
+                            $('.status-dropdown').on({ 'change': function () {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                    );
+                                    column.column(6).search(val).draw();
+                                },
+                            });
+                            column.column(6).search(val).draw();
+                        })
+                    );
+                }
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+
 
             $('.checkStatus').change(function () {
                 var status = $(this).prop('checked') == true ? 0 : 1;
@@ -103,6 +157,6 @@
                     }
                 });
             });
-        })
+        });
     </script>
 @endpush

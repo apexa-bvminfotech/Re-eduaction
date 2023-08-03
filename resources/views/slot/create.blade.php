@@ -180,9 +180,5 @@
             });
 
         })
-
-
-
-
     </script>
 @endpush
