@@ -558,16 +558,13 @@
                                                     </div>
                                                     <div class="col-md-4 mb-1">
                                                         <div class="form-group mb-3">
-                                                            <label for="inputtext" class="col-sm-3 col-form-label">Course
-                                                                Name:</label>
-                                                            <select class="form-control select2" name="course_id[]"
-                                                                    multiple="multiple"
-                                                                    data-placeholder="Select a course">
+                                                            <label for="inputtext" class="col-sm-3 col-form-label">Course Name:</label>
+
+                                                            <select class="form-control select2" name="course_id[]" multiple="multiple" data-placeholder="Select a course">
                                                                 <option value="">--- Select Course ---</option>
                                                                 @if ($course)
                                                                     @foreach($course as $key => $c)
-
-                                                                        <option value="{{$c->id}}" {{ is_array(json_decode($selectedCourses)) && in_array($c->id, json_decode($selectedCourses)) ? 'selected' : '' }}>{{$c->course_name}}</option>
+                                                                        <option value="{{$c->id}}" {{ is_array(json_decode($trainer->course_id)) && in_array($c->id, json_decode($trainer->course_id)) ? 'selected' : '' }}>{{$c->course_name}}</option>
                                                                     @endforeach
                                                                 @endif
                                                             </select>
@@ -575,10 +572,8 @@
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group mb-2">
-                                                            <label for="inputtext" class="col-sm-3 col-form-label">Role
-                                                                Name:</label>
-                                                            <select class="form-control select2" name="role_id"
-                                                                    required>
+                                                            <label for="inputtext" class="col-sm-3 col-form-label">Role Name:</label>
+                                                            <select class="form-control select2" name="role_id" required>
                                                                 <option value="">--- Select Role ---</option>
                                                                 @foreach($roles as $key => $r)
                                                                     <option value="{{$r->id}}"

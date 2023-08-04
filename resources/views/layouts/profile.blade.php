@@ -79,7 +79,6 @@
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="personal_info">
                                         <div class="col-md-12">
-                                            <div class="card-body">
                                                 <table class="table table-hover">
                                                     <tr>
                                                         <th>Surname</th>
@@ -102,7 +101,6 @@
                                                         <td>{{$user->contact}}</td>
                                                     </tr>
                                                 </table>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

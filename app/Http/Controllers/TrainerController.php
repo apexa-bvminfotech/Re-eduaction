@@ -169,10 +169,8 @@ class TrainerController extends Controller
         $roles = Role::orderBy('id', 'DESC')->get();
         $user = User::where('id', $trainer->user_id)->first();
         $userRole = $user->roles->first();
-        $selectedCourses = json_encode($trainer->course_id);
 
-
-        return view('trainer.edit', compact('trainer', 'branch', 'course', 'roles', 'user','userRole','selectedCourses'));
+        return view('trainer.edit', compact('trainer', 'branch', 'course', 'roles', 'user','userRole'));
     }
 
     public function update(Request $request, Trainer $trainer)
@@ -293,8 +291,7 @@ class TrainerController extends Controller
             'is_active' => $request->is_active,
         ]);
 
-        return redirect()->route('trainer.index')
-            ->with('success', 'Trainer updated successfully');
+        return redirect()->route('trainer.index')->with('success', 'Trainer updated successfully');
     }
 
     public function destroy($id)

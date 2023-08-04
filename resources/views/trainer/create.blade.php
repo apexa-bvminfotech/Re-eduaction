@@ -33,41 +33,35 @@
                             <div class="bs-stepper">
                                 <div class="bs-stepper-header" role="tablist">
                                     <div class="step" data-target="#logins-part">
-                                        <button type="button" class="step-trigger" role="tab"
-                                                aria-controls="logins-part" id="logins-part-trigger">
+                                        <button type="button" class="step-trigger" role="tab" aria-controls="logins-part" id="logins-part-trigger">
                                             <span class="bs-stepper-circle">1</span>
                                             <span class="bs-stepper-label">Employee Information</span>
                                         </button>
                                     </div>
                                     <div class="line"></div>
                                     <div class="step" data-target="#information-part">
-                                        <button type="button" class="step-trigger" role="tab"
-                                                aria-controls="information-part" id="information-part-trigger">
+                                        <button type="button" class="step-trigger" role="tab" aria-controls="information-part" id="information-part-trigger">
                                             <span class="bs-stepper-circle">2</span>
                                             <span class="bs-stepper-label">Emergency Contact information</span>
                                         </button>
                                     </div>
                                     <div class="line"></div>
                                     <div class="step" data-target="#office-use-part">
-                                        <button type="button" class="step-trigger" role="tab"
-                                                aria-controls="office-use-part" id="office-use-part-trigger">
+                                        <button type="button" class="step-trigger" role="tab" aria-controls="office-use-part" id="office-use-part-trigger">
                                             <span class="bs-stepper-circle">3</span>
                                             <span class="bs-stepper-label">Office Use Only</span>
                                         </button>
                                     </div>
                                     <div class="line"></div>
                                     <div class="step" data-target="#document-list-part">
-                                        <button type="button" class="step-trigger" role="tab"
-                                                aria-controls="document-list-part" id="document-list-part-trigger">
+                                        <button type="button" class="step-trigger" role="tab" aria-controls="document-list-part" id="document-list-part-trigger">
                                             <span class="bs-stepper-circle">4</span>
                                             <span class="bs-stepper-label">Upload Document</span>
                                         </button>
                                     </div>
                                     <div class="line"></div>
                                     <div class="step" data-target="#terms-condition-part">
-                                        <button type="button" class="step-trigger" role="tab"
-                                                aria-controls="terms-condition-part"
-                                                id="terms-condition-part-trigger" required>
+                                        <button type="button" class="step-trigger" role="tab" aria-controls="terms-condition-part" id="terms-condition-part-trigger" required>
                                             <span class="bs-stepper-circle">5</span>
                                             <span class="bs-stepper-label">Terms & Condition</span>
                                         </button>
@@ -92,10 +86,7 @@
                                                     <div class="col-md-4 mb-1">
                                                         <div class="form-group mb-3">
                                                             <label for="simpleinput">Surname:</label>
-                                                            <input type="text"
-                                                                   class="form-control "
-                                                                   value="{{ old('surname') }}"
-                                                                   name="surname" placeholder="Enter Surname">
+                                                            <input type="text" class="form-control " value="{{ old('surname') }}" name="surname" placeholder="Enter Surname">
                                                             @error('surname')
                                                             <span class="text-danger">{{ $surname }}</span>
                                                             @enderror
@@ -104,10 +95,7 @@
                                                     <div class="col-md-4 mb-1">
                                                         <div class="form-group mb-3">
                                                             <label for="simpleinput">Name:</label>
-                                                            <input type="text" class="form-control"
-                                                                   name="name"
-                                                                   value="{{ old('name') }}"
-                                                                   placeholder="Enter Name">
+                                                            <input type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="Enter Name">
                                                             @error('name')
                                                             <span class="text-danger">{{ $name }}</span>
                                                             @enderror
@@ -116,10 +104,7 @@
                                                     <div class="col-md-4 mb-1">
                                                         <div class="form-group mb-3">
                                                             <label for="simpleinput">Father Name:</label>
-                                                            <input type="text" class="form-control"
-                                                                   name="father_name"
-                                                                   value="{{ old('father_name') }}"
-                                                                   placeholder="Enter Father Name">
+                                                            <input type="text" class="form-control" name="father_name" value="{{ old('father_name') }}" placeholder="Enter Father Name">
                                                             @error('father_name')
                                                             <span class="text-danger">{{ $father_name }}</span>
                                                             @enderror
@@ -128,10 +113,7 @@
                                                     <div class="col-md-6 mb-1">
                                                         <div class="form-group mb-3">
                                                             <label for="contact number">Mobile No:</label>
-                                                            <input type="tel" name="phone"
-                                                                   placeholder="12345 67890" value="{{ old('phone') }}"
-                                                                   class="form-control"
-                                                                   pattern="[0-9]{5}[\s]{1}[0-9]{5}">
+                                                            <input type="tel" name="phone" placeholder="12345 67890" value="{{ old('phone') }}" class="form-control" pattern="[0-9]{5}[\s]{1}[0-9]{5}">
                                                             @error('phone')
                                                             <span class="text-danger">{{ $phone }}</span>
                                                             @enderror
@@ -140,10 +122,7 @@
                                                     <div class="col-md-6 mb-1">
                                                         <div class="form-group mb-3">
                                                             <label for="inputMailForm">Email address:</label>
-                                                            <input id="inputMailForm" type="email" name="email_id"
-                                                                   class="form-control"
-                                                                   placeholder="Enter Email Address"
-                                                                   value="{{ old('email_id') }}">
+                                                            <input id="inputMailForm" type="email" name="email_id" class="form-control" placeholder="Enter Email Address" value="{{ old('email_id') }}">
                                                             @error('email_id')
                                                             <span class="text-danger">{{ $email_id }}</span>
                                                             @enderror
@@ -152,11 +131,7 @@
                                                     <div class="col-md-4 mb-1">
                                                         <div class="form-group">
                                                             <label for="qualification">Qualification:</label>
-                                                            <input type="text" class="form-control"
-                                                                   name="qualification"
-                                                                   placeholder="Enter Your Qualification"
-                                                                   id="qualification"
-                                                                   value="{{ old('qualification') }}">
+                                                            <input type="text" class="form-control" name="qualification" placeholder="Enter Your Qualification" id="qualification" value="{{ old('qualification') }}">
                                                             @error('qualification')
                                                             <span class="text-danger">{{ $qualification }}</span>
                                                             @enderror
@@ -165,9 +140,7 @@
                                                     <div class="col-md-4 mb-1">
                                                         <div class="form-group">
                                                             <label for="dob">Date Of Birth:</label>
-                                                            <input type="date" class="form-control" name="dob"
-                                                                   placeholder="Enter Birthdate"
-                                                                   value="{{ old('dob','1999-'.date('m-d')) }}" max="{{ date('Y-m-d') }}">
+                                                            <input type="date" class="form-control" name="dob" placeholder="Enter Birthdate" value="{{ old('dob','1999-'.date('m-d')) }}" max="{{ date('Y-m-d') }}">
                                                             @error('dob')
                                                             <span class="text-danger">{{ $dob }}</span>
                                                             @enderror
@@ -179,21 +152,15 @@
                                                             <br/>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio mt-2">
-                                                                    <input type="radio" id="married" class="custom-control-input"
-                                                                           name="marital_status"
-                                                                           value="1" {{ old('marital_status')}}>
-                                                                    <label for="married" class="custom-control-label"
-                                                                           style="font-weight: normal">Married</label>
+                                                                    <input type="radio" id="married" class="custom-control-input" name="marital_status" value="1" {{ old('marital_status')}}>
+                                                                    <label for="married" class="custom-control-label" style="font-weight: normal">Married</label>
 
                                                                 </div>
                                                             </div>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio mt-1">
-                                                                    <input type="radio" id="unmarried" class="custom-control-input"
-                                                                           name="marital_status" checked
-                                                                           value="0" {{ old('marital_status')}}>
-                                                                    <label for="unmarried" class="custom-control-label"
-                                                                           style="font-weight: normal">Unmarried</label>
+                                                                    <input type="radio" id="unmarried" class="custom-control-input" name="marital_status" checked value="0" {{ old('marital_status')}}>
+                                                                    <label for="unmarried" class="custom-control-label" style="font-weight: normal">Unmarried</label>
                                                                 </div>
                                                             </div>
                                                             @error('marital_status')
@@ -204,9 +171,7 @@
                                                     <div class="col-sm-12">
                                                         <div class="form-group mb-3">
                                                             <label for="address">Address:</label>
-                                                            <textarea name="address" class="form-control"
-                                                                      placeholder="Enter Address"
-                                                            >{{ old('address') }}</textarea>
+                                                            <textarea name="address" class="form-control" placeholder="Enter Address">{{ old('address') }}</textarea>
                                                             @error('address')
                                                             <span class="text-danger">{{ $address }}</span>
                                                             @enderror
@@ -222,9 +187,7 @@
                                                     <div class="col-md-12 ">
                                                         <div class="form-group mb-3">
                                                             <label for="simpleinput">Full Name:</label>
-                                                            <input type="text" class="form-control" name="emer_fullName"
-                                                                   placeholder="Enter Your FullName"
-                                                                   value="{{ old('emer_fullName') }}">
+                                                            <input type="text" class="form-control" name="emer_fullName" placeholder="Enter Your FullName" value="{{ old('emer_fullName') }}">
                                                             @error('emer_fullName')
                                                             <span class="text-danger">{{ $emer_fullName }}</span>
                                                             @enderror
@@ -233,11 +196,7 @@
                                                     <div class="col-md-6 mb-1">
                                                         <div class="form-group mb-3">
                                                             <label for="contact number">Mobile No:</label>
-                                                            <input type="tel" name="emer_phone"
-                                                                   placeholder="12345 67890"
-                                                                   value="{{ old('emer_phone') }}"
-                                                                   class="form-control"
-                                                                   pattern="[0-9]{5}[\s]{1}[0-9]{5}">
+                                                            <input type="tel" name="emer_phone" placeholder="12345 67890" value="{{ old('emer_phone') }}" class="form-control" pattern="[0-9]{5}[\s]{1}[0-9]{5}">
                                                             @error('emer_phone')
                                                             <span class="text-danger">{{ $emer_phone }}</span>
                                                             @enderror
@@ -246,10 +205,7 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group mb-3">
                                                             <label for="simpleinput">Relationship:</label>
-                                                            <input type="text" class="form-control"
-                                                                   placeholder="Relationship"
-                                                                   name="emer_relationship"
-                                                                   value="{{ old('emer_relationship') }}">
+                                                            <input type="text" class="form-control" placeholder="Relationship" name="emer_relationship" value="{{ old('emer_relationship') }}">
                                                             @error('emer_relationship')
                                                             <span class="text-danger">{{ $emer_relationship }}</span>
                                                             @enderror
@@ -257,8 +213,7 @@
                                                     </div>
                                                     <div class="col-md-12">
                                                         <label for="note">Address:</label>
-                                                        <textarea name="emer_address" placeholder="address"
-                                                                  class="form-control">{{ old('emer_address') }}</textarea>
+                                                        <textarea name="emer_address" placeholder="address" class="form-control">{{ old('emer_address') }}</textarea>
                                                         <br>
 
                                                     </div>
@@ -273,23 +228,17 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group mb-3">
                                                             <label for="simpleinput">Designation:</label>
-                                                            <input type="text" class="form-control" name="designation"
-                                                                   placeholder="designation"
-                                                                   value="{{ old('designation') }}">
+                                                            <input type="text" class="form-control" name="designation" placeholder="designation" value="{{ old('designation') }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label for="note">Department:</label>
-                                                        <input type="text" class="form-control" name="department"
-                                                               placeholder="department"
-                                                               value="{{ old('department') }}">
+                                                        <input type="text" class="form-control" name="department" placeholder="department" value="{{ old('department') }}">
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group mb-3">
                                                             <label for="simpleinput">Work Location:</label>
-                                                            <input type="text" class="form-control" name="work_location"
-                                                                   placeholder="work location"
-                                                                   value="{{ old('work_location') }}">
+                                                            <input type="text" class="form-control" name="work_location" placeholder="work location" value="{{ old('work_location') }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
@@ -298,17 +247,13 @@
                                                             <br>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio">
-                                                                    <input class="custom-control-input" type="radio"
-                                                                           id="freelancerRadio" name="emp_type"
-                                                                           value="1" {{ old('emp_type') == 1 ? 'checked' : '' }}>
+                                                                    <input class="custom-control-input" type="radio" id="freelancerRadio" name="emp_type" value="1" {{ old('emp_type') == 1 ? 'checked' : '' }}>
                                                                     <label for="freelancerRadio" class="custom-control-label">Freelancer</label>
                                                                 </div>
                                                             </div>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio ml-2">
-                                                                    <input class="custom-control-input" type="radio"
-                                                                           id="fixedRadio" name="emp_type"
-                                                                           value="0" {{ old('emp_type') == 0 ? 'checked' : '' }} >
+                                                                    <input class="custom-control-input" type="radio" id="fixedRadio" name="emp_type" value="0" {{ old('emp_type') == 0 ? 'checked' : '' }} >
                                                                     <label for="fixedRadio" class="custom-control-label">Fixed</label>
                                                                 </div>
                                                             </div>
@@ -318,42 +263,29 @@
                                                     <div class="col-md-6 ">
                                                         <div class="form-group mb-3">
                                                             <label for="simpleinput">Office use Email Address:</label>
-                                                            <input type="email" class="form-control"
-                                                                   placeholder="email address"
-                                                                   name="office_use_email"
-                                                                   value="{{ old('office_use_email') }}">
+                                                            <input type="email" class="form-control" placeholder="email address" name="office_use_email" value="{{ old('office_use_email') }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label for="simpleinput">Joining Date:</label>
                                                         <div class="row mb-3">
-                                                            <div class="col-sm-2"
-                                                                 style="display: flex;justify-content: space-around;">
+                                                            <div class="col-sm-2" style="display: flex;justify-content: space-around;">
                                                                 <label for="simpleinput">From:</label>
                                                             </div>
                                                             <label for="simpleinput" class="m-2" style="justify-content: space-around; display: flex">From:</label>
                                                             <div class="col-sm-4">
-                                                                <div class="input-group date" id="timepicker2"
-                                                                     data-target-input="nearest">
+                                                                <div class="input-group date" id="timepicker2" data-target-input="nearest">
 
-                                                                    <input type="date"
-                                                                           class="form-control"
-                                                                           name="joining_date_from"
-                                                                           value="{{ old('joining_date', date('Y-m-d')) }}">
+                                                                    <input type="date" class="form-control" name="joining_date_from" value="{{ old('joining_date', date('Y-m-d')) }}">
                                                                 </div>
                                                             </div>
-                                                            <div class="col-sm-1"
-                                                                 style="display: flex;justify-content: space-around;">
+                                                            <div class="col-sm-1" style="display: flex;justify-content: space-around;">
                                                                 <label for="simpleinput">To:</label>
                                                             </div>
                                                             <div class="col-sm-4">
-                                                                <div class="input-group date" id="timepicker3"
-                                                                     data-target-input="nearest">
+                                                                <div class="input-group date" id="timepicker3" data-target-input="nearest">
 
-                                                                    <input type="date"
-                                                                           class="form-control "
-                                                                           name="joining_date_to"
-                                                                           value="{{ old('joining_date', date('Y-m-d', strtotime(' + 1 years'))) }}">
+                                                                    <input type="date" class="form-control " name="joining_date_to" value="{{ old('joining_date', date('Y-m-d', strtotime(' + 1 years'))) }}">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -363,27 +295,17 @@
                                                         <div class="row">
                                                             <div class="col-md-4">
                                                                 <div class="form-group mb-3">
-                                                                    <input placeholder="i-card date"
-                                                                           class="form-control textbox-n"
-                                                                           name="i_card_date"
-                                                                           type="date"
-                                                                           id="date"
-                                                                           value="{{ old('i_card_date', date('Y-m-d')) }}" max="{{ date('Y-m-d') }}"/>
+                                                                    <input placeholder="i-card date" class="form-control textbox-n" name="i_card_date" type="date" id="date" value="{{ old('i_card_date', date('Y-m-d')) }}" max="{{ date('Y-m-d') }}"/>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group mb-3">
-                                                                    <input type="date" class="form-control textbox-n"
-                                                                           name="i_card_return_date"
-                                                                           placeholder="i-card return date"
-                                                                           value="{{ old('i_card_return_date') }}" max="{{ date('Y-m-d') }}">
+                                                                    <input type="date" class="form-control textbox-n" name="i_card_return_date" placeholder="i-card return date" value="{{ old('i_card_return_date') }}" max="{{ date('Y-m-d') }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group mb-3">
-                                                                    <input type="text" class="form-control"
-                                                                           name="i_card_note" placeholder="add note"
-                                                                           value="{{ old('i_card_note') }}">
+                                                                    <input type="text" class="form-control" name="i_card_note" placeholder="add note" value="{{ old('i_card_note') }}">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -529,8 +451,7 @@
                                                             <select class="form-control select2" name="course_id[]" multiple="multiple" data-placeholder="Select a course">
                                                                 <option value="">--- Select Course ---</option>
                                                                 @foreach($course as $key=>$c)
-                                                                    <option
-                                                                        value="{{$c->id}}" {{ old('course_id')==$c->id?'selected':'' }}>{{$c->course_name}}</option>
+                                                                    <option value="{{$c->id}}" {{ in_array($c->id, old('course_id', json_decode($c->course_id, true) ?: [])) ? 'selected' : '' }}>{{$c->course_name}}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -577,10 +498,9 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Passport Size Photo</label>
                                                             <div class="custom-file">
-                                                                <input type="file" class="custom-file-input"
-                                                                       name="photo" accept="image/*">
-                                                                <label class="custom-file-label" for="customFile">Choose
-                                                                    file</label>
+                                                                <input type="file" class="custom-file-input" name="photo" accept="image/*" value="{{old('photo')}}"/>
+                                                                <label class="custom-file-label" for="customFile">Choose file</label>
+
                                                                 @error('photo')
                                                                 <span class="text-danger">{{ $photo }}</span>
                                                                 @enderror
@@ -591,12 +511,10 @@
                                                         <div class="form-group mb-2">
                                                             <label for="inputtext">Aadhaar Card</label>
                                                             <div class="custom-file">
-                                                                <input type="file" class="custom-file-input"
-                                                                       name="aadhaar_card" accept="image/*">
-                                                                <label class="custom-file-label" for="customFile">Choose
-                                                                    file</label>
-                                                                @error('photo')
-                                                                <span class="text-danger">{{ $photo }}</span>
+                                                                <input type="file" class="custom-file-input" name="aadhaar_card" accept="image/*" value="{{ old('aadhaar_card') }}"/>
+                                                                <label class="custom-file-label" for="customFile">Choose file</label>
+                                                                @error('aadhaar_card')
+                                                                <span class="text-danger">{{ $aadhaar_card }}</span>
                                                                 @enderror
                                                             </div>
                                                         </div>
@@ -606,7 +524,7 @@
                                                             <label for="inputtext">Last Education MarkSheet</label>
                                                             <div class="custom-file">
                                                                 <input type="file" class="custom-file-input"
-                                                                       name="last_edu_markSheet" accept="image/*">
+                                                                       name="last_edu_markSheet" accept="image/*" value="{{ old('last_edu_markSheet') }}"/>
                                                                 <label class="custom-file-label" for="customFile">Choose
                                                                     file</label>
                                                                 @error('last_edu_markSheet')
@@ -620,7 +538,7 @@
                                                             <label for="inputtext">Choose Bank Passbook Photo</label>
                                                             <div class="custom-file">
                                                                 <input type="file" class="custom-file-input"
-                                                                       name="bank_passbook" accept="image/*">
+                                                                       name="bank_passbook" accept="image/*" value="{{ old('bank_passbook') }}"/>
                                                                 <label class="custom-file-label" for="customFile">Choose
                                                                     file</label>
                                                                 @error('bank_passbook')
@@ -649,8 +567,12 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <textarea id="summernote" name="terms_conditions_detail"></textarea>
-
+                                                <div class="card-body">
+                                                <textarea id="summernote" name="terms_conditions_detail" required="required">{{ old('terms_conditions_detail') }}</textarea>
+                                                @error('terms_conditions_detail')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                                </div>
                                                 <button type="submit" name="submit" class="btn btn-success float-right next-btn  ml-2">Submit</button>
                                                 <button type="button" class="btn btn-primary prvBtn float-right ml-2" onclick="stepper.previous()">Previous</button>
                                             </div>
