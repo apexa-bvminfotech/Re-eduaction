@@ -30,7 +30,7 @@ class StudentsController extends Controller
         $trainers = Trainer::where('is_active', 0)->orderBy('id', 'desc')->get();
         $students = Student::select('students.id','students.surname','students.name','students.mother_contact_no',
                         'students.standard','students.medium','students.course_id','branches.name as branch_name')
-                    ->join('branches', 'branches.id', 'students.branch_id')
+                    ->join('branches', 'branches.id', 'students.id')
                     ->with('course')
                     ->orderBy('students.id')->get();
 
