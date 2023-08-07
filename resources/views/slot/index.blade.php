@@ -66,16 +66,12 @@
                                                     <td>
                                                         <span style="display: none">{{ $s->is_active }}</span>
                                                         <div class="custom-control custom-switch">
-                                                            <input type="checkbox" data-id="{{$s->id}}"
-                                                                   class="custom-control-input checkStatus"
-                                                                   id="c{{$key+1}}" {{ $s->is_active ? '' : 'checked' }}>
+                                                            <input type="checkbox" data-id="{{$s->id}}" class="custom-control-input checkStatus" id="c{{$key+1}}" {{ $s->is_active ? '' : 'checked' }}>
                                                             <label class="custom-control-label" for="c{{$key+1}}"></label>
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <a href="{{ route('slot.edit',$s->id) }}"
-                                                           class="btn btn-success btn-sm" title="Edit">
-                                                            <i class="fa fa-edit"></i> Edit</a>
+                                                        <a href="{{ route('slot.edit',$s->id) }}" class="btn btn-success btn-sm" title="Edit"><i class="fa fa-edit"></i> Edit</a>
                                                     </td>
                                                 @endcan
                                             </tr>
@@ -135,8 +131,7 @@
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
 
-
-            $('.checkStatus').change(function () {
+            $(document).on('change', '.checkStatus', function() {
                 var status = $(this).prop('checked') == true ? 0 : 1;
                 var slot_id = $(this).data('id');
                 $.ajax({

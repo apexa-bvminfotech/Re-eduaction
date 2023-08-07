@@ -60,7 +60,6 @@ class SlotController extends Controller
      */
     public function store(Request $request)
     {
-//        dd($request);
         $this->validate($request, [
             'trainer_id' => 'required',
             'rtc_id' => 'required',

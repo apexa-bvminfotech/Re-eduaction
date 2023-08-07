@@ -62,6 +62,7 @@
                                                 <td>{{ $r->address }}</td>
                                                 @can('rtc-edit')
                                                     <td>
+                                                        <span style="display: none">{{ $r->is_active }}</span>
                                                         <div class="custom-control custom-switch">
                                                             <input type="checkbox" data-id="{{$r->id}}"
                                                                    class="custom-control-input checkStatus"
@@ -71,8 +72,7 @@
                                                     </td>
                                                     <td>
                                                         <a href="{{ route('rtc.edit',$r->id) }}"
-                                                           class="btn btn-success btn-sm" title="Edit"><i
-                                                                class="fa fa-edit"></i> Edit</a>
+                                                           class="btn btn-success btn-sm" title="Edit"><i class="fa fa-edit"></i> Edit</a>
                                                     </td>
                                                 @endcan
                                             </tr>
@@ -91,7 +91,7 @@
 @push('scripts')
     <script>
         $(function () {
-            $("#example1").DataTable({
+            dataTable =  $("#example1").DataTable({
                 "responsive": true, "lengthChange": false, "autoWidth": false,
                 "buttons": ["csv", "excel", "pdf", "print"],
                 initComplete: function () {
@@ -131,7 +131,7 @@
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
 
-            $('.checkStatus').change(function () {
+            $(document).on('change', '.checkStatus', function() {
                 var status = $(this).prop('checked') == true ? 0 : 1;
                 var rtc_id = $(this).data('id');
                 $.ajax({
