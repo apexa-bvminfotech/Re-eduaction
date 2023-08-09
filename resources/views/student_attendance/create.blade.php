@@ -43,51 +43,193 @@
                                                    name="attendance_date" required>
                                         </div>
                                     </div>
-                                    @foreach($students as $key => $s)
+
+                                </div>
+
+                                @foreach($trainer as $t)
+                                    @if(isset($t->studentAssign) && !$t->studentAssign->isEmpty())
                                         <div class="row">
                                             <div class="col-md-3">
-                                                <div class="form-group mb-3">
-                                                    <label for="simpleinput">Student name</label>
+                                                <div class="form-group">
+                                                    <label for="simpleinput">Trainer name</label>
                                                     <input type="hidden" readonly
-                                                           name="data[{{ $key }}][student_id]"
-                                                           value="{{ $s->id }}" class="form-control">
+                                                           name="data[{{ $t->id  }}][trainer_id]"
+                                                           value="{{ $t->id }}" class="form-control">
                                                     <input type="text" readonly
-                                                           name="data[{{ $key }}][student_name]"
-                                                           value="{{ $s->name }}" class="form-control">
-                                                    @error('student_id')
-                                                    <span class="text-danger">{{$message}}</span>
-                                                    @enderror
+                                                           name="data[{{ $t->id  }}][trainer_name]"
+                                                           value="{{ $t->name }}" class="form-control">
                                                 </div>
                                             </div>
-                                            <div class="col-md-3">
-                                                <div class="form-group mb-3">
-                                                    <label for="simpleinput">Attendance</label>
-                                                    <br>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio"
-                                                               name="data[{{ $key }}][attendance_type]" value="0"
-                                                               checked>
-                                                        <label class="form-check-label"
-                                                               for="inlineRadio1">Present</label>
+                                            <div class="col-md-9">
+                                                @forelse($t->studentAssign->groupBy('slot.slot_time') as $key => $regularSlot)
+                                                    @if($key>0)
+                                                        <div class="col-md-3">
+                                                        </div>
+                                                    @endif
+                                                    <div class="form-group">
+                                                        <div class="row">
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="simpleinput">RegularStaff
+                                                                        slot-time</label>
+                                                                    <input type="hidden" readonly
+                                                                           name="data[{{ $key }}][trainer_id]"
+                                                                           value="{{ $key }}"
+                                                                           class="form-control">
+                                                                    <div class="row">
+                                                                        <input type="text" readonly
+                                                                               name="data[{{ $key }}][trainer_name]"
+                                                                               value="{{ $key }}"
+                                                                               class="form-control">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio"
-                                                               name="data[{{ $key }}][attendance_type]" value="1">
-                                                        <label class="form-check-label"
-                                                               for="inlineRadio2">Absent</label>
-                                                    </div>
-                                                </div>
+
+                                                    @foreach($regularSlot as $key1 => $student)
+
+                                                        <div class="col-md-9">
+                                                            <div class="form-group">
+                                                                <div class="row">
+                                                                    <div class="col-md-3">
+                                                                        <div class="form-group mb-3">
+                                                                            <label for="simpleinput">Student name</label>
+                                                                            <input type="hidden" readonly
+                                                                                   name="data[{{ $key1 }}][student_id]"
+                                                                                   value="{{ $key1 }}" class="form-control">
+                                                                            <input type="text" readonly
+                                                                                   name="data[{{ $key1 }}][student_name]"
+                                                                                   value="{{ $student->student->name }}" class="form-control">
+                                                                            @error('student_id')
+                                                                            <span class="text-danger">{{$message}}</span>
+                                                                            @enderror
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <div class="form-group mb-3">
+                                                                            <label for="simpleinput">Attendance</label>
+                                                                            <br>
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input class="form-check-input" type="radio"
+                                                                                       name="data[{{ $key }}][attendance_type]" value="0"
+                                                                                >
+                                                                                <label class="form-check-label"
+                                                                                       for="inlineRadio1">Present</label>
+                                                                            </div>
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input class="form-check-input" type="radio"
+                                                                                       name="data[{{ $key }}][attendance_type]" value="1">
+                                                                                <label class="form-check-label"
+                                                                                       for="inlineRadio2">Absent</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <div class="form-group mb-3">
+                                                                            <label for="simpleinput">Absent reason</label>
+                                                                            <input type="text" name="data[{{ $key }}][absent_reason]"
+                                                                                   class="form-control">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                @empty
+                                                @endforelse
                                             </div>
-                                            <div class="col-md-3">
-                                                <div class="form-group mb-3">
-                                                    <label for="simpleinput">Absent reason</label>
-                                                    <input type="text" name="data[{{ $key }}][absent_reason]"
-                                                           class="form-control">
-                                                </div>
+                                            {{-- ///proxy staff//--}}
+                                            <div class="col-md-3"></div>
+                                            <div class="col-md-9">
+                                                @forelse($t->studentAssignProxy->groupBy('slot.slot_time') as $key2 => $regularSlotProxy)
+                                                    @if(isset($t->studentAssignProxy) && !$t->studentAssignProxy->isEmpty())
+                                                        @if($key2>0)
+                                                            <div class="col-md-3">
+                                                            </div>
+                                                        @endif
+                                                        <div class="form-group">
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <div class="form-group">
+                                                                        <label for="simpleinput">Proxy
+                                                                            slot-time</label>
+                                                                        <input type="hidden" readonly
+                                                                               name="data[{{ $key2 }}][trainer_id]"
+                                                                               value="{{ $key2 }}"
+                                                                               class="form-control">
+                                                                        <div class="row">
+                                                                            <input type="text" readonly
+                                                                                   name="data[{{ $key2 }}][trainer_name]"
+                                                                                   value="{{ $key2 }}"
+                                                                                   class="form-control">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        @foreach($regularSlotProxy as $key3 => $studentProxy)
+                                                            @if($key3>0)
+                                                                <div class="col-md-3">
+                                                                </div>
+                                                            @endif
+                                                            <div class="col-md-9">
+                                                                <div class="form-group">
+                                                                    <div class="row">
+                                                                        <div class="col-md-3">
+                                                                            <div class="form-group mb-3">
+                                                                                <label for="simpleinput">Student name</label>
+                                                                                <input type="hidden" readonly
+                                                                                       name="data[{{ $key3 }}][student_id]"
+                                                                                       value="{{ $key3 }}" class="form-control">
+                                                                                <input type="text" readonly
+                                                                                       name="data[{{ $key3 }}][student_name]"
+                                                                                       value="{{ $student->student->name }}" class="form-control">
+                                                                                @error('student_id')
+                                                                                <span class="text-danger">{{$message}}</span>
+                                                                                @enderror
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-3">
+                                                                            <div class="form-group mb-3">
+                                                                                <label for="simpleinput">Attendance</label>
+                                                                                <br>
+                                                                                <div class="form-check form-check-inline">
+                                                                                    <input class="form-check-input" type="radio"
+                                                                                           name="data[{{ $key }}][attendance_type]" value="0"
+                                                                                    >
+                                                                                    <label class="form-check-label"
+                                                                                           for="inlineRadio1">Present</label>
+                                                                                </div>
+                                                                                <div class="form-check form-check-inline">
+                                                                                    <input class="form-check-input" type="radio"
+                                                                                           name="data[{{ $key }}][attendance_type]" value="1">
+                                                                                    <label class="form-check-label"
+                                                                                           for="inlineRadio2">Absent</label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-3">
+                                                                            <div class="form-group mb-3">
+                                                                                <label for="simpleinput">Absent reason</label>
+                                                                                <input type="text" name="data[{{ $key }}][absent_reason]"
+                                                                                       class="form-control">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    @endif
+                                                @empty
+                                                @endforelse
                                             </div>
                                         </div>
-                                    @endforeach
-                                </div>
+
+                                    @endif
+                                @endforeach
+                                {!! Form::close() !!}
                             </div>
                             <!-- /.card-body -->
 
@@ -95,7 +237,6 @@
                                 <button type="submit" class="btn btn-success mr-2">Create</button>
                                 <a href="{{ route('student_attendance.index') }}" class="btn btn-danger">Cancel</a>
                             </div>
-                            {!! Form::close() !!}
                         </div>
                     </div>
                 </div>

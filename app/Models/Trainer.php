@@ -19,7 +19,11 @@ class Trainer extends Model
     }
     public function studentAssign()
     {
-        return $this->hasOne(StudentStaffAssign::class);
+        return $this->hasMany(StudentStaffAssign::class);
+    }
+    public function studentAssignProxy()
+    {
+        return $this->hasMany(StudentStaffAssign::class);
     }
 
 }

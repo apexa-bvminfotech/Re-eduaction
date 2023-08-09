@@ -31,4 +31,10 @@ class Slot extends Model
     {
         return $this->hasOne(StudentStaffAssign::class);
     }
+
+    public function slotList()
+    {
+        return $this->hasMany(StudentStaffAssign::class);
+    }
+
 }

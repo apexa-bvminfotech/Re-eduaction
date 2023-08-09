@@ -54,13 +54,9 @@ class TrainerAttendanceController extends Controller
     {
         $trainer = Trainer::orderBy('id', 'DESC')->get();
         $studentStaffAssign = StudentStaffAssign::orderBy('id', 'DESC')->with('trainer')->get()->groupBy('trainer.name');
-//        dd($studentStaffAssign);
         $proxyStaff = StudentProxyStaffAssign::orderBy('id', 'DESC')->whereDate('starting_date', now()->format('Y-m-d'))->with('trainer')
             ->get()->groupBy('trainer.name');
-//        dd($proxyStaff);
         $trainerSlotWise = TrainerSlotWiseAttendance::orderBy('id', 'DESC')->get();
-
-//        dd($trainerSlots);
         return view('trainer_attendance.create', compact('trainer', 'proxyStaff', 'studentStaffAssign', 'trainerSlotWise'));
     }
 

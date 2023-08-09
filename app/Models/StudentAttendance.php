@@ -17,4 +17,7 @@ class StudentAttendance extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+    public function studentAssign(){
+        return $this->belongsTo(StudentStaffAssign::class);
+    }
 }

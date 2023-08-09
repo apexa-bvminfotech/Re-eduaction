@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UpdateStudentAttendanceRequest;
 use App\Models\Student;
 use App\Models\StudentAttendance;
+use App\Models\StudentProxyStaffAssign;
+use App\Models\StudentStaffAssign;
+use App\Models\Trainer;
 use App\Models\TrainerAttendance;
 use Illuminate\Contracts\Auth\Guard;
 use App\Http\Requests\StudentAttendanceRequest;
@@ -57,8 +60,13 @@ class StudentAttendanceController extends Controller
      */
     public function create()
     {
-        $students = Student::orderBy('id')->get();
-        return view('student_attendance.create', compact('students'));
+        $trainer = Trainer::orderBy('id')->with('studentAssign','studentAssign.student','studentAssign.slot')->get();
+        $studentStaffAssign = StudentStaffAssign::orderBy('id', 'DESC')->with('trainer')->with('student')->get()->groupBy('slot_id');
+//dd($trainer);
+        $trainerProxy = Trainer::orderBy('id')->with('studentAssignProxy','studentAssignProxy.student','studentAssignProxy.slot')->get();
+//        dd($trainerProxy);
+        $proxyStaff = StudentProxyStaffAssign::orderBy('id', 'DESC')->whereDate('starting_date', now()->format('Y-m-d'))->with('trainer')->get()->groupBy('trainer.name');
+        return view('student_attendance.create', compact('trainer','studentStaffAssign','proxyStaff','trainerProxy'));
     }
 
     /**
