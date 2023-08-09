@@ -228,6 +228,14 @@
                                     <table class="table table-bordered table-striped" id="courseTable" data-CourseId="{{$student->course->id}}">
                                         <input type="hidden" name="student_id" class="form-control student_id" value="{{$student->id}}">
                                         <input type="hidden" name="course_id" class="form-control course_id" value="{{$student->course_id}}">
+                                        <tr>
+                                            <td class="text-center">Before</td>
+                                            <td></td>
+                                            <td class="text-center">After</td>
+                                            <td>
+                                                Date
+                                            </td>
+                                        </tr>
                                         {{-- //subCourse before after--}}
                                         @foreach($student->course->subcourses as $key =>$sc)
                                             {{--                                            @dd($sc)--}}
@@ -267,18 +275,18 @@
                                                         </div>
                                                     @endif
                                                 </th>
+                                                <th  class="text-center bg-info"></th>
                                             </tr>
                                             <tr>
                                                 @if($sc->points->count() > 0)
                                                     <td class="text-center">
-                                                        <b> Before </b>
                                                     </td>
                                                     <td class="text-center">
                                                         <b>Points</b>
                                                     </td>
                                                     <td class="text-center">
-                                                        <b> After </b>
                                                     </td>
+                                                    <td></td>
                                                 @endif
                                             </tr>
                                             {{--  //Points before after--}}
@@ -289,11 +297,11 @@
                                                         @if($sc->points->count() > 0)
                                                             <div class="form-check checkbox-xl custom-checkbox text-center">
                                                                 @can('student-course-complete-before')
-                                                                    <input @if(\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'before'=>1])->first()) checked disabled @endif
+                                                                    <input @if($sub_course = \App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'before'=>1])->first()) checked disabled @endif
                                                                     class="form-check-input point-checkbox subcourse_before_{{ $sc->id }}" type="checkbox" data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}"
                                                                            name="subCourse_point_before[{{$sp->id}}]">
                                                                 @else
-                                                                    <input @if(\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'before'=>1])->first()) checked @endif
+                                                                    <input @if($sub_course=\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'before'=>1])->first()) checked @endif
                                                                     class="form-check-input point-checkbox subcourse_before_{{ $sc->id }}" type="checkbox" disabled data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}">
                                                                 @endcan
                                                             </div>
@@ -304,21 +312,55 @@
                                                         <!--After-->
                                                         <div class="form-check checkbox-xl custom-checkbox text-center">
                                                             @can('student-course-complete-before')
-                                                                <input @if(\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'after'=>1])->first()) checked disabled @endif
+                                                                <input @if($sub_course1 = App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'after'=>1])->first()) checked disabled @endif
                                                                 class="form-check-input point-checkbox subcourse_{{ $sc->id }}" name="subCourse_point_after[{{$sp->id}}]" type="checkbox" data-subCourseId="{{ $sc->id }}"
                                                                        data-pointId="{{ $sp->id }}" >
                                                             @else
-                                                                <input @if(\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'after'=>1])->first()) checked @endif
+                                                                <input @if($sub_course1 = \App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'after'=>1])->first()) checked @endif
                                                                 class="form-check-input point-checkbox subcourse_{{ $sc->id }}" type="checkbox" disabled data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}">
                                                             @endcan
                                                         </div>
                                                     </td>
+                                                    <td>
+                                                        {{isset($sub_course->trainer_confirm_date)? $sub_course->trainer_confirm_date:''}}
+                                                        {{isset($sub_course1->trainer_confirm_date)? $sub_course1->trainer_confirm_date:''}}
+                                                    </td>
+                                                    @if(auth()->user()->type == 0)
+                                                        <td>
+                                                            <div class="form-check checkbox-xl custom-checkbox text-center">
+                                                                @php
+                                                                $id= isset($sub_course)? $sub_course->id :(isset($sub_course1)?$sub_course1->id:0);
+                                                                $status= isset($sub_course)? $sub_course->status :(isset($sub_course1)?$sub_course1->status:0);
+                                                                @endphp
+                                                                @if(in_array($id,$studentCompleteCourses))
+                                                                    <input class="form-check-input point-checkbox" type="checkbox"  name="subCourse_point_approve[{{$id}}]">
+                                                                @elseif($status ==2)
+                                                                    <input class="form-check-input point-checkbox" checked  type="checkbox"  name="subCourse_point_approve[{{$id}}]">
+                                                                @else
+                                                                    <input class="form-check-input point-checkbox" type="checkbox"  name="subCourse_point_approve[{{$id}}]">
+
+                                                                @endif
+                                                            </div>
+                                                        </td>
+                                                    @endif
+                                                    @if(auth()->user()->type != 0)
+                                                        @if((isset($sub_course) && auth()->user()->id == $sub_course->user_id) || (isset($sub_course1) && auth()->user()->id == $sub_course1->user_id))
+                                                            <td>
+                                                                @if(isset($sub_course) && in_array($sub_course->id,$approvedCourse))
+                                                                    Approved
+                                                                @endif
+                                                                @if(isset($sub_course1) && in_array($sub_course1->id,$approvedCourse))
+                                                                    Approved
+                                                                @endif
+                                                            </td>
+                                                        @endif
+                                                    @endif
                                                 </tr>
                                             @empty
                                             @endforelse
                                         @endforeach
                                     </table>
-                                    <button type="submit" class="btn btn-primary float-right mt-2 saveChanges">SaveChanges</button>
+                                    <button type="submit" class="btn btn-primary float-right mt-2 saveChanges">Save Changes</button>
                                 </form>
                             </div>
                         </div>
