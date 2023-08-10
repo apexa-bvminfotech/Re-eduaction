@@ -60,13 +60,11 @@ class StudentAttendanceController extends Controller
      */
     public function create()
     {
-        $trainer = Trainer::orderBy('id')->with('studentAssign','studentAssign.student','studentAssign.slot')->get();
+        $trainer = Trainer::orderBy('id')->with('studentAssign','studentAssign.student','studentAssign.slot','studentAssignProxy','studentAssignProxy.student','studentAssignProxy.slot')->get();
         $studentStaffAssign = StudentStaffAssign::orderBy('id', 'DESC')->with('trainer')->with('student')->get()->groupBy('slot_id');
-//dd($trainer);
-        $trainerProxy = Trainer::orderBy('id')->with('studentAssignProxy','studentAssignProxy.student','studentAssignProxy.slot')->get();
-//        dd($trainerProxy);
+
         $proxyStaff = StudentProxyStaffAssign::orderBy('id', 'DESC')->whereDate('starting_date', now()->format('Y-m-d'))->with('trainer')->get()->groupBy('trainer.name');
-        return view('student_attendance.create', compact('trainer','studentStaffAssign','proxyStaff','trainerProxy'));
+        return view('student_attendance.create', compact('trainer','studentStaffAssign','proxyStaff'));
     }
 
     /**
