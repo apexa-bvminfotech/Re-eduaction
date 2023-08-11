@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Branch;
 use App\Models\Course;
 use App\Models\Slot;
+use App\Models\StudentApproveLeave;
 use App\Models\StudentAttendance;
 use App\Models\StudentCourseComplete;
 use App\Models\SubCourse;
@@ -152,7 +153,8 @@ class StudentsController extends Controller
         $assignStaff = StudentStaffAssign::orderBy('id')->where('student_id', $student->id)->With('Trainer', 'Slot')->get();
         $studentAttendance = StudentAttendance::orderBy('id')->where('student_id', $student->id)->get();
         $proxy_staff_details = $student->proxyStaffAssignments;
-        return view('student.show', compact('student', 'assignStaff', 'studentAttendance', 'proxy_staff_details'));
+        $student_leave_show =  StudentApproveLeave::orderBy('id')->where('student_id', $student->id)->get();
+        return view('student.show', compact('student', 'assignStaff', 'studentAttendance', 'proxy_staff_details','student_leave_show'));
     }
 
     public function edit(Student $student)
@@ -277,9 +279,14 @@ class StudentsController extends Controller
         } else {
 
             $studentUpdate = StudentStaffAssign::where(['student_id' => $request->student_id, 'is_active' => 0])->first();
-            $studentUpdate->update([
-                'is_active' => 1,
-            ]);
+            if ($studentUpdate)
+            {
+                $studentUpdate->update([
+                    'is_active' => 1,
+                ]);
+            }else{
+
+            }
 
             $assignStaff = new StudentStaffAssign();
             $assignStaff->student_id = $validatedData['student_id'];
@@ -471,6 +478,26 @@ class StudentsController extends Controller
 
 
         return redirect()->route('student.show', $validatedData['student_id'])->with('success', 'notification sent to admin.');
+    }
+
+    public function studentLeaveApprove(Request $request)
+    {
+        $validatedData = $request->validate([
+            'student_id' => 'required',
+            'start_date' => 'required|date|after:tomorrow',
+            'end_date' => 'required|date|after:start_date',
+            'reason' => 'required',
+        ]);
+        $user_id = Auth::id();
+            $approve = new StudentApproveLeave();
+            $approve->student_id = $validatedData['student_id'];
+            $approve->user_id = $user_id;
+            $approve->start_date = $validatedData['start_date'];
+            $approve->end_date = $validatedData['end_date'];
+            $approve->reason = $validatedData['reason'];
+            $approve->save();
+
+        return redirect()->route('student.index')->with('success', 'Leave Approved :)');
     }
 
 }

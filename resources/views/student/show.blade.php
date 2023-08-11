@@ -51,6 +51,7 @@
                                     <li class="nav-item"><a class="nav-link" href="#proxy_detail" data-toggle="tab">Proxy staff Details</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#timeline1" data-toggle="tab">Assign Staff</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#timeline2" data-toggle="tab">Student Attendance Show</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#student_leave" data-toggle="tab">Student Leave List</a></li>
                                 </ul>
                                 <a href="{{ route('student.index') }}" class="col-1 btn btn-primary float-right">Back</a>
                             </div>
@@ -205,6 +206,30 @@
                                                         </tr>
                                                     @endif
                                                 @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="student_leave">
+                                        <div class="post">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                <tr>
+                                                    <th><b>Leave Date From:</b></th>
+                                                    <th><b>Leave Date To:</b></th>
+                                                    <th><b>Reason:</b></th>
+                                                </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                @foreach($student_leave_show as $leave)
+                                                    <tr>
+                                                        <td>{{$leave->start_date}}</td>
+                                                        <td>{{$leave->end_date}}</td>
+                                                        <td>{{$leave->reason}}</td>
+                                                    </tr>
+                                                @endforeach
+
                                                 </tbody>
                                             </table>
                                         </div>

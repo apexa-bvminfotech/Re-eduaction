@@ -79,6 +79,10 @@
                                                                 class="btn btn-secondary btn-proxy btn-sm"
                                                                 data-id="{{$s->id}}"> Assign Proxy Trainer
                                                         </button>
+                                                        <button type="button"
+                                                                class="btn btn-secondary btn-student-leave btn-sm"
+                                                                data-id="{{$s->id}}"> Approved Leave
+                                                        </button>
                                                     @endcan
                                                 </div>
                                             </td>
@@ -197,6 +201,51 @@
                         </div>
                     </div>
                 </form>
+                <form id="leaveApprovedForm" action="{{ route('student.studentLeaveApprove') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="user_id" id="user_id" value="">
+                    <input type="hidden" name="student_id" class="form-control student_id" value="" required>
+                    <div class="modal fade" id="verticalModal2" tabindex="-1" role="dialog"
+                         aria-labelledby="verticalModalTitle"
+                         style="display: none;" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="verticalModalTitle">Assign Trainer</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="col-md-12 mb-1">
+                                        <div class="form-group">
+                                            <label for="date">From:</label>
+                                            <input type="date" class="form-control" name="start_date"
+                                                   value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mb-1">
+                                        <div class="form-group">
+                                            <label for="date">To:</label>
+                                            <input type="date" class="form-control" name="end_date"
+                                                   value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mb-1">
+                                        <div class="form-group">
+                                            <label for="text">Leave Reason:</label>
+                                            <input type="text" class="form-control" name="reason" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn mb-2 btn-primary leave-submit">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </section>
     </div>
@@ -241,7 +290,6 @@
             });
 
             //proxy-assign-staff
-
             $(document).on('click', '.btn-proxy', function () {
                 let id = parseInt($(this).data('id'));
                 $('.student_id').val(id)
@@ -275,6 +323,52 @@
             $(document).on('click', '.proxy_submit', function () {
                 $('#proxyStaffForm').submit();
             });
+
+
+            //Student Leave Form
+            $(document).on('click', '.btn-student-leave', function () {
+                let id = parseInt($(this).data('id'));
+                $('.student_id').val(id);
+
+                // Capture user_id (assuming it's available on the page)
+                let user_id = {{ Auth::id() }};
+                $('#user_id').val(user_id);
+
+                $('#verticalModal2').modal('toggle');
+            });
+
+            $(document).on('click', '.leave-submit', function () {
+                // console.log('Button clicked');
+                $('#leaveApprovedForm').submit();
+            });
+            // function validateFields(user_id, student_id, startDate, endDate, reason) {
+            //     if (user_id === '' || student_id === '') {
+            //         return false;
+            //     }
+            //
+            //     if (startDate === '' || !isAfterTomorrow(startDate))
+            //     {
+            //         return false;
+            //     }
+            //     if (endDate === '' || !isAfterStartDate(endDate, startDate)) {
+            //         return false;
+            //     }
+            //
+            //     if (reason.trim() === '')
+            //     {
+            //         return false;
+            //     }
+            //
+            //     return true;
+            // }
+
+
+
+
+
+
+
+
 
             $("#example1").DataTable({
                 "responsive": true, "lengthChange": false, "autoWidth": false,
