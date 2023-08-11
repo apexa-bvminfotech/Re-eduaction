@@ -77,6 +77,12 @@
                         <p>Branch</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{route('course_material.index')}}" class="nav-link @if(Route::currentRouteName() == 'course_material.index')active  @endif">
+                        <i class="nav-icon fas fa-book-open"></i>
+                        <p>Course Material</p>
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>

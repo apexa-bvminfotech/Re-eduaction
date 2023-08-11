@@ -33,4 +33,12 @@ class Student extends Model
         return $this->hasMany(StudentProxyStaffAssign::class, 'student_id');
     }
 
+    public function assignedStaff()
+    {
+        return $this->hasOne(StudentStaffAssign::class, 'student_id', 'id');
+    }
+    public function isStaffAssigned()
+    {
+        return $this->assignedStaff()->exists();
+    }
 }

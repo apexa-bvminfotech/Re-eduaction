@@ -9,7 +9,8 @@
                     </div>
                     <div class="col-sm-6">
                         @can('student-create')
-                            <a href="{{route('student.create')}}" class="btn btn-primary float-right"><i class="fa fa-plus pr-2"></i> Add</a>
+                            <a href="{{route('student.create')}}" class="btn btn-primary float-right"><i
+                                    class="fa fa-plus pr-2"></i> Add</a>
                         @endcan
                     </div>
                 </div>
@@ -34,7 +35,7 @@
                                         <th>Mother Contact no.</th>
                                         <th>Standard</th>
                                         <th>Medium</th>
-                                        <th width="300px">Action</th>
+                                        <th>Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -61,7 +62,8 @@
                                                     @endcan
                                                     @can('student-delete')
                                                         {!! Form::open(['method' => 'DELETE','route' => ['student.destroy', $s->id],'style'=>'display:inline']) !!}
-                                                        <button type="submit" class="btn btn-danger btn-sm" title="Delete"
+                                                        <button type="submit" class="btn btn-danger btn-sm"
+                                                                title="Delete"
                                                                 onclick="return confirm('Are you sure you want to delete?')">
                                                             <i class="fa fa-trash"></i></button>
                                                         {!! Form::close() !!}
@@ -69,11 +71,17 @@
                                                     @can('student-edit')
                                                         <button type="button"
                                                                 class="btn  btn-secondary btn-assign btn-sm"
-                                                                data-id="{{$s->id}}"> Assign Staff
+                                                                data-id="{{$s->id}}"
+                                                                data-assigned="{{ $s->isStaffAssigned() ? 'true' : 'false' }}">
+                                                            {{ $s->isStaffAssigned() ? 'Shift Trainer' : 'Assign Trainer' }}
                                                         </button>
                                                         <button type="button"
                                                                 class="btn btn-secondary btn-proxy btn-sm"
-                                                                data-id="{{$s->id}}"> Assign Proxy Staff
+                                                                data-id="{{$s->id}}"> Assign Proxy Trainer
+                                                        </button>
+                                                        <button type="button"
+                                                                class="btn btn-secondary btn-student-leave btn-sm"
+                                                                data-id="{{$s->id}}"> Approved Leave
                                                         </button>
                                                     @endcan
                                                 </div>
@@ -95,7 +103,7 @@
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="verticalModalTitle">Assign Staff</h5>
+                                    <h5 class="modal-title" id="verticalModalTitle">Assign Trainer</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">×</span>
                                     </button>
@@ -104,7 +112,7 @@
                                     <input type="hidden" name="student_id" class="form-control student_id" value="">
                                     <div class="col-md-12 mb-1">
                                         <label for="name">Trainer Name: </label>
-                                        <select  name="trainer_id" class="form-control staff_id select2" required>
+                                        <select name="trainer_id" class="form-control staff_id select2" required>
                                             <option value="0">------Select Trainer-----</option>
                                             @foreach($trainers as $key =>$trainer)
                                                 @if($trainer->is_active == 0)
@@ -116,7 +124,7 @@
                                     </div>
                                     <div class="col-md-12 mb-1">
                                         <label for="name">Slot: </label>
-                                        <select  name="slot_id" class="form-control slot select2" required>
+                                        <select name="slot_id" class="form-control slot select2" required>
                                             <option value="">------Select Slot-----</option>
                                             @foreach($slots as $key =>$s)
                                                 @if($s->is_active == 0)
@@ -144,7 +152,7 @@
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="verticalModalTitle">Assign ProxyStaff</h5>
+                                    <h5 class="modal-title" id="verticalModalTitle">Assign ProxyTrainer</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">×</span>
                                     </button>
@@ -172,13 +180,15 @@
                                     <div class="col-md-12 mb-1">
                                         <div class="form-group">
                                             <label for="start_date">Starting Date:</label>
-                                            <input type="date" class="form-control" name="starting_date" value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}">
+                                            <input type="date" class="form-control" name="starting_date"
+                                                   value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}">
                                         </div>
                                     </div>
                                     <div class="col-md-12 mb-1">
                                         <div class="form-group">
                                             <label for="end_date">Ending Date:</label>
-                                            <input type="date" class="form-control" name="ending_date" value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}">
+                                            <input type="date" class="form-control" name="ending_date"
+                                                   value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}">
                                         </div>
                                     </div>
                                 </div>
@@ -186,6 +196,51 @@
                                     <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Close
                                     </button>
                                     <button type="button" class="btn mb-2 btn-primary proxy_submit">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <form id="leaveApprovedForm" action="{{ route('student.studentLeaveApprove') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="user_id" id="user_id" value="">
+                    <input type="hidden" name="student_id" class="form-control student_id" value="" required>
+                    <div class="modal fade" id="verticalModal2" tabindex="-1" role="dialog"
+                         aria-labelledby="verticalModalTitle"
+                         style="display: none;" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="verticalModalTitle">Assign Trainer</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="col-md-12 mb-1">
+                                        <div class="form-group">
+                                            <label for="date">From:</label>
+                                            <input type="date" class="form-control" name="start_date"
+                                                   value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mb-1">
+                                        <div class="form-group">
+                                            <label for="date">To:</label>
+                                            <input type="date" class="form-control" name="end_date"
+                                                   value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mb-1">
+                                        <div class="form-group">
+                                            <label for="text">Leave Reason:</label>
+                                            <input type="text" class="form-control" name="reason" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn mb-2 btn-primary leave-submit">Submit</button>
                                 </div>
                             </div>
                         </div>
@@ -235,7 +290,6 @@
             });
 
             //proxy-assign-staff
-
             $(document).on('click', '.btn-proxy', function () {
                 let id = parseInt($(this).data('id'));
                 $('.student_id').val(id)
@@ -270,27 +324,74 @@
                 $('#proxyStaffForm').submit();
             });
 
+
+            //Student Leave Form
+            $(document).on('click', '.btn-student-leave', function () {
+                let id = parseInt($(this).data('id'));
+                $('.student_id').val(id);
+
+                // Capture user_id (assuming it's available on the page)
+                let user_id = {{ Auth::id() }};
+                $('#user_id').val(user_id);
+
+                $('#verticalModal2').modal('toggle');
+            });
+
+            $(document).on('click', '.leave-submit', function () {
+                // console.log('Button clicked');
+                $('#leaveApprovedForm').submit();
+            });
+            // function validateFields(user_id, student_id, startDate, endDate, reason) {
+            //     if (user_id === '' || student_id === '') {
+            //         return false;
+            //     }
+            //
+            //     if (startDate === '' || !isAfterTomorrow(startDate))
+            //     {
+            //         return false;
+            //     }
+            //     if (endDate === '' || !isAfterStartDate(endDate, startDate)) {
+            //         return false;
+            //     }
+            //
+            //     if (reason.trim() === '')
+            //     {
+            //         return false;
+            //     }
+            //
+            //     return true;
+            // }
+
+
+
+
+
+
+
+
+
             $("#example1").DataTable({
                 "responsive": true, "lengthChange": false, "autoWidth": false,
                 "buttons": ["csv", "excel", "pdf", "print"],
                 initComplete: function () {
-                    this.api().columns([1,3]).every( function () {
+                    this.api().columns([1, 3]).every(function () {
                         var column = this;
                         var select = $('<select class="form-control select2"><option value="">All</option></select>')
-                            .appendTo( $(column.header()).find('span').empty() )
-                            .on({ 'change': function () {
-                            var val = $.fn.dataTable.util.escapeRegex(
-                                $(this).val()
-                            );
-                            column
-                                .search( val ? '^'+val+'$' : '', true, false ).draw();
-                            },
-                            'click': function(e) {
-                                e.stopPropagation();
-                            }
-                        });
-                        column.data().unique().sort().each( function ( d, j ) {
-                            select.append( '<option value="'+d+'">'+d+'</option>' )
+                            .appendTo($(column.header()).find('span').empty())
+                            .on({
+                                'change': function () {
+                                    var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                    );
+                                    column
+                                        .search(val ? '^' + val + '$' : '', true, false).draw();
+                                },
+                                'click': function (e) {
+                                    e.stopPropagation();
+                                }
+                            });
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
                         });
                     });
                 }
