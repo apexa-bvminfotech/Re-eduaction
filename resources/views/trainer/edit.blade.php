@@ -696,7 +696,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <textarea id="summernote" name="terms_conditions_detail" value="{{ old('terms_conditions_detail',$trainer->terms_conditions_detail) }}">{{ $trainer->terms_conditions_detail }}</textarea>
+                                                <textarea cols="5" id="summernote" name="terms_conditions_detail" value="{{ old('terms_conditions_detail',$trainer->terms_conditions_detail) }}">{{ $trainer->terms_conditions_detail }}</textarea>
 
 
                                                 <button type="submit" name="submit"
@@ -723,7 +723,9 @@
 @push('scripts')
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#summernote').summernote();
+            $('#summernote').summernote({
+                height: 250
+            });
             var form = $('#quickForm');
             var validator = form.validate({
                 rules: {
