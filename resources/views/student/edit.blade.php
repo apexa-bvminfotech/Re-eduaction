@@ -364,7 +364,7 @@
                                                         <div class="form-group">
                                                             <label for="course_name">Course Name:</label>
                                                             <br>
-                                                            <select name="course_id" class="form-control select2"
+                                                            <select name="course_id[]" multiple="" class="form-control select2"
                                                                     required>
                                                                 <option value="">----- Course Name -----</option>
                                                                 @foreach($course as $key=>$c)

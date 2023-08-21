@@ -41,4 +41,7 @@ class Student extends Model
     {
         return $this->assignedStaff()->exists();
     }
+    public function courses(){
+        return $this->hasMany(StudentCourse::class);
+    }
 }
