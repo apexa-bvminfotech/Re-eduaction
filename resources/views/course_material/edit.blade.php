@@ -29,7 +29,7 @@
                                         <select class="form-control select2" name="course_name" required>
                                             <option value="">Select Course</option>
                                             @foreach($course as $key => $c)
-                                                <option value="{{ $c->id }}" {{ $courseMaterial->course_name == $c->id ? 'selected' : '' }}>{{ $c->course_name }}</option>
+                                                <option value="{{ $c->id }}" {{ $courseMaterial->course_id == $c->id ? 'selected' : '' }}>{{ $c->course_name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -45,6 +45,7 @@
                                             <option value="hindi"{{ $courseMaterial->medium == 'hindi' ? 'selected' : '' }}>Hindi</option>
                                             <option value="english"{{ $courseMaterial->medium == 'english' ? 'selected' : '' }}>English</option>
                                             <option value="gujlish"{{ $courseMaterial->medium == 'gujlish' ? 'selected' : '' }}>Gujlish</option>
+                                            <option value="other"{{ $courseMaterial->medium == 'other' ? 'selected' : '' }}>Other</option>
                                         </select>
                                     </div>
                                 </div>

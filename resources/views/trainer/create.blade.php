@@ -590,7 +590,9 @@
 @push('scripts')
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#summernote').summernote();
+            $('#summernote').summernote({
+                height: 250;
+            });
             var form = $('#quickForm');
             var validator = form.validate({
                 rules: {

@@ -40,13 +40,12 @@
                                     @foreach ($course_material as $key => $material)
                                         <tr>
                                             <td>{{ $material->id }}</td>
-                                            <td>{{ $material->course_name }}</td>
+                                            <td>{{ $material->course->course_name }}</td>
                                             <td>{{ $material->medium }}</td>
                                             <td>{{ $material->material_name }}</td>
                                             <td>
                                                 <a href="{{ route('course_material.edit',$material->id) }}" class="btn btn-success btn-sm" title="Edit"><i class="fa fa-edit"></i> Edit</a>
                                             </td>
-
                                         </tr>
                                     @endforeach
                                     </tbody>

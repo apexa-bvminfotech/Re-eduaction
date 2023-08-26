@@ -22,15 +22,21 @@ Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::group(['middleware'=>['auth']],function (){
-    Route::resource('student', 'StudentsController');;
+    Route::resource('student', 'StudentsController');
+    Route::resource('student_ptm', 'StudentPTMController');
     Route::group(['prefix'=>'student'],function (){
         Route::get('/staff-slot/{id}','StudentsController@slot');
         Route::post('/assign-staff', 'StudentsController@assignStaff')->name('student.assignStaff');
         //proxy-staff-route
         Route::get('/proxy-slot/{id}','StudentsController@proxySlot');
+        Route::get('/get-leave-data/{id}','StudentsController@getLeaveData')->name('student.getLeaveData');
+
+        Route::get('/edit-student-approve-leave/{id}','StudentsController@proxySlot');
         Route::post('/proxy-staff', 'StudentsController@proxyStaff')->name('student.proxyStaff');
         Route::post('/send-notification', 'StudentsController@sendNotification')->name('student.sendNotification');
         Route::post('/student-leave-approve','StudentsController@studentLeaveApprove')->name('student.studentLeaveApprove');
+        Route::post('/edit-student-leave-approve','StudentsController@editStudentLeaveApprove')->name('student.editStudentLeaveApprove');
+        Route::post('/change-student-status','StudentsController@ChangeStudentStatus')->name('student.ChangeStudentStatus');
 
     });
     Route::resource('roles', 'RoleController');

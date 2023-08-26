@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Student extends Model
 {
@@ -32,7 +33,6 @@ class Student extends Model
     {
         return $this->hasMany(StudentProxyStaffAssign::class, 'student_id');
     }
-
     public function assignedStaff()
     {
         return $this->hasOne(StudentStaffAssign::class, 'student_id', 'id');
@@ -40,5 +40,13 @@ class Student extends Model
     public function isStaffAssigned()
     {
         return $this->assignedStaff()->exists();
+    }
+    public function studentStatus()
+    {
+        return $this->hasMany(StudentStatus::class, 'student_id');
+    }
+    public function isActiveStatus()
+    {
+        return  $this->studentStatus()->select('status')->where('is_active', 0)->first();
     }
 }

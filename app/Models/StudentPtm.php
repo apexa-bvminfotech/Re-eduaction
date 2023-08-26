@@ -5,16 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CourseWiseMaterial extends Model
+class StudentPtm extends Model
 {
     use HasFactory;
-
     protected $guarded = ['id'];
-
-    protected $table ="course_wise_materials";
-
-    public function course(){
-        return $this->belongsTo(Course::class);
-    }
-
+    protected $table = 'student_ptm_report';
 }

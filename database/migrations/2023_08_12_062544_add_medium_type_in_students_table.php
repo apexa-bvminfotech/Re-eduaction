@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('user_profile')->nullable()->after('password');
+        Schema::table('students', function (Blueprint $table) {
+            \DB::statement("ALTER TABLE `students` CHANGE `medium` `medium` ENUM('gujarati','hindi','english', 'gujlish', 'other') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;");
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('user_profile');
+        Schema::table('students', function (Blueprint $table) {
+            //
         });
     }
 };

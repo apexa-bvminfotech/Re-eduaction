@@ -15,7 +15,7 @@ class CourseWiseMaterialController extends Controller
      */
     public function index()
     {
-        $course_material = CourseWiseMaterial::orderBy('id','DESC')->get();
+        $course_material = CourseWiseMaterial::orderBy('id','DESC')->with('course')->get();
         return view('course_material.index',compact('course_material'));
     }
 
@@ -45,7 +45,7 @@ class CourseWiseMaterialController extends Controller
         ]);
 
         CourseWiseMaterial::create([
-            'course_name' => $request->input('course_name'),
+            'course_id' => $request->input('course_name'),
             'medium' => $request->input('medium'),
             'material_name' => $request->input('material_name')
         ]);
@@ -90,7 +90,7 @@ class CourseWiseMaterialController extends Controller
             'material_name' => 'required'
         ]);
         $courseMaterial->update([
-            'course_name' => $request->input('course_name'),
+            'course_id' => $request->input('course_name'),
             'medium' => $request->input('medium'),
             'material_name' => $request->input('material_name')
         ]);

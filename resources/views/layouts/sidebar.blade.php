@@ -14,6 +14,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{route('student_ptm.index')}}" class="nav-link @if(Route::currentRouteName() == 'student_ptm.index')active  @endif">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>Student PTM</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{route('trainer.index')}}" class="nav-link @if(Route::currentRouteName() == 'trainer.index')active  @endif">
                         <i class="nav-icon fas fa-chalkboard-teacher"></i>
                         <p>Trainer</p>
@@ -23,6 +29,12 @@
                     <a href="{{route('course.index')}}" class="nav-link @if(Route::currentRouteName() == 'course.index')active  @endif">
                         <i class="nav-icon fas fa-columns"></i>
                         <p>Course</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{route('course.index')}}" class="nav-link @if(Route::currentRouteName() == 'course.index')active  @endif">
+                        <i class="nav-icon fas fa-columns"></i>
+                        <p>Appreciation</p>
                     </a>
                 </li>
                 <li class="nav-item">

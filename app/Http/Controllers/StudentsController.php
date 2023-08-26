@@ -8,6 +8,7 @@ use App\Models\Slot;
 use App\Models\StudentApproveLeave;
 use App\Models\StudentAttendance;
 use App\Models\StudentCourseComplete;
+use App\Models\StudentStatus;
 use App\Models\SubCourse;
 use App\Models\SubCoursePoint;
 use App\Models\Trainer;
@@ -21,7 +22,6 @@ use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class StudentsController extends Controller
 {
@@ -34,7 +34,7 @@ class StudentsController extends Controller
                         'students.standard','students.medium','students.course_id','branches.name as branch_name')
                     ->join('branches', 'branches.id', 'students.branch_id')
                     ->with('course')
-                    ->orderBy('students.id')->get();
+                    ->orderBy('students.id','DESC')->get();
 
         if(Auth::user()->type == 1) {
             $slots = Slot::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'desc')->get();
@@ -45,7 +45,7 @@ class StudentsController extends Controller
                 ->join('student_staff_assigns', 'student_staff_assigns.student_id', 'students.id')
                 ->join('trainers','trainers.id', 'student_staff_assigns.trainer_id')
                 ->where(['trainers.user_id' => Auth::user()->id,'student_staff_assigns.is_active' => 0])
-                ->orderBy('students.id')->get();
+                ->orderBy('students.id', 'DESC')->get();
         }
         return view('student.index', compact('students', 'trainers', 'slots'))->with('i');
     }
@@ -56,16 +56,19 @@ class StudentsController extends Controller
         $course = Course::orderBy('id', 'desc')->get();
         $trainer = Trainer::orderBy('id')->where('is_active', 0)->get();
         $branch = Branch::orderBy('id', 'DESC')->get();
+        $last_id = Student::latest()->first() ? 'RE/'.Student::get()->count() + 1 : 'RE/1';
         if(Auth::user()->type == 1) {
             $trainer = Trainer::orderBy('id')->where(['is_active' => 0, 'branch_id' => Auth::user()->branch_id])->get();
             $branch = Branch::where('id', Auth::user()->branch_id)->orderBy('id', 'DESC')->get();
         }
-        return view('student.create', compact('role', 'course', 'trainer','branch'));
+        return view('student.create', compact('role', 'course', 'trainer','branch','last_id'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
+            'form_no' => 'required|unique:students,form_no',
+            'registration_date' => 'required',
             'surname' => 'required|max:255',
             'name' => 'required|max:255',
             'father_name' => 'required|max:255',
@@ -85,6 +88,7 @@ class StudentsController extends Controller
             'age' => 'required',
             'course_id' => 'required|exists:courses,id',
             'branch_id' => 'required',
+
         ]);
 
         $upload_student_image = null;
@@ -115,9 +119,10 @@ class StudentsController extends Controller
         }
         $time = $request->input('school_time_to') . " - " . $request->input('school_time_from');
         $tuition = $request->input('extra_tuition_time_to') . "-" . $request->input('extra_tuition_time_from');
-        $last_id = Student::latest()->first() ? Student::latest()->first()->value('id') + 1 : 1;
-        Student::create([
-            'form_no' => 'RE/' . $last_id,
+
+        $student = Student::create([
+            'form_no' => $request->form_no,
+            'registration_date' => $request->registration_date,
             'surname' => $request->surname,
             'name' => $request->name,
             'father_name' => $request->father_name,
@@ -135,15 +140,25 @@ class StudentsController extends Controller
             'age' => $request->age,
             'course_id' => $request->course_id,
             'payment_condition' => $request->payment_condition,
+            'counselling_by' => $request->counselling_by,
             'reference_by' => $request->reference_by,
             'demo_trainer_id' => $request->demo_trainer_id ? $request->demo_trainer_id : 0,
             'branch_id' => $request->input('branch_id'),
             'fees' => $request->fees,
             'extra_note' => $request->extra_note,
             'analysis_trainer_id' => $request->analysis_trainer_id ? $request->analysis_trainer_id : 0,
+            'stf' => $request->stf,
             'upload_analysis' => $upload_analysis,
             'upload_student_image' => $upload_student_image,
             'user_id' => $user->id,
+        ]);
+
+        StudentStatus::create([
+            'status' => 0,
+            'is_active' => 0,
+            'date' => date('Y-m-d'),
+            'student_id' => $student->id,
+            'user_id' => Auth::id()
         ]);
         return redirect()->route('student.index')->with('success', 'student created successfully');
     }
@@ -176,6 +191,7 @@ class StudentsController extends Controller
     public function update(Request $request, Student $student)
     {
         $request->validate([
+            'registration_date' => 'required',
             'surname' => 'required|max:255',
             'name' => 'required|max:255',
             'father_name' => 'required|max:255',
@@ -206,9 +222,8 @@ class StudentsController extends Controller
             'surname' => $request->surname,
             'father_name' => $request->father_name,
             'email' => $request->email_id,
-            'user_profile' => $upload_student_image,
+            'user_profile' => $upload_student_image ? $upload_student_image : null,
             'contact' => $request->father_contact_no,
-            'password' => Hash::make(strtolower($request->name) . '@123'),
             'type' => 2,
         ]);
 
@@ -223,6 +238,8 @@ class StudentsController extends Controller
         $tuition = $request->input('extra_tuition_time_to') . "-" . $request->input('extra_tuition_time_from');
         $user->assignRole($request->input('role'));
         $student->update([
+            'form_no' => $request->form_no,
+            'registration_date' => $request->registration_date,
             'surname' => $request->surname,
             'name' => $request->name,
             'father_name' => $request->father_name,
@@ -240,12 +257,14 @@ class StudentsController extends Controller
             'age' => $request->age,
             'course_id' => $request->course_id,
             'payment_condition' => $request->payment_condition,
+            'counselling_by' => $request->counselling_by,
             'reference_by' => $request->reference_by,
             'demo_trainer_id' => $request->demo_trainer_id ? $request->demo_trainer_id : 0,
             'branch_id' => $request->input('branch_id'),
             'fees' => $request->fees,
             'extra_note' => $request->extra_note,
             'analysis_trainer_id' => $request->analysis_trainer_id ? $request->analysis_trainer_id : 0,
+            'stf' => $request->stf,
             'upload_analysis' => $upload_analysis,
             'upload_student_image' => $upload_student_image,
         ]);
@@ -321,15 +340,18 @@ class StudentsController extends Controller
         ]);
 
         $existingProxyStaff = StudentProxyStaffAssign::where('student_id', $request->student_id)
-            ->where('starting_date' ,'>=', $request->starting_date)
-            ->where('ending_date', '<=', $request->ending_date)
+            ->whereDate('starting_date' ,'<=', $request->starting_date)
+            ->whereDate('ending_date', '>=', $request->ending_date)
             ->where('trainer_id',  $request->trainer_id)
             ->first();
 
-        $checkIsregularTrainer = StudentStaffAssign::where(['student_id' => $request->student_id, 'trainer_id' => $request->trainer_id, 'is_active' => 0])->first();
+
         if ($existingProxyStaff) {
-                return back()->with('error', 'Trainer is already assigned as proxy staff for the specified dates');
-        } elseif($checkIsregularTrainer) {
+            return back()->with('error', 'Trainer is already assigned as proxy staff for the specified dates');
+        }
+
+        $checkIsregularTrainer = StudentStaffAssign::where(['student_id' => $request->student_id, 'trainer_id' => $request->trainer_id, 'is_active' => 0])->first();
+        if($checkIsregularTrainer) {
             return back()->with('error', 'Trainer is already assigned as regular staff');
         }
 
@@ -343,7 +365,6 @@ class StudentsController extends Controller
 
         return redirect()->back()->with('success', 'Proxy-Trainer assigned successfully');
     }
-
 
     public function sendNotification(Request $request)
     {
@@ -493,22 +514,66 @@ class StudentsController extends Controller
 
     public function studentLeaveApprove(Request $request)
     {
-        $validatedData = $request->validate([
-            'student_id' => 'required',
-            'start_date' => 'required|date|after:tomorrow',
-            'end_date' => 'required|date|after:start_date',
-            'reason' => 'required',
-        ]);
+        $existingProxyStaff = StudentApproveLeave::where('student_id', $request->student_id)
+            ->whereDate('start_date' ,'<=', $request->start_date)
+            ->whereDate('end_date', '>=', $request->end_date)
+            ->first();
+
+        if ($existingProxyStaff) {
+            return back()->with('error', 'Selected date leave is already added');
+        }
+
         $user_id = Auth::id();
             $approve = new StudentApproveLeave();
-            $approve->student_id = $validatedData['student_id'];
+            $approve->student_id = $request->student_id;
             $approve->user_id = $user_id;
-            $approve->start_date = $validatedData['start_date'];
-            $approve->end_date = $validatedData['end_date'];
-            $approve->reason = $validatedData['reason'];
+            $approve->start_date = $request->start_date;
+            $approve->end_date = $request->end_date;
+            $approve->reason = $request->reason;
             $approve->save();
 
-        return redirect()->route('student.index')->with('success', 'Leave Approved :)');
+        return redirect()->route('student.index')->with('success', 'Leave Approved');
+    }
+
+    public function editStudentLeaveApprove(Request $request)
+    {
+        $existingProxyStaff = StudentApproveLeave::where('student_id', $request->student_id)
+            ->whereDate('start_date' , $request->start_date)
+            ->whereDate('end_date', $request->end_date)
+            ->where('reason', $request->reason)
+            ->first();
+
+        if ($existingProxyStaff) {
+            return back()->with('error', 'Selected date leave is already added');
+        }
+        $updateData = StudentApproveLeave::find($request->leave_id);
+
+        $updateData->update([
+            'student_id' => $request->student_id,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'reason' => $request->reason,
+            'user_id' => Auth::id(),
+        ]);
+        return redirect()->route('student.index')->with('success', 'Edit student leave data');
+    }
+
+    public function getLeaveData($id){
+        $leaveData = StudentApproveLeave::find($id);
+        return $leaveData;
+    }
+
+    public function ChangeStudentStatus(Request $request) {
+        StudentStatus::where('student_id', $request->student_id)->update(['is_active' => 1]);
+        StudentStatus::create([
+           'status' => $request->status,
+           'is_active' => 0,
+           'trainer_name' => $request->trainer_name,
+           'date' => date('Y-m-d'),
+           'student_id' => $request->student_id,
+           'user_id' => Auth::id(),
+        ]);
+        return redirect()->route('student.index')->with('success', 'Student status change');
     }
 
 }

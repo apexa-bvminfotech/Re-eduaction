@@ -140,7 +140,6 @@ class UserController extends Controller
             'name' => $request->name,
             'father_name' => $request->father_name,
             'email' => $request->email,
-            'password' => bcrypt(strtolower($request->name) . '@2121'),
             'user_profile' => $user_profile,
             'contact' => $request->contact,
             'branch_id' => $request->branch_id ? $request->branch_id : 0,

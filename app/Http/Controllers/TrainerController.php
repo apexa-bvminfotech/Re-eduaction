@@ -210,7 +210,6 @@ class TrainerController extends Controller
             'email' => $request->email_id,
             'user_profile' => $photo,
             'contact' => $request->phone,
-            'password' => Hash::make(($request->name) . '@2121'),
             'type' => 1,
             'branch_id' => $request->input('branch_id'),
         ]);

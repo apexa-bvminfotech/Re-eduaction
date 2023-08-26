@@ -63,6 +63,28 @@
                                                 <div class="row">
                                                     <div class="col-md-4 mb-1">
                                                         <div class="form-group mb-3">
+                                                            <label for="simpleinput">Form no:</label>
+                                                            <input type="text" id="form_no" class="form-control " value="{{ $student->form_no }}" name="form_no" readonly>
+                                                            @error('form_no')
+                                                                <span class="text-danger">{{$message}}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4 mb-1">
+
+                                                    </div>
+                                                    <div class="col-md-4 mb-2">
+                                                        <div class="form-group">
+                                                            <label for="dob">Registration Date:</label>
+                                                            <input type="date" class="form-control" name="registration_date"
+                                                                   min="{{ date('Y-m-d') }}" value="{{ $student->registration_date ? Carbon\Carbon::parse($student->registration_date)->format('Y-m-d') : date('Y-m-d')}}" id="registration_date">
+                                                            @error('registration_date')
+                                                            <span class="text-danger">{{$message}}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4 mb-1">
+                                                        <div class="form-group mb-3">
                                                             <label for="simpleinput">Surname:</label>
                                                             <input type="text" id="simpleinput"
                                                                    class="form-control "
@@ -225,6 +247,15 @@
                                                                     Gujlish
                                                                 </label>
                                                             </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input type="checkbox" name="medium" value="other"
+                                                                       {{ $student->medium == 'other' ? 'checked' :'' }}
+                                                                       class="form-check-input medium-list">
+                                                                <label class="form-check-label"
+                                                                       for="medium_other">
+                                                                    Other
+                                                                </label>
+                                                            </div>
                                                             @error('medium')
                                                             <span class="text-danger">{{$message}}</span>
                                                             @enderror
@@ -341,7 +372,7 @@
                                                         <div class="form-group">
                                                             <label for="dob">Date Of Birth:</label>
                                                             <input type="date" class="form-control" name="dob"
-                                                                   placeholder="enter birthdate"
+                                                                   placeholder="enter birthdate" id="dob"
                                                                    value="{{Carbon\Carbon::parse($student->dob)->format('Y-m-d')}}">
                                                             @error('dob')
                                                             <span class="text-danger">{{$message}}</span>
@@ -351,7 +382,7 @@
                                                     <div class="col-md-6 mb-1">
                                                         <div class="form-group">
                                                             <label for="age">Age:</label>
-                                                            <input type="number" name="age" id="txtAge" min="1" max="20"
+                                                            <input type="number" name="age" id="age" min="1" max="20"
                                                                    onkeyup="ageValidation()"
                                                                    class="form-control"
                                                                    placeholder="enter age" value="{{$student->age}}">
@@ -389,15 +420,8 @@
                                              aria-labelledby="information-part-trigger">
                                             <div class="card-body">
                                                 <div class="row">
-                                                    <div class="col-md-6 mb-1">
-                                                        <div class="form-group mb-3">
-                                                            <label for="simpleinput">Reference By:</label>
-                                                            <input type="text" class="form-control"
-                                                                   name="reference_by"
-                                                                   value="{{$student->reference_by}}">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6 mb-1">
+
+                                                    <div class="col-md-3 mb-1">
                                                         <div class="form-group mb-3">
                                                             <label for="demo">Demo Taken By:</label>
                                                             <br>
@@ -412,7 +436,7 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6 mb-1">
+                                                    <div class="col-md-3 mb-1">
                                                         <div class="form-group">
                                                             <label for="name">Analysis Trainer Name: </label>
                                                             <select class="form-control select2"
@@ -424,6 +448,22 @@
                                                                         @if($student->analysis_trainer_id== $t->id) selected @endif>{{$t->name}}</option>
                                                                 @endforeach
                                                             </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 mb-1">
+                                                        <div class="form-group mb-3">
+                                                            <label for="simpleinput">Counselling By:</label>
+                                                            <input type="text" class="form-control"
+                                                                   name="counselling_by"
+                                                                   value="{{$student->counselling_by}}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 mb-1">
+                                                        <div class="form-group mb-3">
+                                                            <label for="simpleinput">Reference By:</label>
+                                                            <input type="text" class="form-control"
+                                                                   name="reference_by"
+                                                                   value="{{$student->reference_by}}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 mb-1">
@@ -503,9 +543,19 @@
                                              aria-labelledby="office-use-part-trigger">
                                             <div class="card-body">
                                                 <div class="row">
+                                                    <div class="col-md-6 mb-1">
+                                                        <div class="form-group mb-3">
+                                                            <label for="simpleinput">STF:</label>
+                                                            <input type="text" class="form-control"
+                                                                   name="stf"
+                                                                   value="{{$student->stf}}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 mb-1">
+                                                    </div>
                                                     <div class="col-md-6 mb-4">
                                                         <div class="form-group mb-2">
-                                                            <label for="student image">Student Image:</label>
+                                                            <label for="student image">Student Profile Photo:</label>
                                                             <div class="custom-file">
                                                                 <input type="file" name="upload_student_image"
                                                                        class="custom-file-input"
@@ -519,7 +569,7 @@
                                                     </div>
                                                     <div class="col-md-6 mb-4">
                                                         <div class="form-group mb-2">
-                                                            <label for="pdf">Upload PDF:</label>
+                                                            <label for="pdf">Student Analysis PDF:</label>
                                                             <div class="custom-file">
                                                                 <input type="file" name="upload_analysis"
                                                                        class="custom-file-input"
@@ -531,6 +581,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
                                                 </div>
                                                 <button type="submit"
                                                         class="btn btn-success float-right ml-2 next-btn1">Update
@@ -717,6 +768,21 @@
                 form.find('.invalid-feedback').remove();
             }
         });
+
+        $(document).ready(function() {
+            $('#dob').on('change', function() {
+                var dob = new Date($(this).val());
+                var today = new Date();
+                var age = today.getFullYear() - dob.getFullYear();
+                // Adjust age based on the month and day
+                if (today.getMonth() < dob.getMonth() ||
+                    (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())) {
+                    age--;
+                }
+                $('#age').val(age);
+            });
+        });
+
         document.addEventListener('DOMContentLoaded', function () {
             window.stepper = new Stepper(document.querySelector('.bs-stepper'))
         });

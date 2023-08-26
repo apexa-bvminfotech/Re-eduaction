@@ -26,8 +26,8 @@
                         <div class="card card-primary card-outline">
                             <div class="card-body">
                                 <div class="text-center">
-                                    <img class="profile-user-img img-fluid img-circle"
-                                         src="{{asset( $student->upload_student_image )}}" alt="User profile picture">
+                                    <img class="profile-user-img img-fluid img-circle" style="height: 100px;"
+                                         src="{{asset('assets/student/images/'. $student->upload_student_image )}}" alt="Student Profile Photo">
                                 </div>
                                 <h3 class="profile-username text-center">{{$student->surname}} {{$student->name}}</h3>
                                 <p class="text-muted text-center">Student</p>
@@ -53,7 +53,6 @@
                                     <li class="nav-item"><a class="nav-link" href="#timeline2" data-toggle="tab">Student Attendance Show</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#student_leave" data-toggle="tab">Student Leave List</a></li>
                                 </ul>
-                                <a href="{{ route('student.index') }}" class="col-1 btn btn-primary float-right">Back</a>
                             </div>
                             <div class="card-body">
                                 <div class="tab-content">
@@ -104,8 +103,11 @@
                                                     <td>{{$student->extra_note}}</td>
                                                 </tr>
                                                 <tr>
-                                                    <th><b>Upload PDF:</b></th>
-                                                    <td>{{$student->upload_analysis}}</td>
+                                                    <th><b>Student Analysis PDF:</b></th>
+                                                    <td><a href="{{asset('assets/student/images/'. $student->upload_student_image )}}" download="">
+                                                            <button class="btn btn-success">Download  <i class="fa fa-file-pdf"></i></button>
+                                                        </a>
+                                                    </td>
                                                     <th><b>Courses:</b></th>
                                                     <td>{{$student->course->course_name}}</td>
                                                 </tr>
@@ -214,22 +216,32 @@
                                         <div class="post">
                                             <table class="table table-striped">
                                                 <thead>
-                                                <tr>
-                                                    <th><b>Leave Date From:</b></th>
-                                                    <th><b>Leave Date To:</b></th>
-                                                    <th><b>Reason:</b></th>
-                                                </tr>
+                                                    <tr>
+                                                        <th><b>No</b></th>
+                                                        <th><b>Leave Date From</b></th>
+                                                        <th><b>Leave Date To</b></th>
+                                                        <th><b>Reason</b></th>
+                                                        <th></th>
+                                                    </tr>
                                                 </thead>
 
                                                 <tbody>
-                                                @foreach($student_leave_show as $leave)
-                                                    <tr>
-                                                        <td>{{$leave->start_date}}</td>
-                                                        <td>{{$leave->end_date}}</td>
-                                                        <td>{{$leave->reason}}</td>
-                                                    </tr>
-                                                @endforeach
-
+                                                    @foreach($student_leave_show as $key => $leave)
+                                                        <tr>
+                                                            <td>{{ $key+1 }}</td>
+                                                            <td>{{$leave->start_date}}</td>
+                                                            <td>{{$leave->end_date}}</td>
+                                                            <td>{{$leave->reason}}</td>
+                                                            <td>
+                                                                @if(\Illuminate\Support\Facades\Auth::user()->type == 0)
+                                                                    <button type="button"
+                                                                            class="btn btn-success btn-student-leave-edit btn-sm"
+                                                                            data-id="{{$leave->id}}"><i class="fa fa-edit"></i>
+                                                                    </button>
+                                                                @endif
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
                                                 </tbody>
                                             </table>
                                         </div>
@@ -394,6 +406,76 @@
                 </div>
             </div>
         </section>
+        <div class="modal fade" id="btn-student-leave-edit" tabindex="-1" role="dialog"
+             aria-labelledby="verticalModalTitle"
+             style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="verticalModalTitle">Edit student Approved leave</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <form id="leaveApprovedForm" action="{{ route('student.editStudentLeaveApprove') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="leave_id" id="leave_id" value="">
+                        <input type="hidden" name="user_id" id="leave_user_id" value="">
+                        <input type="hidden" name="student_id" class="form-control student_id" id="leave_student_id" value="" required>
+                        <div class="modal-body">
+                            <div class="col-md-12 mb-1">
+                                <div class="form-group">
+                                    <label for="date">From:</label>
+                                    <input type="date" class="form-control" name="start_date"
+                                           value="{{date('Y-m-d')}}" id="start_date_leave" required>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-1">
+                                <div class="form-group">
+                                    <label for="date">To:</label>
+                                    <input type="date" class="form-control" name="end_date"
+                                           value="{{date('Y-m-d')}}" id="end_date_leave">
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-1">
+                                <div class="form-group">
+                                    <label for="text">Leave Reason:</label>
+                                    <input type="text" class="form-control" name="reason" required id="leave_reason">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn mb-2 btn-primary leave-submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
+@push('scripts')
+    <script>
+        $(document).on('click', '.btn-student-leave-edit', function () {
+            let id = parseInt($(this).data('id'));
+            $('.student_id').val(id);
+            let user_id = {{ Auth::id() }};
+            $('#user_id').val(user_id);
+            $('#btn-student-leave-edit').modal('toggle');
+
+            $.ajax({
+                url : "get-leave-data/" + id,
+                type: 'GET',
+                success: function (data) {
+                    $('#start_date_leave').val(data.start_date);
+                    $('#end_date_leave').val(data.end_date);
+                    $('#leave_reason').val(data.reason);
+                    $('#leave_student_id').val(data.student_id);
+                    $('#leave_user_id').val(data.student_id);
+                    $('#leave_id').val(id);
+                }
+            });
+        });
+    </script>
+@endpush
 
