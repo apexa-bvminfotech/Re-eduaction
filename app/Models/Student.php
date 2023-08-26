@@ -41,6 +41,9 @@ class Student extends Model
     {
         return $this->assignedStaff()->exists();
     }
+    public function courses(){
+        return $this->hasMany(StudentCourse::class);
+    }
     public function studentStatus()
     {
         return $this->hasMany(StudentStatus::class, 'student_id');

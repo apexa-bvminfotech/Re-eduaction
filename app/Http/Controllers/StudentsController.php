@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Slot;
 use App\Models\StudentApproveLeave;
 use App\Models\StudentAttendance;
+use App\Models\StudentCourse;
 use App\Models\StudentCourseComplete;
 use App\Models\StudentStatus;
 use App\Models\SubCourse;
@@ -33,15 +34,15 @@ class StudentsController extends Controller
         $students = Student::select('students.id','students.surname','students.name','students.mother_contact_no',
                         'students.standard','students.medium','students.course_id','branches.name as branch_name')
                     ->join('branches', 'branches.id', 'students.branch_id')
-                    ->with('course')
-                    ->orderBy('students.id','DESC')->get();
+                    ->with('courses')
+                    ->orderBy('students.id')->get();
 
         if(Auth::user()->type == 1) {
             $slots = Slot::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'desc')->get();
             $trainers = Trainer::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'desc')->get();
             $students = Student::
                 select('students.surname', 'students.name','students.standard','students.medium','students.course_id','students.id','students.father_contact_no')
-                ->with('course')
+                ->with('courses')
                 ->join('student_staff_assigns', 'student_staff_assigns.student_id', 'students.id')
                 ->join('trainers','trainers.id', 'student_staff_assigns.trainer_id')
                 ->where(['trainers.user_id' => Auth::user()->id,'student_staff_assigns.is_active' => 0])
@@ -88,7 +89,6 @@ class StudentsController extends Controller
             'age' => 'required',
             'course_id' => 'required|exists:courses,id',
             'branch_id' => 'required',
-
         ]);
 
         $upload_student_image = null;
@@ -138,7 +138,7 @@ class StudentsController extends Controller
             'extra_tuition_time' => $tuition,
             'dob' => $request->dob,
             'age' => $request->age,
-            'course_id' => $request->course_id,
+//            'course_id' => 2,
             'payment_condition' => $request->payment_condition,
             'counselling_by' => $request->counselling_by,
             'reference_by' => $request->reference_by,
@@ -160,12 +160,21 @@ class StudentsController extends Controller
             'student_id' => $student->id,
             'user_id' => Auth::id()
         ]);
+
+        foreach($request->course_id as $course_id){
+            StudentCourse::create([
+                'student_id'=>$student->id,
+                'course_id'=>$course_id,
+                'user_id'=>$user->id,
+            ]);
+
+        }
         return redirect()->route('student.index')->with('success', 'student created successfully');
     }
 
     public function show($id)
     {
-        $student = Student::find($id);
+        $student = Student::with('courses')->find($id);
         $assignStaff = StudentStaffAssign::orderBy('id')->where('student_id', $student->id)->With('Trainer', 'Slot')->get();
         $studentAttendance = StudentAttendance::orderBy('id')->where('student_id', $student->id)->get();
         $studentCompleteCourses = StudentCourseComplete::where('status',1)->where('student_id',$id)->pluck('id')->toArray();
@@ -255,7 +264,7 @@ class StudentsController extends Controller
             'extra_tuition_time' => $tuition,
             'dob' => $request->dob,
             'age' => $request->age,
-            'course_id' => $request->course_id,
+//            'course_id' => $request->course_id,
             'payment_condition' => $request->payment_condition,
             'counselling_by' => $request->counselling_by,
             'reference_by' => $request->reference_by,
@@ -268,6 +277,14 @@ class StudentsController extends Controller
             'upload_analysis' => $upload_analysis,
             'upload_student_image' => $upload_student_image,
         ]);
+        foreach($request->course_id as $course_id){
+            StudentCourse::create([
+                'student_id'=>$student->id,
+                'course_id'=>$course_id,
+                'user_id'=>$user->id,
+            ]);
+
+        }
         return redirect()->route('student.index')->with('success', 'Student updated successfully');
     }
 
@@ -380,121 +397,131 @@ class StudentsController extends Controller
         ]);
         if($request->subCourse_point_approve){
             //            dd(array_keys($request->subCourse_point_approve));
-            foreach ($request->subCourse_point_approve as $key=>$item){
-
-                $studentCompleteCourse = StudentCourseComplete::find($key);
+            foreach ($request->subCourse_point_approve as $items){
+                foreach ($items as $key=>$item){
+                    $studentCompleteCourse = StudentCourseComplete::find($key);
                     if(isset($studentCompleteCourse)){
                         $studentCompleteCourse->status = 2;
                         $studentCompleteCourse->save();
                     }
-            }
-            $subCourseCompleted= StudentCourseComplete::whereNotIn('id',array_keys($request->subCourse_point_approve))->get();
-            foreach ($subCourseCompleted as $item){
-                $item->status = 1;
-                $item->save();
+                }
+//                $subCourseCompleted= StudentCourseComplete::whereNotIn('id',array_keys($items))->get();
+//                foreach ($subCourseCompleted as $item){
+//                    $item->status = 1;
+//                    $item->save();
+//                }
             }
         }
         else{
             if (!empty($request->subCourse_before) && is_array($request->subCourse_before)) {
-                foreach ($request->subCourse_before as $subCourseBefore_key => $subCourseBefore_value) {
-                    $subCourseBefore = SubCourse::find($subCourseBefore_key);
+                foreach ($request->subCourse_before as $subCourse_before) {
+                    foreach($subCourse_before as $subCourseBefore_key => $subCourseBefore_value){
+                        $subCourseBefore = SubCourse::find($subCourseBefore_key);
 
-                    if ($subCourseBefore) {
-                        StudentCourseComplete::updateOrCreate(
-                            [
-                                'student_id' => $validatedData['student_id'],
-                                'course_id' => $validatedData['course_id'],
-                                'sub_course_id' => $subCourseBefore_key,
-
-                            ],
-                            [
-                                'user_id' => Auth::user()->roles()->first()->value('name') == "Admin" ? Auth::user()->id : null,
-                                'trainer_id' => Auth::user()->roles()->first()->value('name') != "Admin" ? Auth::user()->id : null,
-                                'before' => 1,
-                                'trainer_confirm_date' => Carbon::now()->toDateString(),
-                                'admin_confirm_date' => Carbon::now()->toDateString(),
-                            ]
-                        );
+                        if ($subCourseBefore) {
+                            StudentCourseComplete::updateOrCreate(
+                                [
+                                    'student_id' => $validatedData['student_id'],
+                                    'course_id' => $validatedData['course_id'],
+                                    'sub_course_id' => $subCourseBefore_key,
+                                ],
+                                [
+                                    'user_id' => Auth::user()->roles()->first()->value('name') == "Admin" ? Auth::user()->id : null,
+                                    'trainer_id' => Auth::user()->roles()->first()->value('name') != "Admin" ? Auth::user()->id : null,
+                                    'before' => 1,
+                                    'trainer_confirm_date' => Carbon::now()->toDateString(),
+                                    'admin_confirm_date' => Carbon::now()->toDateString(),
+                                ]
+                            );
+                        }
                     }
                 }
             }
 
             // Handle 'after' checkboxes for subCourses
             if (!empty($request->subCourse_after) && is_array($request->subCourse_after)) {
-                foreach ($request->subCourse_after as $subCourseAfter_key => $subCourseAfter_value) {
-                    $subCourseAfter = SubCourse::find($subCourseAfter_key);
+                foreach ($request->subCourse_after as $subCourse_after) {
+                    foreach ($subCourse_after as $subCourseAfter_key => $subCourseAfter_value) {
+                        $subCourseAfter = SubCourse::find($subCourseAfter_key);
 
-                    if ($subCourseAfter) {
-                        StudentCourseComplete::updateOrCreate(
-                            [
-                                'student_id' => $validatedData['student_id'],
-                                'course_id' => $validatedData['course_id'],
-                                'sub_course_id' => $subCourseAfter_key,
+                        if ($subCourseAfter) {
+                            StudentCourseComplete::updateOrCreate(
+                                [
+                                    'student_id' => $validatedData['student_id'],
+                                    'course_id' => $validatedData['course_id'],
+                                    'sub_course_id' => $subCourseAfter_key,
 
-                            ],
-                            [
-                                'user_id' => Auth::user()->roles()->first()->value('name') == "Admin" ? Auth::user()->id : null,
-                                'trainer_id' => Auth::user()->roles()->first()->value('name') != "Admin" ? Auth::user()->id : null,
-                                'after' => 1,
-                                'trainer_confirm_date' => Carbon::now()->toDateString(),
-                                'admin_confirm_date' => Carbon::now()->toDateString(),
-                            ]
-                        );
+                                ],
+                                [
+                                    'user_id' => Auth::user()->roles()->first()->value('name') == "Admin" ? Auth::user()->id : null,
+                                    'trainer_id' => Auth::user()->roles()->first()->value('name') != "Admin" ? Auth::user()->id : null,
+                                    'after' => 1,
+                                    'trainer_confirm_date' => Carbon::now()->toDateString(),
+                                    'admin_confirm_date' => Carbon::now()->toDateString(),
+                                ]
+                            );
+                        }
                     }
                 }
             }
 
             // Handle subCourse points for 'before'
             if (!empty($request->subCourse_point_before) && is_array($request->subCourse_point_before)) {
-                foreach ($request->subCourse_point_before as $key1 => $value1) {
-                    $point_before = SubCoursePoint::find($key1);
+                foreach ($request->subCourse_point_before as $subCourse_point_before) {
+                    foreach ($subCourse_point_before as $key1 => $value1) {
+                        $point_before = SubCoursePoint::find($key1);
 
-                    if ($point_before) {
-                        StudentCourseComplete::updateOrCreate(
-                            [
-                                'student_id' => $validatedData['student_id'],
-                                'course_id' => $validatedData['course_id'],
-                                'sub_course_point_id' => $key1,
-                            ],
-                            [
-                                'user_id' => Auth::user()->roles()->first()->value('name') == "Admin" ? Auth::user()->id : null,
-                                'trainer_id' => Auth::user()->roles()->first()->value('name') != "Admin" ? Auth::user()->id : null,
-                                'sub_course_id' => optional($point_before)->sub_course_id,
-                                'before' => 1,
-                                'trainer_confirm_date' => Carbon::now()->toDateString(),
-                                'admin_confirm_date' => Carbon::now()->toDateString(),
-                            ]
-                        );
+                        if ($point_before) {
+                            StudentCourseComplete::updateOrCreate(
+                                [
+                                    'student_id' => $validatedData['student_id'],
+                                    'course_id' => $validatedData['course_id'],
+                                    'sub_course_point_id' => $key1,
+                                ],
+                                [
+                                    'user_id' => Auth::user()->roles()->first()->value('name') == "Admin" ? Auth::user()->id : null,
+                                    'trainer_id' => Auth::user()->roles()->first()->value('name') != "Admin" ? Auth::user()->id : null,
+                                    'sub_course_id' => optional($point_before)->sub_course_id,
+                                    'before' => 1,
+                                    'trainer_confirm_date' => Carbon::now()->toDateString(),
+                                    'admin_confirm_date' => Carbon::now()->toDateString(),
+                                ]
+                            );
+                        }
                     }
                 }
             }
             // Handle subCourse points for 'after'
             if (!empty($request->subCourse_point_after) && is_array($request->subCourse_point_after)) {
-                foreach ($request->subCourse_point_after as $key => $value) {
-                    $point = SubCoursePoint::find($key);
+                foreach ($request->subCourse_point_after as $subCourse_point_after) {
 
-                    if ($point) {
-                        StudentCourseComplete::updateOrCreate(
-                            [
-                                'student_id' => $validatedData['student_id'],
-                                'course_id' => $validatedData['course_id'],
-                                'sub_course_point_id' => $key,
-                            ],
-                            [
-                                'user_id' => Auth::user()->roles()->first()->value('name') == "Admin" ? Auth::user()->id : null,
-                                'trainer_id' => Auth::user()->roles()->first()->value('name') != "Admin" ? Auth::user()->id : null,
-                                'sub_course_id' => optional($point)->sub_course_id,
-                                'after' => 1,
-                                'trainer_confirm_date' => Carbon::now()->toDateString(),
-                                'admin_confirm_date' => Carbon::now()->toDateString(),
-                            ]
-                        );
+                    foreach ($subCourse_point_after as $key => $value) {
+                        $point = SubCoursePoint::find($key);
+
+                        if ($point) {
+                            StudentCourseComplete::updateOrCreate(
+                                [
+                                    'student_id' => $validatedData['student_id'],
+                                    'course_id' => $validatedData['course_id'],
+                                    'sub_course_point_id' => $key,
+                                ],
+                                [
+                                    'user_id' => Auth::user()->roles()->first()->value('name') == "Admin" ? Auth::user()->id : null,
+                                    'trainer_id' => Auth::user()->roles()->first()->value('name') != "Admin" ? Auth::user()->id : null,
+                                    'sub_course_id' => optional($point)->sub_course_id,
+                                    'after' => 1,
+                                    'trainer_confirm_date' => Carbon::now()->toDateString(),
+                                    'admin_confirm_date' => Carbon::now()->toDateString(),
+                                ]
+                            );
+                        }
                     }
                 }
             }
             $status = 1;
 
             StudentCourseComplete::where('student_id', $validatedData['student_id'])
+                ->where('status','!=',2)
                 ->where('course_id', $validatedData['course_id'])
                 ->update(['status' => $status]);
 
