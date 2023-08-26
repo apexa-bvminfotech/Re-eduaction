@@ -377,22 +377,24 @@ class StudentsController extends Controller
             'subCourse_point_after' => 'nullable|array',
             'subCourse_point_before' => 'nullable|array',
         ]);
-//        dd($request);
+//        dd($request->subCourse_point_approve);
         if($request->subCourse_point_approve){
             //            dd(array_keys($request->subCourse_point_approve));
-            foreach ($request->subCourse_point_approve as $key=>$item){
-
-                $studentCompleteCourse = StudentCourseComplete::find($key);
+            foreach ($request->subCourse_point_approve as $items){
+                foreach ($items as $key=>$item){
+                    $studentCompleteCourse = StudentCourseComplete::find($key);
                     if(isset($studentCompleteCourse)){
                         $studentCompleteCourse->status = 2;
                         $studentCompleteCourse->save();
                     }
+                }
+//                $subCourseCompleted= StudentCourseComplete::whereNotIn('id',array_keys($items))->get();
+//                foreach ($subCourseCompleted as $item){
+//                    $item->status = 1;
+//                    $item->save();
+//                }
             }
-            $subCourseCompleted= StudentCourseComplete::whereNotIn('id',array_keys($request->subCourse_point_approve))->get();
-            foreach ($subCourseCompleted as $item){
-                $item->status = 1;
-                $item->save();
-            }
+
         }
         else{
             if (!empty($request->subCourse_before) && is_array($request->subCourse_before)) {
@@ -458,6 +460,7 @@ class StudentsController extends Controller
                                 [
                                     'student_id' => $validatedData['student_id'],
                                     'course_id' => $validatedData['course_id'],
+                                    'sub_course_point_id' => $key1,
                                 ],
                                 [
                                     'user_id' => Auth::user()->roles()->first()->value('name') == "Admin" ? Auth::user()->id : null,
@@ -502,6 +505,7 @@ class StudentsController extends Controller
             $status = 1;
 
             StudentCourseComplete::where('student_id', $validatedData['student_id'])
+                ->where('status','!=',2)
                 ->where('course_id', $validatedData['course_id'])
                 ->update(['status' => $status]);
 

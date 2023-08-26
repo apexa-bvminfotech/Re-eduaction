@@ -274,11 +274,11 @@
                                                         @if($sc->points->count() == 0)
                                                             <div class="form-check checkbox-xl custom-checkbox text-center">
                                                                 @can('student-course-complete-before')
-                                                                    <input @if(\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_id'=>$sc->id,'before'=>1])->first()) checked disabled @endif
+                                                                    <input @if($sub_course=\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_id'=>$sc->id,'before'=>1])->first()) checked disabled @endif
                                                                     type="checkbox" class="form-check-input sub-course-checkbox_before" name="subCourse_before[{{$student_course->id}}][{{$sc->id}}]" data-id="{{ $sc->id }}"
                                                                            data-subCourseId="{{ $sc->id }}" data-pointId="{{$sc->id}}">
                                                                 @else
-                                                                    <input @if(\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_id'=>$sc->id,'before'=>1])->first()) checked disabled @endif
+                                                                    <input @if($sub_course= \App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_id'=>$sc->id,'before'=>1])->first()) checked disabled @endif
                                                                     type="checkbox" class="form-check-input sub-course-checkbox_before"  data-id="{{ $sc->id }}"
                                                                            data-subCourseId="{{ $sc->id }}" data-pointId="0">
                                                                 @endcan
@@ -293,18 +293,52 @@
                                                         @if($sc->points->count() == 0)
                                                             <div class="form-check checkbox-xl custom-checkbox text-center">
                                                                 @can('student-course-complete-after')
-                                                                    <input @if(\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_id'=>$sc->id,'after'=>1])->first()) checked disabled @endif
+                                                                    <input @if($sub_course1=\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_id'=>$sc->id,'after'=>1])->first()) checked disabled @endif
                                                                     type="checkbox" class="form-check-input  sub-course-checkbox_after" name="subCourse_after[{{$student_course->id}}][{{$sc->id}}]" data-id="{{ $sc->id }}"
                                                                            data-subCourseId="{{ $sc->id }}" data-pointId="{{$sc->id}}">
                                                                 @else
-                                                                    <input @if(\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_id'=>$sc->id,'after'=>1])->first()) checked  disabled @endif
+                                                                    <input @if($sub_course1=\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_id'=>$sc->id,'after'=>1])->first()) checked  disabled @endif
                                                                     type="checkbox" class="form-check-input  sub-course-checkbox_after" data-id="{{ $sc->id }}"
                                                                            data-subCourseId="{{ $sc->id }}" data-pointId="0">
                                                                 @endcan
                                                             </div>
                                                         @endif
                                                     </th>
-                                                    <th  class="text-center bg-info"></th>
+
+                                                    <th  class="text-center bg-info">{{isset($sub_course->trainer_confirm_date)? $sub_course->trainer_confirm_date:''}}
+                                                        {{isset($sub_course1->trainer_confirm_date)? $sub_course1->trainer_confirm_date:''}}</th>
+                                                    @if(auth()->user()->type == 0)
+                                                        <td>
+                                                            @if($sc->points->count() == 0)
+                                                            <div class="form-check checkbox-xl custom-checkbox text-center">
+                                                                @php
+                                                                    $id= isset($sub_course)? $sub_course->id :(isset($sub_course1)?$sub_course1->id:0);
+                                                                    $status= isset($sub_course)? $sub_course->status :(isset($sub_course1)?$sub_course1->status:0);
+                                                                @endphp
+                                                                @if(in_array($id,$studentCompleteCourses))
+                                                                    <input class="form-check-input point-checkbox" type="checkbox"  name="subCourse_point_approve[{{$student_course->id}}][{{$id}}]">
+                                                                @elseif($status ==2)
+                                                                    <input class="form-check-input point-checkbox" checked  type="checkbox"  name="subCourse_point_approve[{{$student_course->id}}][{{$id}}]">
+                                                                @else
+                                                                    <input class="form-check-input point-checkbox" type="checkbox"  name="subCourse_point_approve[{{$student_course->id}}][{{$id}}]">
+
+                                                                @endif
+                                                            </div>
+                                                                @endif
+                                                        </td>
+                                                    @endif
+                                                    @if(auth()->user()->type != 0)
+                                                        @if((isset($sub_course) && auth()->user()->id == $sub_course->user_id) || (isset($sub_course1) && auth()->user()->id == $sub_course1->user_id))
+                                                            <td>
+                                                                @if(isset($sub_course) && in_array($sub_course->id,$approvedCourse))
+                                                                    Approved
+                                                                @endif
+                                                                @if(isset($sub_course1) && in_array($sub_course1->id,$approvedCourse))
+                                                                    Approved
+                                                                @endif
+                                                            </td>
+                                                        @endif
+                                                    @endif
                                                 </tr>
                                                 <tr>
                                                     @if($sc->points->count() > 0)
