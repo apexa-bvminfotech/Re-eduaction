@@ -30,6 +30,7 @@ Route::group(['middleware'=>['auth']],function (){
         //proxy-staff-route
         Route::get('/proxy-slot/{id}','StudentsController@proxySlot');
         Route::get('/get-leave-data/{id}','StudentsController@getLeaveData')->name('student.getLeaveData');
+        Route::get('/get-course-material-data/{id}/{medium_id}','StudentsController@getCourseMaterialData')->name('student.getCourseMaterialData');
 
         Route::get('/edit-student-approve-leave/{id}','StudentsController@proxySlot');
         Route::post('/proxy-staff', 'StudentsController@proxyStaff')->name('student.proxyStaff');
@@ -46,6 +47,7 @@ Route::group(['middleware'=>['auth']],function (){
     Route::resource('trainer_attendance', 'TrainerAttendanceController');
     Route::resource('student_attendance','StudentAttendanceController');
     Route::resource('course', 'CourseController');
+    Route::resource('appreciation', 'AppreciationController');
     Route::resource('point', 'PointController')->only(['destroy']);
     Route::resource('subCourse', 'SubCourseController')->only(['destroy']);
     Route::resource('user','UserController');

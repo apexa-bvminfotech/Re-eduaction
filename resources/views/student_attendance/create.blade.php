@@ -21,6 +21,16 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
+{{--                    <div class="col-md-12">--}}
+{{--                        <div class="card card-primary">--}}
+{{--                            @foreach($trainer as $t)--}}
+{{--                                <p>{{ $t->id }} => {{ $t->name }}</p>--}}
+{{--                                @foreach($t->studentAssign as $k => $stu)--}}
+{{--                                    <p>Regular => {{ ($stu->student->name) }}</p>--}}
+{{--                                @endforeach--}}
+{{--                            @endforeach--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
                     <div class="col-md-12">
                         <div class="card card-primary">
                             @if (count($errors) > 0)
@@ -137,7 +147,6 @@
                                                 @empty
                                                 @endforelse
                                             </div>
-                                            {{-- ///proxy staff//--}}
                                             <div class="col-md-3"></div>
                                             <div class="col-md-9">
                                                 @forelse($t->studentAssignProxy->groupBy('slot.slot_time') as $key2 => $regularSlotProxy)
@@ -149,8 +158,7 @@
                                                         <div class="row">
                                                             <div class="col-md-3">
                                                                 <div class="form-group">
-                                                                    <label for="simpleinput">Proxy
-                                                                        slot-time</label>
+                                                                    <label for="simpleinput">Proxy slot-time</label>
                                                                     <input type="hidden" readonly
                                                                            name="data[{{ $key2 }}][trainer_id]"
                                                                            value="{{ $key2 }}"

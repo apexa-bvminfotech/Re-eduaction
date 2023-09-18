@@ -44,8 +44,9 @@
                                         <tr>
                                             <td>{{ ++$i }}</td>
                                             <td>{{ $s->surname }} {{ $s->name }}</td>
-                                            <td>@foreach($s->courses as $course)
-                                                {{$course->course->course_name }}
+                                            <td>
+                                                @foreach($s->courses as $course)
+                                                {{$course->course->course_name }}<br>
                                                 @endforeach
                                             </td>
                                             <td>{{ $s->branch_name }}</td>

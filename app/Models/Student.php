@@ -52,4 +52,7 @@ class Student extends Model
     {
         return  $this->studentStatus()->select('status')->where('is_active', 0)->first();
     }
+    public function studentDmit(){
+        return $this->hasOne(StudentDMIT::class,'student_id');
+    }
 }

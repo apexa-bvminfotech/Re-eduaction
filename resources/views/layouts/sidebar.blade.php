@@ -32,8 +32,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{route('course.index')}}" class="nav-link @if(Route::currentRouteName() == 'course.index')active  @endif">
-                        <i class="nav-icon fas fa-columns"></i>
+                    <a href="{{route('appreciation.index')}}" class="nav-link @if(Route::currentRouteName() == 'appreciation.index')active  @endif">
+                        <i class="nav-icon fas fa-award"></i>
                         <p>Appreciation</p>
                     </a>
                 </li>

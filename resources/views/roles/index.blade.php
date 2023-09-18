@@ -83,7 +83,6 @@
 
         $(".showDetail").on('click', function(){
             var id = $(this).attr("data-id");
-            console.log(id);
             $.ajax({
                 url: 'roles/'+id,
                 type: 'get',

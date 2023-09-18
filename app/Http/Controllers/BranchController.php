@@ -15,7 +15,6 @@ class BranchController extends Controller
      */
     public function index()
     {
-
         $branches = Branch::orderBy('id','DESC')->get();
         return view('branch.index', compact('branches'))->with('i');
     }

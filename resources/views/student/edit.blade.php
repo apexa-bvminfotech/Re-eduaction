@@ -76,8 +76,8 @@
                                                     <div class="col-md-4 mb-2">
                                                         <div class="form-group">
                                                             <label for="dob">Registration Date:</label>
-                                                            <input type="date" class="form-control" name="registration_date"
-                                                                   min="{{ date('Y-m-d') }}" value="{{ $student->registration_date ? Carbon\Carbon::parse($student->registration_date)->format('Y-m-d') : date('Y-m-d')}}" id="registration_date">
+                                                            <input type="date" class="form-control" name="registration_date" readonly
+                                                                    value="{{ $student->registration_date ? Carbon\Carbon::parse($student->registration_date)->format('Y-m-d') : date('Y-m-d')}}" id="registration_date">
                                                             @error('registration_date')
                                                             <span class="text-danger">{{$message}}</span>
                                                             @enderror
@@ -395,17 +395,15 @@
                                                         <div class="form-group">
                                                             <label for="course_name">Course Name:</label>
                                                             <br>
-                                                            <select name="course_id[]" multiple="" class="form-control select2"
-                                                                    required>
+                                                            <select name="course_id[]" multiple="" class="form-control select2">
                                                                 <option value="">----- Course Name -----</option>
                                                                 @foreach($course as $key=>$c)
-                                                                    <option
-                                                                        value="{{$c->id}}"
-                                                                        @if($student->course_id==$c->id) selected @endif>{{$c->course_name}}</option>
+                                                                    <option value="{{$c->id}}"
+                                                                        @if(in_array($c->id, $courseID)) selected disabled @endif>{{$c->course_name}}</option>
                                                                 @endforeach
                                                             </select>
                                                             @error('course_id')
-                                                            <span class="text-danger"> {{$message}}</span>
+                                                                <span class="text-danger"> {{$message}}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
@@ -523,7 +521,78 @@
                                                             </label>
                                                         </div>
                                                     </div>
-
+                                                    <div class="col-md-12 mb-1">
+                                                        <div class="form-group">
+                                                            <label for="fees">DMIT</label>
+                                                            <br>
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input type="checkbox" name="fp"
+                                                                               {{ $studentDmit->fp == 1 ? 'checked' :'' }}
+                                                                               class="form-check">&nbsp;&nbsp;
+                                                                        <label class="form-check-label"
+                                                                               for="fp">
+                                                                            FP
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <input type="date" class="form-control" name="fp_date"
+                                                                               value="{{ $studentDmit->fp_date }}" id="fp_date">
+                                                                        @error('fp_date')
+                                                                        <span class="text-danger">{{$message}}</span>
+                                                                        @enderror
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input type="checkbox" name="report"
+                                                                               {{ $studentDmit->report == 1 ? 'checked' :'' }}
+                                                                               class="form-check">&nbsp;&nbsp;
+                                                                        <label class="form-check-label"
+                                                                               for="report">
+                                                                            Report
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <input type="date" class="form-control" name="report_date"
+                                                                                value="{{ $studentDmit->report_date }}" id="report_date">
+                                                                        @error('report_date')
+                                                                        <span class="text-danger">{{$message}}</span>
+                                                                        @enderror
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input type="checkbox" name="counselling_by"
+                                                                               {{ $studentDmit->counselling_by == 1 ? 'checked' :'' }}
+                                                                               class="form-check">&nbsp;&nbsp;
+                                                                        <label class="form-check-label"
+                                                                               for="counselling_by">
+                                                                            Counselling By
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <input type="date" class="form-control" name="counselling_date"
+                                                                               value="{{ $studentDmit->counselling_date }}" id="counselling_date">
+                                                                        @error('counselling_date')
+                                                                        <span class="text-danger">{{$message}}</span>
+                                                                        @enderror
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <div class="col-md-12 mb-4">
                                                         <label for="note">Extra Note:</label>
                                                         <textarea name="extra_note"
@@ -691,9 +760,6 @@
                     age: {
                         required: true,
                     },
-                    course_id: {
-                        required: true,
-                    },
                 },
                 messages: {
                     surname: {
@@ -731,9 +797,6 @@
                     },
                     age: {
                         required: "Please enter a age ",
-                    },
-                    course_id: {
-                        required: "Please enter a course_id ",
                     },
                 },
                 errorElement: 'span',

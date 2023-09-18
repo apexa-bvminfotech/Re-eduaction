@@ -381,7 +381,7 @@
                                                         <div class="form-group">
                                                             <label for="course_name">Course Name:</label>
                                                             <br>
-                                                            <select name="course_id[]" multiple="" class="form-control select2"
+                                                            <select name="course_id[]" multiple="" class="form-control select2" id="course_id"
                                                                     required>
                                                                 <option value="">----- Course Name -----</option>
                                                                 @foreach($course as $key=>$c)
@@ -394,6 +394,14 @@
                                                             @enderror
                                                         </div>
                                                     </div>
+                                                    <div class="col-md-6 mb-1">
+                                                        <div class="form-group">
+                                                            <label for="course_material">Course Material</label><br>
+                                                            <div id="course_material">
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <button type="button" class="btn btn-primary float-right btn-next-form nxtbt next-btn">Next</button>
                                             </div>
@@ -401,7 +409,6 @@
                                         <div id="information-part" class="content" role="tabpanel" aria-labelledby="information-part-trigger">
                                             <div class="card-body">
                                                 <div class="row">
-
                                                     <div class="col-md-3 mb-1">
                                                         <div class="form-group mb-3">
                                                             <label for="demo">Demo Taken By:</label>
@@ -504,6 +511,79 @@
                                                                 <label class="form-check-label" for="medium_hindi">
                                                                     Unpaid
                                                                 </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12 mb-1">
+                                                        <div class="form-group">
+                                                            <label for="fees">DMIT</label>
+                                                            <br>
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input type="checkbox" name="fp"
+                                                                               {{ old('fp') == 1 ? 'checked' : '' }}
+                                                                               class="form-check">&nbsp;&nbsp;
+                                                                        <label class="form-check-label"
+                                                                               for="fp">
+                                                                            FP
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <input type="date" class="form-control" name="fp_date"
+                                                                               min="{{ date('Y-m-d') }}" value="{{ old('fp_date',date('Y-m-d')) }}" id="fp_date">
+                                                                        @error('fp_date')
+                                                                            <span class="text-danger">{{$message}}</span>
+                                                                        @enderror
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input type="checkbox" name="report"
+                                                                               {{ old('report') == 1 ? 'checked' : '' }}
+                                                                               class="form-check">&nbsp;&nbsp;
+                                                                        <label class="form-check-label"
+                                                                               for="report">
+                                                                            Report
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <input type="date" class="form-control" name="report_date"
+                                                                               min="{{ date('Y-m-d') }}" value="{{ old('report_date',date('Y-m-d')) }}" id="fp_date">
+                                                                        @error('report_date')
+                                                                            <span class="text-danger">{{$message}}</span>
+                                                                        @enderror
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input type="checkbox" name="counselling_by"
+                                                                               {{ old('counselling_by') == 1 ? 'checked' : '' }}
+                                                                               class="form-check">&nbsp;&nbsp;
+                                                                        <label class="form-check-label"
+                                                                               for="counselling_by">
+                                                                            Counselling By
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <input type="date" class="form-control" name="counselling_date"
+                                                                               min="{{ date('Y-m-d') }}" value="{{ old('counselling_date',date('Y-m-d')) }}" id="fp_date">
+                                                                        @error('counselling_date')
+                                                                            <span class="text-danger">{{$message}}</span>
+                                                                        @enderror
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -764,6 +844,31 @@
                 }
                 $('#age').val(age);
             });
+
+            $('#course_id').on('change', function() {
+                var course_id = $(this).val();
+                var title = $( "#course_id option:selected" ).text();
+                var medium_id = $('input[name="medium"]:checked').val();
+                if (course_id && typeof (medium_id) == 'undefined') {
+
+                    $(this).find("option").prop("disabled", true);
+                }
+                // if(typeof (medium_id) == 'undefined') {
+                //     alert("Please select medium");
+                //     // $('li[title="'+title+'"]').remove();
+                //     $('li[title="'+title+'"] span').click;
+                // }
+                // $.ajax({
+                //     url : "get-course-material-data/" + course_id + "/" + medium_id,
+                //     type: 'GET',
+                //     success: function (data) {
+                //         console.log(data);
+                //         $('#course_material').append(data);
+                //     }
+                // });
+            })
+
+
         });
 
     </script>

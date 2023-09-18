@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Appreciation;
 use App\Models\Branch;
 use App\Models\Course;
+use App\Models\CourseWiseMaterial;
 use App\Models\Slot;
 use App\Models\StudentApproveLeave;
 use App\Models\StudentAttendance;
 use App\Models\StudentCourse;
 use App\Models\StudentCourseComplete;
+use App\Models\StudentDMIT;
 use App\Models\StudentStatus;
 use App\Models\SubCourse;
 use App\Models\SubCoursePoint;
@@ -154,18 +157,30 @@ class StudentsController extends Controller
         ]);
 
         StudentStatus::create([
-            'status' => 0,
+            'status' => 'Pending',
             'is_active' => 0,
             'date' => date('Y-m-d'),
             'student_id' => $student->id,
-            'user_id' => Auth::id()
+            'user_id' => Auth::user()->id
+        ]);
+
+        StudentDMIT::create([
+            'student_id' => $student->id,
+            'fp' => $request->fp ? 1 : 0,
+            'fp_date' => $request->fp_date,
+            'report' => $request->report ? 1 : 0,
+            'report_date' => $request->report_date,
+            'counselling_by' => $request->counselling_by ? 1 : 0,
+            'counselling_date' => $request->counselling_date,
         ]);
 
         foreach($request->course_id as $course_id){
+            $getAppreciation = Appreciation::where('course_id', $course_id)->first();
             StudentCourse::create([
-                'student_id'=>$student->id,
-                'course_id'=>$course_id,
-                'user_id'=>$user->id,
+                'student_id' => $student->id,
+                'course_id' => $course_id,
+                'user_id' => $user->id,
+                'appreciation_id' => $getAppreciation->id,
             ]);
 
         }
@@ -174,7 +189,7 @@ class StudentsController extends Controller
 
     public function show($id)
     {
-        $student = Student::with('courses')->find($id);
+        $student = Student::with('courses','studentDmit')->find($id);
         $assignStaff = StudentStaffAssign::orderBy('id')->where('student_id', $student->id)->With('Trainer', 'Slot')->get();
         $studentAttendance = StudentAttendance::orderBy('id')->where('student_id', $student->id)->get();
         $studentCompleteCourses = StudentCourseComplete::where('status',1)->where('student_id',$id)->pluck('id')->toArray();
@@ -184,23 +199,29 @@ class StudentsController extends Controller
         return view('student.show', compact('student', 'assignStaff', 'studentAttendance', 'proxy_staff_details','studentCompleteCourses','approvedCourse','student_leave_show'));
     }
 
-    public function edit(Student $student)
+    public function edit($id)
     {
+        $student = Student::with('courses')->find($id);
+        $assignCourse = StudentCourse::select('course_id')->where('student_id', $id)->get()->toArray();
+        $courseID = [];
+        foreach ($assignCourse as $c){
+            array_push($courseID, $c['course_id']);
+        }
         $role = Role::orderBy('id', 'desc')->get();
         $course = Course::orderBy('id', 'desc')->get();
         $trainer = Trainer::where('is_active', 0)->orderBy('id')->get();
         $branch = Branch::orderBy('id', 'DESC')->get();
+        $studentDmit = StudentDMIT::where('student_id', $id)->first();
         if(Auth::user()->type == 1) {
             $trainer = Trainer::orderBy('id')->where(['is_active' => 0, 'branch_id' => Auth::user()->branch_id])->get();
             $branch = Branch::where('id', Auth::user()->branch_id)->orderBy('id', 'DESC')->get();
         }
-        return view('student.edit', compact('student', 'role', 'course', 'trainer','branch'));
+        return view('student.edit', compact('student', 'role', 'course', 'trainer','branch', 'courseID', 'studentDmit'));
     }
 
     public function update(Request $request, Student $student)
     {
         $request->validate([
-            'registration_date' => 'required',
             'surname' => 'required|max:255',
             'name' => 'required|max:255',
             'father_name' => 'required|max:255',
@@ -217,7 +238,6 @@ class StudentsController extends Controller
             'extra_tuition_time_from' => 'required',
             'dob' => 'required',
             'age' => 'required',
-            'course_id' => 'required|exists:courses,id'
         ]);
         $upload_student_image = $student->upload_student_image;
         if ($request->upload_student_image) {
@@ -235,7 +255,6 @@ class StudentsController extends Controller
             'contact' => $request->father_contact_no,
             'type' => 2,
         ]);
-
 
         $upload_analysis = $student->upload_analysis;
         if ($request->upload_analysis) {
@@ -277,14 +296,33 @@ class StudentsController extends Controller
             'upload_analysis' => $upload_analysis,
             'upload_student_image' => $upload_student_image,
         ]);
-        foreach($request->course_id as $course_id){
-            StudentCourse::create([
-                'student_id'=>$student->id,
-                'course_id'=>$course_id,
-                'user_id'=>$user->id,
-            ]);
+        if($request->course_id) {
+            foreach($request->course_id as $course_id){
+                $getAppreciation = Appreciation::where('course_id', $course_id)->first();
+                StudentCourse::updateOrCreate([
+                    'student_id' => $student->id,
+                    'course_id' => $course_id,
+                    'user_id' => $user->id,
+                ],[
+                    'student_id' => $student->id,
+                    'course_id' => $course_id,
+                    'user_id' => $user->id,
+                    'appreciation_id' => $getAppreciation->id,
+                ]);
 
+            }
         }
+        $getDmit = $student->studentDmit;
+        $getDmit->update([
+            'student_id' => $student->id,
+            'fp' => $request->fp ? 1 : 0,
+            'fp_date' => $request->fp_date,
+            'report' => $request->report ? 1 : 0,
+            'report_date' => $request->report_date,
+            'counselling_by' => $request->counselling_by ? 1 : 0,
+            'counselling_date' => $request->counselling_date,
+        ]);
+
         return redirect()->route('student.index')->with('success', 'Student updated successfully');
     }
 
@@ -601,6 +639,20 @@ class StudentsController extends Controller
            'user_id' => Auth::id(),
         ]);
         return redirect()->route('student.index')->with('success', 'Student status change');
+    }
+
+    public function getCourseMaterialData($course_id, $medium_id){
+        $material_data = [];
+        $data = CourseWiseMaterial::where(['course_id' => $course_id, 'medium' => $medium_id])->get();
+        foreach ($data as $d) {
+            $material_data[] = '<div class="form-check form-check-inline">
+                <input type="checkbox" value="'.$d->id.'" name="course_material" class="form-check medium-list">
+                    <label class="form-check-label" for="medium_gujarati">&nbsp;&nbsp;
+                        '. $d->material_name .'
+                    </label>
+            </div><br>';
+        }
+        return $material_data;
     }
 
 }

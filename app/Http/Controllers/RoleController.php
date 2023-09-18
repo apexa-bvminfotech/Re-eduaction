@@ -79,15 +79,23 @@ class RoleController extends Controller
         $rolePermissions = Permission::join("role_has_permissions","role_has_permissions.permission_id","=","permissions.id")
             ->where("role_has_permissions.role_id",$id)
             ->get();
-
         $permission = '<div class="row">';
-        foreach ($rolePermissions->chunk(count($rolePermissions) / 3) as $chunk){
-            $permission .= '<div class="col-md-4"><ul>';
-            foreach ($chunk as $value) {
-                $permission .= '<li>'. $value->name.'</li>';
+        if(count($rolePermissions) > 6){
+            foreach ($rolePermissions->chunk(count($rolePermissions) / 3) as $chunk){
+                $permission .= '<div class="col-md-4"><ul>';
+                foreach ($chunk as $value) {
+                    $permission .= '<li>'. $value->name.'</li>';
+                }
+                $permission .= '</ul></div>';
             }
-            $permission .= '</ul></div>';
+        } else {
+                $permission .= '<div class="col-md-4"><ul>';
+                foreach ($rolePermissions as $value) {
+                    $permission .= '<li>'. $value->name.'</li>';
+                }
+                $permission .= '</ul></div>';
         }
+
         $permission .= '</div>';
         $data['permissionData'] = $permission;
         return $data;

@@ -29,7 +29,7 @@
                                     <img class="profile-user-img img-fluid img-circle" style="height: 100px;"
                                          src="{{asset('assets/student/images/'. $student->upload_student_image )}}" alt="Student Profile Photo">
                                 </div>
-                                <h3 class="profile-username text-center">{{$student->surname}} {{$student->name}}</h3>
+                                <h3 class="profile-username text-center">{{ $student->surname }} {{ $student->name }}</h3>
                                 <p class="text-muted text-center">Student</p>
                                 <ul class="list-group  mb-3">
                                     <li class="list-group-item">
@@ -39,7 +39,19 @@
                                         </a>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>Demo taken:</b> <a class="float-right">{{$student->trainer->name ?? ''}}</a>
+                                        <b>Demo taken:</b> <a class="float-right">{{ $student->trainer->name ?? ''}}</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Email ID:</b> <a class="float-right">{{ $student->email_id ?? ''}}</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Gender:</b> <a class="float-right">{{ $student->gender ?? ''}}</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Standard:</b> <a class="float-right">{{ $student->standard ?? ''}}</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Medium:</b> <a class="float-right">{{ $student->medium ?? ''}}</a>
                                     </li>
                                 </ul>
                             </div>
@@ -70,22 +82,10 @@
                                                     <td>{{$student->mother_contact_no}}</td>
                                                 </tr>
                                                 <tr>
-                                                    <th><b>Gender:</b></th>
-                                                    <td>{{$student->gender}}</td>
-                                                    <th><b>Email ID:</b></th>
-                                                    <td>{{$student->email_id}}</td>
-                                                </tr>
-                                                <tr>
                                                     <th><b>Address:</b></th>
                                                     <td>{{$student->address}}</td>
                                                     <th><b>School Name:</b></th>
                                                     <td>{{$student->school_name}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th><b>Standard:</b></th>
-                                                    <td>{{$student->standard}}</td>
-                                                    <th><b>Medium:</b></th>
-                                                    <td>{{$student->medium}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th><b>School Time:</b></th>
@@ -112,7 +112,11 @@
                                                         </a>
                                                     </td>
                                                     <th><b>Courses:</b></th>
-{{--                                                    <td>{{$student->course->course_name}}</td>--}}
+                                                    <td>
+                                                        @foreach($student->courses as $key => $cor)
+                                                            <b>{{ $key+1 }}:</b> {{ $cor->course->course_name }}<br>
+                                                        @endforeach
+                                                    </td>
                                                 </tr>
                                             </table>
                                         </div>
@@ -123,23 +127,47 @@
                                                 <tr>
                                                     <th><b>Reference By:</b></th>
                                                     <td>{{$student->reference_by}}</td>
-                                                </tr>
-                                                <tr>
                                                     <th><b>Role:</b></th>
                                                     <td>{{$student->user->roles->first()->name}}</td>
                                                 </tr>
                                                 <tr>
-                                                    <th><b>Payment Condition:</b></th>
-                                                    <td>{{$student->payment_condition}}</td>
-                                                </tr>
-                                                <tr>
+                                                    <th><b>Demo Taken By:</b></th>
+                                                    <td>{{$student->trainer->name ?? ''}}</td>
                                                     <th><b>Analysis Staff Name:</b></th>
                                                     <td>{{$student->trainer->name ?? ''}}</td>
                                                 </tr>
                                                 <tr>
-                                                    <th><b>Demo Taken By:</b></th>
-                                                    <td>{{$student->trainer->name ?? ''}}</td>
+                                                    <th><b>Payment Condition:</b></th>
+                                                    <td>{{$student->payment_condition}}</td>
+                                                    <th></th>
+                                                    <td></td>
                                                 </tr>
+                                                @if($student->studentDmit)
+                                                    <tr>
+                                                        <th><b>DMIT Details</b></th>
+                                                        <td></td>
+                                                        <th></th>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><b>FP</b></th>
+                                                        <td>{!! $student->studentDmit->fp ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
+                                                        <th><b>Fp Date</b></th>
+                                                        <td>{{ $student->studentDmit->fp_date ?? '' }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><b>Report</b></th>
+                                                        <td>{!! $student->studentDmit->report ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
+                                                        <th><b>Report Date</b></th>
+                                                        <td>{{ $student->studentDmit->report_date ?? '' }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><b>Counselling By</b></th>
+                                                        <td>{!! $student->studentDmit->counselling_by ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
+                                                        <th><b>Counselling by Date</b></th>
+                                                        <td>{{ $student->studentDmit->counselling_date ?? '' }}</td>
+                                                    </tr>
+                                                @endif
                                             </table>
                                         </div>
                                     </div>

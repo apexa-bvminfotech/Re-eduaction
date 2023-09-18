@@ -32,6 +32,9 @@
                                                 <option value="{{ $c->id }}" {{ old('course_name') == $c->id ? 'selected' : '' }}>{{ $c->course_name }}</option>
                                             @endforeach
                                         </select>
+                                        @error('course_name')
+                                            <span class="text-danger">{{$message}}</span>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -45,12 +48,18 @@
                                             <option value="gujlish" {{ old('medium') == 'gujlish' ? 'selected' : '' }}>Gujlish</option>
                                         </select>
                                     </div>
+                                    @error('medium')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror
                                 </div>
                                 <div class="form-group row">
                                     <label for="inputtext" class="col-sm-3 col-form-label">Material Name</label>
                                     <div class="col-sm-9">
                                         <input type="text" name="material_name" class="form-control" placeholder="Enter Material name" value="{{ old('material_name') }}" required>
                                     </div>
+                                    @error('material_name')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror
                                 </div>
                             </div>
 
