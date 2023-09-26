@@ -38,7 +38,7 @@ Route::group(['middleware'=>['auth']],function (){
         Route::post('/student-leave-approve','StudentsController@studentLeaveApprove')->name('student.studentLeaveApprove');
         Route::post('/edit-student-leave-approve','StudentsController@editStudentLeaveApprove')->name('student.editStudentLeaveApprove');
         Route::post('/change-student-status','StudentsController@ChangeStudentStatus')->name('student.ChangeStudentStatus');
-
+        Route::post('/student-appreciation','StudentsController@studentAppreciation')->name('student.studentAppreciation');
     });
     Route::resource('roles', 'RoleController');
     Route::resource('trainer', 'TrainerController');

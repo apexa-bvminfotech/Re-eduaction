@@ -590,8 +590,8 @@
 @push('scripts')
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#summernote').summernote({
-                height: 250;
+            $('#summernote').summernote({quickForm
+                height: 250
             });
             var form = $('#quickForm');
             var validator = form.validate({
@@ -744,7 +744,7 @@
             }
         });
         document.addEventListener('DOMContentLoaded', function () {
-            window.stepper = new Stepper(document.querySelector('.bs-stepper'))
+            window.stepper = new Stepper(document.querySelector('.bs-stepper'));
         });
 
     </script>

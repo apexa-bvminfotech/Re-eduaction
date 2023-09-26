@@ -9,6 +9,8 @@ class Slot extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
     protected $fillable = [
         'slot_time',
         'trainer_id',

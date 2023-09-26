@@ -40,6 +40,10 @@
                                             <td>{{$s->present}}</td>
                                             <td>{{$s->absent}}</td>
                                             <td>
+                                                <a href="{{ route('student_attendance.show',$s->attendance_date) }}"
+                                                    class="btn btn-primary btn-sm" title="Edit">
+                                                    <i class="fa fa-eye"></i> View</a>
+                                                </a>
                                                 @can('student-attendance-edit')
                                                     @if($s->attendance_date == date('Y-m-d') && \Illuminate\Support\Facades\Auth::user()->type !=0)
                                                         <a href="{{route('student_attendance.edit',$s->attendance_date)}}"

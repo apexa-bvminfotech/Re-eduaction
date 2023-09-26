@@ -60,20 +60,20 @@
                     <div class="col-md-9">
                         <div class="card">
                             <div class="card-header p-2 d-flex">
-                                <ul class="nav nav-pills col-11">
+                                <ul class="nav nav-pills col-12">
                                     <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Personal Information</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">School Detail</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#proxy_detail" data-toggle="tab">Proxy staff Details</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#timeline1" data-toggle="tab">Assign Staff</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#timeline2" data-toggle="tab">Student Attendance Show</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#student_leave" data-toggle="tab">Student Leave List</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#student_appreciation" data-toggle="tab">Student Appreciation Detail</a></li>
                                 </ul>
                             </div>
                             <div class="card-body">
                                 <div class="tab-content">
                                     <div class="active tab-pane" id="activity">
                                         <div class="post">
-                                            {{--                                            @dd($student)--}}
                                             <table class="table border-bottom">
                                                 <tr>
                                                     <th><b>Father Contact No:</b></th>
@@ -269,6 +269,44 @@
                                                                             class="btn btn-success btn-student-leave-edit btn-sm"
                                                                             data-id="{{$leave->id}}"><i class="fa fa-edit"></i>
                                                                     </button>
+                                                                @endif
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    {{-- for Student appreciation detail --}}
+                                    <div class="tab-pane" id="student_appreciation">
+                                        <div class="post">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th><b>No</b></th>
+                                                        <th><b>Course Name:</b></th>
+                                                        <th><b>Appreciation:</b></th>
+                                                        <th><b>Appreciation Date:</b></th>
+                                                        <th><b>Action</b></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($student_appreciation as $key => $appreciation)
+                                                        <tr>
+                                                            <td>{{ $key+1 }}</td>
+                                                            <td>{{$appreciation->course->course_name}}</td>
+                                                            <td>{{$appreciation->appreciation->appreciation_name}}</td>
+                                                            @if($appreciation->appreciation_given_date !== NULL)
+                                                                <td>{{ $appreciation_given_date = date('d-m-Y', strtotime($appreciation->appreciation_given_date)) }}</td>
+                                                            @endif
+                                                            <td>
+                                                                @if(\Illuminate\Support\Facades\Auth::user()->type == 0)
+                                                                    @if($appreciation->end_date !== NULL && $appreciation->appreciation_given_date == NULL)
+                                                                        <button type="button"
+                                                                            class="btn btn-success btn-sm btn-student-appreciation"
+                                                                            data-id="{{$appreciation->id}}" data-student-id="{{ $appreciation->student_id }}"> Appreciation
+                                                                        </button>
+                                                                    @endif
                                                                 @endif
                                                             </td>
                                                         </tr>
@@ -521,6 +559,39 @@
                 </div>
             </div>
         </div>
+        {{-- form for give student appreciation --}}
+        <form id="appreciationForm" action="{{ route('student.studentAppreciation') }}" method="POST">
+            @csrf
+            <input type="hidden" name="student_course_appreciation_id" class="form-control student_course_appreciation_id"  id="student_course_appreciation_id" value="" required>
+            <input type="hidden" name="student_id" class="form-control student_id" id="student_id" value="" required>
+            <div class="modal fade" id="verticalModal2" tabindex="-1" role="dialog"
+                 aria-labelledby="verticalModalTitle"
+                 style="display: none;" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="verticalModalTitle">Student Appreciation</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="col-md-12 mb-1">
+                                <div class="form-group">
+                                    <label for="date">Appreciation Date:</label>
+                                    <input type="date" class="form-control" name="appreciation_given_date"
+                                           value="{{date('Y-m-d')}}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn mb-2 btn-primary appreciation-form-submit">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 @endsection
 @push('scripts')
@@ -544,6 +615,18 @@
                     $('#leave_id').val(id);
                 }
             });
+        });
+
+        $(document).on('click', '.btn-student-appreciation', function () {
+            let id = $(this).data('id');
+            let student_id = $(this).data('student-id');
+            $('#student_id').val(student_id);
+            $('#student_course_appreciation_id').val(id);
+            $('#verticalModal2').modal('toggle');
+        });
+
+        $(document).on('click', '.appreciation-form-submit', function () {
+            $('#appreciationForm').submit();
         });
     </script>
 @endpush

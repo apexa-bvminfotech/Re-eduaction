@@ -20,4 +20,10 @@ class StudentAttendance extends Model
     public function studentAssign(){
         return $this->belongsTo(StudentStaffAssign::class);
     }
+    public function trainer(){
+        return $this->belongsTo(Trainer::class);
+    }
+    public function slot(){
+        return $this->belongsTo(Slot::class,'slot_id','id');
+    }
 }

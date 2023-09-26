@@ -14,4 +14,7 @@ class StudentCourse extends Model
     public function course(){
         return $this->belongsTo(Course::class);
     }
+    public function appreciation(){
+        return $this->belongsTo(Appreciation::class);
+    }
 }

@@ -30,12 +30,14 @@ class UpdateStudentAttendanceRequest extends FormRequest
                 new StudentAttendanceRule(auth()->id(),$this->date,$this->data),
             ],
             'data.*.absent_reason' => 'required_if:data.*.attendance_type,absent',
+            'attendance_date' => 'required',
         ];
     }
     public function messages()
     {
         return [
             'data.*.student_id' => 'student has already present',
+            'attendance_date' =>'Attendance date is required',
         ];
     }
 }

@@ -33,14 +33,11 @@ class TrainerAttendanceController extends Controller
      */
     public function index()
     {
-//        $trainerAttendance = DB::table("trainer_attendances")
-//            ->select('trainer_attendances.date',DB::raw('count(IF(attendance = 0, 1, NULL)) as present'),
-//                DB::raw('count(IF(attendance = 1, 1, NULL)) as absent'))
-//            ->groupBy('trainer_attendances.date')
-//            ->orderBy('trainer_attendances.id','DESC')->get();
-        $trainerAttendance = TrainerAttendance::orderBy('id', 'DESC');
-//        $regularStaffAssignedSlots = Slot::orderBy('id','DESC');
-
+        $trainerAttendance = DB::table("trainer_attendances")
+            ->select('trainer_attendances.date',DB::raw('count(IF(status = "P", 1, NULL)) as present'),
+                DB::raw('count(IF(status = "A", 1, NULL)) as absent'))
+            ->groupBy('trainer_attendances.date')
+            ->orderBy('trainer_attendances.id','DESC')->get();
 
         return view('trainer_attendance.index', compact('trainerAttendance',));
     }
@@ -56,8 +53,7 @@ class TrainerAttendanceController extends Controller
         $studentStaffAssign = StudentStaffAssign::orderBy('id', 'DESC')->with('trainer')->get()->groupBy('trainer.name');
         $proxyStaff = StudentProxyStaffAssign::orderBy('id', 'DESC')->whereDate('starting_date', now()->format('Y-m-d'))->with('trainer')
             ->get()->groupBy('trainer.name');
-        $trainerSlotWise = TrainerSlotWiseAttendance::orderBy('id', 'DESC')->get();
-        return view('trainer_attendance.create', compact('trainer', 'proxyStaff', 'studentStaffAssign', 'trainerSlotWise'));
+        return view('trainer_attendance.create', compact('trainer', 'proxyStaff', 'studentStaffAssign'));
     }
 
     /**
@@ -69,15 +65,19 @@ class TrainerAttendanceController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'date' => 'required|unique:trainer_attendance,date',
+            'date' => 'required|unique:trainer_attendances,date',
         ]);
+
+        $date = date('Y-m-d', strtotime($request->date));
+
         foreach ($request->data as $key => $r) {
             $data = [
-                'trainers_id' => $r['trainer_id'],
-                'attendance' => $r['attendance'],
+                'trainer_id' => $r['trainer_id'],
+                'slot_id' =>  $r['slot_id'],
+                'status' => $r['status'],
                 'absent_reason' => $r['absent_reason'],
-                'date' => date('Y-m-d', strtotime($request->date)),
-                'user_id' => auth()->user()->id,
+                'slot_type' => $r['slot_type'],
+                'date' =>  $date,
             ];
             TrainerAttendance::Create($data);
         }
@@ -93,9 +93,14 @@ class TrainerAttendanceController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($date)
     {
-        //
+        $trainerAttendance = TrainerAttendance::select('trainer_attendances.*','trainers.name','slots.slot_time')
+            ->where('date',$date)
+            ->join('trainers', 'trainers.id', 'trainer_attendances.trainer_id')
+            ->join('slots', 'slots.id', 'trainer_attendances.slot_id')
+            ->get()->groupby('trainer.name');
+        return view('trainer_attendance.show',compact('trainerAttendance'));
     }
 
     /**
@@ -107,17 +112,13 @@ class TrainerAttendanceController extends Controller
     public function edit($date)
     {
         $EditDate = $date;
-        $trainerAttendance = TrainerAttendance::select('trainer_attendance.*', 'trainers.id as trainerID', 'trainers.name')
+        $trainerAttendance = TrainerAttendance::select('trainer_attendances.*', 'trainers.id as trainerID', 'trainers.name', 'slots.slot_time')
             ->Where('date', $date)
-            ->join('trainers', 'trainers.id', 'trainer_attendance.trainers_id')
-            ->orderBy('trainer_attendance.id', 'DESC')->get();
-        $trainer = Trainer::orderBy('id', 'DESC')->get();
-        $proxyStaff = StudentProxyStaffAssign::orderBy('id', 'DESC')->whereDate('starting_date', now()->format('Y-m-d'))->with('trainer')->get();
-        if ($trainerAttendance) {
-            return view('trainer_attendance.edit', compact('trainerAttendance', 'EditDate', 'proxyStaff'));
-        } else {
-            return view('trainer_attendance.create', compact('trainer'));
-        }
+            ->join('trainers', 'trainers.id', 'trainer_attendances.trainer_id')
+            ->join('slots', 'slots.id', 'trainer_attendances.slot_id')
+            ->orderBy('trainer_attendances.id', 'ASC')->get()->groupby('trainer.name');
+
+            return view('trainer_attendance.edit', compact('trainerAttendance', 'EditDate'));
     }
 
     /**
@@ -129,12 +130,13 @@ class TrainerAttendanceController extends Controller
      */
     public function update(Request $request, $date)
     {
+        $this->validate($request, [
+            'date' => 'required',
+        ]);
         foreach ($request->data as $key => $r) {
             $data = [
-                'trainers_id' => $r['trainers_id'],
-                'attendance' => $r['attendance'],
+                'status' => $r['status'],
                 'absent_reason' => $r['absent_reason'],
-                'user_id' => auth()->user()->id,
             ];
             TrainerAttendance::where('id', $r['id'])->update($data);
         }

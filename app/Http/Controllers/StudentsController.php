@@ -29,7 +29,6 @@ use Illuminate\Support\Facades\Auth;
 
 class StudentsController extends Controller
 {
-
     public function index()
     {
         $slots = Slot::where('is_active', 0)->orderBy('id', 'desc')->get();
@@ -141,7 +140,6 @@ class StudentsController extends Controller
             'extra_tuition_time' => $tuition,
             'dob' => $request->dob,
             'age' => $request->age,
-//            'course_id' => 2,
             'payment_condition' => $request->payment_condition,
             'counselling_by' => $request->counselling_by,
             'reference_by' => $request->reference_by,
@@ -196,7 +194,8 @@ class StudentsController extends Controller
         $approvedCourse= StudentCourseComplete::where('status',2)->where('user_id',auth()->user()->id)->where('student_id',$id)->pluck('id')->toArray();
         $proxy_staff_details = $student->proxyStaffAssignments;
         $student_leave_show =  StudentApproveLeave::orderBy('id')->where('student_id', $student->id)->get();
-        return view('student.show', compact('student', 'assignStaff', 'studentAttendance', 'proxy_staff_details','studentCompleteCourses','approvedCourse','student_leave_show'));
+        $student_appreciation = StudentCourse::orderBy('id')->where('student_id', $student->id)->With('course', 'appreciation')->get();
+        return view('student.show', compact('student', 'assignStaff', 'studentAttendance', 'proxy_staff_details','studentCompleteCourses','approvedCourse','student_leave_show','student_appreciation'));
     }
 
     public function edit($id)
@@ -283,7 +282,6 @@ class StudentsController extends Controller
             'extra_tuition_time' => $tuition,
             'dob' => $request->dob,
             'age' => $request->age,
-//            'course_id' => $request->course_id,
             'payment_condition' => $request->payment_condition,
             'counselling_by' => $request->counselling_by,
             'reference_by' => $request->reference_by,
@@ -405,7 +403,7 @@ class StudentsController extends Controller
             return back()->with('error', 'Trainer is already assigned as proxy staff for the specified dates');
         }
 
-        $checkIsregularTrainer = StudentStaffAssign::where(['student_id' => $request->student_id, 'trainer_id' => $request->trainer_id, 'is_active' => 0])->first();
+        $checkIsregularTrainer = StudentStaffAssign::where(['trainer_id' => $request->trainer_id, 'slot_id' => $request->slot_id , 'is_active' => 0])->first();
         if($checkIsregularTrainer) {
             return back()->with('error', 'Trainer is already assigned as regular staff');
         }
@@ -655,6 +653,23 @@ class StudentsController extends Controller
         return $material_data;
     }
 
+    public function studentAppreciation(Request $request)
+    {
+        $request->validate([
+            'student_id' => 'required|integer',
+            'student_course_appreciation_id' => 'required|integer',
+            'appreciation_given_date' => 'required'
+        ]);
+
+        $studentId = $request->student_id;
+
+        StudentCourse::where('id',$request->student_course_appreciation_id)->update([
+            'appreciation_given_date' => $request->appreciation_given_date
+        ]);
+
+        return redirect()->route('student.show',$studentId)->with('success', 'Appreciate Given Succesfully');
+
+    }
 }
 
 

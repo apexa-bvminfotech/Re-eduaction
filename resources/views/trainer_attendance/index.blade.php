@@ -30,27 +30,31 @@
                                             <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Trainer Id</th>
-                                                <th>Trainer Name</th>
                                                 <th>Date</th>
+                                                <th>Total Present Trainer</th>
+                                                <th>Total absent Trianer</th>
                                                 <th width="280px">Action</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach ($trainerAttendance as $key => $s)
+                                            @foreach ($trainerAttendance as $key => $ta)
                                                 <tr>
-                                                    <td>{{ $s->id }}</td>
-                                                    <td>{{ $s->trainer_id }}</td>
-                                                    <td>{{ $s->trainer_name }}</td>
-                                                    <td>{{ date('d-m-Y', strtotime($s->date))}}</td>
+                                                    <td>{{++$key}}</td>
+                                                    <td>{{ date('d-m-Y', strtotime($ta->date))}}</td>
+                                                    <td>{{$ta->present}}</td>
+                                                    <td>{{$ta->absent}}</td>
                                                     <td>
+                                                        <a href="{{ route('trainer_attendance.show',$ta->date) }}"
+                                                            class="btn btn-info btn-md" title="Show">
+                                                             <i class="fa fa-eye"></i>
+                                                        </a>
                                                         @can('trainer-attendance-edit')
-                                                            <a href="{{ route('trainer_attendance.edit',$s->date) }}"
+                                                            <a href="{{ route('trainer_attendance.edit',$ta->date) }}"
                                                                class="btn btn-success" title="Edit"><i
                                                                     class="fa fa-edit"></i></a>
                                                         @endcan
                                                         @can('trainer-attendance-delete')
-                                                            {!! Form::open(['method' => 'DELETE','route' => ['trainer_attendance.destroy', $s->date],'style'=>'display:inline']) !!}
+                                                            {!! Form::open(['method' => 'DELETE','route' => ['trainer_attendance.destroy', $ta->date],'style'=>'display:inline']) !!}
                                                             <button type="submit" class="btn btn-danger" title="Delete"
                                                                     onclick="return confirm('Are you sure you want to delete?')">
                                                                 <i class="fa fa-trash"></i></button>

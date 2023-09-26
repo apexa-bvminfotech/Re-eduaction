@@ -30,7 +30,7 @@ class StudentAttendanceRequest extends FormRequest
                 'required',
                 new StudentAttendanceRule(auth()->id(),$this->attendance_date,$this->data),
             ],
-            'attendance_date' => 'required',
+            'attendance_date' => 'required|unique:students_attendance,attendance_date',
         ];
     }
 
@@ -39,7 +39,7 @@ class StudentAttendanceRequest extends FormRequest
 
         return [
             'student_id' => 'student has already present',
-            'attendance_date' =>'date has taken',
+            'attendance_date' =>'date has already taken',
         ];
 
     }
