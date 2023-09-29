@@ -95,6 +95,28 @@
                         <p>Course Material</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link @if(Route::currentRouteName() == 'trainer_attendance.index')active  @endif">
+                        <i class="nav-icon fas fa-file"></i>
+                        <p> Reports
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('trainer_wise_student_report.index')}}" class="nav-link">
+                                <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
+                                <p>Trainer wise student/RTC/slot</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('trainer_attendance.index')}}" class="nav-link @if(Route::currentRouteName() == 'trainer_attendance.index')active  @endif">
+                                <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
+                                <p>Trainer Attendance</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </nav>
     </div>
