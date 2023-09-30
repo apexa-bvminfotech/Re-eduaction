@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('student_course_completes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained('students');
-            $table->foreignId('trainer_id')->nullable()->constrained('trainers');
-            $table->foreignId('user_id')->nullable()->constrained('users');
-            $table->foreignId('course_id')->constrained('courses')->nullable();
-            $table->foreignId('sub_course_id')->constrained('sub_courses')->nullable();
-            $table->foreignId('sub_course_point_id')->constrained('sub_course_points')->nullable();
+            $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('trainer_id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('course_id');
+            $table->unsignedBigInteger('sub_course_id');
+            $table->unsignedBigInteger('sub_course_point_id');
             $table->boolean('before')->default(0);
             $table->boolean('after')->default(0);
             $table->integer('status')->default(0)->comment('0=default,1=Trainer-Confirm,2=Admin-Confirm');

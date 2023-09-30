@@ -17,4 +17,7 @@ class StudentCourse extends Model
     public function appreciation(){
         return $this->belongsTo(Appreciation::class);
     }
+    public function courseWiseMaterial(){
+        return $this->belongsTo(CourseWiseMaterial::class,'course_id','id');
+    }
 }

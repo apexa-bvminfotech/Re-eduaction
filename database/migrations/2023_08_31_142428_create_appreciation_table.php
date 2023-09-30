@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('appreciation', function (Blueprint $table) {
             $table->id();
             $table->string('appreciation_name');
-            $table->foreignId('course_id')->constrained('courses')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->unsignedBigInteger('course_id');
             $table->timestamps();
         });
     }

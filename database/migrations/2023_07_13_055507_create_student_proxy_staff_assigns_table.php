@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('student_proxy_staff_assigns', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained('students')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('trainer_id')->constrained('trainers')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('slot_id')->constrained('slots')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('trainer_id');
+            $table->unsignedBigInteger('slot_id');
             $table->date('starting_date');
             $table->date('ending_date');
             $table->timestamps();

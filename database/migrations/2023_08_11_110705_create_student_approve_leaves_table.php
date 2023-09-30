@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('student_approve_leaves', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained('students')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('user_id');
             $table->date('start_date');
             $table->date('end_date');
             $table->string('reason');

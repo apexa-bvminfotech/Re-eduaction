@@ -13,11 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('sub_course_points', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('sub_course_id');
-            $table->string('sub_point_name');
-            $table->timestamps();
+        Schema::table('students', function (Blueprint $table) {
+            $table->unsignedBigInteger('course_material_id')->after('course_id');
         });
     }
 
@@ -28,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sub_course_points');
+        Schema::table('students', function (Blueprint $table) {
+            //
+        });
     }
 };

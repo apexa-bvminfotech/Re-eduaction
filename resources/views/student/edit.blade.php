@@ -395,16 +395,36 @@
                                                         <div class="form-group">
                                                             <label for="course_name">Course Name:</label>
                                                             <br>
-                                                            <select name="course_id[]" multiple="" class="form-control select2">
+                                                            <select name="course_id[]" multiple="" class="form-control select2 course_id " id="course_id">
                                                                 <option value="">----- Course Name -----</option>
                                                                 @foreach($course as $key=>$c)
                                                                     <option value="{{$c->id}}"
-                                                                        @if(in_array($c->id, $courseID)) selected disabled @endif>{{$c->course_name}}</option>
+                                                                        @if(in_array($c->id, $courseID)) selected @endif>{{$c->course_name}}</option>
                                                                 @endforeach
                                                             </select>
                                                             @error('course_id')
                                                                 <span class="text-danger"> {{$message}}</span>
                                                             @enderror
+                                                        </div>
+                                                    </div>
+                                                    <input type="hidden" name="course_material_string" id="course_material_string" class="form-control" value="{{implode(",",$courseMaterialIds)}}">
+                                                    <div class="col-md-6 mb-1">
+                                                        <label for="course_material">Course Material:</label>
+                                                        <div id="empty_course_material">
+                                                            <div class="form-check">                                                            
+                                                                @foreach ($courseWiseMaterial as $courseMaterial)
+                                                                    <input class="form-check-input course_material" type="checkbox" id="course_material"
+                                                                        data-course-id="{{ $courseMaterial->course_id }}" name="course_material[]"  value="{{ $courseMaterial->id }}"
+                                                                        @if(in_array($courseMaterial->id, $courseMaterialIds)) checked @endif>
+                                                                        <label class="form-check-label" for="course_material">
+                                                                            {{ $courseMaterial->material_name }}
+                                                                        </label>
+                                                                    <br>
+                                                                @endforeach
+                                                            </div>
+                                                        </div>   
+                                                        <div id="append_course_material">
+                                                                
                                                         </div>
                                                     </div>
                                                 </div>
@@ -685,12 +705,6 @@
             return true;
         }
 
-        // function  () {
-        //     var x = document.getElementById("txtAge").value;
-        //     if (x < 1 || x > 20) {
-        //         alert("enter age between 1 to 20")
-        //     }
-        // }
         $(document).ready(function () {
 
             $('#timepicker').datetimepicker({
@@ -843,6 +857,45 @@
                     age--;
                 }
                 $('#age').val(age);
+            });
+
+            $(".getDeleteCourseId").on("select2:select select2:unselect", function (e) {
+                var lastSelectedItem = e.params.data.id;
+                $('.course_material').each(function() {
+                    var courseId = $(this).data('course-id');
+                    if(lastSelectedItem == courseId ){
+                        $(this).closest('div.form-check').remove();
+                    }
+                });
+            });
+        
+            //append course_material according to change meduim and course
+            $('body').on("change", ".medium-list, #course_id", function(){
+                $('#empty_course_material').empty();
+                $('#append_course_material').empty();
+                var medium_id = $('input[name="medium"]:checked').val();
+                var course_material_string = $('#course_material_string').val();
+                var course_id = $('.course_id option:selected').map(function () {
+                    return $(this).val();
+                }).get();
+
+                $.ajax({
+                    url : "{{ route('student.getCourseMaterialData') }}",
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('input[name="_token"]').val(),
+                    },
+                    data: {
+                        'course_id': course_id,
+                        'medium_id' : medium_id,
+                        'course_material_string' : course_material_string
+                    },
+                    success: function (data) {
+                        $('#append_course_material').append(data);
+                    },
+                    error: function (err) {
+                    }
+                });
             });
         });
 

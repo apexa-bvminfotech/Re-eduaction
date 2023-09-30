@@ -17,7 +17,6 @@ return new class extends Migration
             $table->dateTime('registration_date')->nullable()->after('form_no');
             $table->string('counselling_by')->nullable()->after('analysis_trainer_id');
             $table->text('stf')->nullable()->after('counselling_by');
-
         });
     }
 

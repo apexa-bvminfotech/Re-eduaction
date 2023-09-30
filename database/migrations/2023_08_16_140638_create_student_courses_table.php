@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('student_courses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('student_id')->constrained('students')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('course_id')->constrained('courses')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('course_id');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->timestamps();

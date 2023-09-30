@@ -25,7 +25,7 @@ return new class extends Migration {
             $table->string('email_id')->unique();
             $table->integer('marital_status');
             $table->string('course_id')->nullable();
-            $table->foreignId('branch_id')->nullable()->constrained('branches')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->unsignedBigInteger('branch_id');
             $table->string('emer_fullName');
             $table->string('emer_address');
             $table->string('emer_phone', 15);

@@ -30,7 +30,7 @@ Route::group(['middleware'=>['auth']],function (){
         //proxy-staff-route
         Route::get('/proxy-slot/{id}','StudentsController@proxySlot');
         Route::get('/get-leave-data/{id}','StudentsController@getLeaveData')->name('student.getLeaveData');
-        Route::get('/get-course-material-data/{id}/{medium_id}','StudentsController@getCourseMaterialData')->name('student.getCourseMaterialData');
+        Route::post('/get-course-material-data','StudentsController@getCourseMaterialData')->name('student.getCourseMaterialData');
 
         Route::get('/edit-student-approve-leave/{id}','StudentsController@proxySlot');
         Route::post('/proxy-staff', 'StudentsController@proxyStaff')->name('student.proxyStaff');

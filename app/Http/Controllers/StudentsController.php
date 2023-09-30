@@ -19,6 +19,7 @@ use App\Models\Trainer;
 use App\Models\StudentStaffAssign;
 use App\Models\StudentProxyStaffAssign;
 use App\Models\Student;
+use App\Models\StudentCourseMaterial;
 use App\Models\User;
 use App\Notifications\SendNotificationForStudentCourse;
 use Illuminate\Http\Request;
@@ -180,8 +181,17 @@ class StudentsController extends Controller
                 'user_id' => $user->id,
                 'appreciation_id' => $getAppreciation->id,
             ]);
-
         }
+        
+        if($request->course_material){
+            foreach($request->course_material as $material_id){
+                StudentCourseMaterial::create([
+                    'student_id' => $student->id,
+                    'course_material_id' => $material_id,
+                ]);
+            }
+        }
+
         return redirect()->route('student.index')->with('success', 'student created successfully');
     }
 
@@ -211,11 +221,23 @@ class StudentsController extends Controller
         $trainer = Trainer::where('is_active', 0)->orderBy('id')->get();
         $branch = Branch::orderBy('id', 'DESC')->get();
         $studentDmit = StudentDMIT::where('student_id', $id)->first();
+        $studentCourseId = [];
+        foreach($student->courses as $courseId){
+            $studentCourseId[] = $courseId->course_id;
+        }    
+        $courseWiseMaterial = CourseWiseMaterial::whereIn('course_id',$studentCourseId)->where('medium',$student->medium)->get(); 
+        $selectedMaterial = StudentCourseMaterial::
+            join('course_wise_materials', 'course_wise_materials.id','student_course_materials.course_material_id')
+            ->where('medium',$student->medium)
+            ->whereIn('course_id',$studentCourseId)
+            ->where('student_id', $id)->get();
+        $courseMaterialIds = $selectedMaterial->pluck('course_material_id')->toArray();
+        
         if(Auth::user()->type == 1) {
             $trainer = Trainer::orderBy('id')->where(['is_active' => 0, 'branch_id' => Auth::user()->branch_id])->get();
             $branch = Branch::where('id', Auth::user()->branch_id)->orderBy('id', 'DESC')->get();
         }
-        return view('student.edit', compact('student', 'role', 'course', 'trainer','branch', 'courseID', 'studentDmit'));
+        return view('student.edit', compact('student', 'role', 'course', 'trainer','branch', 'courseID', 'studentDmit','courseWiseMaterial','selectedMaterial','courseMaterialIds'));
     }
 
     public function update(Request $request, Student $student)
@@ -282,6 +304,7 @@ class StudentsController extends Controller
             'extra_tuition_time' => $tuition,
             'dob' => $request->dob,
             'age' => $request->age,
+            'course_material_id' => json_encode($request->course_material),
             'payment_condition' => $request->payment_condition,
             'counselling_by' => $request->counselling_by,
             'reference_by' => $request->reference_by,
@@ -294,22 +317,30 @@ class StudentsController extends Controller
             'upload_analysis' => $upload_analysis,
             'upload_student_image' => $upload_student_image,
         ]);
+
         if($request->course_id) {
+            $courseIds = StudentCourse::where('student_id', $student->id)->delete();
             foreach($request->course_id as $course_id){
-                $getAppreciation = Appreciation::where('course_id', $course_id)->first();
-                StudentCourse::updateOrCreate([
-                    'student_id' => $student->id,
-                    'course_id' => $course_id,
-                    'user_id' => $user->id,
-                ],[
+                $getAppreciation = Appreciation::where('course_id', $course_id)->first();       
+                StudentCourse::create([
                     'student_id' => $student->id,
                     'course_id' => $course_id,
                     'user_id' => $user->id,
                     'appreciation_id' => $getAppreciation->id,
                 ]);
-
             }
         }
+
+        if($request->course_material){
+            $courseMaterial = StudentCourseMaterial::where('student_id', $student->id)->delete();
+            foreach($request->course_material as $material_id){
+                StudentCourseMaterial::create([
+                    'student_id' => $student->id,
+                    'course_material_id' => $material_id,
+                ]);
+            }
+        }
+    
         $getDmit = $student->studentDmit;
         $getDmit->update([
             'student_id' => $student->id,
@@ -432,7 +463,6 @@ class StudentsController extends Controller
             'subCourse_point_before' => 'nullable|array',
         ]);
         if($request->subCourse_point_approve){
-            //            dd(array_keys($request->subCourse_point_approve));
             foreach ($request->subCourse_point_approve as $items){
                 foreach ($items as $key=>$item){
                     $studentCompleteCourse = StudentCourseComplete::find($key);
@@ -441,11 +471,6 @@ class StudentsController extends Controller
                         $studentCompleteCourse->save();
                     }
                 }
-//                $subCourseCompleted= StudentCourseComplete::whereNotIn('id',array_keys($items))->get();
-//                foreach ($subCourseCompleted as $item){
-//                    $item->status = 1;
-//                    $item->save();
-//                }
             }
         }
         else{
@@ -639,20 +664,6 @@ class StudentsController extends Controller
         return redirect()->route('student.index')->with('success', 'Student status change');
     }
 
-    public function getCourseMaterialData($course_id, $medium_id){
-        $material_data = [];
-        $data = CourseWiseMaterial::where(['course_id' => $course_id, 'medium' => $medium_id])->get();
-        foreach ($data as $d) {
-            $material_data[] = '<div class="form-check form-check-inline">
-                <input type="checkbox" value="'.$d->id.'" name="course_material" class="form-check medium-list">
-                    <label class="form-check-label" for="medium_gujarati">&nbsp;&nbsp;
-                        '. $d->material_name .'
-                    </label>
-            </div><br>';
-        }
-        return $material_data;
-    }
-
     public function studentAppreciation(Request $request)
     {
         $request->validate([
@@ -668,7 +679,30 @@ class StudentsController extends Controller
         ]);
 
         return redirect()->route('student.show',$studentId)->with('success', 'Appreciate Given Succesfully');
+    }
 
+    public function getCourseMaterialData(Request $request)
+    {
+        $material_data = [];
+        $course_id = $request->course_id;
+        $medium_id = $request->medium_id;
+        $course_material_string = explode(",",$request->course_material_string);
+        
+        $data = CourseWiseMaterial::whereIn('course_id',$course_id)->where('medium',$medium_id)->get();
+        foreach ($data as $d) {
+            $check = '';
+
+            if(in_array($d->id, $course_material_string)){
+                $check = 'checked="checked"';
+            }
+            $material_data[] = '<div class="form-check form-check-inline">
+                <input type="checkbox" value="'.$d->id.'" name="course_material[]" class="form-check course_material" id="course_material" data-course-id="'.$d->course_id.'" '.$check.'>
+                    <label class="form-check-label" for="medium_gujarati">&nbsp;&nbsp;
+                        '. $d->material_name .'
+                    </label>
+            </div><br>';
+        }
+        return $material_data;
     }
 }
 

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('student_dmit', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained('students')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->unsignedBigInteger('student_id');
             $table->integer('fp')->default(0);
             $table->date('fp_date')->nullable();
             $table->integer('report')->default(0);

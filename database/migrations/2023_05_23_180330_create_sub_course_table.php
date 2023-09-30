@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('sub_courses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('course_id')->constrained('courses')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->unsignedBigInteger('course_id');
             $table->string('sub_course_name');
             $table->timestamps();
         });

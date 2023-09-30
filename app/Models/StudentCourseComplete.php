@@ -17,12 +17,8 @@ class StudentCourseComplete extends Model
     public function student(){
         return $this->belongsTo(Student::class);
     }
-
-
     public function subCourses()
     {
         return $this->belongsToMany(SubCourse::class);
     }
-
-
 }

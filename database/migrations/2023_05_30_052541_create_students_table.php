@@ -43,7 +43,7 @@ return new class extends Migration
             $table->string('upload_analysis')->nullable();
             $table->string('upload_student_image')->nullable();
             $table->boolean('status')->default(1);
-            $table->foreignId('user_id')->constrained('users');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
         });
     }

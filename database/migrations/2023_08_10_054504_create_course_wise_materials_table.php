@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('course_wise_materials', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('course_id')->constrained('courses')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->unsignedBigInteger('course_id');
             $table->enum('medium', ['gujarati', 'hindi', 'english','gujlish','other']);
             $table->string('material_name');
             $table->timestamps();

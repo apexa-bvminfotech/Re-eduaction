@@ -137,6 +137,7 @@ class TrainerController extends Controller
             'other_allowance' => $request->other_allowance,
             'branch_id' => $request->input('branch_id'),
             'course_id' => json_encode($request->input('course_id')),
+            'course_wise_material_id' => json_encode($request->input('course_material')),
             'user_id' => $user->id,
             'photo' => $photo,
             'aadhaar_card' => $aadhaar_card,

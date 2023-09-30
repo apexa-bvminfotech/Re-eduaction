@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('students_attendance', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained('students');
+            $table->unsignedBigInteger('student_id');
             $table->boolean('attendance_type')->default(0);
-            $table->foreignId('user_id')->constrained('users');
+            $table->unsignedBigInteger('user_id');
             $table->date('attendance_date');
             $table->string('absent_reason')->nullable();
             $table->timestamps();

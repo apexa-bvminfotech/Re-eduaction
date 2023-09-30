@@ -196,10 +196,10 @@
                                                             <label for="medium">Medium:</label>
                                                             <br>
                                                             <div class="form-check form-check-inline">
-                                                                <input type="checkbox" value="gujarati"
+                                                                <input type="checkbox" value="gujarati" 
                                                                        {{ old("medium") === 'gujarati' ? 'checked' : '' }}
                                                                        name="medium"
-                                                                       class="form-check medium-list">
+                                                                       class="form-check medium-list" id="medium-list">
                                                                 <label class="form-check-label"
                                                                        for="medium_gujarati">&nbsp;&nbsp;
                                                                     Gujarati
@@ -208,7 +208,7 @@
                                                             <div class="form-check form-check-inline">
                                                                 <input type="checkbox" value="hindi"
                                                                        {{ old("medium") === 'hindi' ? 'checked' : '' }} name="medium"
-                                                                       class="form-check-input medium-list">
+                                                                       class="form-check-input medium-list" id="medium-list">
                                                                 <label class="form-check-label" for="medium_hindi">
                                                                     Hindi
                                                                 </label>
@@ -216,7 +216,7 @@
                                                             <div class="form-check form-check-inline">
                                                                 <input type="checkbox" value="english"
                                                                        {{ old("medium") === 'english' ? 'checked' : '' }} name="medium"
-                                                                       class="form-check-input medium-list">
+                                                                       class="form-check-input medium-list" id="medium-list">
                                                                 <label class="form-check-label"
                                                                        for="medium_english">
                                                                     English
@@ -225,7 +225,7 @@
                                                             <div class="form-check form-check-inline">
                                                                 <input type="checkbox" value="gujlish"
                                                                        {{ old("medium") === 'gujlish' ? 'checked' : '' }} name="medium"
-                                                                       class="form-check-input medium-list">
+                                                                       class="form-check-input medium-list" id="medium-list">
                                                                 <label class="form-check-label"
                                                                        for="medium_gujlish">
                                                                     Gujlish
@@ -234,7 +234,7 @@
                                                             <div class="form-check form-check-inline">
                                                                 <input type="checkbox" value="other"
                                                                        {{ old("medium") === 'other' ? 'checked' : '' }} name="medium"
-                                                                       class="form-check-input medium-list">
+                                                                       class="form-check-input medium-list" id="medium-list">
                                                                 <label class="form-check-label"
                                                                        for="medium_other">
                                                                     Other
@@ -377,12 +377,12 @@
                                                             @enderror
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6 mb-1">
+                                                    <div class="col-md-6 mb-1" >
                                                         <div class="form-group">
                                                             <label for="course_name">Course Name:</label>
                                                             <br>
-                                                            <select name="course_id[]" multiple="" class="form-control select2" id="course_id"
-                                                                    required>
+                                                            <select name="course_id[]" multiple="" class="form-control select2 course_id" id="course_id"
+                                                                    required disabled>
                                                                 <option value="">----- Course Name -----</option>
                                                                 @foreach($course as $key=>$c)
                                                                     <option
@@ -398,7 +398,7 @@
                                                         <div class="form-group">
                                                             <label for="course_material">Course Material</label><br>
                                                             <div id="course_material">
-
+                                                                
                                                             </div>
                                                         </div>
                                                     </div>
@@ -674,112 +674,112 @@
             var form = $('#quickForm');
             var validator = form.validate({
                 rules: {
-                    // surname: {
-                    //     required: true,
-                    //     maxlength: 255,
-                    // },
-                    // name: {
-                    //     required: true,
-                    //     maxlength: 255,
-                    // },
-                    // father_name: {
-                    //     required: true,
-                    // },
-                    // address: {
-                    //     required: true,
-                    // },
-                    // gender: {
-                    //     required: true,
-                    // },
-                    // father_contact_no: {
-                    //     required: true,
-                    // },
-                    // mother_contact_no: {
-                    //     required: true,
-                    // },
-                    // standard: {
-                    //     required: true,
-                    // },
-                    // medium: {
-                    //     required: true,
-                    // },
-                    // school_name: {
-                    //     required: true,
-                    // },
-                    // school_time_to: {
-                    //     required: true,
-                    // },
-                    // school_time_from: {
-                    //     required: true,
-                    // },
-                    // extra_tuition_time_to: {
-                    //     required: true,
-                    // },
-                    // extra_tuition_time_from: {
-                    //     required: true,
-                    // },
-                    // dob: {
-                    //     required: true,
-                    // },
-                    // age: {
-                    //     required: true,
-                    // },
-                    // course_id: {
-                    //     required: true,
-                    // },
+                    surname: {
+                        required: true,
+                        maxlength: 255,
+                    },
+                    name: {
+                        required: true,
+                        maxlength: 255,
+                    },
+                    father_name: {
+                        required: true,
+                    },
+                    address: {
+                        required: true,
+                    },
+                    gender: {
+                        required: true,
+                    },
+                    father_contact_no: {
+                        required: true,
+                    },
+                    mother_contact_no: {
+                        required: true,
+                    },
+                    standard: {
+                        required: true,
+                    },
+                    medium: {
+                        required: true,
+                    },
+                    school_name: {
+                        required: true,
+                    },
+                    school_time_to: {
+                        required: true,
+                    },
+                    school_time_from: {
+                        required: true,
+                    },
+                    extra_tuition_time_to: {
+                        required: true,
+                    },
+                    extra_tuition_time_from: {
+                        required: true,
+                    },
+                    dob: {
+                        required: true,
+                    },
+                    age: {
+                        required: true,
+                    },
+                    course_id: {
+                        required: true,
+                    },
                 },
                 messages: {
-                    // surname: {
-                    //     required: "Please enter a surname ",
-                    // },
-                    // name: {
-                    //     required: "Please enter a name ",
-                    // },
-                    // father_name: {
-                    //     required: "Please enter a father name ",
-                    // },
-                    // address: {
-                    //     required: "Please enter a address ",
-                    // },
-                    // gender: {
-                    //     required: "Please select a gender ",
-                    // },
-                    // father_contact_no: {
-                    //     required: "Please enter a father_contact_no ",
-                    // },
-                    // mother_contact_no: {
-                    //     required: "Please enter a mother_contact_no ",
-                    // },
-                    // standard: {
-                    //     required: "Please enter a standard ",
-                    // },
-                    // medium: {
-                    //     required: "Please select a medium ",
-                    // },
-                    // school_name: {
-                    //     required: "Please enter a school_name ",
-                    // },
-                    // school_time_to: {
-                    //     required: "Please enter a school_time ",
-                    // },
-                    // school_time_from: {
-                    //     required: "Please enter a school_time ",
-                    // },
-                    // extra_tuition_time_to: {
-                    //     required: "Please enter a Tuition_time ",
-                    // },
-                    // extra_tuition_time_from: {
-                    //     required: "Please enter a Tuition_time ",
-                    // },
-                    // dob: {
-                    //     required: "Please enter a dob ",
-                    // },
-                    // age: {
-                    //     required: "Please enter a age ",
-                    // },
-                    // course_id: {
-                    //     required: "Please enter a course_id ",
-                    // },
+                    surname: {
+                        required: "Please enter a surname ",
+                    },
+                    name: {
+                        required: "Please enter a name ",
+                    },
+                    father_name: {
+                        required: "Please enter a father name ",
+                    },
+                    address: {
+                        required: "Please enter a address ",
+                    },
+                    gender: {
+                        required: "Please select a gender ",
+                    },
+                    father_contact_no: {
+                        required: "Please enter a father_contact_no ",
+                    },
+                    mother_contact_no: {
+                        required: "Please enter a mother_contact_no ",
+                    },
+                    standard: {
+                        required: "Please enter a standard ",
+                    },
+                    medium: {
+                        required: "Please select a medium ",
+                    },
+                    school_name: {
+                        required: "Please enter a school_name ",
+                    },
+                    school_time_to: {
+                        required: "Please enter a school_time ",
+                    },
+                    school_time_from: {
+                        required: "Please enter a school_time ",
+                    },
+                    extra_tuition_time_to: {
+                        required: "Please enter a Tuition_time ",
+                    },
+                    extra_tuition_time_from: {
+                        required: "Please enter a Tuition_time ",
+                    },
+                    dob: {
+                        required: "Please enter a dob ",
+                    },
+                    age: {
+                        required: "Please enter a age ",
+                    },
+                    course_id: {
+                        required: "Please enter a course_id ",
+                    },
                 },
                 errorElement: 'span',
                 errorPlacement: function (error, element) {
@@ -845,30 +845,35 @@
                 $('#age').val(age);
             });
 
-            $('#course_id').on('change', function() {
-                var course_id = $(this).val();
-                var title = $( "#course_id option:selected" ).text();
+            $('.medium-list').on('change', function(){
+                $('#course_id').prop("disabled", false);
+            });
+
+            //append course_material according to change meduim and course
+            $('body').on("change", ".medium-list, #course_id", function(){
+                $('#course_material').empty(); 
                 var medium_id = $('input[name="medium"]:checked').val();
-                if (course_id && typeof (medium_id) == 'undefined') {
+                var course_id = $('.course_id option:selected').map(function () {
+                    return $(this).val();
+                }).get();
 
-                    $(this).find("option").prop("disabled", true);
-                }
-                // if(typeof (medium_id) == 'undefined') {
-                //     alert("Please select medium");
-                //     // $('li[title="'+title+'"]').remove();
-                //     $('li[title="'+title+'"] span').click;
-                // }
-                // $.ajax({
-                //     url : "get-course-material-data/" + course_id + "/" + medium_id,
-                //     type: 'GET',
-                //     success: function (data) {
-                //         console.log(data);
-                //         $('#course_material').append(data);
-                //     }
-                // });
-            })
-
-
+                $.ajax({
+                    url : "{{ route('student.getCourseMaterialData') }}",
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('input[name="_token"]').val(),
+                    },
+                    data: {
+                        'course_id': course_id,
+                        'medium_id' : medium_id
+                    },
+                    success: function (data) {
+                        $('#course_material').append(data);
+                    },
+                    error: function (err) {
+                    }
+                });
+            });
         });
 
     </script>

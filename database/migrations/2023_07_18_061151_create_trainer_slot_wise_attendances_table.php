@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('trainer_slot_wise_attendances', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('trainer_attendance_id')->constrained('trainer_attendances')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('slot_id')->constrained('slots')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->unsignedBigInteger('trainer_attendance_id');
+            $table->unsignedBigInteger('slot_id');
             $table->boolean('status');
             $table->string('absent_reason')->nullable();
             $table->timestamps();

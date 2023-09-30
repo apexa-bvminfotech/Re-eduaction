@@ -13,14 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('slots', function (Blueprint $table) {
+        Schema::create('student_course_materials', function (Blueprint $table) {
             $table->id();
-            $table->string('slot_time');
-            $table->unsignedBigInteger('trainer_id')->nullable();
-            $table->unsignedBigInteger('rtc_id')->nullable();
-            $table->unsignedBigInteger('branch_id')->nullable();
-            $table->string('whatsapp_group_name')->nullable();
-            $table->boolean('is_active')->default(0);
+            $table->unsignedBigInteger('course_material_id');
             $table->timestamps();
         });
     }
@@ -32,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('slots');
+        Schema::dropIfExists('student_course_materials');
     }
 };

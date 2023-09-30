@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('students_attendance', function (Blueprint $table) {
-                $table->foreignId('trainer_id')->constrained('trainers')->after('student_id');
-                $table->foreignId('slot_id')->constrained('slots')->after('trainer_id');
+                $table->unsignedBigInteger('trainer_id');
+                $table->unsignedBigInteger('slot_id');
                 $table->enum('slot_type',['Regular','Proxy'])->after('slot_id');
         });
     }
