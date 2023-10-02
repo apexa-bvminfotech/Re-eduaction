@@ -350,7 +350,7 @@
 
                                                     @php
                                                         $seperateJoinDate = explode(',', $trainer->joining_date);
-//                                                  @endphp
+                                                    @endphp
                                                     <div class="col-md-6">
                                                         <label for="simpleinput">Joining Date:</label>
                                                         <div class="row mb-3">
@@ -697,8 +697,9 @@
                                                     </div>
                                                 </div>
                                                 <textarea cols="5" id="summernote" name="terms_conditions_detail" value="{{ old('terms_conditions_detail',$trainer->terms_conditions_detail) }}">{{ $trainer->terms_conditions_detail }}</textarea>
-
-
+                                                @error('terms_conditions_detail')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror                                
                                                 <button type="submit" name="submit"
                                                         class="btn btn-success float-right next-btn  ml-2">
                                                     Update
@@ -774,11 +775,7 @@
                     },
                     terms_conditions: {
                         required: true,
-                    },
-                    terms_conditions_detail: {
-                        required: true,
                     }
-
                 },
                 messages: {
                     surname: {
@@ -822,9 +819,6 @@
                     },
                     terms_conditions: {
                         required: 'Please read terms and condition and select this checkbox for submit data',
-                    },
-                    terms_conditions_detail: {
-                        required: 'Please Add terms and condition',
                     }
                 },
                 errorElement: 'span',

@@ -97,9 +97,10 @@ class StudentsController extends Controller
         $upload_student_image = null;
         if ($request->upload_student_image) {
             $filename = $request->name . '_' . date_default_timezone_get() . '.' . $request->upload_student_image->getClientOriginalExtension();
-            $request->upload_student_image->move(public_path('assets/student'), $filename);
-            $upload_student_image = 'assets/student' . '/' . $filename;
+            $request->upload_student_image->move(public_path('assets/student/images'), $filename);
+            $upload_student_image = $filename;
         }
+
         $user = User::Create([
             'name' => $request->name,
             'surname' => $request->surname,
@@ -117,9 +118,10 @@ class StudentsController extends Controller
         $upload_analysis = null;
         if ($request->upload_analysis) {
             $filename = $request->name . '-' . $request->upload_analysis->getClientOriginalExtension();
-            $request->upload_analysis->move(public_path('assets/student'), $filename);
-            $upload_analysis = 'assets/student' . '/' . $filename;
+            $request->upload_analysis->move(public_path('assets/student/pdf'), $filename);
+            $upload_analysis = $filename;
         }
+        
         $time = $request->input('school_time_to') . " - " . $request->input('school_time_from');
         $tuition = $request->input('extra_tuition_time_to') . "-" . $request->input('extra_tuition_time_from');
 
@@ -260,12 +262,22 @@ class StudentsController extends Controller
             'dob' => 'required',
             'age' => 'required',
         ]);
+
         $upload_student_image = $student->upload_student_image;
-        if ($request->upload_student_image) {
-            $filename = $request->upload_student_image->getClientOriginalName();
-            $request->upload_student_image->move('assets/student/images', $filename);
-            $upload_student_image = $filename;
+        if ($request->hasFile('upload_student_image')) {
+            if ($upload_student_image) {
+                // Delete old profile image if exists
+                $existingFilePath = public_path('assets/student/images/' . $upload_student_image);
+                if (file_exists($existingFilePath)) {
+                    unlink($existingFilePath);
+                }
+                // Upload new profile image
+                $filename = $request->upload_student_image->getClientOriginalName();
+                $request->upload_student_image->move('assets/student/images', $filename);
+                $upload_student_image = $filename;
+            }
         }
+
         $user = $student->user;
         $user->update([
             'name' => $request->name,
@@ -277,12 +289,22 @@ class StudentsController extends Controller
             'type' => 2,
         ]);
 
+        
         $upload_analysis = $student->upload_analysis;
-        if ($request->upload_analysis) {
-            $filename = $request->name . '-' . $request->upload_analysis->getClientOriginalExtension();
-            $request->upload_analysis->move(public_path('assets/student/pdf'), $filename);
-            $upload_analysis = 'assets/student/pdf/' . $filename;
+        if ($request->hasFile('upload_analysis')) {
+            if ($upload_analysis) {
+                // Delete old pdf if exists
+                $existingFilePath = public_path('assets/student/pdf/' . $upload_analysis);
+                if (file_exists($existingFilePath)) {
+                    unlink($existingFilePath);
+                }
+                // Upload new pdf
+                $filename = $request->name . '-' . $request->upload_analysis->getClientOriginalExtension();
+                $request->upload_analysis->move(public_path('assets/student/pdf'), $filename);
+                $upload_analysis = $filename;
+            }
         }
+
         $time = $request->input('school_time_to') . " - " . $request->input('school_time_from');
         $tuition = $request->input('extra_tuition_time_to') . "-" . $request->input('extra_tuition_time_from');
         $user->assignRole($request->input('role'));

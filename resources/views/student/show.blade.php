@@ -107,7 +107,7 @@
                                                 </tr>
                                                 <tr>
                                                     <th><b>Student Analysis PDF:</b></th>
-                                                    <td><a href="{{asset('assets/student/images/'. $student->upload_student_image )}}" download="">
+                                                    <td><a href="{{asset('assets/student/pdf/'. $student->upload_analysis )}}" download="">
                                                             <button class="btn btn-success">Download  <i class="fa fa-file-pdf"></i></button>
                                                         </a>
                                                     </td>

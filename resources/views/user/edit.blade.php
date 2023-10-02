@@ -33,7 +33,6 @@
                                             <label class="custom-file-label" for="customFile">Choose Profile Photo</label>
                                         </div>
                                         <img src="{{asset('assets/user/' . $user->user_profile)}}" width="100" height="100">
-
                                     </div>
                                 </div>
                                 <div class="form-group row">

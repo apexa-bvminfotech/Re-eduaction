@@ -568,7 +568,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="card-body">
-                                                <textarea id="summernote" name="terms_conditions_detail" required="required">{{ old('terms_conditions_detail') }}</textarea>
+                                                <textarea id="summernote" name="terms_conditions_detail" >{{ old('terms_conditions_detail') }}</textarea>
                                                 @error('terms_conditions_detail')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -590,7 +590,7 @@
 @push('scripts')
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#summernote').summernote({quickForm
+            $('#summernote').summernote({
                 height: 250
             });
             var form = $('#quickForm');
@@ -654,10 +654,6 @@
                     terms_conditions: {
                         required: true,
                     },
-                    terms_conditions_detail: {
-                        required: true,
-                    }
-
                 },
                 messages: {
                     surname: {
@@ -713,9 +709,6 @@
                     },
                     terms_conditions: {
                         required: 'Please read terms and condition and select this checkbox for submit data',
-                    },
-                    terms_conditions_detail: {
-                        required: 'Please Add terms and condition',
                     }
                 },
                 errorElement: 'span',

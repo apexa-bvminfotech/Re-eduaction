@@ -57,7 +57,6 @@ class TrainerController extends Controller
             'last_edu_markSheet' => 'required',
             'bank_passbook' => 'required',
             'terms_conditions' => 'required',
-            'terms_conditions_detail'=> 'required',
             'is_active' => 'required',
         ]);
 
@@ -195,14 +194,23 @@ class TrainerController extends Controller
             'last_edu_markSheet' => 'nullable',
             'bank_passbook' => 'nullable',
             'terms_conditions' => 'required',
-            'terms_conditions_detail'=> 'required',
         ]);
+    
         $photo = $trainer->photo;
-        if ($request->photo) {
-            $filename = $request->photo->getClientOriginalName();
-            $request->photo->move('assets/trainer', $filename);
-            $photo = $filename;
+        if ($request->hasFile('photo')) {
+            if ($photo) {
+                // Delete old photo if exists
+                $existingFilePath = public_path('assets/trainer/' . $photo);
+                if (file_exists($existingFilePath)) {
+                    unlink($existingFilePath);
+                }
+                // Upload new photo
+                $filename = $request->photo->getClientOriginalName();
+                $request->photo->move('assets/trainer', $filename);
+                $photo = $filename;
+            }
         }
+
         $user = $trainer->user;
         $user->update([
             'surname' => $request->surname,
@@ -224,22 +232,48 @@ class TrainerController extends Controller
         }
 
         $aadhaar_card = $trainer->aadhaar_card;
-        if ($request->aadhaar_card) {
-            $filename = $request->aadhaar_card->getClientOriginalName();
-            $request->aadhaar_card->move('assets/trainer', $filename);
-            $aadhaar_card = $filename;
+        if ($request->hasFile('aadhaar_card')) {
+            if ($aadhaar_card) {
+                // Delete old adhar card if exists
+                $existingFilePath = public_path('assets/trainer/' . $aadhaar_card);
+                if (file_exists($existingFilePath)) {
+                    unlink($existingFilePath);
+                }
+                // Upload new adhar card
+                $filename = $request->aadhaar_card->getClientOriginalName();
+                $request->aadhaar_card->move('assets/trainer', $filename);
+                $aadhaar_card = $filename;
+            }
         }
+
         $last_edu_markSheet = $trainer->last_edu_markSheet;
-        if ($request->last_edu_markSheet) {
-            $filename = $request->last_edu_markSheet->getClientOriginalName();
-            $request->last_edu_markSheet->move('assets/trainer', $filename);
-            $last_edu_markSheet = $filename;
+        if ($request->hasFile('last_edu_markSheet')) {
+            if ($aadhaar_card) {
+                // Delete old last education marksheet if exists
+                $existingFilePath = public_path('assets/trainer/' . $last_edu_markSheet);
+                if (file_exists($existingFilePath)) {
+                    unlink($existingFilePath);
+                }
+                // Upload new last education marksheet
+                $filename = $request->last_edu_markSheet->getClientOriginalName();
+                $request->last_edu_markSheet->move('assets/trainer', $filename);
+                $last_edu_markSheet = $filename;
+            }
         }
+
         $bank_passbook = $trainer->bank_passbook;
-        if ($request->bank_passbook) {
-            $filename = $request->bank_passbook->getClientOriginalName();
-            $request->bank_passbook->move('assets/trainer', $filename);
-            $bank_passbook = $filename;
+        if ($request->hasFile('bank_passbook')) {
+            if ($bank_passbook) {
+                // Delete old bank passbook if exists
+                $existingFilePath = public_path('assets/trainer/' . $bank_passbook);
+                if (file_exists($existingFilePath)) {
+                    unlink($existingFilePath);
+                }
+                // Upload new bank passbook
+                $filename = $request->bank_passbook->getClientOriginalName();
+                $request->bank_passbook->move('assets/trainer', $filename);
+                $bank_passbook = $filename;
+            }
         }
 
         $trainer->update([
@@ -287,7 +321,6 @@ class TrainerController extends Controller
             'last_edu_markSheet' => $last_edu_markSheet,
             'bank_passbook' => $bank_passbook,
             'terms_conditions' => $request->terms_conditions,
-            'terms_conditions_detail' => $request->terms_conditions_detail,
             'is_active' => $request->is_active,
         ]);
 

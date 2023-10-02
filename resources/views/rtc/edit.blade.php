@@ -31,7 +31,7 @@
                                             <option value="">Select Branch</option>
                                             @foreach($branch as $key => $b)
                                                 <option
-                                                    value="{{ $b->id }}" {{ $b->id == $rtc->id ? "selected" : "" }}>{{ $b->name }}</option>
+                                                    value="{{ $b->id }}" {{ $b->id == $rtc->branch_id ? "selected" : "" }}>{{ $b->name }}</option>
                                                 </option>
                                             @endforeach
                                         </select>

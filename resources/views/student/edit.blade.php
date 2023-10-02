@@ -666,7 +666,7 @@
                                                                        placeholder="enter pdf">
                                                                 <label class="custom-file-label" for="customFile">Choose
                                                                     file</label>
-                                                                <a href="{{asset($student->upload_analysis)}}">{{( str_replace("assets/student/pdf/","",$student->upload_analysis))}}</a>
+                                                                <a href="{{asset('assets/student/pdf/'. $student->upload_analysis )}}">{{( str_replace("assets/student/pdf/","",$student->upload_analysis))}}</a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -741,11 +741,9 @@
                     },
                     father_contact_no: {
                         required: true,
-                        phoneUS: true,
                     },
                     mother_contact_no: {
                         required: true,
-                        phoneUS: true,
                     },
                     standard: {
                         required: true,

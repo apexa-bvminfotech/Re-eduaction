@@ -31,7 +31,7 @@
          <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle text-muted pr-0" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <span class="avatar avatar-sm mt-2">
-                <img src="{{asset('assets/img/pngImage.png')}}" alt="..." class="avatar-img rounded-circle" style="border-radius: 10px;width: 30px;height: 30px;">
+                <img src="{{ asset('assets/user/'. Auth::user()->user_profile ) }}" alt="..." class="avatar-img rounded-circle" style="border-radius: 10px;width: 30px;height: 30px;">
               </span>
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
