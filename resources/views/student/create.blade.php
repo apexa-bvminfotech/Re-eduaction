@@ -396,7 +396,7 @@
                                                     </div>
                                                     <div class="col-md-6 mb-1">
                                                         <div class="form-group">
-                                                            <label for="course_material">Course Material</label><br>
+                                                            <label for="course_material">Course Material: </label><br>
                                                             <div id="course_material">
                                                                 
                                                             </div>

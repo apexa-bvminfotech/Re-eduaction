@@ -94,7 +94,10 @@
                                 <div class="form-group row">
                                     <label for="inputtext" class="col-sm-3 col-form-label">Whatsapp Group Name:</label>
                                     <div class="col-sm-9">
-                                        <input type="text" name="whatsapp_group_name" class="form-control" value="{{$slot->whatsapp_group_name}}">
+                                        <input type="text" name="whatsapp_group_name" placeholder="Enter whatsapp group name"  class="form-control" value="{{$slot->whatsapp_group_name}}" required>
+                                        @error('whatsapp_group_name')
+                                            <span class="text-danger">{{$message}}</span>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">

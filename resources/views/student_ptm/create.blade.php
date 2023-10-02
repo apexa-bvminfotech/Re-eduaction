@@ -21,7 +21,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card card-primary">
-                            {!! Form::open(array('route' => 'student_ptm.store','method'=>'POST')) !!}
+                            {!! Form::open(array('route' => 'student_ptm.store','method'=>'POST', 'id' => 'quickForm')) !!}
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-4 mb-1">
@@ -33,18 +33,24 @@
                                                     <option value="{{ $b->id }}" {{old('student_id') == $b->id?'selected':''}}>{{ $b->name }}</option>
                                                 @endforeach
                                             </select>
+                                            @error('student_id')
+                                                <span class="text-danger">{{$message}}</span>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-md-4 mb-1">
                                         <div class="form-group">
                                             <label for="name">Trainer</label>
                                             <select class="form-control select2"
-                                                    name="trainer_id">
+                                                    name="trainer_id" required>
                                                 <option value="">Select Trainer</option>
                                                 @foreach($trainers as $key => $b)
                                                     <option value="{{ $b->id }}" {{old('trainers_id') == $b->id?'selected':''}}>{{ $b->name }}</option>
                                                 @endforeach
                                             </select>
+                                            @error('trainer_id')
+                                                <span class="text-danger">{{$message}}</span>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-md-4 mb-2">
@@ -54,7 +60,7 @@
                                                    placeholder="enter birthdate"
                                                    value="{{ old('dob',date('Y-m-d')) }}" id="dob">
                                             @error('date')
-                                            <span class="text-danger">{{$message}}</span>
+                                                <span class="text-danger">{{$message}}</span>
                                             @enderror
                                         </div>
                                     </div>
@@ -72,7 +78,7 @@
                                             <label>Next Month's Plan</label>
                                             <textarea id="summernote2" name="next_month_plan" >{{ old('next_month_plan') }}</textarea>
                                             @error('next_month_plan')
-                                            <span class="text-danger">{{$message}}</span>
+                                                <span class="text-danger">{{$message}}</span>
                                             @enderror
                                         </div>
                                     </div>
@@ -81,7 +87,7 @@
                                             <label >Suggestion to Parents</label>
                                             <textarea id="summernote3" name="suggestion_to_parents">{{ old('suggestion_to_parents') }}</textarea>
                                             @error('suggestion_to_parents')
-                                            <span class="text-danger">{{$message}}</span>
+                                                <span class="text-danger">{{$message}}</span>
                                             @enderror
                                         </div>
                                     </div>
@@ -90,7 +96,7 @@
                                             <label >Suggestion by Parents</label>
                                             <textarea id="summernote4" name="suggestion_by_parents">{{ old('suggestion_by_parents') }}</textarea>
                                             @error('suggestion_by_parents')
-                                            <span class="text-danger">{{$message}}</span>
+                                                <span class="text-danger">{{$message}}</span>
                                             @enderror
                                         </div>
                                     </div>
@@ -123,6 +129,43 @@
             });
             $('#summernote4').summernote({
                 height: 200
+            });
+
+            var form = $('#quickForm');
+            var validator = form.validate({
+                rules : {
+                    date : {
+                        required: true,
+                    },
+                    student_id : {
+                        required: true,
+                    },
+                    trainer_id : {
+                        required: true,
+                    }
+                },
+                messages: {
+                    date: {
+                        required: 'Please select Date',
+                    },
+                    student_id: {
+                        required: 'Please select Student ',
+                    },
+                    trainer_id: {
+                        required: 'Please select Trainer ',
+                    }
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).closest('.form-check').addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
             });
         });
     </script>

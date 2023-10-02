@@ -60,6 +60,12 @@ class StudentPTMController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'date' => 'required|unique:student_ptm_report,date',
+            'student_id' => 'required',
+            'trainer_id' => 'required'
+        ]);
+
         $existRecord = StudentPtm::where('student_id', $request->student_id)
             ->where('date' ,'=', $request->date)
             ->first();
@@ -134,6 +140,11 @@ class StudentPTMController extends Controller
      */
     public function update(Request $request, $ptm)
     {
+        $request->validate([
+            'date' => 'required',
+            'student_id' => 'required',
+            'trainer_id' => 'required'
+        ]);
 
         $existRecord = StudentPtm::where('student_id', $request->student_id)
             ->where('date' , $request->date)

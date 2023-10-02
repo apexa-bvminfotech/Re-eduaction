@@ -88,7 +88,6 @@ class SlotController extends Controller
             'slot_time' => $time,
             'is_active' => $request->input('is_active'),
         ];
-//        dd($data);
         Slot::create($data);
         return redirect()->route('slot.index')
             ->with('success', 'Slot created successfully');

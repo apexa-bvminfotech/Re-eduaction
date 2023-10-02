@@ -21,7 +21,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card card-primary">
-                            {!! Form::model($ptmData, ['method' => 'PATCH','route' => ['student_ptm.update', $ptmData->id]]) !!}
+                            {!! Form::model($ptmData, ['method' => 'PATCH', 'route' => ['student_ptm.update', $ptmData->id], 'id' => 'quickForm']) !!}
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-4 mb-1">
@@ -33,6 +33,9 @@
                                                     <option value="{{ $b->id }}" {{$ptmData->student_id == $b->id?'selected':''}}>{{ $b->name }}</option>
                                                 @endforeach
                                             </select>
+                                            @error('student_id')
+                                                <span class="text-danger">{{$message}}</span>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-md-4 mb-1">
@@ -45,6 +48,9 @@
                                                     <option value="{{ $b->id }}" {{$ptmData->trainer_id == $b->id?'selected':''}}>{{ $b->name }}</option>
                                                 @endforeach
                                             </select>
+                                            @error('trainer_id')
+                                                <span class="text-danger">{{$message}}</span>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-md-4 mb-2">
@@ -98,7 +104,7 @@
                             </div>
 
                             <div class="card-footer justify-content-end d-flex" >
-                                <button type="submit" class="btn btn-primary mr-2">Edit</button>
+                                <button type="submit" class="btn btn-primary mr-2">Update</button>
                                 <a href="{{ route('student_ptm.index') }}" class="btn btn-danger">Cancel</a>
                             </div>
                             {!! Form::close() !!}
@@ -123,6 +129,43 @@
             });
             $('#summernote4').summernote({
                 height: 200
+            });
+
+            var form = $('#quickForm');
+            var validator = form.validate({
+                rules : {
+                    date : {
+                        required: true,
+                    },
+                    student_id : {
+                        required: true,
+                    },
+                    trainer_id : {
+                        required: true,
+                    }
+                },
+                messages: {
+                    date: {
+                        required: 'Please select Date',
+                    },
+                    student_id: {
+                        required: 'Please select Student ',
+                    },
+                    trainer_id: {
+                        required: 'Please select Trainer ',
+                    }
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).closest('.form-check').addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
             });
         });
     </script>
