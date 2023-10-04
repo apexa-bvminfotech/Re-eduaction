@@ -29,14 +29,13 @@ class Slot extends Model
     public function branch(){
         return $this->belongsTo(Branch::class);
     }
-    public function studentAssign()
-    {
+    public function studentAssign(){
         return $this->hasOne(StudentStaffAssign::class);
     }
-
-    public function slotList()
-    {
+    public function slotList(){
         return $this->hasMany(StudentStaffAssign::class);
     }
-
+    public function proxySlotlist(){
+        return $this->hasMany(StudentProxyStaffAssign::class);
+    }
 }

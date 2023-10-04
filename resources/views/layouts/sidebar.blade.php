@@ -104,17 +104,53 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{route('trainer_wise_student_report.index')}}" class="nav-link">
+                            <a href="{{ route('report.trainer-wise-student-rtc-slot') }}" class="nav-link @if(Route::currentRouteName() == 'report.trainer-wise-student-rtc-slot')active  @endif">
                                 <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
                                 <p>Trainer wise student/RTC/slot</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{route('trainer_attendance.index')}}" class="nav-link @if(Route::currentRouteName() == 'trainer_attendance.index')active  @endif">
+                            <a href="{{ route('report.course-wise-student-list') }}" class="nav-link @if(Route::currentRouteName() == 'report.course-wise-student-list')active  @endif">
                                 <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
-                                <p>Trainer Attendance</p>
+                                <p>Course wise Student List</p>
                             </a>
-                        </li>
+                        </li> 
+                        <li class="nav-item">
+                            <a href="{{ route('report.student-list') }}" class="nav-link @if(Route::currentRouteName() == 'report.reports-student-list')active  @endif">
+                                <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
+                                <p>Student List</p>
+                            </a>
+                        </li> 
+                        <li class="nav-item">
+                            <a href="{{ route('report.pending-appreciation-student-list') }}" class="nav-link @if(Route::currentRouteName() == 'report.pending-appreciation-student-list')active  @endif">
+                                <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
+                                <p>Pending appreciation Student List</p>
+                            </a>
+                        </li> 
+                        <li class="nav-item">
+                            <a href="{{ route('report.pending-course-student-list') }}" class="nav-link @if(Route::currentRouteName() == 'report.pending-course-student-list')active  @endif">
+                                <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
+                                <p>Pending Course Student List</p>
+                            </a>
+                        </li> 
+                        <li class="nav-item">
+                            <a href="{{ route('report.student-list-with-course-detail') }}" class="nav-link @if(Route::currentRouteName() == 'report.course-wise-student-list')active  @endif">
+                                <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
+                                <p>Student List with Course Detail</p>
+                            </a>
+                        </li>  
+                        <li class="nav-item">
+                            <a href="{{ route('report.pending-counselling-student-list') }}" class="nav-link @if(Route::currentRouteName() == 'report.pending-counselling-student-list')active  @endif">
+                                <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
+                                <p>Pending Counselling Student List</p>
+                            </a>
+                        </li> 
+                        <li class="nav-item">
+                            <a href="{{ route('report.pending-material-list-student-list') }}" class="nav-link @if(Route::currentRouteName() == 'report.pending-material-list-student-list')active  @endif">
+                                <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
+                                <p>Pending Material List Student List</p>
+                            </a>
+                        </li> 
                     </ul>
                 </li>
             </ul>

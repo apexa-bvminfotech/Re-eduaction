@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ReportController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -39,6 +41,7 @@ Route::group(['middleware'=>['auth']],function (){
         Route::post('/edit-student-leave-approve','StudentsController@editStudentLeaveApprove')->name('student.editStudentLeaveApprove');
         Route::post('/change-student-status','StudentsController@ChangeStudentStatus')->name('student.ChangeStudentStatus');
         Route::post('/student-appreciation','StudentsController@studentAppreciation')->name('student.studentAppreciation');
+        Route::get('/update-course-start-end-date/{student_id}/{course_id}/{task}','StudentsController@updateCourseStartEndDate')->name('student.updateCourseStartEndDate');
     });
     Route::resource('roles', 'RoleController');
     Route::resource('trainer', 'TrainerController');
@@ -62,5 +65,15 @@ Route::group(['middleware'=>['auth']],function (){
     Route::get('get-trainer-data','SlotController@gettrainerdata')->name('get-trainer-data');
     Route::get('myprofile', 'UserController@profile')->name('profile');
     Route::post('user/{user}/update-profile-image', 'UserController@updateProfileImage')->name('user.update-profile-image');
+
+    Route::get('/reports-trainer-wise-student-rtc-slot','ReportController@getTrainerWiseStudentRtcSlot')->name('report.trainer-wise-student-rtc-slot');
+    Route::get('/reports-course-wise-student','ReportController@getCourseWiseStudentList')->name('report.course-wise-student-list');
+    Route::get('/reports-student-list','ReportController@getStudentList')->name('report.student-list');
+    Route::post('/search-date','ReportController@getSearchDate')->name('student.getSerachDate');
+    Route::get('/pending-appreciation-student-list','ReportController@getPendingAppreciationStudentList')->name('report.pending-appreciation-student-list');
+    Route::get('/pending-course-student-list','ReportController@getPendingCourseStudentList')->name('report.pending-course-student-list');
+    Route::get('/student-list-with-course-detail','ReportController@getStudentListWithCourseDetail')->name('report.student-list-with-course-detail');
+    Route::get('/pending-counselling-student-list','ReportController@getPendingCounselllingStudentList')->name('report.pending-counselling-student-list');
+    Route::get('/pending-material-list-student-list','ReportController@getPendingMaterialListStudentList')->name('report.pending-material-list-student-list');
 });
 

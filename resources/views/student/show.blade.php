@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.admin')btn-student-leave-edit
 @section('content')
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -298,6 +298,8 @@
                                                             <td>{{$appreciation->appreciation->appreciation_name}}</td>
                                                             @if($appreciation->appreciation_given_date !== NULL)
                                                                 <td>{{ $appreciation_given_date = date('d-m-Y', strtotime($appreciation->appreciation_given_date)) }}</td>
+                                                            @else
+                                                                <td></td>
                                                             @endif
                                                             <td>
                                                                 @if(\Illuminate\Support\Facades\Auth::user()->type == 0)
@@ -332,19 +334,22 @@
                                 <form action="{{route('student.sendNotification')}}" method="POST">
                                     @csrf
                                     @foreach($student->courses as $student_course)
-                                        <a class="btn btn-success">Start</a>
-                                        <a class="btn btn-primary">End Task</a>
+                                        <span class="h4 p-2">{{$student_course->course->course_name}}</span>
+                                        <a class="btn btn-success btn-start" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="start_task">Start</a>
+                                        <a class="btn btn-primary btn-end" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="end_task">End Task</a>
                                         <table class="table table-bordered table-striped" id="courseTable" >
                                             <input type="hidden" name="student_id" class="form-control student_id" value="{{$student->id}}">
                                             <input type="hidden" name="course_id" class="form-control course_id" value="{{$student_course->course_id}}">
-                                            <tr>
-                                                <td class="text-center">Before</td>
-                                                <td></td>
-                                                <td class="text-center">After</td>
-                                                <td>
-                                                    Date
-                                                </td>
-                                            </tr>
+                                            @if($student_course->course->subcourses->isNotEmpty())
+                                                <tr>
+                                                    <td class="text-center">Before</td>
+                                                    <td></td>
+                                                    <td class="text-center">After</td>
+                                                    <td>
+                                                        Date
+                                                    </td>
+                                                </tr>
+                                            @endif
                                             {{-- //subCourse before after--}}
                                             @foreach($student_course->course->subcourses as $key =>$sc)
                                                 <tr>
@@ -628,6 +633,21 @@
         $(document).on('click', '.appreciation-form-submit', function () {
             $('#appreciationForm').submit();
         });
+
+        $(document).on('click','.btn-start, .btn-end', function(){
+            let student_id = $(this).data('student-id');
+            let course_id = $(this).data('course-id');
+            let task = $(this).data('btn');
+
+            $.ajax({
+                url : "update-course-start-end-date/" + student_id + "/" + course_id + "/" + task,
+                type: 'GET',
+                success: function (data) {
+                //    location.reload();
+                }
+            });
+        });
+
     </script>
 @endpush
 

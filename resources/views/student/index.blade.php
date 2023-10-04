@@ -270,28 +270,34 @@
                             <form action="{{ route('student.ChangeStudentStatus') }}" method="POST" id="studentStatusForm">
                                 @csrf
                                 <input type="hidden" name="student_id" class="form-control student_id" value="" required>
-                                    <div class="modal-body">
-                                        <div class="col-md-12 mb-1">
-                                            <label for="name">Status</label>
-                                            <select class="form-control proxy_class select2 statusSelect" name="status" required>
-                                                <option value="0">------Select Status-----</option>
-                                                <option value="Start">Start</option>
-                                                <option value="Hold">Hold</option>
-                                                <option value="Cancel">Cancel</option>
-                                                <option value="Complete">Complete</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-12 mb-1" id="displayTrainerBox" style="display: none">
-                                            <div class="form-group">
-                                                <label for="text">Trainer name:</label>
-                                                <input type="text" class="form-control" name="trainer_name" required>
-                                            </div>
+                                <div class="modal-body">
+                                    <div class="col-md-12 mb-1">
+                                        <label for="name">Status</label>
+                                        <select class="form-control proxy_class select2 statusSelect" name="status" required>
+                                            <option value="0">------Select Status-----</option>
+                                            <option value="Start">Start</option>
+                                            <option value="Hold">Hold</option>
+                                            <option value="Cancel">Cancel</option>
+                                            <option value="Complete">Complete</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12 mb-1" id="displayTrainerBox" style="display: none">
+                                        <div class="form-group">
+                                            <label for="text">Trainer name:</label>
+                                            <input type="text" class="form-control" name="trainer_name" required>
                                         </div>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn mb-2 btn-primary students-status">Submit</button>
+                                    <div class="col-md-12 mb-1" id="displayCancelReason" style="display: none">
+                                        <div class="form-group">
+                                            <label for="text">Cancel Reason:</label>
+                                            <input type="text" class="form-control" name="cancel_reason" required>
+                                        </div>
                                     </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn mb-2 btn-primary students-status">Submit</button>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -393,11 +399,18 @@
 
             $(document).ready(function () {
                 $('.statusSelect').on('change', function () {
+                    
+                    $('#displayCancelReason').hide();
+                    $('#displayTrainerBox').hide();
+                    
                     var selectedValue = $(this).val();
 
                     if (selectedValue === 'Complete') { // Option "Other" is selected
                         $('#displayTrainerBox').show();
-                    } else {
+                    } else if (selectedValue === 'Cancel') {
+                        $('#displayCancelReason').show();
+                    }
+                    else{
                         $('#displayTrainerBox').hide();
                     }
                 });

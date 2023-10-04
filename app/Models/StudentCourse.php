@@ -20,4 +20,7 @@ class StudentCourse extends Model
     public function courseWiseMaterial(){
         return $this->belongsTo(CourseWiseMaterial::class,'course_id','id');
     }
+    public function student(){
+        return $this->belongsTo(Student::class);
+    }
 }

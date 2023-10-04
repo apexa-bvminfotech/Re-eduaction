@@ -200,7 +200,7 @@ class StudentsController extends Controller
     public function show($id)
     {
         $student = Student::with('courses','studentDmit')->find($id);
-        $assignStaff = StudentStaffAssign::orderBy('id')->where('student_id', $student->id)->With('Trainer', 'Slot')->get();
+        $assignStaff = StudentStaffAssign::orderBy('id')->where('student_id', $student->id)->with('Trainer', 'Slot')->get();
         $studentAttendance = StudentAttendance::orderBy('id')->where('student_id', $student->id)->get();
         $studentCompleteCourses = StudentCourseComplete::where('status',1)->where('student_id',$id)->pluck('id')->toArray();
         $approvedCourse= StudentCourseComplete::where('status',2)->where('user_id',auth()->user()->id)->where('student_id',$id)->pluck('id')->toArray();
@@ -400,7 +400,7 @@ class StudentsController extends Controller
             'trainer_id' => 'required|integer',
             'slot_id' => 'required|integer',
         ]);
-        $student = StudentStaffAssign::where('student_id', $request->student_id)->where('is_active', 0)->first();
+        $student = StudentStaffAssign::where(['student_id' => $request->student_id, 'trainer_id' => $request->trainer_id] )->where('is_active', 0)->first();
 
         if ($student) {
                 return back()->with('error', 'Trainer is already Assigned');
@@ -679,6 +679,7 @@ class StudentsController extends Controller
            'status' => $request->status,
            'is_active' => 0,
            'trainer_name' => $request->trainer_name,
+           'cancel_reason' => $request->cancel_reason,
            'date' => date('Y-m-d'),
            'student_id' => $request->student_id,
            'user_id' => Auth::id(),
@@ -725,6 +726,23 @@ class StudentsController extends Controller
             </div><br>';
         }
         return $material_data;
+    }
+
+    public function updateCourseStartEndDate($student_id, $course_id, $task)
+    {
+        if($task == "start_task"){
+            $start_date = date('Y-m-d');
+            $end_date = Null;
+        }
+        else{
+            $end_date = date('Y-m-d');
+        }
+        StudentCourse::where('student_id',$student_id)
+            ->where('course_id',$course_id)->update([
+                'start_date' =>  $start_date == 'undefined' ? NULL : $start_date,
+                'end_date' => $end_date,
+            ]);
+        return response()->json(['success' => true]);
     }
 }
 

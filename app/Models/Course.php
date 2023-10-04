@@ -13,4 +13,7 @@ class Course extends Model
     public function subCourses(){
         return $this->hasMany(SubCourse::class);
     }
+    public function studentCourse(){
+        return $this->hasMany(StudentCourse::class);
+    }
 }

@@ -10,4 +10,8 @@ class StudentDMIT extends Model
     use HasFactory;
     protected $table = 'student_dmit';
     protected $guarded = ['id'];
+
+    public function student(){
+        return $this->belongsTo(Student::class);
+    }
 }

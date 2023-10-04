@@ -55,4 +55,13 @@ class Student extends Model
     public function studentDmit(){
         return $this->hasOne(StudentDMIT::class,'student_id');
     }
+    public function studentTrainer(){
+        return $this->hasOne(StudentStaffAssign::class)->where('is_active', 0);
+    }
+    public function statusStudent(){
+        return $this->hasOne(StudentStatus::class, 'student_id');
+    }
+    public function studentMaterial(){
+        return $this->hasMany(StudentCourseMaterial::class);
+    }
 }

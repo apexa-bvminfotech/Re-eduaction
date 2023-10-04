@@ -25,5 +25,8 @@ class Trainer extends Model
     {
         return $this->hasMany(StudentProxyStaffAssign::class);
     }
+    public function slots(){
+        return $this->hasMany(Slot::class);
+    }
 
 }

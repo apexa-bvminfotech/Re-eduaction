@@ -117,7 +117,6 @@ class TrainerAttendanceController extends Controller
             ->join('trainers', 'trainers.id', 'trainer_attendances.trainer_id')
             ->join('slots', 'slots.id', 'trainer_attendances.slot_id')
             ->orderBy('trainer_attendances.id', 'ASC')->get()->groupby('trainer.name');
-
             return view('trainer_attendance.edit', compact('trainerAttendance', 'EditDate'));
     }
 
