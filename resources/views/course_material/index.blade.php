@@ -29,8 +29,8 @@
                                     <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Course Name</th>
-                                        <th>Medium</th>
+                                        <th><span></span></th>
+                                        <th><span></span></th>
                                         <th>Material Name</th>
                                         <th>Action</th>
                                     </tr>
@@ -66,7 +66,7 @@
                 "responsive": true, "lengthChange": false, "autoWidth": false,
                 "buttons": ["csv", "excel", "pdf", "print"],
                 initComplete: function () {
-                    this.api().columns([1]).every(function () {
+                    this.api().columns([1,2]).every(function () {
                         var column = this;
                         var select = $('<select class="form-control select2"><option value="">All</option></select>')
                             .appendTo($(column.header()).find('span').empty())

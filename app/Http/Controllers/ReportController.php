@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Student;
 use App\Models\StudentCourse;
 use App\Models\StudentDMIT;
+use App\Models\StudentStatus;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
@@ -86,4 +87,9 @@ class ReportController extends Controller
         return view('reports.pending_material_list_student_list', compact('studentList'));
     }
 
+    public function getStudentStatusList()
+    {
+        $studentStatus = StudentStatus::whereIn('status',['Hold','Cancel'])->where('is_active','0')->with('student.activeCourses.course')->get();
+        return view('reports.student_status_list',compact('studentStatus'));
+    }
 }

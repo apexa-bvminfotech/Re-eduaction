@@ -15,6 +15,9 @@ class Student extends Model
     public function course(){
         return $this->belongsTo(Course::class);
     }
+    public function branch(){
+        return $this->belongsTo(Branch::class);
+    }
     public function user(){
         return $this->belongsTo(User::class);
     }
@@ -63,5 +66,8 @@ class Student extends Model
     }
     public function studentMaterial(){
         return $this->hasMany(StudentCourseMaterial::class);
+    }
+    public function activeCourses(){
+        return $this->hasMany(StudentCourse::class)->where('start_date','!=',null)->where('end_date',null);
     }
 }

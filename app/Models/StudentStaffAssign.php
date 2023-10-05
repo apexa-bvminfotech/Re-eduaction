@@ -23,7 +23,6 @@ class StudentStaffAssign extends Model
     {
         return $this->belongsTo(Slot::class);
     }
-
     public function studentStaff()
     {
         return $this->belongsTo(Student::class, 'student_id');

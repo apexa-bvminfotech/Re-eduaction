@@ -85,7 +85,6 @@
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="personal_info">
                                         <div class="col-md-12">
-
                                             <div class="card-body">
                                                 <table class="table table-hover">
                                                     <tr>
@@ -180,7 +179,6 @@
                                                         <tr>
                                                             <th>I-Card</th>
                                                             <td>{{ date('d-m-Y', strtotime($trainer->i_card_date)) }}</td>
-{{--                                                            <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d',$trainer->i_card_date )->format('d/m/Y') }}</td>--}}
                                                         </tr>
                                                         <tr>
                                                             <th>I-Card Return Date</th>
@@ -202,12 +200,6 @@
                                                             <th>Uniform Note</th>
                                                             <td>{{ $trainer->uniform_note }}</td>
                                                         </tr>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="card-body">
-                                                    <table class="table table-hover">
                                                         <tr>
                                                             <th>Material</th>
                                                             <td>{{ date('d-m-Y', strtotime($trainer->material_date)) }}</td>
@@ -216,6 +208,12 @@
                                                             <th>Material Return Date</th>
                                                             <td>{{ date('d-m-Y', strtotime($trainer->material_return_date)) }}</td>
                                                         </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card-body">
+                                                    <table class="table table-hover">
                                                         <tr>
                                                             <th>Material Note</th>
                                                             <td>{{ $trainer->material_note }}</td>
@@ -249,6 +247,10 @@
                                                             <td>{{ $trainer->other_allowance }}</td>
                                                         </tr>
                                                         <tr>
+                                                            <th>Branch Name</th>
+                                                            <td>{{ $trainer->branch->name }}</td>
+                                                        </tr>
+                                                        <tr>
                                                             <th>Course(s)</th>
                                                             <td>
                                                                 @if (json_decode($trainer->course_id) != null)
@@ -259,9 +261,20 @@
                                                                     </ul>
                                                                 @else
                                                                     No courses assigned
-
                                                                 @endif
                                                             </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Role</th>
+                                                            {{-- <td>{{$trainer->user->roles->first()->name}}</td> --}}
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Status</th>
+                                                            @if($trainer->is_active == '0')
+                                                                <td>Active</td>
+                                                            @else
+                                                                <td> Deactive </td>
+                                                            @endif
                                                         </tr>
                                                     </table>
                                                 </div>
@@ -318,11 +331,50 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div><!-- /.card-body -->
-                            </div>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>    
                             <!-- /.card -->
                         </div>
                     </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            @foreach($rtcWiseSlotStudent as $key => $rtc)
+                                <div class="card-header">
+                                    <h3 class="card-title"><b>RTC : </b>{{ $rtc->rtc_name }}</h3>
+                                </div>
+                                @foreach ($rtc->slot as $slot)
+                                    <div class="card-body">
+                                        <h6 class="border-bottom"><b>Slot : </b>{{ $slot->slot_time }}</h6>
+                                        @if($slot->slotList->isNotEmpty())
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Student Name</th>
+                                                        <th>Meduim</th> 
+                                                        <th>Standard</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($slot->slotList as $slotStudent)
+                                                        <tr>
+                                                            <td>{{ $slotStudent->student->name }} {{ $slotStudent->student->surname }}</td>
+                                                            <td>{{ $slotStudent->student->medium }}</td>
+                                                            <td>{{ $slotStudent->student->standard }}</td>
+                                                        </tr>
+                                                    @endforeach   
+                                                </tbody>
+                                            </table>
+                                        @endif
+                                    </div>
+                                @endforeach
+                                <!-- /.card-header -->
+                            @endforeach
+                             <!-- /.card-body -->       
+                        </div>
+                    </div>    
                 </div>
             </div>
         </section>

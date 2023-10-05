@@ -62,7 +62,7 @@ class StudentAttendanceController extends Controller
     public function create()
     {
         $trainer = Trainer::orderBy('id', 'DESC')->get();
-        $studentStaffAssign = StudentStaffAssign::orderBy('id', 'DESC')->with('trainer','student','slot')->get()->groupBy('trainer.name');
+        $studentStaffAssign = StudentStaffAssign::orderBy('id', 'DESC')->where('is_active','0')->with('trainer','student','slot')->get()->groupBy('trainer.name');
         $proxyStaff = StudentProxyStaffAssign::orderBy('id', 'DESC')->whereDate('starting_date', now()->format('Y-m-d'))->with('trainer','student','slot')
             ->get()->groupBy('trainer.name');
 

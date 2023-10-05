@@ -36,6 +36,7 @@
                                         <th>Std</th>
                                         <th>Medium</th>
                                         <th><span></span></th>
+                                        <th><span></span></th>
                                         <th>Action</th>
                                     </tr>
                                     </thead>
@@ -53,6 +54,7 @@
                                             <td>{{ $s->mother_contact_no }}</td>
                                             <td>{{ $s->standard }}</td>
                                             <td>{{ $s->medium }}</td>
+                                            <td>{{ $s->studentTrainer->trainer->name }}  {{ $s->studentTrainer->trainer->surname }} </td>
                                             <td>{{ $s->isActiveStatus() != null ? $s->isActiveStatus()->status : 'Pending' }}</td>
                                             <td>
                                                 <div class="flex justify-between">
@@ -293,6 +295,12 @@
                                             <input type="text" class="form-control" name="cancel_reason" required>
                                         </div>
                                     </div>
+                                    <div class="col-md-12 mb-1" id="displayHoldReason" style="display: none">
+                                        <div class="form-group">
+                                            <label for="text">Hold Reason:</label>
+                                            <input type="text" class="form-control" name="cancel_reason" required>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Close</button>
@@ -399,7 +407,7 @@
 
             $(document).ready(function () {
                 $('.statusSelect').on('change', function () {
-                    
+                    $('#displayHoldReason').hide();
                     $('#displayCancelReason').hide();
                     $('#displayTrainerBox').hide();
                     
@@ -409,6 +417,9 @@
                         $('#displayTrainerBox').show();
                     } else if (selectedValue === 'Cancel') {
                         $('#displayCancelReason').show();
+                    }
+                    else if (selectedValue === 'Hold') {
+                        $('#displayHoldReason').show();
                     }
                     else{
                         $('#displayTrainerBox').hide();

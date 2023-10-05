@@ -10,6 +10,12 @@
                 <li class="nav-item">
                     <a href="{{route('student.index')}}" class="nav-link @if(Route::currentRouteName() == 'student.index')active  @endif">
                         <i class="nav-icon fas fa-graduation-cap"></i>
+                        <p> Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{route('student.index')}}" class="nav-link @if(Route::currentRouteName() == 'student.index')active  @endif">
+                        <i class="nav-icon fas fa-graduation-cap"></i>
                         <p>Student</p>
                     </a>
                 </li>
@@ -149,6 +155,12 @@
                             <a href="{{ route('report.pending-material-list-student-list') }}" class="nav-link @if(Route::currentRouteName() == 'report.pending-material-list-student-list')active  @endif">
                                 <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
                                 <p>Pending Material List Student List</p>
+                            </a>
+                        </li> 
+                        <li class="nav-item">
+                            <a href="{{ route('report.student-status-list') }}" class="nav-link @if(Route::currentRouteName() == 'report.student-status-list')active  @endif">
+                                <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
+                                <p>Student Status List</p>
                             </a>
                         </li> 
                     </ul>

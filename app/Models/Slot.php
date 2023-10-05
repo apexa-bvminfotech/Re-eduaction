@@ -33,7 +33,7 @@ class Slot extends Model
         return $this->hasOne(StudentStaffAssign::class);
     }
     public function slotList(){
-        return $this->hasMany(StudentStaffAssign::class);
+        return $this->hasMany(StudentStaffAssign::class)->where('is_active','0');
     }
     public function proxySlotlist(){
         return $this->hasMany(StudentProxyStaffAssign::class);

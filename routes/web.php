@@ -75,5 +75,6 @@ Route::group(['middleware'=>['auth']],function (){
     Route::get('/student-list-with-course-detail','ReportController@getStudentListWithCourseDetail')->name('report.student-list-with-course-detail');
     Route::get('/pending-counselling-student-list','ReportController@getPendingCounselllingStudentList')->name('report.pending-counselling-student-list');
     Route::get('/pending-material-list-student-list','ReportController@getPendingMaterialListStudentList')->name('report.pending-material-list-student-list');
+    Route::get('/student-status-list','ReportController@getStudentStatusList')->name('report.student-status-list');
 });
 

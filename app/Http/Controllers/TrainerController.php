@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Models\Trainer;
 use App\Models\Branch;
+use App\Models\Rtc;
+use App\Models\Slot;
+use App\Models\StudentStaffAssign;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -153,9 +156,24 @@ class TrainerController extends Controller
     public function show(Trainer $trainer)
     {
         if (json_decode($trainer->course_id) != null){
+            $trainerId = $trainer->id;
+            $trainerSlot = Slot::where('trainer_id',$trainerId)->get();
+            $rtcId = [];
+            foreach($trainerSlot as $slot){
+                if(!in_array($slot->rtc_id,$rtcId)){
+                    $rtcId[] = $slot->rtc_id;
+                }
+            }
+
+            $rtcWiseSlotStudent = Rtc::whereIn('id',$rtcId)->with('slot')->get();
+            dd($rtcWiseSlotStudent);
+
+            // $rtcWiseSlotStudent = Rtc::whereIn('id',$rtcId)->with('slot.slotList.student')->get();
+            // $trainerSlot = StudentStaffAssign::where('trainer_id',$trainerId)->with('student','slot.rtc')->get();
             $courseIds = json_decode($trainer->course_id);
             $courseNames = Course::whereIn('id', $courseIds)->pluck('course_name');
-            return view('trainer.show', compact('trainer', 'courseNames'));
+           
+            return view('trainer.show', compact('trainer', 'courseNames','rtcWiseSlotStudent'));
         }
         else{
             return view('trainer.show', compact('trainer'));

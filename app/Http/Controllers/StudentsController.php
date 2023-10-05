@@ -34,10 +34,11 @@ class StudentsController extends Controller
     {
         $slots = Slot::where('is_active', 0)->orderBy('id', 'desc')->get();
         $trainers = Trainer::where('is_active', 0)->orderBy('id', 'desc')->get();
+        // $studentTrainer = StudentStaffAssign::where('is_active','0')->with('trainer')->get();
         $students = Student::select('students.id','students.surname','students.name','students.mother_contact_no',
                         'students.standard','students.medium','students.course_id','branches.name as branch_name')
                     ->join('branches', 'branches.id', 'students.branch_id')
-                    ->with('courses')
+                    ->with('courses','studentTrainer.trainer')
                     ->orderBy('students.id')->get();
 
         if(Auth::user()->type == 1) {
@@ -199,7 +200,7 @@ class StudentsController extends Controller
 
     public function show($id)
     {
-        $student = Student::with('courses','studentDmit')->find($id);
+        $student = Student::with('courses','studentDmit','studentStatus','branch','studentMaterial.material')->find($id);
         $assignStaff = StudentStaffAssign::orderBy('id')->where('student_id', $student->id)->with('Trainer', 'Slot')->get();
         $studentAttendance = StudentAttendance::orderBy('id')->where('student_id', $student->id)->get();
         $studentCompleteCourses = StudentCourseComplete::where('status',1)->where('student_id',$id)->pluck('id')->toArray();
@@ -456,7 +457,7 @@ class StudentsController extends Controller
             return back()->with('error', 'Trainer is already assigned as proxy staff for the specified dates');
         }
 
-        $checkIsregularTrainer = StudentStaffAssign::where(['trainer_id' => $request->trainer_id, 'slot_id' => $request->slot_id , 'is_active' => 0])->first();
+        $checkIsregularTrainer = StudentStaffAssign::where(['student_id' => $request->student_id, 'trainer_id' => $request->trainer_id, 'slot_id' => $request->slot_id , 'is_active' => 0])->first();
         if($checkIsregularTrainer) {
             return back()->with('error', 'Trainer is already assigned as regular staff');
         }
@@ -731,18 +732,19 @@ class StudentsController extends Controller
     public function updateCourseStartEndDate($student_id, $course_id, $task)
     {
         if($task == "start_task"){
-            $start_date = date('Y-m-d');
-            $end_date = Null;
+             StudentCourse::where('student_id',$student_id)
+            ->where('course_id',$course_id)->update([
+                'start_date' =>  date('Y-m-d'),
+                ]);
+            return response()->json(['success' => true, 'course_id' => $course_id]);
         }
         else{
-            $end_date = date('Y-m-d');
-        }
-        StudentCourse::where('student_id',$student_id)
+            StudentCourse::where('student_id',$student_id)
             ->where('course_id',$course_id)->update([
-                'start_date' =>  $start_date == 'undefined' ? NULL : $start_date,
-                'end_date' => $end_date,
-            ]);
-        return response()->json(['success' => true]);
+                'end_date' => date('Y-m-d'),
+                ]);
+            return response()->json(['success' => false, 'course_id' => $course_id]);
+        }
     }
 }
 

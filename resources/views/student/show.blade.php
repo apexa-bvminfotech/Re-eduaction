@@ -68,6 +68,7 @@
                                     <li class="nav-item"><a class="nav-link" href="#timeline2" data-toggle="tab">Student Attendance Show</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#student_leave" data-toggle="tab">Student Leave List</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#student_appreciation" data-toggle="tab">Student Appreciation Detail</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#student_status" data-toggle="tab">Student Status Detail</a></li>
                                 </ul>
                             </div>
                             <div class="card-body">
@@ -76,45 +77,55 @@
                                         <div class="post">
                                             <table class="table border-bottom">
                                                 <tr>
+                                                    <th><b>Father Name:</b></th>
+                                                    <td>{{$student->father_name}}</td>
                                                     <th><b>Father Contact No:</b></th>
                                                     <td>{{$student->father_contact_no}}</td>
+                                                </tr>
+                                                <tr>   
                                                     <th><b>Mother Contact No:</b></th>
                                                     <td>{{$student->mother_contact_no}}</td>
-                                                </tr>
-                                                <tr>
                                                     <th><b>Address:</b></th>
                                                     <td>{{$student->address}}</td>
+                                                </tr>
+                                                <tr>   
                                                     <th><b>School Name:</b></th>
                                                     <td>{{$student->school_name}}</td>
-                                                </tr>
-                                                <tr>
                                                     <th><b>School Time:</b></th>
                                                     <td>{{$student->school_time}}</td>
+                                                </tr>
+                                                <tr>    
                                                     <th><b>Extra Tuition Time:</b></th>
                                                     <td>{{$student->extra_tuition_time}}</td>
-                                                </tr>
-                                                <tr>
                                                     <th><b>Date Of Birth:</b></th>
                                                     <td>{{$student->dob}}</td>
+                                                </tr>
+                                                <tr>   
                                                     <th><b>Age:</b></th>
                                                     <td>{{$student->age}}</td>
-                                                </tr>
-                                                <tr class="border-bottom">
                                                     <th><b>Fees:</b></th>
                                                     <td>{{$student->fees}}</td>
+                                                </tr>
+                                                <tr class="border-bottom">   
                                                     <th><b>Extra Note:</b></th>
                                                     <td>{{$student->extra_note}}</td>
-                                                </tr>
-                                                <tr>
                                                     <th><b>Student Analysis PDF:</b></th>
                                                     <td><a href="{{asset('assets/student/pdf/'. $student->upload_analysis )}}" download="">
                                                             <button class="btn btn-success">Download  <i class="fa fa-file-pdf"></i></button>
                                                         </a>
                                                     </td>
+                                                </tr>
+                                                <tr>   
                                                     <th><b>Courses:</b></th>
                                                     <td>
                                                         @foreach($student->courses as $key => $cor)
                                                             <b>{{ $key+1 }}:</b> {{ $cor->course->course_name }}<br>
+                                                        @endforeach
+                                                    </td>
+                                                    <th><b>Course Material:</b></th>
+                                                    <td>
+                                                        @foreach ($student->studentMaterial as $key=>$material)
+                                                            <b>{{ $key+1 }}:</b> {{ $material->material->material_name }}<br>
                                                         @endforeach
                                                     </td>
                                                 </tr>
@@ -139,6 +150,12 @@
                                                 <tr>
                                                     <th><b>Payment Condition:</b></th>
                                                     <td>{{$student->payment_condition}}</td>
+                                                    <th><b>Branch Name:</b></th>
+                                                    <td>{{ $student->branch->name }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th><b>STF:</b></th>
+                                                    <td>{{$student->stf}}</td>
                                                     <th></th>
                                                     <td></td>
                                                 </tr>
@@ -317,6 +334,40 @@
                                             </table>
                                         </div>
                                     </div>
+                                    <div class="tab-pane" id="student_status">
+                                        <div class="post">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th><b>No</b></th>
+                                                        <th><b>Status:</b></th>
+                                                        <th><b>Trainer Name:</b></th>
+                                                        <th><b>Reason:</b></th>
+                                                        <th><b>Action</b></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($student->studentStatus as $key => $status)
+                                                        <tr>
+                                                            <td>{{ $key+1 }}</td>
+                                                            <td>{{ $status->status }}</td>
+                                                            @if ($status->trainer_name !== null)
+                                                                <td>{{ $status->trainer_name }}</td>
+                                                            @else
+                                                                <td>-</td>
+                                                            @endif
+                                                            @if ($status->cancel_reason !== null)
+                                                                <td>{{ $status->cancel_reason }}</td>
+                                                            @else
+                                                                <td>-</td>
+                                                            @endif
+                                                            <td>{!! $status->is_active == 0 ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -334,9 +385,22 @@
                                 <form action="{{route('student.sendNotification')}}" method="POST">
                                     @csrf
                                     @foreach($student->courses as $student_course)
+                                    {{-- @dd($student_course->start_date) --}}
                                         <span class="h4 p-2">{{$student_course->course->course_name}}</span>
-                                        <a class="btn btn-success btn-start" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="start_task">Start</a>
-                                        <a class="btn btn-primary btn-end" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="end_task">End Task</a>
+                                        @if($student_course->start_date == null)
+                                            <a class="btn btn-success btn-start" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="start_task" id="btn-start_{{ $student_course->course_id }}">Start</a>
+                                            <span class="h6 border p-2" style="display: none;" id="display_start_date_{{ $student_course->course_id }}"> Start Date :- {{ date('d-m-Y', $student_course->start_date)}}</span>
+                                        @else
+                                            <span class="h6 border p-2"> Start Date :- {{ date('d-m-Y', strtotime($student_course->start_date))}} </span>
+                                        @endif
+                                        @if($student_course->end_date == null)
+                                            <a class="btn btn-primary btn-end" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="end_task" id="btn-end_{{ $student_course->course_id  }}">End Task</a>
+                                            <span class="h6 border p-2" style="display: none;" id="display_end_date_{{ $student_course->course_id }}"> End Date :- {{ date('d-m-Y', $student_course->end_date) }}</span>
+                                        @else
+                                            <span class="h6 border p-2"> End Date :- {{ date('d-m-Y', strtotime($student_course->end_date))}}</span>
+                                            <button class="btn btn-success" disabled>Course Completed</button>
+                                        @endif
+                                        <button class="btn btn-success" style="display: none;" id="course-complete_{{ $student_course->course_id }}" disabled>Course Completed</button>
                                         <table class="table table-bordered table-striped" id="courseTable" >
                                             <input type="hidden" name="student_id" class="form-control student_id" value="{{$student->id}}">
                                             <input type="hidden" name="course_id" class="form-control course_id" value="{{$student_course->course_id}}">
@@ -643,7 +707,19 @@
                 url : "update-course-start-end-date/" + student_id + "/" + course_id + "/" + task,
                 type: 'GET',
                 success: function (data) {
-                //    location.reload();
+                    if(data.success == true)
+                    {
+                        course_id = data.course_id;
+                        $('#btn-start_' + course_id).remove();
+                        $('#display_start_date_' + course_id).show();
+                    }
+                    else
+                    {
+                        course_id = data.course_id;
+                        $('#btn-end_' + course_id).remove();
+                        $('#display_end_date_' + course_id).show();
+                        $('#course-complete_' + course_id).show();
+                    }
                 }
             });
         });
