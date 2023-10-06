@@ -202,13 +202,36 @@ class StudentsController extends Controller
     {
         $student = Student::with('courses','studentDmit','studentStatus','branch','studentMaterial.material')->find($id);
         $assignStaff = StudentStaffAssign::orderBy('id')->where('student_id', $student->id)->with('Trainer', 'Slot')->get();
-        $studentAttendance = StudentAttendance::orderBy('id')->where('student_id', $student->id)->get();
+
         $studentCompleteCourses = StudentCourseComplete::where('status',1)->where('student_id',$id)->pluck('id')->toArray();
         $approvedCourse= StudentCourseComplete::where('status',2)->where('user_id',auth()->user()->id)->where('student_id',$id)->pluck('id')->toArray();
         $proxy_staff_details = $student->proxyStaffAssignments;
         $student_leave_show =  StudentApproveLeave::orderBy('id')->where('student_id', $student->id)->get();
         $student_appreciation = StudentCourse::orderBy('id')->where('student_id', $student->id)->With('course', 'appreciation')->get();
-        return view('student.show', compact('student', 'assignStaff', 'studentAttendance', 'proxy_staff_details','studentCompleteCourses','approvedCourse','student_leave_show','student_appreciation'));
+
+        $fromDate = '';
+        $toDate = '';
+
+        if(isset($_GET['fromDate'])){
+            $fromDate = $_GET['fromDate'];
+        }
+        if(isset($_GET['toDate'])){
+            $toDate = $_GET['toDate'];
+        }
+
+        $qurey = StudentAttendance::orderBy('id')->where('student_id', $student->id);
+
+        if($fromDate != '' && $fromDate != null){
+            $qurey->whereDate('attendance_date', '>=', date('Y-m-d', strtotime($fromDate)));
+        }
+
+        if($toDate != '' && $toDate != null){
+            $qurey->whereDate('attendance_date', '<=',  date('Y-m-d', strtotime($toDate)));
+        }
+
+        $studentAttendance = $qurey->with('slot','trainer')->get();
+
+        return view('student.show', compact('student', 'assignStaff', 'studentAttendance', 'proxy_staff_details','studentCompleteCourses','approvedCourse','student_leave_show','student_appreciation','fromDate','toDate'));
     }
 
     public function edit($id)
@@ -452,12 +475,11 @@ class StudentsController extends Controller
             ->where('trainer_id',  $request->trainer_id)
             ->first();
 
-
         if ($existingProxyStaff) {
             return back()->with('error', 'Trainer is already assigned as proxy staff for the specified dates');
         }
 
-        $checkIsregularTrainer = StudentStaffAssign::where(['student_id' => $request->student_id, 'trainer_id' => $request->trainer_id, 'slot_id' => $request->slot_id , 'is_active' => 0])->first();
+        $checkIsregularTrainer = StudentStaffAssign::where(['trainer_id' => $request->trainer_id, 'slot_id' => $request->slot_id , 'is_active' => 0])->first();
         if($checkIsregularTrainer) {
             return back()->with('error', 'Trainer is already assigned as regular staff');
         }
@@ -621,6 +643,69 @@ class StudentsController extends Controller
         // Handle 'before' checkboxes for subCourses
 
         return redirect()->route('student.show', $validatedData['student_id'])->with('success', 'notification sent to admin.');
+    }
+
+    public function trainerProxySlot($id){
+        $trainer_proxy_slot = Slot::where(['trainer_id' => $id, 'is_active' => 0])->get();
+        return response()->json(['slots' => $trainer_proxy_slot]);
+    }
+
+    public function editProxySlot(Request $request)
+    {
+        $request->validate([
+            'student_id' => 'required|integer',
+            'trainer_id' => 'required|integer',
+            'slot_id' => 'required|integer',
+            'starting_date' => 'required',
+            'ending_date' => 'required',
+        ]);
+
+        $checkIsregularTrainer = StudentStaffAssign::where(['trainer_id' => $request->trainer_id, 'slot_id' => $request->slot_id , 'is_active' => 0])->first();
+        if($checkIsregularTrainer) {
+            return back()->with('error', 'Trainer is already assigned as regular staff');
+        }
+
+        $studentProxyStaffAssign = StudentProxyStaffAssign::where(['trainer_id' => $request->trainer_id, 'slot_id' => $request->old_slot_id , 'student_id' => $request->student_id])->first();
+
+        StudentProxyStaffAssign::where('id',$studentProxyStaffAssign->id)->update([
+            'student_id' => $request->student_id,
+            'trainer_id' => $request->trainer_id,
+            'slot_id' => $request->slot_id,
+            'starting_date' => $request->starting_date,
+            'ending_date' => $request->ending_date,
+        ]);
+
+        return redirect()->back()->with('success', 'Slot is Edited Successfully !!');
+    }
+
+    public function trainerRegularSlot($id){
+        $trainer_regular_slot = Slot::where(['trainer_id' => $id, 'is_active' => 0])->get();
+        return response()->json(['slots' => $trainer_regular_slot]);
+    }
+
+    public function editRegularSlot(Request $request)
+    {
+        $request->validate([
+            'student_id' => 'required|integer',
+            'trainer_id' => 'required|integer',
+            'slot_id' => 'required|integer',
+            'date' => 'required',
+        ]);
+
+        $checkIsregularTrainer = StudentStaffAssign::where(['trainer_id' => $request->trainer_id, 'slot_id' => $request->slot_id , 'is_active' => 0])->first();
+        if($checkIsregularTrainer) {
+            return back()->with('error', 'Trainer is already assigned as regular staff');
+        }
+
+        $studentStaffAssign = StudentStaffAssign::where(['trainer_id' => $request->trainer_id, 'slot_id' => $request->old_slot_id , 'student_id' => $request->student_id, 'is_active' => 0])->first();
+        StudentStaffAssign::where('id',$studentStaffAssign->id)->update([
+            'student_id' => $request->student_id,
+            'trainer_id' => $request->trainer_id,
+            'slot_id' => $request->slot_id,
+            'date' => $request->date,
+        ]);
+
+        return redirect()->back()->with('success', 'Slot is Edited Successfully !!');
     }
 
     public function studentLeaveApprove(Request $request)

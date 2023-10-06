@@ -54,7 +54,7 @@
                                             <td>{{ $s->mother_contact_no }}</td>
                                             <td>{{ $s->standard }}</td>
                                             <td>{{ $s->medium }}</td>
-                                            <td>{{ $s->studentTrainer->trainer->name }}  {{ $s->studentTrainer->trainer->surname }} </td>
+                                            {{-- <td>{{ $s->studentTrainer->trainer->name }}  {{ $s->studentTrainer->trainer->surname }} </td> --}}
                                             <td>{{ $s->isActiveStatus() != null ? $s->isActiveStatus()->status : 'Pending' }}</td>
                                             <td>
                                                 <div class="flex justify-between">

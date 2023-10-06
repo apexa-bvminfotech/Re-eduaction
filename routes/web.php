@@ -28,6 +28,8 @@ Route::group(['middleware'=>['auth']],function (){
     Route::resource('student_ptm', 'StudentPTMController');
     Route::group(['prefix'=>'student'],function (){
         Route::get('/staff-slot/{id}','StudentsController@slot');
+        Route::get('/trainer-proxy-slot/{id}','StudentsController@trainerProxySlot');
+        Route::get('/trainer-regular-slot/{id}','StudentsController@trainerRegularSlot');
         Route::post('/assign-staff', 'StudentsController@assignStaff')->name('student.assignStaff');
         //proxy-staff-route
         Route::get('/proxy-slot/{id}','StudentsController@proxySlot');
@@ -37,6 +39,8 @@ Route::group(['middleware'=>['auth']],function (){
         Route::get('/edit-student-approve-leave/{id}','StudentsController@proxySlot');
         Route::post('/proxy-staff', 'StudentsController@proxyStaff')->name('student.proxyStaff');
         Route::post('/send-notification', 'StudentsController@sendNotification')->name('student.sendNotification');
+        Route::post('/edit-proxy-slot', 'StudentsController@editProxySlot')->name('student.editProxySlot');
+        Route::post('/edit-regular-slot', 'StudentsController@editRegularSlot')->name('student.editRegularSlot');
         Route::post('/student-leave-approve','StudentsController@studentLeaveApprove')->name('student.studentLeaveApprove');
         Route::post('/edit-student-leave-approve','StudentsController@editStudentLeaveApprove')->name('student.editStudentLeaveApprove');
         Route::post('/change-student-status','StudentsController@ChangeStudentStatus')->name('student.ChangeStudentStatus');
@@ -69,12 +73,13 @@ Route::group(['middleware'=>['auth']],function (){
     Route::get('/reports-trainer-wise-student-rtc-slot','ReportController@getTrainerWiseStudentRtcSlot')->name('report.trainer-wise-student-rtc-slot');
     Route::get('/reports-course-wise-student','ReportController@getCourseWiseStudentList')->name('report.course-wise-student-list');
     Route::get('/reports-student-list','ReportController@getStudentList')->name('report.student-list');
-    Route::post('/search-date','ReportController@getSearchDate')->name('student.getSerachDate');
     Route::get('/pending-appreciation-student-list','ReportController@getPendingAppreciationStudentList')->name('report.pending-appreciation-student-list');
     Route::get('/pending-course-student-list','ReportController@getPendingCourseStudentList')->name('report.pending-course-student-list');
     Route::get('/student-list-with-course-detail','ReportController@getStudentListWithCourseDetail')->name('report.student-list-with-course-detail');
     Route::get('/pending-counselling-student-list','ReportController@getPendingCounselllingStudentList')->name('report.pending-counselling-student-list');
     Route::get('/pending-material-list-student-list','ReportController@getPendingMaterialListStudentList')->name('report.pending-material-list-student-list');
     Route::get('/student-status-list','ReportController@getStudentStatusList')->name('report.student-status-list');
+
+    Route::get('/student-dashboard','StudentDashboardController@index')->name('studentdashboard.index');
 });
 

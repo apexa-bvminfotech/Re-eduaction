@@ -7,7 +7,9 @@ use App\Models\Trainer;
 use App\Models\Branch;
 use App\Models\Rtc;
 use App\Models\Slot;
+use App\Models\Student;
 use App\Models\StudentStaffAssign;
+use App\Models\TrainerAttendance;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -157,23 +159,33 @@ class TrainerController extends Controller
     {
         if (json_decode($trainer->course_id) != null){
             $trainerId = $trainer->id;
-            $trainerSlot = Slot::where('trainer_id',$trainerId)->get();
-            $rtcId = [];
-            foreach($trainerSlot as $slot){
-                if(!in_array($slot->rtc_id,$rtcId)){
-                    $rtcId[] = $slot->rtc_id;
-                }
-            }
-
-            $rtcWiseSlotStudent = Rtc::whereIn('id',$rtcId)->with('slot')->get();
-            dd($rtcWiseSlotStudent);
-
-            // $rtcWiseSlotStudent = Rtc::whereIn('id',$rtcId)->with('slot.slotList.student')->get();
-            // $trainerSlot = StudentStaffAssign::where('trainer_id',$trainerId)->with('student','slot.rtc')->get();
+            $tarinerSlot = Slot::where('trainer_id',$trainerId)->with('rtc','slotList.student')->get(); 
             $courseIds = json_decode($trainer->course_id);
             $courseNames = Course::whereIn('id', $courseIds)->pluck('course_name');
+
+            $fromDate = '';
+            $toDate = '';
+
+            if(isset($_GET['fromDate'])){
+                $fromDate = $_GET['fromDate'];
+            }
+            if(isset($_GET['toDate'])){
+                $toDate = $_GET['toDate'];
+            }
            
-            return view('trainer.show', compact('trainer', 'courseNames','rtcWiseSlotStudent'));
+            $qurey = TrainerAttendance::from('trainer_attendances')->where('trainer_id',$trainerId);
+
+            if($fromDate != '' && $fromDate != null){
+                $qurey->whereDate('date', '>=', date('Y-m-d', strtotime($fromDate)));
+            }
+    
+            if($toDate != '' && $toDate != null){
+                $qurey->whereDate('date', '<=',  date('Y-m-d', strtotime($toDate)));
+            }
+
+            $trainerAttendance = $qurey->with('slots')->get();
+
+            return view('trainer.show', compact('trainer', 'courseNames','tarinerSlot','trainerAttendance','fromDate','toDate'));
         }
         else{
             return view('trainer.show', compact('trainer'));

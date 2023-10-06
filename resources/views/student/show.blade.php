@@ -1,4 +1,4 @@
-@extends('layouts.admin')btn-student-leave-edit
+@extends('layouts.admin')
 @section('content')
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -29,6 +29,7 @@
                                     <img class="profile-user-img img-fluid img-circle" style="height: 100px;"
                                          src="{{asset('assets/student/images/'. $student->upload_student_image )}}" alt="Student Profile Photo">
                                 </div>
+                                <input type="hidden" name="student_id" id="student_id" value="{{ $student->id }}">
                                 <h3 class="profile-username text-center">{{ $student->surname }} {{ $student->name }}</h3>
                                 <p class="text-muted text-center">Student</p>
                                 <ul class="list-group  mb-3">
@@ -189,6 +190,9 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="proxy_detail">
+                                        @php
+                                            $counter = 0;
+                                        @endphp
                                         <div class="post">
                                             <table class="table table-striped">
                                                 <thead>
@@ -197,24 +201,83 @@
                                                     <th><b>Slot Time:</b></th>
                                                     <th><b>Starting Date:</b></th>
                                                     <th><b>Ending Date:</b></th>
+                                                    <th><b>Action</b></th>
                                                 </tr>
                                                 </thead>
-
                                                 <tbody>
-                                                @foreach($proxy_staff_details as $psd)
-                                                    <tr>
-                                                        <td>{{$psd->trainer->name}}</td>
-                                                        <td>{{$psd->slot->slot_time}}</td>
-                                                        <td>{{$psd->starting_date}}</td>
-                                                        <td>{{$psd->ending_date}}</td>
-                                                    </tr>
-                                                @endforeach
-
+                                                    @foreach($proxy_staff_details as $psd)
+                                                        <tr>
+                                                            <td>{{$psd->trainer->name}}</td>
+                                                            <td>{{$psd->slot->slot_time}}</td>
+                                                            <td>{{$psd->starting_date}}</td>
+                                                            <td>{{$psd->ending_date}}</td>
+                                                            @if($counter == count( $proxy_staff_details ) - 1)
+                                                                <td>
+                                                                    <button class="btn btn-success btn-edit-proxy-slot" data-trainer-id={{ $psd->trainer_id }} data-student-id={{ $psd->student_id }} data-old-slot-id={{ $psd->slot_id }}>Edit Slot</button>
+                                                                </td>
+                                                            @else
+                                                                <td></td>
+                                                            @endif
+                                                        </tr>
+                                                        @php
+                                                             $counter = $counter + 1;
+                                                        @endphp
+                                                    @endforeach
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
+                                    <form id="editProxySlot" action="{{ route('student.editProxySlot') }}" method="POST">
+                                        @csrf
+                                        <div class="modal fade" id="verticalModal1" tabindex="-1" role="dialog"
+                                             aria-labelledby="verticalModalTitle"
+                                             style="display: none;" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="verticalModalTitle">Edit Proxy Slot</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">×</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <input type="hidden" name="student_id" class="form-control student_proxy_id " value="">
+                                                        <input type="hidden" name="trainer_id" class="form-control trainer_proxy_id " value="">
+                                                        <input type="hidden" name="old_slot_id" class="form-control old_proxy_slot_id " value="">
+                                                        <div class="col-md-12 mb-1">
+                                                            <label for="name">Slot: </label>
+                                                            <select class="form-control slot select2" name="slot_id" required>
+                                                                <option value="">------Select Slot-----</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-12 mb-1">
+                                                            <div class="form-group">
+                                                                <label for="start_date">Starting Date:</label>
+                                                                <input type="date" class="form-control" name="starting_date"
+                                                                       value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12 mb-1">
+                                                            <div class="form-group">
+                                                                <label for="end_date">Ending Date:</label>
+                                                                <input type="date" class="form-control" name="ending_date"
+                                                                       value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Close
+                                                        </button>
+                                                        <button type="button" class="btn mb-2 btn-primary edit_proxy_slot_submit">Submit</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
                                     <div class="tab-pane" id="timeline1">
+                                        @php
+                                            $counter = 0;
+                                        @endphp
                                         <div class="post">
                                             <table class="table table-striped">
                                                 <thead>
@@ -222,22 +285,71 @@
                                                     <th><b>Assign Staff name</b></th>
                                                     <th><b>Slot:</b></th>
                                                     <th><b>Date:</b></th>
+                                                    <th><b>Action</b></th>
                                                     <th><b>Status</b></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                @foreach($assignStaff as $key => $as)
-                                                    <tr>
-                                                        <td>{{$as->trainer->name}}</td>
-                                                        <td>{{$as->slot->slot_time}}</td>
-                                                        <td>{{$as->date}}</td>
-                                                        <td>{!! $as->is_active == 0 ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
-                                                    </tr>
-                                                @endforeach
+                                                    @foreach($assignStaff as $key => $as)
+                                                        <tr>
+                                                            <td>{{$as->trainer->name}}</td>
+                                                            <td>{{$as->slot->slot_time}}</td>
+                                                            <td>{{$as->date}}</td>
+                                                            @if($counter == count( $assignStaff ) - 1)
+                                                                <td>
+                                                                    <button class="btn btn-success btn-edit-regular-slot" data-trainer-id={{ $as->trainer_id }} data-student-id={{ $as->student_id }} data-old-slot-id={{ $as->slot_id }}>Edit Slot</button>
+                                                                </td>
+                                                            @endif
+                                                            <td>{!! $as->is_active == 0 ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
+                                                        </tr>
+                                                        @php
+                                                            $counter = $counter + 1;
+                                                        @endphp
+                                                    @endforeach
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
+                                    <form id="editRegularSlot" action="{{ route('student.editRegularSlot') }}" method="POST">
+                                        @csrf
+                                        <div class="modal fade" id="verticalModal2" tabindex="-1" role="dialog"
+                                             aria-labelledby="verticalModalTitle"
+                                             style="display: none;" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="verticalModalTitle">Edit Proxy Slot</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">×</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <input type="hidden" name="student_id" class="form-control student_regular_id " value="">
+                                                        <input type="hidden" name="trainer_id" class="form-control trainer_regular_id " value="">
+                                                        <input type="hidden" name="old_slot_id" class="form-control old_regular_slot_id " value="">
+                                                        <div class="col-md-12 mb-1">
+                                                            <label for="name">Slot: </label>
+                                                            <select class="form-control slot select2" name="slot_id" required>
+                                                                <option value="">------Select Slot-----</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-12 mb-1">
+                                                            <div class="form-group">
+                                                                <label for="start_date">Starting Date:</label>
+                                                                <input type="date" class="form-control" name="date"
+                                                                       value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Close
+                                                        </button>
+                                                        <button type="button" class="btn mb-2 btn-primary edit_regular_slot_submit">Submit</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
                                     <div class="tab-pane" id="timeline2">
                                         <div class="post">
                                             <table class="table table-striped">
@@ -343,6 +455,7 @@
                                                         <th><b>Status:</b></th>
                                                         <th><b>Trainer Name:</b></th>
                                                         <th><b>Reason:</b></th>
+                                                        <th><b>Date:</b></th>
                                                         <th><b>Action</b></th>
                                                     </tr>
                                                 </thead>
@@ -361,6 +474,7 @@
                                                             @else
                                                                 <td>-</td>
                                                             @endif
+                                                            <td>{{ date('d-m-Y', strtotime($status->date)) }}</td>                                                           
                                                             <td>{!! $status->is_active == 0 ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
                                                         </tr>
                                                     @endforeach
@@ -580,6 +694,77 @@
                     </div>
                     <div id="result"></div>
                 </div>
+                {{-- @if($trainerAttendance->isNotEmpty()) --}}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <h5 class=""><b>Attendance</b></h5>
+                                        </div>
+                                        <div class="col-md-4 text-right">
+                                            <form class="form-inline" action="">
+                                                <div class="form-group mr-2">
+                                                    <label for="start-date" class="mr-2">From :</label>
+                                                    <input type="date" class="form-control" id="from_date" name="from_date" value="{{ !empty($fromDate) ? $fromDate : '' }}">
+                                                </div>
+                                                <div class="form-group mr-2">
+                                                    <label for="end-date" class="mr-2">To :</label>
+                                                    <input type="date" class="form-control" id="to_date" name="to_date" value="{{ !empty($toDate) ? $toDate : '' }}">
+                                                </div>
+                                                <button type="button" class="btn btn-primary search-btn">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div> 
+                                <hr>       
+                                <div class="card-body">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Trainer Name</th>
+                                                <th>Slot Time</th>
+                                                <th>Date</th>
+                                                <th>Status</th> 
+                                                <th>Slot Type</th>
+                                                <th>Absent Reason</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($studentAttendance as $attendance)
+                                                <tr>
+                                                    <td>{{ $attendance->trainer->name }}</td>
+                                                    <td>{{ $attendance->slot->slot_time }}</td>
+                                                    <td>{{ date('d-m-Y', strtotime($attendance->attendance_date)) }}</td>
+                                                    <td>
+                                                        @if($attendance->status == 'A')
+                                                            Absent
+                                                        @else
+                                                            Present
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        {{ $attendance->slot_type }}
+                                                    </td>
+                                                    <td>
+                                                        @if($attendance->absent_reason !== null)
+                                                            {{ $attendance->absent_reason }}
+                                                        @else
+                                                        -
+                                                        @endif
+                                                    </td>
+                                                </tr> 
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
+                {{-- @endif  --}}
             </div>
         </section>
         <div class="modal fade" id="btn-student-leave-edit" tabindex="-1" role="dialog"
@@ -722,6 +907,74 @@
                     }
                 }
             });
+        });
+
+        $('body').on('click', '.search-btn',  function(){
+            var baseurl = "{{ asset('/') }}";
+            var fromDate = $("#from_date").val();
+            var toDate = $("#to_date").val();
+            var student_id = $('#student_id').val();
+            var url = baseurl + "student/" + student_id + "?fromDate=" + fromDate + "&toDate=" + toDate;
+            window.location = url;            
+        });
+
+        
+        $(document).on('click', '.btn-edit-proxy-slot', function () {
+            let trainer_id = $(this).data('trainer-id');
+            let student_id = $(this).data('student-id');
+            let old_slot_id = $(this).data('old-slot-id');
+            $('.student_proxy_id').val(student_id);
+            $('.trainer_proxy_id').val(trainer_id);
+            $('.old_proxy_slot_id').val(old_slot_id);
+
+            $.ajax({
+                url: 'trainer-proxy-slot/' + trainer_id,
+                type: 'GET',
+                data: {
+                    "_token": "{{csrf_token()}}",
+                },
+                success: function (data) {
+                    let slotOption = '<option value="">------Select Slot-----</option>'
+                    $.each(data.slots, function (index, slot) {
+                        slotOption += '<option value="' + slot.id + '">' + slot.slot_time + '</option>'
+                    });
+                    $('#verticalModal1').modal('toggle');
+                    $('.slot').html(slotOption)
+                }
+            });
+        });
+
+        $(document).on('click', '.edit_proxy_slot_submit', function () {
+            $('#editProxySlot').submit();
+        });
+
+        $(document).on('click', '.btn-edit-regular-slot', function () {
+            let trainer_id = $(this).data('trainer-id');
+            let student_id = $(this).data('student-id');
+            let old_slot_id = $(this).data('old-slot-id');
+            $('.student_regular_id').val(student_id);
+            $('.trainer_regular_id').val(trainer_id);
+            $('.old_regular_slot_id').val(old_slot_id);
+
+            $.ajax({
+                url: 'trainer-regular-slot/' + trainer_id,
+                type: 'GET',
+                data: {
+                    "_token": "{{csrf_token()}}",
+                },
+                success: function (data) {
+                    let slotOption = '<option value="">------Select Slot-----</option>'
+                    $.each(data.slots, function (index, slot) {
+                        slotOption += '<option value="' + slot.id + '">' + slot.slot_time + '</option>'
+                    });
+                    $('#verticalModal2').modal('toggle');
+                    $('.slot').html(slotOption)
+                }
+            });
+        });
+
+        $(document).on('click', '.edit_regular_slot_submit', function () {
+            $('#editRegularSlot').submit();
         });
 
     </script>

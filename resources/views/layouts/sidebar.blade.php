@@ -8,7 +8,7 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
-                    <a href="{{route('student.index')}}" class="nav-link @if(Route::currentRouteName() == 'student.index')active  @endif">
+                    <a href="{{route('studentdashboard.index')}}" class="nav-link @if(Route::currentRouteName() == 'studentdashboard.index')active  @endif">
                         <i class="nav-icon fas fa-graduation-cap"></i>
                         <p> Dashboard</p>
                     </a>

@@ -86,6 +86,7 @@
                                     <div class="tab-pane active" id="personal_info">
                                         <div class="col-md-12">
                                             <div class="card-body">
+                                                <input type="hidden" name="trainer_id" id="trainer_id" value="{{ $trainer->id }}">
                                                 <table class="table table-hover">
                                                     <tr>
                                                         <th>Father Name</th>
@@ -340,43 +341,130 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
+                        @php
+                            $rtcId = [];
+                        @endphp 
                         <div class="card">
-                            @foreach($rtcWiseSlotStudent as $key => $rtc)
+                            @foreach($tarinerSlot as $key => $slot)
+                            @if(!in_array($slot->rtc_id,$rtcId))
                                 <div class="card-header">
-                                    <h3 class="card-title"><b>RTC : </b>{{ $rtc->rtc_name }}</h3>
+                                    <h3 class="card-title"><b>RTC : </b>{{ $slot->rtc->rtc_name }}</h3>
                                 </div>
-                                @foreach ($rtc->slot as $slot)
-                                    <div class="card-body">
-                                        <h6 class="border-bottom"><b>Slot : </b>{{ $slot->slot_time }}</h6>
-                                        @if($slot->slotList->isNotEmpty())
-                                            <table class="table table-bordered">
-                                                <thead>
+                            @endif
+                                <div class="card-body">
+                                    <h6 class="border-bottom pb-2"><b>Slot : </b>{{ $slot->slot_time }}</h6>
+                                    @if($slot->slotList->isNotEmpty())
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Student Name</th>
+                                                    <th>Meduim</th> 
+                                                    <th>Standard</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($slot->slotList as $student)
                                                     <tr>
-                                                        <th>Student Name</th>
-                                                        <th>Meduim</th> 
-                                                        <th>Standard</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach ($slot->slotList as $slotStudent)
-                                                        <tr>
-                                                            <td>{{ $slotStudent->student->name }} {{ $slotStudent->student->surname }}</td>
-                                                            <td>{{ $slotStudent->student->medium }}</td>
-                                                            <td>{{ $slotStudent->student->standard }}</td>
-                                                        </tr>
-                                                    @endforeach   
-                                                </tbody>
-                                            </table>
-                                        @endif
-                                    </div>
+                                                        <td>{{ $student->student->name }} {{ $student->student->surname }}</td>
+                                                        <td>{{ $student->student->medium }}</td>
+                                                        <td>{{ $student->student->standard }}</td>
+                                                    </tr> 
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    @endif     
+                                </div>
+                                    @php
+                                        $rtcId[] = $slot->rtc_id;
+                                    @endphp
+                                    <!-- /.card-header -->
                                 @endforeach
-                                <!-- /.card-header -->
-                            @endforeach
                              <!-- /.card-body -->       
                         </div>
-                    </div>    
+                    </div>  
                 </div>
+                @if($trainerAttendance->isNotEmpty())
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <h5 class=""><b>Attendance</b></h5>
+                                        </div>
+                                        <div class="col-md-4 text-right">
+                                            <form class="form-inline" action="">
+                                                <div class="form-group mr-2">
+                                                    <label for="start-date" class="mr-2">From :</label>
+                                                    <input type="date" class="form-control" id="from_date" name="from_date" value="{{ !empty($fromDate) ? $fromDate : '' }}">
+                                                </div>
+                                                <div class="form-group mr-2">
+                                                    <label for="end-date" class="mr-2">To :</label>
+                                                    <input type="date" class="form-control" id="to_date" name="to_date" value="{{ !empty($toDate) ? $toDate : '' }}">
+                                                </div>
+                                                <button type="button" class="btn btn-primary search-btn">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div> 
+                                <hr>       
+                                <div class="card-body">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Slot Time</th>
+                                                <th>Date</th>
+                                                <th>Status</th> 
+                                                <th>Slot Type</th>
+                                                <th>Absent Reason</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($trainerAttendance as $attendance)
+                                                <tr>
+                                                    <td>{{ $attendance->slots->slot_time }}</td>
+                                                    <td>{{ date('d-m-Y', strtotime($attendance->date)) }}</td>
+                                                    <td>
+                                                        @if($attendance->status == 'A')
+                                                            Absent
+                                                        @else
+                                                            Present
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ $attendance->slot_type }}</td>
+                                                    <td>
+                                                        @if($attendance->absent_reason !== null)
+                                                            {{ $attendance->absent_reason }}
+                                                        @else
+                                                        -
+                                                        @endif
+                                                    </td>
+                                                </tr> 
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
+                @endif  
             </div>
         </section>
     </div>
 @endsection
+@push('scripts')
+    <script>
+        $('body').on('click', '.search-btn',  function(){
+            var baseurl = "{{ asset('/') }}";
+            var fromDate = $("#from_date").val();
+            var toDate = $("#to_date").val();
+            var trainer_id = $('#trainer_id').val();
+            console.log(trainer_id);
+            var url = baseurl + "trainer/" + trainer_id + "?fromDate=" + fromDate + "&toDate=" + toDate;
+            window.location = url;            
+        });
+    </script>
+@endpush
+
