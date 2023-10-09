@@ -122,7 +122,7 @@ class StudentsController extends Controller
             $request->upload_analysis->move(public_path('assets/student/pdf'), $filename);
             $upload_analysis = $filename;
         }
-        
+
         $time = $request->input('school_time_to') . " - " . $request->input('school_time_from');
         $tuition = $request->input('extra_tuition_time_to') . "-" . $request->input('extra_tuition_time_from');
 
@@ -185,7 +185,7 @@ class StudentsController extends Controller
                 'appreciation_id' => $getAppreciation->id,
             ]);
         }
-        
+
         if($request->course_material){
             foreach($request->course_material as $material_id){
                 StudentCourseMaterial::create([
@@ -204,10 +204,11 @@ class StudentsController extends Controller
         $assignStaff = StudentStaffAssign::orderBy('id')->where('student_id', $student->id)->with('Trainer', 'Slot')->get();
 
         $studentCompleteCourses = StudentCourseComplete::where('status',1)->where('student_id',$id)->pluck('id')->toArray();
-        $approvedCourse= StudentCourseComplete::where('status',2)->where('user_id',auth()->user()->id)->where('student_id',$id)->pluck('id')->toArray();
+        $approvedCourse= StudentCourseComplete::where('status',2)->where('student_id',$id)->pluck('id')->toArray();
         $proxy_staff_details = $student->proxyStaffAssignments;
         $student_leave_show =  StudentApproveLeave::orderBy('id')->where('student_id', $student->id)->get();
         $student_appreciation = StudentCourse::orderBy('id')->where('student_id', $student->id)->With('course', 'appreciation')->get();
+        $trainer = StudentStaffAssign::where(['student_id' => $id, 'is_active' => 0])->first();
 
         $fromDate = '';
         $toDate = '';
@@ -231,7 +232,7 @@ class StudentsController extends Controller
 
         $studentAttendance = $qurey->with('slot','trainer')->get();
 
-        return view('student.show', compact('student', 'assignStaff', 'studentAttendance', 'proxy_staff_details','studentCompleteCourses','approvedCourse','student_leave_show','student_appreciation','fromDate','toDate'));
+        return view('student.show', compact('student', 'assignStaff', 'studentAttendance', 'proxy_staff_details','studentCompleteCourses','approvedCourse','student_leave_show','student_appreciation','fromDate','toDate', 'trainer'));
     }
 
     public function edit($id)
@@ -250,15 +251,15 @@ class StudentsController extends Controller
         $studentCourseId = [];
         foreach($student->courses as $courseId){
             $studentCourseId[] = $courseId->course_id;
-        }    
-        $courseWiseMaterial = CourseWiseMaterial::whereIn('course_id',$studentCourseId)->where('medium',$student->medium)->get(); 
+        }
+        $courseWiseMaterial = CourseWiseMaterial::whereIn('course_id',$studentCourseId)->where('medium',$student->medium)->get();
         $selectedMaterial = StudentCourseMaterial::
             join('course_wise_materials', 'course_wise_materials.id','student_course_materials.course_material_id')
             ->where('medium',$student->medium)
             ->whereIn('course_id',$studentCourseId)
             ->where('student_id', $id)->get();
         $courseMaterialIds = $selectedMaterial->pluck('course_material_id')->toArray();
-        
+
         if(Auth::user()->type == 1) {
             $trainer = Trainer::orderBy('id')->where(['is_active' => 0, 'branch_id' => Auth::user()->branch_id])->get();
             $branch = Branch::where('id', Auth::user()->branch_id)->orderBy('id', 'DESC')->get();
@@ -313,7 +314,7 @@ class StudentsController extends Controller
             'type' => 2,
         ]);
 
-        
+
         $upload_analysis = $student->upload_analysis;
         if ($request->hasFile('upload_analysis')) {
             if ($upload_analysis) {
@@ -367,7 +368,7 @@ class StudentsController extends Controller
         if($request->course_id) {
             $courseIds = StudentCourse::where('student_id', $student->id)->delete();
             foreach($request->course_id as $course_id){
-                $getAppreciation = Appreciation::where('course_id', $course_id)->first();       
+                $getAppreciation = Appreciation::where('course_id', $course_id)->first();
                 StudentCourse::create([
                     'student_id' => $student->id,
                     'course_id' => $course_id,
@@ -386,7 +387,7 @@ class StudentsController extends Controller
                 ]);
             }
         }
-    
+
         $getDmit = $student->studentDmit;
         $getDmit->update([
             'student_id' => $student->id,
@@ -507,18 +508,22 @@ class StudentsController extends Controller
             'subCourse_point_after' => 'nullable|array',
             'subCourse_point_before' => 'nullable|array',
         ]);
+
         if($request->subCourse_point_approve){
+//            print_r("if sub course dsfsf point before"); die();
             foreach ($request->subCourse_point_approve as $items){
                 foreach ($items as $key=>$item){
                     $studentCompleteCourse = StudentCourseComplete::find($key);
                     if(isset($studentCompleteCourse)){
                         $studentCompleteCourse->status = 2;
+                        $studentCompleteCourse->admin_confirm_date = Carbon::now()->toDateString();
                         $studentCompleteCourse->save();
                     }
                 }
             }
         }
-        else{
+//        else{
+            // Handle 'before' checkboxes for subCourses
             if (!empty($request->subCourse_before) && is_array($request->subCourse_before)) {
                 foreach ($request->subCourse_before as $subCourse_before) {
                     foreach($subCourse_before as $subCourseBefore_key => $subCourseBefore_value){
@@ -532,11 +537,9 @@ class StudentsController extends Controller
                                     'sub_course_id' => $subCourseBefore_key,
                                 ],
                                 [
-                                    'user_id' => Auth::user()->roles()->first()->value('name') == "Admin" ? Auth::user()->id : null,
-                                    'trainer_id' => Auth::user()->roles()->first()->value('name') != "Admin" ? Auth::user()->id : null,
+                                    'user_id' => Auth::user()->id,
+                                    'trainer_id' => $request->trainer_id,
                                     'before' => 1,
-                                    'trainer_confirm_date' => Carbon::now()->toDateString(),
-                                    'admin_confirm_date' => Carbon::now()->toDateString(),
                                 ]
                             );
                         }
@@ -559,11 +562,10 @@ class StudentsController extends Controller
 
                                 ],
                                 [
-                                    'user_id' => Auth::user()->roles()->first()->value('name') == "Admin" ? Auth::user()->id : null,
-                                    'trainer_id' => Auth::user()->roles()->first()->value('name') != "Admin" ? Auth::user()->id : null,
+                                    'user_id' => Auth::user()->id,
+                                    'trainer_id' => $request->trainer_id,
                                     'after' => 1,
                                     'trainer_confirm_date' => Carbon::now()->toDateString(),
-                                    'admin_confirm_date' => Carbon::now()->toDateString(),
                                 ]
                             );
                         }
@@ -585,18 +587,17 @@ class StudentsController extends Controller
                                     'sub_course_point_id' => $key1,
                                 ],
                                 [
-                                    'user_id' => Auth::user()->roles()->first()->value('name') == "Admin" ? Auth::user()->id : null,
-                                    'trainer_id' => Auth::user()->roles()->first()->value('name') != "Admin" ? Auth::user()->id : null,
+                                    'user_id' => Auth::user()->id,
+                                    'trainer_id' => $request->trainer_id,
                                     'sub_course_id' => optional($point_before)->sub_course_id,
                                     'before' => 1,
-                                    'trainer_confirm_date' => Carbon::now()->toDateString(),
-                                    'admin_confirm_date' => Carbon::now()->toDateString(),
                                 ]
                             );
                         }
                     }
                 }
             }
+
             // Handle subCourse points for 'after'
             if (!empty($request->subCourse_point_after) && is_array($request->subCourse_point_after)) {
                 foreach ($request->subCourse_point_after as $subCourse_point_after) {
@@ -612,12 +613,11 @@ class StudentsController extends Controller
                                     'sub_course_point_id' => $key,
                                 ],
                                 [
-                                    'user_id' => Auth::user()->roles()->first()->value('name') == "Admin" ? Auth::user()->id : null,
-                                    'trainer_id' => Auth::user()->roles()->first()->value('name') != "Admin" ? Auth::user()->id : null,
+                                    'user_id' => Auth::user()->id,
+                                    'trainer_id' => $request->trainer_id,
                                     'sub_course_id' => optional($point)->sub_course_id,
                                     'after' => 1,
                                     'trainer_confirm_date' => Carbon::now()->toDateString(),
-                                    'admin_confirm_date' => Carbon::now()->toDateString(),
                                 ]
                             );
                         }
@@ -639,8 +639,8 @@ class StudentsController extends Controller
 
             }
 
-        }
-        // Handle 'before' checkboxes for subCourses
+//        }
+        //  Handle 'before' checkboxes for subCourses
 
         return redirect()->route('student.show', $validatedData['student_id'])->with('success', 'notification sent to admin.');
     }
@@ -796,7 +796,7 @@ class StudentsController extends Controller
         $course_id = $request->course_id;
         $medium_id = $request->medium_id;
         $course_material_string = explode(",",$request->course_material_string);
-        
+
         $data = CourseWiseMaterial::whereIn('course_id',$course_id)->where('medium',$medium_id)->get();
         foreach ($data as $d) {
             $check = '';

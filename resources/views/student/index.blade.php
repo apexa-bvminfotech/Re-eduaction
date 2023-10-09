@@ -36,7 +36,6 @@
                                         <th>Std</th>
                                         <th>Medium</th>
                                         <th><span></span></th>
-                                        <th><span></span></th>
                                         <th>Action</th>
                                     </tr>
                                     </thead>
@@ -54,7 +53,6 @@
                                             <td>{{ $s->mother_contact_no }}</td>
                                             <td>{{ $s->standard }}</td>
                                             <td>{{ $s->medium }}</td>
-                                            {{-- <td>{{ $s->studentTrainer->trainer->name }}  {{ $s->studentTrainer->trainer->surname }} </td> --}}
                                             <td>{{ $s->isActiveStatus() != null ? $s->isActiveStatus()->status : 'Pending' }}</td>
                                             <td>
                                                 <div class="flex justify-between">
@@ -77,20 +75,22 @@
                                                         {!! Form::close() !!}
                                                     @endcan
                                                     @can('student-edit')
-                                                        <button type="button"
-                                                                class="btn  btn-secondary btn-assign btn-sm"
-                                                                data-id="{{$s->id}}"
-                                                                data-assigned="{{ $s->isStaffAssigned() ? 'true' : 'false' }}">
-                                                            {{ $s->isStaffAssigned() ? 'Shift Trainer' : 'Assign Trainer' }}
-                                                        </button>
-                                                        <button type="button"
-                                                                class="btn btn-secondary btn-proxy btn-sm"
-                                                                data-id="{{$s->id}}"> Assign Proxy Trainer
-                                                        </button>
-                                                        <button type="button"
-                                                                class="btn btn-secondary btn-student-leave btn-sm"
-                                                                data-id="{{$s->id}}"> Approved Leave
-                                                        </button>
+                                                        @if($s->isActiveStatus()->status == 'Start')
+                                                            <button type="button"
+                                                                    class="btn  btn-secondary btn-assign btn-sm"
+                                                                    data-id="{{$s->id}}"
+                                                                    data-assigned="{{ $s->isStaffAssigned() ? 'true' : 'false' }}">
+                                                                {{ $s->isStaffAssigned() ? 'Shift Trainer' : 'Assign Trainer' }}
+                                                            </button>
+                                                            <button type="button"
+                                                                    class="btn btn-secondary btn-proxy btn-sm"
+                                                                    data-id="{{$s->id}}"> Assign Proxy Trainer
+                                                            </button>
+                                                            <button type="button"
+                                                                    class="btn btn-secondary btn-student-leave btn-sm"
+                                                                    data-id="{{$s->id}}"> Approved Leave
+                                                            </button>
+                                                        @endif
                                                         <button type="button"
                                                                 class="btn btn-secondary btn-student-status btn-sm"
                                                                 data-id="{{$s->id}}"> Change status
@@ -410,7 +410,7 @@
                     $('#displayHoldReason').hide();
                     $('#displayCancelReason').hide();
                     $('#displayTrainerBox').hide();
-                    
+
                     var selectedValue = $(this).val();
 
                     if (selectedValue === 'Complete') { // Option "Other" is selected

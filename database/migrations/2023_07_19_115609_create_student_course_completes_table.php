@@ -20,12 +20,12 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('course_id');
             $table->unsignedBigInteger('sub_course_id');
-            $table->unsignedBigInteger('sub_course_point_id');
+            $table->unsignedBigInteger('sub_course_point_id')->default(0);
             $table->boolean('before')->default(0);
             $table->boolean('after')->default(0);
             $table->integer('status')->default(0)->comment('0=default,1=Trainer-Confirm,2=Admin-Confirm');
-            $table->date('trainer_confirm_date');
-            $table->date('admin_confirm_date');
+            $table->date('trainer_confirm_date')->nullable();
+            $table->date('admin_confirm_date')->nullable();
             $table->timestamps();
         });
     }

@@ -66,7 +66,7 @@
                                     <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">School Detail</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#proxy_detail" data-toggle="tab">Proxy staff Details</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#timeline1" data-toggle="tab">Assign Staff</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#timeline2" data-toggle="tab">Student Attendance Show</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#timeline2" data-toggle="tab">Absent Student Attendance Show</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#student_leave" data-toggle="tab">Student Leave List</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#student_appreciation" data-toggle="tab">Student Appreciation Detail</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#student_status" data-toggle="tab">Student Status Detail</a></li>
@@ -83,31 +83,31 @@
                                                     <th><b>Father Contact No:</b></th>
                                                     <td>{{$student->father_contact_no}}</td>
                                                 </tr>
-                                                <tr>   
+                                                <tr>
                                                     <th><b>Mother Contact No:</b></th>
                                                     <td>{{$student->mother_contact_no}}</td>
                                                     <th><b>Address:</b></th>
                                                     <td>{{$student->address}}</td>
                                                 </tr>
-                                                <tr>   
+                                                <tr>
                                                     <th><b>School Name:</b></th>
                                                     <td>{{$student->school_name}}</td>
                                                     <th><b>School Time:</b></th>
                                                     <td>{{$student->school_time}}</td>
                                                 </tr>
-                                                <tr>    
+                                                <tr>
                                                     <th><b>Extra Tuition Time:</b></th>
                                                     <td>{{$student->extra_tuition_time}}</td>
                                                     <th><b>Date Of Birth:</b></th>
                                                     <td>{{$student->dob}}</td>
                                                 </tr>
-                                                <tr>   
+                                                <tr>
                                                     <th><b>Age:</b></th>
                                                     <td>{{$student->age}}</td>
                                                     <th><b>Fees:</b></th>
                                                     <td>{{$student->fees}}</td>
                                                 </tr>
-                                                <tr class="border-bottom">   
+                                                <tr class="border-bottom">
                                                     <th><b>Extra Note:</b></th>
                                                     <td>{{$student->extra_note}}</td>
                                                     <th><b>Student Analysis PDF:</b></th>
@@ -116,7 +116,7 @@
                                                         </a>
                                                     </td>
                                                 </tr>
-                                                <tr>   
+                                                <tr>
                                                     <th><b>Courses:</b></th>
                                                     <td>
                                                         @foreach($student->courses as $key => $cor)
@@ -318,7 +318,7 @@
                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="verticalModalTitle">Edit Proxy Slot</h5>
+                                                        <h5 class="modal-title" id="verticalModalTitle">Edit Regular Slot</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">×</span>
                                                         </button>
@@ -431,14 +431,14 @@
                                                                 <td></td>
                                                             @endif
                                                             <td>
-                                                                @if(\Illuminate\Support\Facades\Auth::user()->type == 0)
+                                                                @can('student-appreciation-edit')
                                                                     @if($appreciation->end_date !== NULL && $appreciation->appreciation_given_date == NULL)
                                                                         <button type="button"
                                                                             class="btn btn-success btn-sm btn-student-appreciation"
                                                                             data-id="{{$appreciation->id}}" data-student-id="{{ $appreciation->student_id }}"> Appreciation
                                                                         </button>
                                                                     @endif
-                                                                @endif
+                                                                @endcan
                                                             </td>
                                                         </tr>
                                                     @endforeach
@@ -474,7 +474,7 @@
                                                             @else
                                                                 <td>-</td>
                                                             @endif
-                                                            <td>{{ date('d-m-Y', strtotime($status->date)) }}</td>                                                           
+                                                            <td>{{ date('d-m-Y', strtotime($status->date)) }}</td>
                                                             <td>{!! $status->is_active == 0 ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
                                                         </tr>
                                                     @endforeach
@@ -502,29 +502,35 @@
                                     {{-- @dd($student_course->start_date) --}}
                                         <span class="h4 p-2">{{$student_course->course->course_name}}</span>
                                         @if($student_course->start_date == null)
-                                            <a class="btn btn-success btn-start" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="start_task" id="btn-start_{{ $student_course->course_id }}">Start</a>
+                                            <a class="btn btn-success btn-start" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="start_task" id="btn-start_{{ $student_course->course_id }}">Start Course</a>
                                             <span class="h6 border p-2" style="display: none;" id="display_start_date_{{ $student_course->course_id }}"> Start Date :- {{ date('d-m-Y', $student_course->start_date)}}</span>
                                         @else
-                                            <span class="h6 border p-2"> Start Date :- {{ date('d-m-Y', strtotime($student_course->start_date))}} </span>
+                                            <span class="h6 border p-2 mr-2"> Start Date :- {{ date('d-m-Y', strtotime($student_course->start_date))}} </span>
                                         @endif
                                         @if($student_course->end_date == null)
-                                            <a class="btn btn-primary btn-end" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="end_task" id="btn-end_{{ $student_course->course_id  }}">End Task</a>
+                                            <a class="btn btn-primary btn-end" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="end_task" id="btn-end_{{ $student_course->course_id  }}">End Course</a>
                                             <span class="h6 border p-2" style="display: none;" id="display_end_date_{{ $student_course->course_id }}"> End Date :- {{ date('d-m-Y', $student_course->end_date) }}</span>
                                         @else
-                                            <span class="h6 border p-2"> End Date :- {{ date('d-m-Y', strtotime($student_course->end_date))}}</span>
+                                            <span class="h6 border p-2 mr-2"> End Date :- {{ date('d-m-Y', strtotime($student_course->end_date))}}</span>
                                             <button class="btn btn-success" disabled>Course Completed</button>
                                         @endif
                                         <button class="btn btn-success" style="display: none;" id="course-complete_{{ $student_course->course_id }}" disabled>Course Completed</button>
+                                        <br><br>
                                         <table class="table table-bordered table-striped" id="courseTable" >
                                             <input type="hidden" name="student_id" class="form-control student_id" value="{{$student->id}}">
                                             <input type="hidden" name="course_id" class="form-control course_id" value="{{$student_course->course_id}}">
+                                            <input type="hidden" name="trainer_id" class="form-control trainer" value="{{$trainer->trainer_id}}">
                                             @if($student_course->course->subcourses->isNotEmpty())
                                                 <tr>
                                                     <td class="text-center">Before</td>
                                                     <td></td>
                                                     <td class="text-center">After</td>
                                                     <td>
-                                                        Date
+                                                        Trainer Confirm Date
+                                                    </td>
+                                                    <td></td>
+                                                    <td>
+                                                        Admin Confirm Date
                                                     </td>
                                                 </tr>
                                             @endif
@@ -535,13 +541,13 @@
                                                         <!--Before-->
                                                         @if($sc->points->count() == 0)
                                                             <div class="form-check checkbox-xl custom-checkbox text-center">
-                                                                @can('student-course-complete-before')
+                                                                @can('student-course-start')
                                                                     <input @if($sub_course=\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_id'=>$sc->id,'before'=>1])->first()) checked disabled @endif
                                                                     type="checkbox" class="form-check-input sub-course-checkbox_before" name="subCourse_before[{{$student_course->id}}][{{$sc->id}}]" data-id="{{ $sc->id }}"
                                                                            data-subCourseId="{{ $sc->id }}" data-pointId="{{$sc->id}}">
                                                                 @else
                                                                     <input @if($sub_course= \App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_id'=>$sc->id,'before'=>1])->first()) checked disabled @endif
-                                                                    type="checkbox" class="form-check-input sub-course-checkbox_before"  data-id="{{ $sc->id }}"
+                                                                    @if(auth()->user()->type == 1) disabled @endif  type="checkbox" class="form-check-input sub-course-checkbox_before" name="subCourse_before[{{$student_course->id}}][{{$sc->id}}]" data-id="{{ $sc->id }}"
                                                                            data-subCourseId="{{ $sc->id }}" data-pointId="0">
                                                                 @endcan
                                                             </div>
@@ -554,53 +560,53 @@
                                                     <th class="bg-info">
                                                         @if($sc->points->count() == 0)
                                                             <div class="form-check checkbox-xl custom-checkbox text-center">
-                                                                @can('student-course-complete-after')
+                                                                @can('student-course-start')
                                                                     <input @if($sub_course1=\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_id'=>$sc->id,'after'=>1])->first()) checked disabled @endif
                                                                     type="checkbox" class="form-check-input  sub-course-checkbox_after" name="subCourse_after[{{$student_course->id}}][{{$sc->id}}]" data-id="{{ $sc->id }}"
                                                                            data-subCourseId="{{ $sc->id }}" data-pointId="{{$sc->id}}">
                                                                 @else
-                                                                    <input @if($sub_course1=\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_id'=>$sc->id,'after'=>1])->first()) checked  disabled @endif
-                                                                    type="checkbox" class="form-check-input  sub-course-checkbox_after" data-id="{{ $sc->id }}"
+                                                                    <input @if($sub_course1=\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_id'=>$sc->id,'after'=>1])->first()) checked disabled @endif
+                                                                   type="checkbox" class="form-check-input  sub-course-checkbox_after" name="subCourse_after[{{$student_course->id}}][{{$sc->id}}]" data-id="{{ $sc->id }}"
                                                                            data-subCourseId="{{ $sc->id }}" data-pointId="0">
                                                                 @endcan
                                                             </div>
                                                         @endif
                                                     </th>
 
-                                                    <th  class="text-center bg-info">{{isset($sub_course->trainer_confirm_date)? $sub_course->trainer_confirm_date:''}}
-                                                        {{isset($sub_course1->trainer_confirm_date)? $sub_course1->trainer_confirm_date:''}}</th>
+                                                    <th  class="text-center bg-info">@if($sc->points->count() == 0) {{isset($sub_course->trainer_confirm_date)? $sub_course->trainer_confirm_date:''}} @endif</th>
                                                     @if(auth()->user()->type == 0)
                                                         <td>
                                                             @if($sc->points->count() == 0)
-                                                            <div class="form-check checkbox-xl custom-checkbox text-center">
-                                                                @php
-                                                                    $id= isset($sub_course)? $sub_course->id :(isset($sub_course1)?$sub_course1->id:0);
-                                                                    $status= isset($sub_course)? $sub_course->status :(isset($sub_course1)?$sub_course1->status:0);
-                                                                @endphp
-                                                                @if(in_array($id,$studentCompleteCourses))
-                                                                    <input class="form-check-input point-checkbox" type="checkbox"  name="subCourse_point_approve[{{$student_course->id}}][{{$id}}]">
-                                                                @elseif($status ==2)
-                                                                    <input class="form-check-input point-checkbox" checked  type="checkbox"  name="subCourse_point_approve[{{$student_course->id}}][{{$id}}]">
-                                                                @else
-                                                                    <input class="form-check-input point-checkbox" type="checkbox"  name="subCourse_point_approve[{{$student_course->id}}][{{$id}}]">
-
+                                                                <div class="form-check checkbox-xl custom-checkbox text-center">
+                                                                    @php
+                                                                        $id= isset($sub_course)? $sub_course->id :(isset($sub_course1)?$sub_course1->id:0);
+                                                                        $status= isset($sub_course)? $sub_course->status :(isset($sub_course1)?$sub_course1->status:0);
+                                                                    @endphp
+                                                                    @if(in_array($id,$studentCompleteCourses))
+                                                                        <input class="form-check-input point-checkbox" type="checkbox"  name="subCourse_point_approve[{{$student_course->id}}][{{$id}}]">
+                                                                    @elseif($status ==2)
+                                                                        <input class="form-check-input point-checkbox" checked  type="checkbox"  name="subCourse_point_approve[{{$student_course->id}}][{{$id}}]">
+                                                                    @else
+                                                                        <input class="form-check-input point-checkbox" type="checkbox"  name="subCourse_point_approve[{{$student_course->id}}][{{$id}}]">
+                                                                    @endif
+                                                                </div>
+                                                            @endif
+                                                        </td>
+                                                    @else
+                                                        <td>
+                                                            @if(auth()->user()->type != 0)
+                                                                @if((isset($sub_course) && auth()->user()->id == $sub_course->user_id) || (isset($sub_course1) && auth()->user()->id == $sub_course1->user_id))
+                                                                    @if(isset($sub_course) && in_array($sub_course->id,$approvedCourse))
+                                                                        Approved
+                                                                    @endif
+                                                                    @if(isset($sub_course1) && in_array($sub_course1->id,$approvedCourse))
+                                                                        Approved
+                                                                    @endif
                                                                 @endif
-                                                            </div>
-                                                                @endif
+                                                            @endif
                                                         </td>
                                                     @endif
-                                                    @if(auth()->user()->type != 0)
-                                                        @if((isset($sub_course) && auth()->user()->id == $sub_course->user_id) || (isset($sub_course1) && auth()->user()->id == $sub_course1->user_id))
-                                                            <td>
-                                                                @if(isset($sub_course) && in_array($sub_course->id,$approvedCourse))
-                                                                    Approved
-                                                                @endif
-                                                                @if(isset($sub_course1) && in_array($sub_course1->id,$approvedCourse))
-                                                                    Approved
-                                                                @endif
-                                                            </td>
-                                                        @endif
-                                                    @endif
+                                                    <td>@if($sc->points->count() == 0) {{isset($sub_course->admin_confirm_date)? $sub_course->admin_confirm_date:''}} @endif</td>
                                                 </tr>
                                                 <tr>
                                                     @if($sc->points->count() > 0)
@@ -612,6 +618,7 @@
                                                         <td class="text-center">
                                                         </td>
                                                         <td></td>
+                                                        <td></td>
                                                     @endif
                                                 </tr>
     {{--                                              //Points before after--}}
@@ -621,13 +628,13 @@
                                                             <!--Before -->
                                                             @if($sc->points->count() > 0)
                                                                 <div class="form-check checkbox-xl custom-checkbox text-center">
-                                                                    @can('student-course-complete-before')
+                                                                    @can('student-course-start')
                                                                         <input @if($sub_course = \App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'before'=>1])->first()) checked disabled @endif
                                                                         class="form-check-input point-checkbox subcourse_before_{{ $sc->id }}" type="checkbox" data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}"
                                                                                name="subCourse_point_before[{{$student_course->id}}][{{$sp->id}}]">
                                                                     @else
-                                                                        <input @if($sub_course=\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'before'=>1])->first()) checked @endif
-                                                                        class="form-check-input point-checkbox subcourse_before_{{ $sc->id }}" type="checkbox" disabled data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}">
+                                                                        <input @if($sub_course=\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'before'=>1])->first()) checked disabled @endif
+                                                                        @if(auth()->user()->type == 1) disabled @endif  class="form-check-input point-checkbox subcourse_before_{{ $sc->id }}" name="subCourse_point_before[{{$student_course->id}}][{{$sp->id}}]" type="checkbox" data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}">
                                                                     @endcan
                                                                 </div>
                                                             @endif
@@ -636,19 +643,18 @@
                                                         <td>
                                                             <!--After-->
                                                             <div class="form-check checkbox-xl custom-checkbox text-center">
-                                                                @can('student-course-complete-before')
+                                                                @can('student-course-start')
                                                                     <input @if($sub_course1 = App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'after'=>1])->first()) checked disabled @endif
                                                                     class="form-check-input point-checkbox subcourse_{{ $sc->id }}" name="subCourse_point_after[{{$student_course->id}}][{{$sp->id}}]" type="checkbox" data-subCourseId="{{ $sc->id }}"
                                                                            data-pointId="{{ $sp->id }}" >
                                                                 @else
-                                                                    <input @if($sub_course1 = \App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'after'=>1])->first()) checked @endif
-                                                                    class="form-check-input point-checkbox subcourse_{{ $sc->id }}" type="checkbox" disabled data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}">
+                                                                    <input @if($sub_course1 = \App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'after'=>1])->first()) checked disabled @endif
+                                                                    class="form-check-input point-checkbox subcourse_{{ $sc->id }}" type="checkbox" name="subCourse_point_after[{{$student_course->id}}][{{$sp->id}}]" data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}">
                                                                 @endcan
                                                             </div>
                                                         </td>
                                                         <td>
                                                             {{isset($sub_course->trainer_confirm_date)? $sub_course->trainer_confirm_date:''}}
-                                                            {{isset($sub_course1->trainer_confirm_date)? $sub_course1->trainer_confirm_date:''}}
                                                         </td>
                                                         @if(auth()->user()->type == 0)
                                                             <td>
@@ -667,19 +673,18 @@
                                                                     @endif
                                                                 </div>
                                                             </td>
-                                                        @endif
-                                                        @if(auth()->user()->type != 0)
-                                                            @if((isset($sub_course) && auth()->user()->id == $sub_course->user_id) || (isset($sub_course1) && auth()->user()->id == $sub_course1->user_id))
-                                                                <td>
+                                                        @else
+                                                            <td>
+                                                                @if(auth()->user()->type != 0)
                                                                     @if(isset($sub_course) && in_array($sub_course->id,$approvedCourse))
                                                                         Approved
-                                                                    @endif
-                                                                    @if(isset($sub_course1) && in_array($sub_course1->id,$approvedCourse))
+                                                                    @elseif(isset($sub_course1) && in_array($sub_course1->id,$approvedCourse))
                                                                         Approved
                                                                     @endif
-                                                                </td>
-                                                            @endif
+                                                                @endif
+                                                            </td>
                                                         @endif
+                                                        <td>{{isset($sub_course->admin_confirm_date)? $sub_course->admin_confirm_date:''}}</td>
                                                     </tr>
                                                 @empty
                                                 @endforelse
@@ -719,8 +724,8 @@
                                             </form>
                                         </div>
                                     </div>
-                                </div> 
-                                <hr>       
+                                </div>
+                                <hr>
                                 <div class="card-body">
                                     <table class="table table-bordered">
                                         <thead>
@@ -728,7 +733,7 @@
                                                 <th>Trainer Name</th>
                                                 <th>Slot Time</th>
                                                 <th>Date</th>
-                                                <th>Status</th> 
+                                                <th>Status</th>
                                                 <th>Slot Type</th>
                                                 <th>Absent Reason</th>
                                             </tr>
@@ -756,13 +761,13 @@
                                                         -
                                                         @endif
                                                     </td>
-                                                </tr> 
+                                                </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                        </div>  
+                        </div>
                     </div>
                 {{-- @endif  --}}
             </div>
@@ -915,10 +920,10 @@
             var toDate = $("#to_date").val();
             var student_id = $('#student_id').val();
             var url = baseurl + "student/" + student_id + "?fromDate=" + fromDate + "&toDate=" + toDate;
-            window.location = url;            
+            window.location = url;
         });
 
-        
+
         $(document).on('click', '.btn-edit-proxy-slot', function () {
             let trainer_id = $(this).data('trainer-id');
             let student_id = $(this).data('student-id');
