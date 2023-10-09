@@ -10,4 +10,8 @@ class StudentPtm extends Model
     use HasFactory;
     protected $guarded = ['id'];
     protected $table = 'student_ptm_report';
+
+    public function trainer(){
+        return $this->belongsTo(Trainer::class);
+    }
 }

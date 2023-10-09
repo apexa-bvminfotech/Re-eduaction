@@ -36,7 +36,9 @@
                                     <li class="list-group-item">
                                         <b>Course:</b>
                                         <a class="float-right">
-{{--                                            {{$student->course->course_name}}--}}
+                                            @foreach($student->courses as $key => $cor)
+                                                <b>{{ $key+1 }}:</b> {{ $cor->course->course_name }}<br>
+                                            @endforeach
                                         </a>
                                     </li>
                                     <li class="list-group-item">

@@ -23,4 +23,7 @@ class StudentCourse extends Model
     public function student(){
         return $this->belongsTo(Student::class);
     }
+    // public function studentCourseMaterial(){
+    //     return $this->belongsTo(StudentCourseMaterial::class,'student_id','student_id');
+    // }
 }

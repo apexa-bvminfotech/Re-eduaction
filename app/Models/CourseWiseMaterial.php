@@ -16,5 +16,7 @@ class CourseWiseMaterial extends Model
     public function course(){
         return $this->belongsTo(Course::class);
     }
-
+    public function studentCourseMaterial(){
+        return $this->belongsTo(StudentCourseMaterial::class,'id','course_material_id');
+    }
 }

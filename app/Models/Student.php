@@ -70,4 +70,7 @@ class Student extends Model
     public function activeCourses(){
         return $this->hasMany(StudentCourse::class)->where('start_date','!=',null)->where('end_date',null);
     }
+    public function studentptm(){
+        return $this->hasMany(StudentPtm::class);
+    }
 }
