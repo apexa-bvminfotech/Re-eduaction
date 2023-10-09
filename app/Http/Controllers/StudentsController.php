@@ -49,9 +49,11 @@ class StudentsController extends Controller
                 ->with('courses')
                 ->join('student_staff_assigns', 'student_staff_assigns.student_id', 'students.id')
                 ->join('trainers','trainers.id', 'student_staff_assigns.trainer_id')
-                ->where(['trainers.user_id' => Auth::user()->id,'student_staff_assigns.is_active' => 0])
+                ->join('student_proxy_staff_assigns','student_proxy_staff_assigns.student_id', 'students.id')
+                ->where(['trainers.user_id' => Auth::user()->id,'student_staff_assigns.is_active' => 0 ])
+                // ->whereDate('student_proxy_staff_assigns.starting_date', now()->format('Y-m-d'))->whereDate('student_proxy_staff_assigns.ending_date', now()->format('Y-m-d'))
                 ->orderBy('students.id', 'DESC')->get();
-        }
+            }
         return view('student.index', compact('students', 'trainers', 'slots'))->with('i');
     }
 

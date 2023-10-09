@@ -9,8 +9,14 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
                     <a href="{{route('studentdashboard.index')}}" class="nav-link @if(Route::currentRouteName() == 'studentdashboard.index')active  @endif">
-                        <i class="nav-icon fas fa-graduation-cap"></i>
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p> Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{route('trainerdashboard.index')}}" class="nav-link @if(Route::currentRouteName() == 'trainerdashboard.index')active  @endif">
+                        <i class="nav-icon fas fa-graduation-cap"></i>
+                        <p> Trainer Dashboard</p>
                     </a>
                 </li>
                 <li class="nav-item">

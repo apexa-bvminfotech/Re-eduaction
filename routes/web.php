@@ -80,6 +80,20 @@ Route::group(['middleware'=>['auth']],function (){
     Route::get('/pending-material-list-student-list','ReportController@getPendingMaterialListStudentList')->name('report.pending-material-list-student-list');
     Route::get('/student-status-list','ReportController@getStudentStatusList')->name('report.student-status-list');
 
-    Route::get('/student-dashboard','StudentDashboardController@index')->name('studentdashboard.index');
+    //Route for student dsahboard
+    Route::group(['prefix'=>'student-dashboard'],function (){
+        Route::get('/','StudentDashboardController@index')->name('studentdashboard.index');
+        Route::get('/student_ptm_report','StudentDashboardController@index')->name('studentdashboard.index');
+        Route::get('/student_staff_assign','StudentDashboardController@index')->name('studentdashboard.index');
+        Route::get('/student_proxy_staff_assign','StudentDashboardController@index')->name('studentdashboard.index');
+        Route::get('/student_course','StudentDashboardController@index')->name('studentdashboard.index');
+        Route::get('/student_leave','StudentDashboardController@index')->name('studentdashboard.index');
+        Route::get('/student_attendance','StudentDashboardController@index')->name('studentdashboard.index');
+        Route::get('/student_status','StudentDashboardController@index')->name('studentdashboard.index');
+    });
+
+    Route::group(['prefix' => 'trainer-dashboard'], function(){
+        Route::get('/','TrainerDashboardController@index')->name('trainerdashboard.index');
+    });
 });
 
