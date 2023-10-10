@@ -83,13 +83,13 @@ Route::group(['middleware'=>['auth']],function (){
     //Route for student dsahboard
     Route::group(['prefix'=>'student-dashboard'],function (){
         Route::get('/','StudentDashboardController@index')->name('studentdashboard.index');
-        Route::get('/student_ptm_report','StudentDashboardController@index')->name('studentdashboard.index');
-        Route::get('/student_staff_assign','StudentDashboardController@index')->name('studentdashboard.index');
-        Route::get('/student_proxy_staff_assign','StudentDashboardController@index')->name('studentdashboard.index');
-        Route::get('/student_course','StudentDashboardController@index')->name('studentdashboard.index');
-        Route::get('/student_leave','StudentDashboardController@index')->name('studentdashboard.index');
-        Route::get('/student_attendance','StudentDashboardController@index')->name('studentdashboard.index');
-        Route::get('/student_status','StudentDashboardController@index')->name('studentdashboard.index');
+        Route::get('/student_ptm_report','StudentDashboardController@index');
+        Route::get('/student_staff_assign','StudentDashboardController@index');
+        Route::get('/student_proxy_staff_assign','StudentDashboardController@index');
+        Route::get('/student_course','StudentDashboardController@index');
+        Route::get('/student_leave','StudentDashboardController@index');
+        Route::get('/student_attendance','StudentDashboardController@index');
+        Route::get('/student_status','StudentDashboardController@index');
     });
 
     Route::group(['prefix' => 'trainer-dashboard'], function(){

@@ -7,18 +7,22 @@
     <div class="sidebar">
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <li class="nav-item">
-                    <a href="{{route('studentdashboard.index')}}" class="nav-link @if(Route::currentRouteName() == 'studentdashboard.index')active  @endif">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p> Dashboard</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{route('trainerdashboard.index')}}" class="nav-link @if(Route::currentRouteName() == 'trainerdashboard.index')active  @endif">
-                        <i class="nav-icon fas fa-graduation-cap"></i>
-                        <p> Trainer Dashboard</p>
-                    </a>
-                </li>
+                @if(\Illuminate\Support\Facades\Auth::user()->type == 2)
+                    <li class="nav-item">
+                        <a href="{{route('studentdashboard.index')}}" class="nav-link @if(Route::currentRouteName() == 'studentdashboard.index')active  @endif">
+                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <p> Dashboard</p>
+                        </a>
+                    </li>
+                @endif
+                @if(\Illuminate\Support\Facades\Auth::user()->type == 1)
+                    <li class="nav-item">
+                        <a href="{{route('trainerdashboard.index')}}" class="nav-link @if(Route::currentRouteName() == 'trainerdashboard.index')active  @endif">
+                            <i class="nav-icon fas fa-graduation-cap"></i>
+                            <p> Trainer Dashboard</p>
+                        </a>
+                    </li>
+                @endif
                 <li class="nav-item">
                     <a href="{{route('student.index')}}" class="nav-link @if(Route::currentRouteName() == 'student.index')active  @endif">
                         <i class="nav-icon fas fa-graduation-cap"></i>
@@ -83,24 +87,26 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('user.index') }}" class="nav-link @if(Route::currentRouteName() == 'user.index')active  @endif">
-                        <i class="nav-icon fas fa-user-alt"></i>
-                        <p>Users</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('roles.index') }}" class="nav-link @if(Route::currentRouteName() == 'roles.index')active  @endif">
-                        <i class="nav-icon fas fa-users"></i>
-                        <p>Roles</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('branch.index') }}" class="nav-link @if(Route::currentRouteName() == 'branch.index')active  @endif">
-                        <i class="nav-icon fas fa-map-marker-alt"></i>
-                        <p>Branch</p>
-                    </a>
-                </li>
+                @if(\Illuminate\Support\Facades\Auth::user()->type == 0)
+                    <li class="nav-item">
+                        <a href="{{ route('user.index') }}" class="nav-link @if(Route::currentRouteName() == 'user.index')active  @endif">
+                            <i class="nav-icon fas fa-user-alt"></i>
+                            <p>Users</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('roles.index') }}" class="nav-link @if(Route::currentRouteName() == 'roles.index')active  @endif">
+                            <i class="nav-icon fas fa-users"></i>
+                            <p>Roles</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('branch.index') }}" class="nav-link @if(Route::currentRouteName() == 'branch.index')active  @endif">
+                            <i class="nav-icon fas fa-map-marker-alt"></i>
+                            <p>Branch</p>
+                        </a>
+                    </li>
+                @endif
                 <li class="nav-item">
                     <a href="{{route('course_material.index')}}" class="nav-link @if(Route::currentRouteName() == 'course_material.index')active  @endif">
                         <i class="nav-icon fas fa-book-open"></i>
@@ -126,49 +132,49 @@
                                 <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
                                 <p>Course wise Student List</p>
                             </a>
-                        </li> 
+                        </li>
                         <li class="nav-item">
                             <a href="{{ route('report.student-list') }}" class="nav-link @if(Route::currentRouteName() == 'report.reports-student-list')active  @endif">
                                 <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
                                 <p>Student List</p>
                             </a>
-                        </li> 
+                        </li>
                         <li class="nav-item">
                             <a href="{{ route('report.pending-appreciation-student-list') }}" class="nav-link @if(Route::currentRouteName() == 'report.pending-appreciation-student-list')active  @endif">
                                 <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
                                 <p>Pending appreciation Student List</p>
                             </a>
-                        </li> 
+                        </li>
                         <li class="nav-item">
                             <a href="{{ route('report.pending-course-student-list') }}" class="nav-link @if(Route::currentRouteName() == 'report.pending-course-student-list')active  @endif">
                                 <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
                                 <p>Pending Course Student List</p>
                             </a>
-                        </li> 
+                        </li>
                         <li class="nav-item">
                             <a href="{{ route('report.student-list-with-course-detail') }}" class="nav-link @if(Route::currentRouteName() == 'report.course-wise-student-list')active  @endif">
                                 <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
                                 <p>Student List with Course Detail</p>
                             </a>
-                        </li>  
+                        </li>
                         <li class="nav-item">
                             <a href="{{ route('report.pending-counselling-student-list') }}" class="nav-link @if(Route::currentRouteName() == 'report.pending-counselling-student-list')active  @endif">
                                 <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
                                 <p>Pending Counselling Student List</p>
                             </a>
-                        </li> 
+                        </li>
                         <li class="nav-item">
                             <a href="{{ route('report.pending-material-list-student-list') }}" class="nav-link @if(Route::currentRouteName() == 'report.pending-material-list-student-list')active  @endif">
                                 <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
                                 <p>Pending Material List Student List</p>
                             </a>
-                        </li> 
+                        </li>
                         <li class="nav-item">
                             <a href="{{ route('report.student-status-list') }}" class="nav-link @if(Route::currentRouteName() == 'report.student-status-list')active  @endif">
                                 <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
                                 <p>Student Status List</p>
                             </a>
-                        </li> 
+                        </li>
                     </ul>
                 </li>
             </ul>
