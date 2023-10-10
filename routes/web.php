@@ -22,6 +22,19 @@ Route::get('/', function () {
 
 Auth::routes();
 
+
+Route::get('/dashboard', function () {
+    $user =  Auth::user()->type;
+    if ($user == 0) {
+        return redirect()->route('home');
+    } elseif ($user == 1) {
+        return redirect()->route('trainerdashboard.index');
+    } else {
+        return redirect()->route('studentdashboard.index');
+    }
+})->middleware(['auth:web'])->name('login-as-user');
+
+
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::group(['middleware'=>['auth']],function (){
     Route::resource('student', 'StudentsController');
@@ -80,7 +93,10 @@ Route::group(['middleware'=>['auth']],function (){
     Route::get('/pending-material-list-student-list','ReportController@getPendingMaterialListStudentList')->name('report.pending-material-list-student-list');
     Route::get('/student-status-list','ReportController@getStudentStatusList')->name('report.student-status-list');
 
-    //Route for student dsahboard
+    Route::group(['prefix' => 'trainer-dashboard'], function(){
+        Route::get('/','TrainerDashboardController@index')->name('trainerdashboard.index');
+    });
+
     Route::group(['prefix'=>'student-dashboard'],function (){
         Route::get('/','StudentDashboardController@index')->name('studentdashboard.index');
         Route::get('/student_ptm_report','StudentDashboardController@index');
@@ -90,10 +106,6 @@ Route::group(['middleware'=>['auth']],function (){
         Route::get('/student_leave','StudentDashboardController@index');
         Route::get('/student_attendance','StudentDashboardController@index');
         Route::get('/student_status','StudentDashboardController@index');
-    });
-
-    Route::group(['prefix' => 'trainer-dashboard'], function(){
-        Route::get('/','TrainerDashboardController@index')->name('trainerdashboard.index');
     });
 });
 

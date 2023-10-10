@@ -53,6 +53,7 @@ class PermissionTableSeeder extends Seeder
             'student-attendance-list',
             'student-attendance-create',
             'student-attendance-edit',
+            'student-attendance-delete',
 
             'student-PTM-list',
             'student-PTM-create',
@@ -65,6 +66,7 @@ class PermissionTableSeeder extends Seeder
             'trainer-attendance-list',
             'trainer-attendance-create',
             'trainer-attendance-edit',
+            'trainer-attendance-delete',
 
             'branch-list',
             'branch-create',
@@ -87,8 +89,6 @@ class PermissionTableSeeder extends Seeder
             'pending-counselling-student-list-report',
             'pending-material-list-student-list-report',
             'student-status-list-report',
-
-            'student-dashboard'
         ];
 
         foreach ($permissions as $permission) {

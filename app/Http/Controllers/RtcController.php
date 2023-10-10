@@ -17,10 +17,9 @@ class RtcController extends Controller
      */
     function __construct()
     {
-        $this->middleware('permission:rtc-list|rtc-create|rtc-edit|rtc-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:rtc-list|rtc-create|rtc-edit', ['only' => ['index','store']]);
         $this->middleware('permission:rtc-create', ['only' => ['create','store']]);
         $this->middleware('permission:rtc-edit', ['only' => ['edit','update']]);
-        $this->middleware('permission:rtc-delete', ['only' => ['destroy']]);
     }
 
     /**

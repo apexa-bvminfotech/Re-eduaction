@@ -62,7 +62,6 @@
                                                         <i class="fa fa-trash"></i> Delete</button>
                                                     {!! Form::close() !!}
                                                 @endcan
-
                                             </td>
                                         </tr>
                                     @endforeach

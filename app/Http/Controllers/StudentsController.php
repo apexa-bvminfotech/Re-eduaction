@@ -30,6 +30,29 @@ use Illuminate\Support\Facades\Auth;
 
 class StudentsController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    function __construct()
+    {
+        $this->middleware('permission:student-list|student-create|student-edit|
+        student-regular-trainer|
+        student-status-list-report|
+        student-assign-proxy-trainer|
+        student-approved-leave|
+        student-status-change|
+        student-course-start|
+        student-course-end|
+        student-proxy-staff-edit|
+        student-regular-staff-edit|
+        student-approved-leave-edit|
+        student-appreciation-edit', ['only' => ['index','store']]);
+        $this->middleware('permission:student-create', ['only' => ['create','store']]);
+        $this->middleware('permission:student-edit', ['only' => ['edit','update']]);
+    }
+
     public function index()
     {
         $user = Auth::user();
@@ -52,7 +75,6 @@ class StudentsController extends Controller
                 ->join('trainers','trainers.id', 'student_staff_assigns.trainer_id')
                 ->where(['trainers.user_id' => Auth::user()->id,'student_staff_assigns.is_active' => 0])
                 ->orderBy('students.id', 'DESC')->get();
-            dd($students);
         }
         return view('student.index', compact('students', 'trainers', 'slots'))->with('i');
     }
@@ -486,7 +508,7 @@ class StudentsController extends Controller
         if ($existingStudentProxySlot) {
             return back()->with('error', 'Student have already proxy slot for the specified dates');
         }
-    
+
         // $existingProxyStaff = StudentProxyStaffAssign::where('student_id', $request->student_id)
         //     ->whereDate('starting_date' ,'<=', $request->starting_date)
         //     ->whereDate('ending_date', '>=', $request->ending_date)

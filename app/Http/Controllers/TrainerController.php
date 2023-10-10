@@ -20,10 +20,9 @@ class TrainerController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:trainer-list|trainer-create|trainer-edit|trainer-delete', ['only' => ['index', 'store']]);
+        $this->middleware('permission:trainer-list|trainer-create|trainer-edit', ['only' => ['index', 'store']]);
         $this->middleware('permission:trainer-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:trainer-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:trainer-delete', ['only' => ['destroy']]);
     }
 
     public function index()
@@ -159,7 +158,7 @@ class TrainerController extends Controller
     {
         if (json_decode($trainer->course_id) != null){
             $trainerId = $trainer->id;
-            $tarinerSlot = Slot::where('trainer_id',$trainerId)->with('rtc','slotList.student')->get(); 
+            $tarinerSlot = Slot::where('trainer_id',$trainerId)->with('rtc','slotList.student')->get();
             $courseIds = json_decode($trainer->course_id);
             $courseNames = Course::whereIn('id', $courseIds)->pluck('course_name');
 
@@ -172,13 +171,13 @@ class TrainerController extends Controller
             if(isset($_GET['toDate'])){
                 $toDate = $_GET['toDate'];
             }
-           
+
             $qurey = TrainerAttendance::from('trainer_attendances')->where('trainer_id',$trainerId);
 
             if($fromDate != '' && $fromDate != null){
                 $qurey->whereDate('date', '>=', date('Y-m-d', strtotime($fromDate)));
             }
-    
+
             if($toDate != '' && $toDate != null){
                 $qurey->whereDate('date', '<=',  date('Y-m-d', strtotime($toDate)));
             }
@@ -225,7 +224,7 @@ class TrainerController extends Controller
             'bank_passbook' => 'nullable',
             'terms_conditions' => 'required',
         ]);
-    
+
         $photo = $trainer->photo;
         if ($request->hasFile('photo')) {
             if ($photo) {

@@ -8,6 +8,13 @@ use Illuminate\Http\Request;
 
 class appreciationController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:appreciation-list|appreciation-create|appreciation-edit', ['only' => ['index', 'store']]);
+        $this->middleware('permission:appreciation-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:appreciation-edit', ['only' => ['edit', 'update']]);
+    }
+
     /**
      * Display a listing of the resource.
      *

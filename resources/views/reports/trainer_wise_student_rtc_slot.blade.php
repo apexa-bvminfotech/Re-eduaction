@@ -19,42 +19,61 @@
                     </div>
                     <div class="card-body">
                         @foreach ($trainerWiseData as $branch)
-                        <div class="col-12 d-flex align-items-stretch flex-column">
-                            <div class="card bg-light d-flex flex-fill">
-                                <div class="card-header border-bottom-0">
-                                    <b> Branch Name : </b> {{ $branch->name }}
-                                    <hr>    
-                                </div>
-                                <div class="card-body pt-0">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            @foreach($branch->trainer as $key => $trainerName)
-                                                <b>Trainer Name : </b> {{ $trainerName->name }} 
-                                                @foreach ($trainerName->slots as $slotTime)
-                                                    <p class="pt-3"><b>RTC Name : </b>{{ $slotTime->rtc->rtc_name }}</p>
-                                                    <p><b>Slot Time : </b>{{ $slotTime->slot_time }}</p>
-                                                    @foreach ($slotTime->slotList as $student)
-                                                        <p><b>Student Detail :- </b></p>
-                                                        <p><b>Student Name : </b> {{ $student->student->name }} {{ $student->student->surname }}</p>
-                                                        <p><b>Standard : </b> {{ $student->student->standard }}</p>
-                                                        <p><b>Meduim : </b> {{ $student->student->medium }}</p>
-                                                    @endforeach
-                                                    @foreach ($slotTime->proxySlotlist as $student)
-                                                        <p><b>Student Detail :- </b></p>
-                                                        <p><b>Student Name : </b> {{ $student->student->name }} {{ $student->student->surname }}</p>
-                                                        <p><b>Standard : </b> {{ $student->student->standard }}</p>
-                                                        <p><b>Meduim : </b> {{ $student->student->medium }}</p>
-                                                    @endforeach
-                                                @endforeach
-                                                <hr>
+                            <div class="container-fluid">
+                                <div class="card card-primary card-outline">
+                                    <div class="card-header" style="display: flex;justify-content: space-between;">
+                                        <h3 class="card-title"><b>Branch Name :</b> {{ $branch->name }}</h3>
+                                        <h3 class="card-title"><b>Total Trainer :</b> {{ count($branch->trainer) }}</h3>
+                                    </div> <!-- /.card-body -->
+                                    @foreach($branch->trainer as $key => $trainerName)
+                                        <div class="card-body">
+                                            <div class="card-header" style="display: flex;justify-content: space-between;">
+                                                <h3 class="card-title"><strong>Trainer Name : </strong> {{ $trainerName->surname }} {{ $trainerName->name }} </h3>
+                                            </div>
+                                            @foreach ($trainerName->slots as $slotTime)
+                                                <div class="card-header">
+                                                    <h3 class="card-title"><strong>RTC Name : </strong> {{ $slotTime->rtc->rtc_name }} </h3><br>
+                                                    <h3 class="card-title"><strong>Slot Time : </strong> 10:00 AM - 12:00 PM</h3>
+                                                </div>
+                                                @if(count($slotTime->slotList) > 0 || count($slotTime->proxySlotlist) > 0)
+                                                    <div class="card-body">
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                            <tr>
+                                                                <th style="width: 10px">#</th>
+                                                                <th>Student Name</th>
+                                                                <th>Standard</th>
+                                                                <th>Meduim</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            @foreach ($slotTime->slotList as $student)
+                                                                <tr>
+                                                                    <td>1.</td>
+                                                                    <td>{{ $student->student->name }} {{ $student->student->surname }}</td>
+                                                                    <td>{{ $student->student->standard }}</td>
+                                                                    <td>{{ $student->student->medium }}</td>
+                                                                </tr>
+                                                            @endforeach
+                                                            @foreach ($slotTime->proxySlotlist as $student)
+                                                                <tr>
+                                                                    <td>1.</td>
+                                                                    <td>{{ $student->student->name }} {{ $student->student->surname }}</td>
+                                                                    <td>{{ $student->student->standard }}</td>
+                                                                    <td>{{ $student->student->medium }}</td>
+                                                                </tr>
+                                                            @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                @endif
                                             @endforeach
                                         </div>
-                                    </div>
+                                    @endforeach<!-- /.card-body -->
                                 </div>
                             </div>
-                        </div>   
-                        @endforeach 
-                    </div>      
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </section>

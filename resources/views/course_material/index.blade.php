@@ -8,9 +8,11 @@
                         <h1>Course Material Management</h1>
                     </div>
                     <div class="col-sm-6 row input-group-append justify-content-end">
-                        <div class="col-md-3 text-right">
-                            <a href="{{route('course_material.create')}}" class="btn btn-primary"><i class="fa fa-plus pr-2"></i> Add</a>
-                        </div>
+                        @can('course-material-create')
+                            <div class="col-md-3 text-right">
+                                <a href="{{route('course_material.create')}}" class="btn btn-primary"><i class="fa fa-plus pr-2"></i> Add</a>
+                            </div>
+                        @endcan
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
@@ -44,7 +46,9 @@
                                             <td>{{ $material->medium }}</td>
                                             <td>{{ $material->material_name }}</td>
                                             <td>
-                                                <a href="{{ route('course_material.edit',$material->id) }}" class="btn btn-success btn-sm" title="Edit"><i class="fa fa-edit"></i> Edit</a>
+                                                @can('course-material-edit')
+                                                    <a href="{{ route('course_material.edit',$material->id) }}" class="btn btn-success btn-sm" title="Edit"><i class="fa fa-edit"></i> Edit</a>
+                                                @endcan
                                             </td>
                                         </tr>
                                     @endforeach

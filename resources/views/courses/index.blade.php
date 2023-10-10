@@ -39,15 +39,15 @@
                                                     <td>{{$course->id}}</td>
                                                     <td>{{$course->course_name}}</td>
                                                     <td>
-                                                        <form action="{{route('course.destroy',$course->id)}}"
-                                                              method="POST">
+{{--                                                        <form action="{{route('course.destroy',$course->id)}}"--}}
+{{--                                                              method="POST">--}}
                                                             <a class="btn btn-success btn-sm fa fa-edit"
                                                                href="{{ route('course.edit',$course->id) }}"> Edit</a>
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit"
-                                                                    class="btn btn-danger fa fa-trash-alt btn-sm show_confirm"> Delete</button>
-                                                        </form>
+{{--                                                            @csrf--}}
+{{--                                                            @method('DELETE')--}}
+{{--                                                            <button type="submit"--}}
+{{--                                                                    class="btn btn-danger fa fa-trash-alt btn-sm show_confirm"> Delete</button>--}}
+{{--                                                        </form>--}}
                                                     </td>
                                                 </tr>
                                             @endforeach

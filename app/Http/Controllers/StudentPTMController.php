@@ -15,11 +15,23 @@ class StudentPTMController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+        $this->middleware('permission:student-PTM-list|student-PTM-create|student-PTM-edit', ['only' => ['index','store']]);
+        $this->middleware('permission:student-PTM-create', ['only' => ['create','store']]);
+        $this->middleware('permission:student-PTM-edit', ['only' => ['edit','update']]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $ptmData = Student::join('student_ptm_report', 'student_ptm_report.student_id', 'students.id')->orderBy('student_ptm_report.id','DESC')->get();
         if(Auth::user()->type == 1) {
-            $students = Student::
+            $ptmData = Student::
             select('students.id','students.surname', 'students.name')
                 ->join('student_staff_assigns', 'student_staff_assigns.student_id', 'students.id')
                 ->join('trainers','trainers.id', 'student_staff_assigns.trainer_id')

@@ -8,7 +8,7 @@
                         <h1>Appreciation Management</h1>
                     </div>
                     <div class="col-sm-6 row input-group-append justify-content-end">
-                        @can('rtc-create')
+                        @can('appreciation-create')
                             <div class="col-md-3 text-right">
                                 <a href="{{route('appreciation.create')}}" class="btn btn-primary"><i class="fa fa-plus pr-2"></i> Add</a>
                             </div>
@@ -43,7 +43,7 @@
                                             <td>{{ ++$i }}</td>
                                             <td>{{ $a->appreciation_name }}</td>
                                             <td>{{ $a->course->course_name }}</td>
-                                            @can('rtc-edit')
+                                            @can('appreciation-edit')
                                                 <td>
                                                     <a href="{{ route('appreciation.edit',$a->id) }}"
                                                        class="btn btn-success btn-sm" title="Edit"><i class="fa fa-edit"></i> Edit</a>

@@ -215,7 +215,9 @@
                                                             <td>{{$psd->ending_date}}</td>
                                                             @if($counter == count( $proxy_staff_details ) - 1)
                                                                 <td>
-                                                                    <button class="btn btn-success btn-edit-proxy-slot" data-trainer-id={{ $psd->trainer_id }} data-student-id={{ $psd->student_id }} data-old-slot-id={{ $psd->slot_id }}>Edit Slot</button>
+                                                                    @can('student-proxy-staff-edit')
+                                                                        <button class="btn btn-success btn-edit-proxy-slot" data-trainer-id={{ $psd->trainer_id }} data-student-id={{ $psd->student_id }} data-old-slot-id={{ $psd->slot_id }}>Edit Slot</button>
+                                                                    @endcan
                                                                 </td>
                                                             @else
                                                                 <td></td>
@@ -299,7 +301,9 @@
                                                             <td>{{$as->date}}</td>
                                                             @if($counter == count( $assignStaff ) - 1)
                                                                 <td>
-                                                                    <button class="btn btn-success btn-edit-regular-slot" data-trainer-id={{ $as->trainer_id }} data-student-id={{ $as->student_id }} data-old-slot-id={{ $as->slot_id }}>Edit Slot</button>
+                                                                    @can('student-regular-staff-edit')
+                                                                        <button class="btn btn-success btn-edit-regular-slot" data-trainer-id={{ $as->trainer_id }} data-student-id={{ $as->student_id }} data-old-slot-id={{ $as->slot_id }}>Edit Slot</button>
+                                                                    @endcan
                                                                 </td>
                                                             @endif
                                                             <td>{!! $as->is_active == 0 ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>

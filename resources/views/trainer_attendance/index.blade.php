@@ -45,19 +45,18 @@
                                                     <td>{{$ta->absent}}</td>
                                                     <td>
                                                         <a href="{{ route('trainer_attendance.show',$ta->date) }}"
-                                                            class="btn btn-info btn-md" title="Show">
-                                                             <i class="fa fa-eye"></i>
+                                                            class="btn btn-info btn-sm" title="Show">
+                                                             <i class="fa fa-eye"></i> View
                                                         </a>
                                                         @can('trainer-attendance-edit')
                                                             <a href="{{ route('trainer_attendance.edit',$ta->date) }}"
-                                                               class="btn btn-success" title="Edit"><i
-                                                                    class="fa fa-edit"></i></a>
+                                                               class="btn btn-success btn-sm" title="Edit"><i class="fa fa-edit"></i> Edit</a>
                                                         @endcan
                                                         @can('trainer-attendance-delete')
                                                             {!! Form::open(['method' => 'DELETE','route' => ['trainer_attendance.destroy', $ta->date],'style'=>'display:inline']) !!}
-                                                            <button type="submit" class="btn btn-danger" title="Delete"
+                                                            <button type="submit" class="btn btn-danger btn-sm" title="Delete"
                                                                     onclick="return confirm('Are you sure you want to delete?')">
-                                                                <i class="fa fa-trash"></i></button>
+                                                                <i class="fa fa-trash"></i> Delete</button>
                                                             {!! Form::close() !!}
                                                         @endcan
                                                     </td>

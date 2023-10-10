@@ -13,6 +13,18 @@ class CourseWiseMaterialController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+        $this->middleware('permission:course-material-list|course-material-create|course-material-edit', ['only' => ['index','store']]);
+        $this->middleware('permission:course-material-create', ['only' => ['create','store']]);
+        $this->middleware('permission:course-material-edit', ['only' => ['edit','update']]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $course_material = CourseWiseMaterial::orderBy('id','DESC')->with('course')->get();

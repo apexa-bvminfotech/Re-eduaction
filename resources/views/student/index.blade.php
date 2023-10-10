@@ -66,14 +66,14 @@
                                                             <i class="fa fa-edit"></i>
                                                         </a>
                                                     @endcan
-                                                    @can('student-delete')
-                                                        {!! Form::open(['method' => 'DELETE','route' => ['student.destroy', $s->id],'style'=>'display:inline']) !!}
-                                                        <button type="submit" class="btn btn-danger btn-sm"
-                                                                title="Delete"
-                                                                onclick="return confirm('Are you sure you want to delete?')">
-                                                            <i class="fa fa-trash"></i></button>
-                                                        {!! Form::close() !!}
-                                                    @endcan
+{{--                                                    @can('student-delete')--}}
+{{--                                                        {!! Form::open(['method' => 'DELETE','route' => ['student.destroy', $s->id],'style'=>'display:inline']) !!}--}}
+{{--                                                        <button type="submit" class="btn btn-danger btn-sm"--}}
+{{--                                                                title="Delete"--}}
+{{--                                                                onclick="return confirm('Are you sure you want to delete?')">--}}
+{{--                                                            <i class="fa fa-trash"></i></button>--}}
+{{--                                                        {!! Form::close() !!}--}}
+{{--                                                    @endcan--}}
                                                     @can('student-edit')
                                                         @if($s->isActiveStatus()->status == 'Start')
                                                             <button type="button"

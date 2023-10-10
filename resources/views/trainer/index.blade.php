@@ -8,7 +8,7 @@
                         <h1>Trainer Management</h1>
                     </div>
                     <div class="col-sm-6 row input-group-append justify-content-end">
-                        @can('branch-create')
+                        @can('trainer-list')
                             <div class="col-md-3 text-right">
                                 <a href="{{route('trainer.create')}}" class="btn btn-primary float-right"><i class="fa fa-plus pr-2"></i> Add</a>
                             </div>
@@ -41,10 +41,8 @@
                                         <th>No</th>
                                         <th>Name</th>
                                         <th><span></span></th>
-                                        @can('trainer-edit')
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        @endcan
+                                        <th>Status</th>
+                                        <th>Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -53,27 +51,25 @@
                                             <td>{{ ++$i }}</td>
                                             <td>{{ $t->name }}</td>
                                             <td>{{$t->branch ? $t->branch->name : ''}}</td>
-                                            @can('trainer-edit')
-                                                <td>
-                                                    <span style="display: none">{{ $t->is_active }}</span>
+                                            <td>
+                                                <span style="display: none">{{ $t->is_active }}</span>
+                                                @can('trainer-edit')
                                                     <div class="custom-control custom-switch">
                                                         <input type="checkbox" data-id="{{$t->id}}"
                                                                class="custom-control-input checkStatus"
                                                                id="c{{$key+1}}" {{ $t->is_active ? '' : 'checked' }}>
                                                         <label class="custom-control-label" for="c{{$key+1}}"></label>
                                                     </div>
-                                                </td>
-                                            @endcan
-                                            @can('trainer-edit')
-                                                <td>
-                                                    <a href="{{ route('trainer.show',$t->id) }}"
-                                                       class="btn btn-info btn-sm" title="show"><i class="fa fa-eye"></i> View</a>
-
-
+                                                @endcan
+                                            </td>
+                                            <td>
+                                                <a href="{{ route('trainer.show',$t->id) }}"
+                                                   class="btn btn-info btn-sm" title="show"><i class="fa fa-eye"></i> View</a>
+                                                @can('trainer-edit')
                                                     <a href="{{ route('trainer.edit',$t->id) }}"
-                                                       class="btn btn-success btn-sm" title="Edit"><i class="fa fa-edit"></i> Edit</a>
-                                                </td>
-                                            @endcan
+                                                    class="btn btn-success btn-sm" title="Edit"><i class="fa fa-edit"></i> Edit</a>
+                                                @endcan
+                                            </td>
                                         </tr>
                                     @endforeach
                                     </tbody>

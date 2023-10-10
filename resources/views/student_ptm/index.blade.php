@@ -8,7 +8,7 @@
                         <h1>Student PTM</h1>
                     </div>
                     <div class="col-sm-6">
-                        @can('role-create')
+                        @can('student-PTM-create')
                             <a href="{{route('student_ptm.create')}}" class="btn btn-primary float-right"><i class="fa fa-plus pr-2"></i> Add</a>
                         @endcan
                     </div>
@@ -40,9 +40,11 @@
                                                 <a href="{{ route('student_ptm.show',$ptm->id) }}"
                                                    class="btn btn-primary btn-sm" title="Edit"><i
                                                         class="fa fa-eye"></i> View</a>
-                                                <a href="{{ route('student_ptm.edit',$ptm->id) }}"
-                                                       class="btn btn-success btn-sm" title="Edit"><i
-                                                            class="fa fa-edit"></i> Edit</a>
+                                                @can('student-PTM-edit')
+                                                    <a href="{{ route('student_ptm.edit',$ptm->id) }}"
+                                                           class="btn btn-success btn-sm" title="Edit"><i
+                                                                class="fa fa-edit"></i> Edit</a>
+                                                @endcan
                                             </td>
                                         </tr>
                                     @endforeach

@@ -18,10 +18,9 @@ class SlotController extends Controller
      */
     function __construct()
     {
-        $this->middleware('permission:slot-list|slot-create|slot-edit|slot-delete', ['only' => ['index', 'store']]);
+        $this->middleware('permission:slot-list|slot-create|slot-edit', ['only' => ['index', 'store']]);
         $this->middleware('permission:slot-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:slot-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:slot-delete', ['only' => ['destroy']]);
     }
 
     /**
