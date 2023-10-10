@@ -9,6 +9,7 @@ use App\Models\Trainer;
 use App\Models\TrainerAttendance;
 use App\Models\TrainerSlotWiseAttendance;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class TrainerAttendanceController extends Controller
@@ -49,11 +50,21 @@ class TrainerAttendanceController extends Controller
      */
     public function create()
     {
-        $trainer = Trainer::orderBy('id', 'DESC')->get();
-        $studentStaffAssign = StudentStaffAssign::orderBy('id', 'DESC')->with('trainer')->get()->groupBy('trainer.name');
-        $proxyStaff = StudentProxyStaffAssign::orderBy('id', 'DESC')->whereDate('starting_date', now()->format('Y-m-d'))->with('trainer')
-            ->get()->groupBy('trainer.name');
-        return view('trainer_attendance.create', compact('trainer', 'proxyStaff', 'studentStaffAssign'));
+        $user = Auth::user();
+        if(Auth::user()->type == 1){
+            $trainer = Trainer::where('user_id',$user->id)->orderBy('id', 'DESC')->get();
+            $studentStaffAssign = StudentStaffAssign::orderBy('id', 'DESC')->with('trainer')->get()->groupBy('trainer.name');
+            $proxyStaff = StudentProxyStaffAssign::orderBy('id', 'DESC')->whereDate('starting_date', now()->format('Y-m-d'))->with('trainer')
+                ->get()->groupBy('trainer.name');
+            return view('trainer_attendance.create', compact('trainer', 'proxyStaff', 'studentStaffAssign'));
+        }
+        else{
+            $trainer = Trainer::orderBy('id', 'DESC')->get();
+            $studentStaffAssign = StudentStaffAssign::orderBy('id', 'DESC')->with('trainer')->get()->groupBy('trainer.name');
+            $proxyStaff = StudentProxyStaffAssign::orderBy('id', 'DESC')->whereDate('starting_date', now()->format('Y-m-d'))->with('trainer')
+                ->get()->groupBy('trainer.name');
+            return view('trainer_attendance.create', compact('trainer', 'proxyStaff', 'studentStaffAssign'));
+        }      
     }
 
     /**

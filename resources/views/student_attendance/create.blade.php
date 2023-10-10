@@ -45,6 +45,9 @@
                                     </div>
                                 </div>
                                 @foreach ($trainer as $t)
+                                    @php
+                                        $regularSlottrainerIds = [];
+                                    @endphp
                                     @if (isset($studentStaffAssign[$t->name]))
                                         <div class="row">
                                             <div class="col-md-3">
@@ -111,6 +114,9 @@
                                                                 </div>    
                                                             </div>
                                                         </div>
+                                                        @php
+                                                            $regularSlottrainerIds[] = $regularStaff->trainer_id;
+                                                        @endphp
                                                     @endforeach
                                                 @endforeach
                                             </div>
@@ -120,10 +126,20 @@
                                     {{-- for Proxy staff --}}
                                     @if (isset($proxyStaff[$t->name]))
                                         @foreach ($proxyStaff[$t->name]->groupBy('slot_id') as $slotGroup)
+                                            @php
+                                                $proxyStaffTrainerIds = [];
+                                            @endphp
                                             @foreach ($slotGroup as $key => $proxy)
-                                                @if ($t->name !== $proxy->trainer_name)
+                                                {{-- @if ($t->name == $proxy->trainer->name) --}}
                                                     <div class="row">
                                                         <div class="col-md-3">
+                                                            @if(!in_array($t->id,$regularSlottrainerIds) && !in_array($t->id,$proxyStaffTrainerIds))
+                                                                <div class="form-group">
+                                                                    <label for="simpleinput">Trainer name</label> 
+                                                                    <input type="text" readonly value="{{ $t->name }}" class="form-control">                                                    
+                                                                    <input type="hidden" readonly name="trainer_id[]"  value="{{ $t->id }}" class="form-control">
+                                                                </div>
+                                                            @endif
                                                         </div>
                                                         <div class="col-md-9">
                                                             <div class="form-group">
@@ -182,8 +198,11 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        @php
+                                                            $proxyStaffTrainerIds[] = $proxy->trainer_id;
+                                                        @endphp
                                                     </div>
-                                                @endif
+                                                {{-- @endif --}}
                                             @endforeach
                                         @endforeach
                                     @endif

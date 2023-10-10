@@ -32,6 +32,7 @@ class StudentsController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
         $slots = Slot::where('is_active', 0)->orderBy('id', 'desc')->get();
         $trainers = Trainer::where('is_active', 0)->orderBy('id', 'desc')->get();
         // $studentTrainer = StudentStaffAssign::where('is_active','0')->with('trainer')->get();
@@ -51,6 +52,7 @@ class StudentsController extends Controller
                 ->join('trainers','trainers.id', 'student_staff_assigns.trainer_id')
                 ->where(['trainers.user_id' => Auth::user()->id,'student_staff_assigns.is_active' => 0])
                 ->orderBy('students.id', 'DESC')->get();
+            dd($students);
         }
         return view('student.index', compact('students', 'trainers', 'slots'))->with('i');
     }
@@ -425,6 +427,12 @@ class StudentsController extends Controller
             'trainer_id' => 'required|integer',
             'slot_id' => 'required|integer',
         ]);
+
+        $existingProxyStaff = StudentProxyStaffAssign::where(['trainer_id' => $request->trainer_id, 'slot_id' => $request->slot_id])->first();
+            if ($existingProxyStaff) {
+                return back()->with('error', 'Trainer is already Assigned as proxy staff for this student and for this slot');
+            }
+
         $student = StudentStaffAssign::where(['student_id' => $request->student_id, 'trainer_id' => $request->trainer_id] )->where('is_active', 0)->first();
 
         if ($student) {
@@ -470,15 +478,24 @@ class StudentsController extends Controller
             'ending_date' => 'required',
         ]);
 
-        $existingProxyStaff = StudentProxyStaffAssign::where('student_id', $request->student_id)
+        $existingStudentProxySlot = StudentProxyStaffAssign::where('student_id', $request->student_id)
             ->whereDate('starting_date' ,'<=', $request->starting_date)
             ->whereDate('ending_date', '>=', $request->ending_date)
-            ->where('trainer_id',  $request->trainer_id)
             ->first();
 
-        if ($existingProxyStaff) {
-            return back()->with('error', 'Trainer is already assigned as proxy staff for the specified dates');
+        if ($existingStudentProxySlot) {
+            return back()->with('error', 'Student have already proxy slot for the specified dates');
         }
+    
+        // $existingProxyStaff = StudentProxyStaffAssign::where('student_id', $request->student_id)
+        //     ->whereDate('starting_date' ,'<=', $request->starting_date)
+        //     ->whereDate('ending_date', '>=', $request->ending_date)
+        //     ->where('trainer_id',  $request->trainer_id)
+        //     ->first();
+
+        // if ($existingProxyStaff) {
+        //     return back()->with('error', 'Trainer is already assigned as proxy staff for the specified dates');
+        // }
 
         $checkIsregularTrainer = StudentStaffAssign::where(['trainer_id' => $request->trainer_id, 'slot_id' => $request->slot_id , 'is_active' => 0])->first();
         if($checkIsregularTrainer) {
