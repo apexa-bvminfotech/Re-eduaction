@@ -225,8 +225,7 @@ class StudentsController extends Controller
     public function show($id)
     {
         $student = Student::with('courses','studentDmit','studentStatus','branch','studentMaterial.material')->find($id);
-        $assignStaff = StudentStaffAssign::orderBy('id')->where('student_id', $student->id)->with('Trainer', 'Slot')->get();
-
+        $assignStaff = StudentStaffAssign::orderBy('id','DESC')->where('student_id', $student->id)->with('Trainer', 'Slot')->get();
         $studentCompleteCourses = StudentCourseComplete::where('status',1)->where('student_id',$id)->pluck('id')->toArray();
         $approvedCourse= StudentCourseComplete::where('status',2)->where('student_id',$id)->pluck('id')->toArray();
         $proxy_staff_details = $student->proxyStaffAssignments;

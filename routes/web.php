@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\Auth\ResetPasswordController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +36,9 @@ Route::get('/dashboard', function () {
     }
 })->middleware(['auth:web'])->name('login-as-user');
 
+//Route for change password
+Route::get('reset-password','Auth\ResetPasswordController@showResetPasswordForm')->name('reset.password.form');
+Route::post('reset-password', 'Auth\ResetPasswordController@submitResetPasswordForm')->name('reset.password.update');
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::group(['middleware'=>['auth']],function (){
@@ -83,7 +88,8 @@ Route::group(['middleware'=>['auth']],function (){
     Route::get('myprofile', 'UserController@profile')->name('profile');
     Route::post('user/{user}/update-profile-image', 'UserController@updateProfileImage')->name('user.update-profile-image');
 
-    Route::get('/reports-trainer-wise-student-rtc-slot','ReportController@getTrainerWiseStudentRtcSlot')->name('report.trainer-wise-student-rtc-slot');
+    Route::get('/reports-trainer-wise-student-rtc-regular-slot','ReportController@getTrainerWiseStudentRtcRegularSlot')->name('report.trainer-wise-student-rtc-regular-slot');
+    Route::get('/reports-trainer-wise-student-rtc-proxy-slot','ReportController@getTrainerWiseStudentRtcProxySlot')->name('report.trainer-wise-student-rtc-proxy-slot');
     Route::get('/reports-course-wise-student','ReportController@getCourseWiseStudentList')->name('report.course-wise-student-list');
     Route::get('/reports-student-list','ReportController@getStudentList')->name('report.student-list');
     Route::get('/pending-appreciation-student-list','ReportController@getPendingAppreciationStudentList')->name('report.pending-appreciation-student-list');
@@ -106,6 +112,10 @@ Route::group(['middleware'=>['auth']],function (){
         Route::get('/student_leave','StudentDashboardController@index');
         Route::get('/student_attendance','StudentDashboardController@index');
         Route::get('/student_status','StudentDashboardController@index');
+    });
+
+    Route::group(['prefix' => 'admin-dashboard'], function(){
+        Route::get('/','AdminDashboardController@index')->name('admindashboard.index');
     });
 });
 

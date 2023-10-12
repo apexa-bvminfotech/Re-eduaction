@@ -279,9 +279,6 @@
                                         </div>
                                     </form>
                                     <div class="tab-pane" id="timeline1">
-                                        @php
-                                            $counter = 0;
-                                        @endphp
                                         <div class="post">
                                             <table class="table table-striped">
                                                 <thead>
@@ -299,18 +296,15 @@
                                                             <td>{{$as->trainer->name}}</td>
                                                             <td>{{$as->slot->slot_time}}</td>
                                                             <td>{{$as->date}}</td>
-                                                            @if($counter == count( $assignStaff ) - 1)
-                                                                <td>
+                                                            <td>
+                                                                @if($loop->first)
                                                                     @can('student-regular-staff-edit')
                                                                         <button class="btn btn-success btn-edit-regular-slot" data-trainer-id={{ $as->trainer_id }} data-student-id={{ $as->student_id }} data-old-slot-id={{ $as->slot_id }}>Edit Slot</button>
                                                                     @endcan
-                                                                </td>
-                                                            @endif
+                                                                @endif
+                                                            </td>   
                                                             <td>{!! $as->is_active == 0 ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
                                                         </tr>
-                                                        @php
-                                                            $counter = $counter + 1;
-                                                        @endphp
                                                     @endforeach
                                                 </tbody>
                                             </table>

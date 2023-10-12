@@ -12,9 +12,14 @@ use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
-    public function getTrainerWiseStudentRtcSlot(){
-        $trainerWiseData = Branch::with(['trainer.slots.rtc','trainer.slots.slotList.student', 'trainer.slots.proxySlotlist.student'])->get();
-        return view('reports.trainer_wise_student_rtc_slot',compact('trainerWiseData'));
+    public function getTrainerWiseStudentRtcRegularSlot(){
+        $trainerWiseData = Branch::with(['trainer.slots.rtc','trainer.slots.slotList.student'])->get();
+        return view('reports.trainer_wise_student_rtc_regular_slot',compact('trainerWiseData'));
+    }  
+    
+    public function getTrainerWiseStudentRtcProxySlot(){
+        $trainerWiseData = Branch::with(['trainer.slots.rtc','trainer.slots.proxySlotlist.student'])->get();
+        return view('reports.trainer_wise_student_rtc_proxy_slot',compact('trainerWiseData'));
     }
 
     public function getCourseWiseStudentList(){

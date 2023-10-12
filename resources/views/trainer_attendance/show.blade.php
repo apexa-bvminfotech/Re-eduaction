@@ -30,7 +30,6 @@
                                 <tr>
                                     <th>Trainer Name</th>
                                     <th>Date</th>
-
                                     <th>Trainer Slot times</th>
                                     <th>Status</th>
                                     <th>Reason for absent</th>

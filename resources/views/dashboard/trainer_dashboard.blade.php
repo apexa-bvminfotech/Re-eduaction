@@ -4,13 +4,153 @@
 <div class="content-wrapper">
     <section class="content-header">
         <div class="container-fluid">
+            <div class="row md-12">
+                <div class="col-sm-6">
+                    <h1>Dashboard</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="card bg-light card-info">
+                <div class="card-header">
+                    <h4 class="card-title w-100">
+                        <h5 class="d-block w-100" data-toggle="collapse">
+                            <b>Today Assign Student List </b>
+                        </h5>
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Student</th>
+                            <th>Meduim</th>
+                            <th>Standard</th>
+                            <th>Slot Time</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($trainerStudent as $key=>$trainer)
+                                <tr>
+                                    <td>{{ ++$key}}</td>
+                                    <td>{{$trainer->student->name}} {{$trainer->student->surname}}</td>
+                                    <td>{{$trainer->student->medium}}</td>
+                                    <td>{{$trainer->student->standard}}</td>
+                                    <td>{{ $trainer->slot->slot_time }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card bg-light card-info">
+                <div class="card-header">
+                    <h4 class="card-title w-100">
+                        <h5 class="d-block w-100" data-toggle="collapse">
+                            <b>Slot </b>
+                        </h5>
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Slot Time</th>
+                            <th>Slot Type</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($tarinerRegularLecture as $key=>$trainerLecture)
+                                <tr>
+                                    <td>{{$trainerLecture->slot->slot_time}}</td>
+                                    <td>Regular</td>
+                                </tr>
+                            @endforeach
+                            @foreach($tarinerProxyLecture as $key=>$trainerLecture)
+                                <tr>
+                                    <td>{{$trainerLecture->slot->slot_time}}</td>
+                                    <td>Proxy</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>  
+            </div>
+            <div class="card bg-light card-info">
+                <div class="card-header">
+                    <h4 class="card-title w-100">
+                        <h5 class="d-block w-100" data-toggle="collapse">
+                            <b>Total Students</b>
+                        </h5>
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-4 col-6">
+                            <div class="small-box" style="background-color:lightgray">
+                                <div class="inner">
+                                    <h4>Total Students</h4>
+                                    <h4>{{ count($totalStudent) }}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-6">
+                            @php
+                                $presentStudent = 0;
+                            @endphp
+
+                            @foreach ($absentPresentStudent as $student)
+                                @foreach ($student->trainer->studentAttendance as $attendance)
+                                    @if ($attendance->attendance_type == '1')
+                                        @php
+                                            $presentStudent++;
+                                        @endphp
+                                    @endif
+                                @endforeach
+                            @endforeach
+                            
+                            <div class="small-box" style="background-color:lightgray">
+                                <div class="inner">
+                                    <h4>Total Present Student</h4>
+                                    <h4>{{ $presentStudent }}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-6">
+                            @php
+                                $absentStudent = 0;
+                            @endphp
+
+                            @foreach ($absentPresentStudent as $student)
+                                @foreach ($student->trainer->studentAttendance as $attendance)
+                                    @if ($attendance->attendance_type == '0')
+                                        @php
+                                            $absentStudent++;
+                                        @endphp
+                                    @endif
+                                @endforeach
+                            @endforeach
+                            
+                            <div class="small-box" style="background-color:lightgray">
+                                <div class="inner">
+                                    <h4>Total Absent Student</h4>
+                                    <h4>{{ $absentStudent }}</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+            </div>
             <div class="row">
                 <div class="col-md-3">
                     <div class="card card-success card-outline">
                         <div class="card-body box-profile">
                             <div class="text-center">
                                 <img class="profile-user-img img-fluid img-circle" style="height: 100px;"
-                                        src="{{asset('assets/trainer/'. $trainer->photo )}}" alt="Student Profile Photo">
+                                        src="{{asset('assets/trainer/'. $trainer->photo )}}" alt="Trainer Profile Photo">
                             </div>
                             <h3 class="profile-username text-center">{{ $trainer->name }} {{ $trainer->surname }}</h3>
                             <p class="text-muted text-center">Trainer</p>
@@ -20,7 +160,7 @@
                                     <b>Designation : </b> <a class="float-right">{{ $trainer->designation }}</a>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Branch Name : </b> <a class="float-right">{{ $trainer->branch->name }}</a>
+                                    {{-- <b>Branch Name : </b> <a class="float-right">{{ $trainer->branch->name }}</a> --}}
                                 </li>
                                 <li class="list-group-item">
                                     <b>Email address : </b> <a class="float-right">{{ $trainer->email_id }}</a>

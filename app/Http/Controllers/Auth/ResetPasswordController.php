@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 
 class ResetPasswordController extends Controller
 {
@@ -27,4 +31,32 @@ class ResetPasswordController extends Controller
      * @var string
      */
     protected $redirectTo = RouteServiceProvider::HOME;
+
+    public function showResetPasswordForm() { 
+        return view('auth.passwords.reset');
+    }
+
+    public function submitResetPasswordForm(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users',
+            'password' => 'required|string|min:8',
+            'password_confirmation' => 'required|string|same:password|min:8'
+        ]);
+
+        $existingEmail = DB::table('users')
+                            ->where([
+                              'email' => $request->email, 
+                            ])
+                            ->first();
+
+        if(!$existingEmail){
+            return back()->withInput()->with('error', 'Invalid Email Id ! Please Enter valid Email address !');
+        }
+
+        $user = User::where('email', $request->email)
+                    ->update(['password' => Hash::make($request->password)]);
+
+        return redirect('/login')->with('message', 'Your password has been changed successfully !');
+    }
 }

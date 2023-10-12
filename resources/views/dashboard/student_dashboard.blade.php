@@ -66,28 +66,37 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="post">
-                                        <table class="table table-borderless">
+                                        <table class="table table-borderless table-striped table-hover">
                                             <tr>
                                                 <th><b>Father Name:</b></th>
                                                 <td>{{$student->father_name}}</td>
+                                                
+                                            </tr>
+                                            <tr>
                                                 <th><b>Father Contact No:</b></th>
                                                 <td>{{$student->father_contact_no}}</td>
                                             </tr>
                                             <tr>   
                                                 <th><b>Mother Contact No:</b></th>
-                                                <td>{{$student->mother_contact_no}}</td>
+                                                <td>{{$student->mother_contact_no}}</td>    
+                                            </tr>
+                                            <tr>
                                                 <th><b>School Time:</b></th>
                                                 <td>{{$student->school_time}}</td>
                                             </tr>
                                             <tr>    
                                                 <th><b>Extra Tuition Time:</b></th>
-                                                <td>{{$student->extra_tuition_time}}</td>
+                                                <td>{{$student->extra_tuition_time}}</td>     
+                                            </tr>
+                                            <tr>
                                                 <th><b>Date Of Birth:</b></th>
                                                 <td>{{$student->dob}}</td>
                                             </tr>
                                             <tr>   
                                                 <th><b>Fees:</b></th>
                                                 <td>{{$student->fees}}</td>
+                                            </tr>
+                                            <tr>
                                                 <th><b>Extra Note:</b></th>
                                                 <td>{{$student->extra_note}}</td>
                                             </tr>
@@ -105,6 +114,8 @@
                                                         <br>
                                                     @endforeach
                                                 </td>
+                                            </tr>
+                                            <tr>
                                                 <th><b>Student Analysis PDF:</b></th>
                                                 <td><a href="{{asset('assets/student/pdf/'. $student->upload_analysis )}}" download="">
                                                         <button class="btn btn-success">Download  <i class="fa fa-file-pdf"></i></button>
@@ -121,22 +132,28 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="post">
-                                        <table class="table table-borderless">
-                                            <tr>
+                                        <table class="table table-borderless table-striped table-hover">
+                                            <tr> 
                                                 <th><b>Reference By:</b></th>
                                                 <td>{{$student->reference_by}}</td>
+                                            </tr>
+                                            <tr>
                                                 <th><b>Demo Taken By:</b></th>
                                                 <td>{{$student->trainer->name ?? ''}}</td>
                                             </tr>
                                             <tr>    
                                                 <th><b>Analysis Staff Name:</b></th>
                                                 <td>{{$student->trainer->name ?? ''}}</td>
+                                            </tr>
+                                            <tr>
                                                 <th><b>Payment Condition:</b></th>
                                                 <td>{{$student->payment_condition}}</td>
                                             </tr>
                                             <tr>   
                                                 <th><b>Branch Name:</b></th>
                                                 <td>{{ $student->branch->name }}</td>
+                                            </tr>
+                                            <tr>
                                                 <th><b>STF:</b></th>
                                                 <td>{{$student->stf}}</td>
                                             </tr>
@@ -144,24 +161,28 @@
                                                 <tr>
                                                     <th><b>DMIT Details</b></th>
                                                     <td></td>
-                                                    <th></th>
-                                                    <td></td>
                                                 </tr>
                                                 <tr>
                                                     <th><b>FP</b></th>
                                                     <td>{!! $student->studentDmit->fp ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
+                                                </tr>
+                                                <tr>
                                                     <th><b>Fp Date</b></th>
                                                     <td>{{ $student->studentDmit->fp_date ?? '' }}</td>
                                                 </tr>
                                                 <tr>
                                                     <th><b>Report</b></th>
                                                     <td>{!! $student->studentDmit->report ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
+                                                </tr>
+                                                <tr>
                                                     <th><b>Report Date</b></th>
                                                     <td>{{ $student->studentDmit->report_date ?? '' }}</td>
                                                 </tr>
                                                 <tr>
                                                     <th><b>Counselling By</b></th>
                                                     <td>{!! $student->studentDmit->counselling_by ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
+                                                </tr>
+                                                <tr>
                                                     <th><b>Counselling by Date</b></th>
                                                     <td>{{ $student->studentDmit->counselling_date ?? '' }}</td>
                                                 </tr>
@@ -199,7 +220,7 @@
                                 </div> 
                                 <hr>       
                                 <div class="card-body">
-                                    <table class="table table-bordered">
+                                    <table class="table table-bordere example1 table-striped table-hover">
                                         <thead>
                                             <tr>
                                                 <th>Trainer Name</th>
@@ -278,7 +299,7 @@
                                 </div> 
                                 <hr>       
                                 <div class="card-body">
-                                    <table class="table table-bordered">
+                                    <table class="table table-bordere example1 table-striped table-hover">
                                         <thead>
                                             <tr>
                                                 <th>Trainer Name</th>
@@ -329,7 +350,7 @@
                                 </div> 
                                 <hr>       
                                 <div class="card-body">
-                                    <table class="table table-bordered">
+                                    <table class="table table-bordere example1 table-striped table-hover">
                                         <thead>
                                             <tr>
                                                 <th>Trainer Name</th>
@@ -381,7 +402,7 @@
                                 </div> 
                                 <hr>       
                                 <div class="card-body">
-                                    <table class="table table-bordered">
+                                    <table class="table table-bordere example1 table-striped table-hover">
                                         <thead>
                                             <tr>
                                                 <th>Course Name</th>
@@ -452,7 +473,7 @@
                                 </div> 
                                 <hr>       
                                 <div class="card-body">
-                                    <table class="table table-bordered">
+                                    <table class="table table-bordere example1 table-striped table-hover">
                                         <thead>
                                             <tr>
                                                 <th>Starting Date</th>
@@ -508,7 +529,7 @@
                                 </div> 
                                 <hr>       
                                 <div class="card-body">
-                                    <table class="table table-bordered">
+                                    <table class="table table-bordere example1 table-striped table-hover">
                                         <thead>
                                             <tr>
                                                 <th>Trainer Name</th>
@@ -577,7 +598,7 @@
                                 </div> 
                                 <hr>       
                                 <div class="card-body">
-                                    <table class="table table-bordered">
+                                    <table class="table table-bordere example1 table-striped table-hover">
                                         <thead>
                                             <tr>
                                                 <th>Status</th>
@@ -689,6 +710,36 @@
             var toDateStatus = $("#to_date_status").val();
             var url = baseurl + "student-dashboard/" + "student_status/" + "?fromDateStatus=" + fromDateStatus + "&toDateStatus=" + toDateStatus;
             window.location = url;            
+        });
+
+        $(function () {
+            dataTable = $(".example1").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["csv", "excel", "pdf", "print"],
+                initComplete: function () {
+                    this.api().columns([]).every(function () {
+                            var column = this;
+                            var select = $('<select class="form-control select2"><option value="">All</option></select>')
+                                .appendTo($(column.header()).find('span').empty())
+                                .on({
+                                    'change': function () {
+                                        var val = $.fn.dataTable.util.escapeRegex(
+                                            $(this).val()
+                                        );
+                                        column
+                                            .search(val ? '^' + val + '$' : '', true, false).draw();
+                                    },
+                                    'click': function (e) {
+                                        e.stopPropagation();
+                                    }
+                                });
+                            column.data().unique().sort().each(function (d, j) {
+                                select.append('<option value="' + d + '">' + d + '</option>')
+                            });
+                        },
+                    );
+                }   
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
     </script>
 @endpush
