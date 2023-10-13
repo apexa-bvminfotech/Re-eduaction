@@ -17,6 +17,68 @@
                 <div class="card-header">
                     <h4 class="card-title w-100">
                         <h5 class="d-block w-100" data-toggle="collapse">
+                            <b>Total Students</b>
+                        </h5>
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-4 col-6">
+                            <div class="small-box" style="background-color:lightgray">
+                                <div class="inner">
+                                    <h4>Total Students</h4>
+                                    <h4>{{ count($totalStudent) }}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-6">
+                            @php
+                                $presentStudent = 0;
+                            @endphp
+
+                            @foreach ($absentPresentStudent as $student)   
+                                @if ($student->attendance_type == '1')
+                                    @php
+                                        $presentStudent++;
+                                    @endphp
+                                @endif   
+                            @endforeach
+                            
+                            <div class="small-box" style="background-color:lightgray">
+                                <div class="inner">
+                                    <h4>Total Present Student</h4>
+                                    <h4>{{ $presentStudent }}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-6">
+                            @php
+                                $absentStudent = 0;
+                            @endphp
+
+                            @foreach ($absentPresentStudent as $student)
+                                @if ($student->attendance_type == '0')
+                                    @php
+                                        $absentStudent++;
+                                    @endphp
+                                @endif
+                            @endforeach
+                            
+                            <div class="small-box" style="background-color:lightgray">
+                                <div class="inner">
+                                    <h4>Total Absent Student</h4>
+                                    <h4>{{ $absentStudent }}</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+            </div>
+            
+            <div class="card bg-light card-info">
+                <div class="card-header">
+                    <h4 class="card-title w-100">
+                        <h5 class="d-block w-100" data-toggle="collapse">
                             <b>Today Assign Student List </b>
                         </h5>
                     </h4>
@@ -50,7 +112,7 @@
                 <div class="card-header">
                     <h4 class="card-title w-100">
                         <h5 class="d-block w-100" data-toggle="collapse">
-                            <b>Slot </b>
+                            <b>Today Regular and Proxy slot</b>
                         </h5>
                     </h4>
                 </div>
@@ -63,85 +125,36 @@
                         </tr>
                         </thead>
                         <tbody>
+                            @php
+                                $regularSlot = [];
+                            @endphp
                             @foreach($tarinerRegularLecture as $key=>$trainerLecture)
-                                <tr>
-                                    <td>{{$trainerLecture->slot->slot_time}}</td>
-                                    <td>Regular</td>
-                                </tr>
+                                @if(!in_array($trainerLecture->trainer_id,$regularSlot))
+                                    <tr>
+                                        <td>{{$trainerLecture->slot->slot_time}}</td>
+                                        <td>Regular</td>
+                                        @php
+                                            $regularSlot[] = $trainerLecture->trainer_id;
+                                        @endphp
+                                    </tr>
+                                @endif    
                             @endforeach
+                            @php
+                                $proxySlot = [];
+                            @endphp
                             @foreach($tarinerProxyLecture as $key=>$trainerLecture)
-                                <tr>
-                                    <td>{{$trainerLecture->slot->slot_time}}</td>
-                                    <td>Proxy</td>
-                                </tr>
+                                @if(!in_array($trainerLecture->trainer_id,$proxySlot))
+                                    <tr>
+                                        <td>{{$trainerLecture->slot->slot_time}}</td>
+                                        <td>Proxy</td>
+                                        @php
+                                            $proxySlot[] = $trainerLecture->trainer_id;
+                                        @endphp
+                                    </tr>
+                                @endif   
                             @endforeach
                         </tbody>
                     </table>
-                </div>  
-            </div>
-            <div class="card bg-light card-info">
-                <div class="card-header">
-                    <h4 class="card-title w-100">
-                        <h5 class="d-block w-100" data-toggle="collapse">
-                            <b>Total Students</b>
-                        </h5>
-                    </h4>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-4 col-6">
-                            <div class="small-box" style="background-color:lightgray">
-                                <div class="inner">
-                                    <h4>Total Students</h4>
-                                    <h4>{{ count($totalStudent) }}</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-6">
-                            @php
-                                $presentStudent = 0;
-                            @endphp
-
-                            @foreach ($absentPresentStudent as $student)
-                                @foreach ($student->trainer->studentAttendance as $attendance)
-                                    @if ($attendance->attendance_type == '1')
-                                        @php
-                                            $presentStudent++;
-                                        @endphp
-                                    @endif
-                                @endforeach
-                            @endforeach
-                            
-                            <div class="small-box" style="background-color:lightgray">
-                                <div class="inner">
-                                    <h4>Total Present Student</h4>
-                                    <h4>{{ $presentStudent }}</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-6">
-                            @php
-                                $absentStudent = 0;
-                            @endphp
-
-                            @foreach ($absentPresentStudent as $student)
-                                @foreach ($student->trainer->studentAttendance as $attendance)
-                                    @if ($attendance->attendance_type == '0')
-                                        @php
-                                            $absentStudent++;
-                                        @endphp
-                                    @endif
-                                @endforeach
-                            @endforeach
-                            
-                            <div class="small-box" style="background-color:lightgray">
-                                <div class="inner">
-                                    <h4>Total Absent Student</h4>
-                                    <h4>{{ $absentStudent }}</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>  
             </div>
             <div class="row">
@@ -150,23 +163,23 @@
                         <div class="card-body box-profile">
                             <div class="text-center">
                                 <img class="profile-user-img img-fluid img-circle" style="height: 100px;"
-                                        src="{{asset('assets/trainer/'. $trainer->photo )}}" alt="Trainer Profile Photo">
+                                        src="{{asset('assets/trainer/'. $trainers->photo )}}" alt="Trainer Profile Photo">
                             </div>
-                            <h3 class="profile-username text-center">{{ $trainer->name }} {{ $trainer->surname }}</h3>
+                            <h3 class="profile-username text-center">{{ $trainers->name }} {{ $trainers->surname }}</h3>
                             <p class="text-muted text-center">Trainer</p>
             
                             <ul class="list-group list-group-unbordered mb-3">
                                 <li class="list-group-item">
-                                    <b>Designation : </b> <a class="float-right">{{ $trainer->designation }}</a>
+                                    <b>Designation : </b> <a class="float-right">{{ $trainers->designation }}</a>
                                 </li>
                                 <li class="list-group-item">
-                                    {{-- <b>Branch Name : </b> <a class="float-right">{{ $trainer->branch->name }}</a> --}}
+                                    <b>Branch Name : </b> <a class="float-right">{{ $trainers->branch->name }}</a>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Email address : </b> <a class="float-right">{{ $trainer->email_id }}</a>
+                                    <b>Email address : </b> <a class="float-right">{{ $trainers->email_id }}</a>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Qualification : </b> <a class="float-right">{{ $trainer->qualification }}</a>
+                                    <b>Qualification : </b> <a class="float-right">{{ $trainers->qualification }}</a>
                                 </li>
                             </ul>
                         </div>
@@ -177,13 +190,13 @@
                         </div>
                         <div class="card-body">
                             <strong><i class="fas fa-map-marker-alt mr-1"></i> Address </strong>
-                            <p class="text-muted"> {{ $trainer->address }}</p>
+                            <p class="text-muted"> {{ $trainers->address }}</p>
                             <hr>
-                            <strong><i class="fas fa-calendar-alt mr-1"></i>Date of Birth</strong> :  {{ date('d-m-Y',strtotime($trainer->dob)) }}
+                            <strong><i class="fas fa-calendar-alt mr-1"></i>Date of Birth</strong> :  {{ date('d-m-Y',strtotime($trainers->dob)) }}
                             <hr>
-                            <strong>Father Name :</strong> {{ $trainer->father_name }}
+                            <strong>Father Name :</strong> {{ $trainers->father_name }}
                             <hr>
-                            <strong>Marital Status :</strong> {{ $trainer->marital_status == 1 ? "Married" : "Unmarried"     }}
+                            <strong>Marital Status :</strong> {{ $trainers->marital_status == 1 ? "Married" : "Unmarried"     }}
                             <hr>
                         </div>
                     </div>
@@ -198,19 +211,19 @@
                                 <table class="table table-striped table-hover">
                                     <tr>
                                         <th>Full Name</th>
-                                        <td>{{ $trainer->emer_fullName }}</td>
+                                        <td>{{ $trainers->emer_fullName }}</td>
                                     </tr>
                                     <tr>
                                         <th>Address</th>
-                                        <td>{{ $trainer->emer_address }}</td>
+                                        <td>{{ $trainers->emer_address }}</td>
                                     </tr>
                                     <tr>
                                         <th>Mobile No</th>
-                                        <td>{{ $trainer->emer_phone }}</td>
+                                        <td>{{ $trainers->emer_phone }}</td>
                                     </tr>
                                     <tr>
                                         <th>Relationship</th>
-                                        <td>{{ $trainer->emer_relationship }}</td>
+                                        <td>{{ $trainers->emer_relationship }}</td>
                                     </tr>
                                 </table>
                             </div>
@@ -225,43 +238,43 @@
                                 <table class="table table-striped table-hover">
                                     <tr>
                                         <th>Department</th>
-                                        <td>{{ $trainer->department }}</td>
+                                        <td>{{ $trainers->department }}</td>
                                         <th>Work Location</th>
-                                        <td>{{ $trainer->work_location }}</td>
+                                        <td>{{ $trainers->work_location }}</td>
                                     </tr>
                                     <tr>
                                         <th>Trainer Type</th>
-                                        <td>{{ $trainer->emp_type == 1 ? "FreeLancer" : "Fixed" }}</td>
+                                        <td>{{ $trainers->emp_type == 1 ? "FreeLancer" : "Fixed" }}</td>
                                         <th>Email Address</th>
-                                        <td>{{ $trainer->office_use_email }}</td>
+                                        <td>{{ $trainers->office_use_email }}</td>
                                     </tr>
                                     <tr>
                                         <th>Joining Date</th>
-                                        <td>{{ $str = str_replace(',', ' to ', $trainer->joining_date) }}</td>
+                                        <td>{{ $str = str_replace(',', ' to ', $trainers->joining_date) }}</td>
                                         <th>I-Card</th>
-                                        <td>{{ date('d-m-Y', strtotime($trainer->i_card_date)) }}</td>
+                                        <td>{{ date('d-m-Y', strtotime($trainers->i_card_date)) }}</td>
                                     </tr>
                                     <tr>
                                         <th>I-Card Return Date</th>
-                                        <td>{{ date('d-m-Y', strtotime($trainer->i_card_return_date)) }}</td>
+                                        <td>{{ date('d-m-Y', strtotime($trainers->i_card_return_date)) }}</td>
                                         <th>I-Card Note</th>
-                                        <td>{{ $trainer->i_card_note }}</td>
+                                        <td>{{ $trainers->i_card_note }}</td>
                                     </tr>
                                     <tr>
                                         <th>Uniform</th>
-                                        <td>{{ date('d-m-Y', strtotime($trainer->uniform_date)) }}</td>
+                                        <td>{{ date('d-m-Y', strtotime($trainers->uniform_date)) }}</td>
                                         <th>Uniform Return Date</th>
-                                        <td>{{ date('d-m-Y', strtotime($trainer->uniform_return_date)) }}</td>
+                                        <td>{{ date('d-m-Y', strtotime($trainers->uniform_return_date)) }}</td>
                                     </tr>
                                     <tr>
                                         <th>Uniform Note</th>
-                                        <td>{{ $trainer->uniform_note }}</td>
+                                        <td>{{ $trainers->uniform_note }}</td>
                                         <th>Material</th>
-                                        <td>{{ date('d-m-Y', strtotime($trainer->material_date)) }}</td>
+                                        <td>{{ date('d-m-Y', strtotime($trainers->material_date)) }}</td>
                                     </tr>
                                     <tr>
                                         <th>Material Return Date</th>
-                                        <td>{{ date('d-m-Y', strtotime($trainer->material_return_date)) }}</td>
+                                        <td>{{ date('d-m-Y', strtotime($trainers->material_return_date)) }}</td>
                                         <th></th>
                                         <td></td>
                                     </tr>
@@ -279,9 +292,9 @@
                                     <tr>
                                         <th>Aadhaar Card</th>
                                         <td>
-                                            @if ($trainer->aadhaar_card)
-                                                <a  class="btn btn-outline-dark fa fa-eye" href="{{ asset('assets/trainer/' . $trainer->aadhaar_card) }}" target="_blank"></a>
-                                                <a class="btn btn-outline-dark" href="{{ asset('assets/trainer/' . $trainer->aadhaar_card) }}" download>Download</a>
+                                            @if ($trainers->aadhaar_card)
+                                                <a  class="btn btn-outline-dark fa fa-eye" href="{{ asset('assets/trainer/' . $trainers->aadhaar_card) }}" target="_blank"></a>
+                                                <a class="btn btn-outline-dark" href="{{ asset('assets/trainer/' . $trainers->aadhaar_card) }}" download>Download</a>
                                             @else
                                                 No image available
                                             @endif
@@ -290,9 +303,9 @@
                                     <tr>
                                         <th>Marksheet Photo</th>
                                         <td>
-                                            @if ($trainer->last_edu_markSheet)
-                                                <a class="btn btn-outline-dark fa fa-eye" href="{{ asset('assets/trainer/' . $trainer->last_edu_markSheet) }}" target="_blank"></a>
-                                                <a class="btn btn-outline-dark" href="{{ asset('assets/trainer/' . $trainer->last_edu_markSheet) }}" download>Download</a>
+                                            @if ($trainers->last_edu_markSheet)
+                                                <a class="btn btn-outline-dark fa fa-eye" href="{{ asset('assets/trainer/' . $trainers->last_edu_markSheet) }}" target="_blank"></a>
+                                                <a class="btn btn-outline-dark" href="{{ asset('assets/trainer/' . $trainers->last_edu_markSheet) }}" download>Download</a>
                                             @else
                                                 No image available
                                             @endif
@@ -301,9 +314,9 @@
                                     <tr>
                                         <th>Bank-Passbook</th>
                                         <td>
-                                            @if ($trainer->bank_passbook)
-                                                <a class="btn btn-outline-dark fa fa-eye" href="{{ asset('assets/trainer/' . $trainer->bank_passbook) }}" target="_blank"></a>
-                                                <a class="btn btn-outline-dark" href="{{ asset('assets/trainer/' . $trainer->bank_passbook) }}" download>Download</a>
+                                            @if ($trainers->bank_passbook)
+                                                <a class="btn btn-outline-dark fa fa-eye" href="{{ asset('assets/trainer/' . $trainers->bank_passbook) }}" target="_blank"></a>
+                                                <a class="btn btn-outline-dark" href="{{ asset('assets/trainer/' . $trainers->bank_passbook) }}" download>Download</a>
                                             @else
                                                 No image available
                                             @endif
