@@ -17,4 +17,7 @@ class Branch extends Model
     public function trainer(){
         return $this->hasMany(Trainer::class);
     }
+    public function student(){
+        return $this->hasMany(Student::class);
+    }
 }

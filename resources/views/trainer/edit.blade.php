@@ -92,8 +92,11 @@
                                                             <input type="text"
                                                                    class="form-control "
                                                                    value="{{ $trainer->emp_id }}"
-                                                                   name="emp_id" readonly>
+                                                                   name="emp_id">
                                                         </div>
+                                                        @error('emp_id')
+                                                            <span class="text-danger">{{$message}}</span>
+                                                        @enderror
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -137,10 +140,9 @@
                                                         <div class="form-group mb-3">
                                                             <label for="contact number">Mobile No:</label>
                                                             <input type="tel" name="phone"
-                                                                   placeholder="12345 67890"
+                                                                   placeholder="1234567890"
                                                                    value="{{ old('phone',$trainer->phone) }}"
-                                                                   class="form-control"
-                                                                   pattern="[0-9]{5}[\s]{1}[0-9]{5}">
+                                                                   class="form-control">
                                                             @error('phone')
                                                             <span class="text-danger">{{$message}}</span>
                                                             @enderror
@@ -248,10 +250,9 @@
                                                         <div class="form-group mb-3">
                                                             <label for="contact number">Mobile No:</label>
                                                             <input type="tel" name="emer_phone"
-                                                                   placeholder="12345 67890"
+                                                                   placeholder="1234567890"
                                                                    value="{{ old('emer_phone',$trainer->emer_phone) }}"
-                                                                   class="form-control"
-                                                                   pattern="[0-9]{5}[\s]{1}[0-9]{5}">
+                                                                   class="form-control">
 
                                                             @error('emer_phone')
                                                             <span class="text-danger">{{$message}}</span>
@@ -336,6 +337,9 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        @error('emp_type')
+                                                            <span class="text-danger">{{$message}}</span>
+                                                        @enderror
                                                     </div>
 
                                                     <div class="col-md-6 ">
@@ -354,11 +358,11 @@
                                                     <div class="col-md-6">
                                                         <label for="simpleinput">Joining Date:</label>
                                                         <div class="row mb-3">
-                                                            <div class="col-sm-2"
+                                                            <div class="col-sm-1"
                                                                  style="display: flex;justify-content: space-around;">
                                                                 <label for="simpleinput">From:</label>
                                                             </div>
-                                                            <div class="col-sm-4">
+                                                            <div class="col-sm-5">
                                                                 <div class="input-group date" id="timepicker2"
                                                                      data-target-input="nearest">
 
@@ -372,7 +376,7 @@
                                                                  style="display: flex;justify-content: space-around;">
                                                                 <label for="simpleinput">To:</label>
                                                             </div>
-                                                            <div class="col-sm-4">
+                                                            <div class="col-sm-5">
                                                                 <div class="input-group date" id="timepicker3"
                                                                      data-target-input="nearest">
 
@@ -602,6 +606,9 @@
                                                                    class="custom-control-label">Deactive</label>
                                                         </div>
                                                     </div>
+                                                    @error('is_active')
+                                                        <span class="text-danger">{{$message}}</span>
+                                                    @enderror
                                                 </div>
                                                 <button type="button" class="btn btn-primary float-right next-btn ml-2">
                                                     Next
@@ -730,6 +737,9 @@
             var form = $('#quickForm');
             var validator = form.validate({
                 rules: {
+                    emp_id: {
+                        required: true,
+                    },
                     surname: {
                         required: true,
                         maxlength: 255,
@@ -748,6 +758,8 @@
                     },
                     phone: {
                         required: true,
+                        maxlength: 10,
+                        number : true,
                     },
                     email_id: {
                         required: true,
@@ -760,6 +772,8 @@
                     },
                     emer_phone: {
                         required: true,
+                        maxlength: 10,
+                        number : true,
                     },
                     emer_relationship: {
                         required: true,
@@ -773,11 +787,20 @@
                     marital_status: {
                         required: true,
                     },
+                    emp_type:{
+                        required: true,
+                    },
+                    is_active:{
+                        required: true,
+                    },
                     terms_conditions: {
                         required: true,
                     }
                 },
                 messages: {
+                    emp_id:{
+                        required: 'Please enter your Employee Id.'
+                    },
                     surname: {
                         required: 'Please enter your surname.'
                     },
@@ -817,6 +840,12 @@
                     marital_status: {
                         required: "Please fill this field ",
                     },
+                    emp_type: {
+                        required : "Please select emp type ",
+                    },
+                    is_active: {
+                        required : "Please select status ",
+                    }, 
                     terms_conditions: {
                         required: 'Please read terms and condition and select this checkbox for submit data',
                     }

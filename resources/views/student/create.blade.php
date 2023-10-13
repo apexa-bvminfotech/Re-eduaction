@@ -139,8 +139,7 @@
                                                             <label for="contact number">Mother Contact No:</label>
                                                             <input type="tel" class="form-control"
                                                                    name="mother_contact_no"
-                                                                   placeholder="12345 67890"
-                                                                   pattern="[0-9]{5}[\s]{1}[0-9]{5}"
+                                                                   placeholder="1234567890"
                                                                    id="mother_contact_no"
                                                                    value="{{ old('mother_contact_no') }}">
                                                             @error('mother_contact_no')
@@ -153,8 +152,7 @@
                                                             <label for="contact number">Father Contact No:</label>
                                                             <input type="tel" class="form-control"
                                                                    name="father_contact_no"
-                                                                   placeholder="12345 67890"
-                                                                   pattern="[0-9]{5}[\s]{1}[0-9]{5}"
+                                                                   placeholder="1234567890"
                                                                    id="father_contact_no"
                                                                    value="{{ old('father_contact_no') }}">
                                                             @error('father_contact_no')
@@ -171,7 +169,7 @@
                                                                 <input class="form-check" type="radio" name="gender"
                                                                        id="gender_male" required
                                                                        {{ old("gender") == 'male' ? 'checked' : '' }}
-                                                                       value="male" checked>&nbsp;&nbsp;
+                                                                       value="male">&nbsp;&nbsp;
                                                                 <label class="form-check-label" for="gender_male">
                                                                     Male
                                                                 </label>
@@ -187,7 +185,7 @@
                                                                 </label>
                                                             </div>
                                                             @error('gender')
-                                                            <span class="text-danger">{{$message}}</span>
+                                                                <span class="text-danger">{{$message}}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
@@ -252,9 +250,6 @@
                                                                    name="school_name"
                                                                    placeholder="enter school name"
                                                                    value="{{ old('school_name') }}">
-                                                            @error('school_name')
-                                                            <span class="text-danger">{{$message}}</span>
-                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="form-group  col-md-6">
@@ -360,7 +355,7 @@
                                                             <label for="dob">Date Of Birth:</label>
                                                             <input type="date" class="form-control" name="dob"
                                                                    placeholder="enter birthdate"
-                                                                   value="{{ old('dob',date('2005-m-01')) }}" id="dob">
+                                                                    id="dob">
                                                             @error('dob')
                                                             <span class="text-danger">{{$message}}</span>
                                                             @enderror
@@ -409,7 +404,7 @@
                                         <div id="information-part" class="content" role="tabpanel" aria-labelledby="information-part-trigger">
                                             <div class="card-body">
                                                 <div class="row">
-                                                    <div class="col-md-3 mb-1">
+                                                    <div class="col-md-4 mb-1">
                                                         <div class="form-group mb-3">
                                                             <label for="demo">Demo Taken By:</label>
                                                             <br>
@@ -423,7 +418,23 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-3 mb-1">
+                                                    <div class="col-md-4 mb-1">
+                                                        <div class="form-group mb-3">
+                                                            <label for="counselling_by">Demo Counselling By:</label>
+                                                            <input type="text" class="form-control"
+                                                                   name="counselling_by"
+                                                                   value="{{ old('counselling_by') }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4 mb-1">
+                                                        <div class="form-group mb-3">
+                                                            <label for="simpleinput">Reference By:</label>
+                                                            <input type="text" class="form-control"
+                                                                   name="reference_by"
+                                                                   value="{{ old('reference_by') }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 mb-1">
                                                         <div class="form-group">
                                                             <label for="name">Analysis Trainer Name: </label>
                                                             <select class="form-control select2"
@@ -434,22 +445,6 @@
                                                                         value="{{$t->id}}" {{ old('analysis_trainer_id')==$t->id?'selected':'' }}>{{$t->name}}</option>
                                                                 @endforeach
                                                             </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6 mb-1">
-                                                        <div class="form-group mb-3">
-                                                            <label for="counselling_by">Counselling By:</label>
-                                                            <input type="text" class="form-control"
-                                                                   name="counselling_by"
-                                                                   value="{{ old('counselling_by') }}">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6 mb-1">
-                                                        <div class="form-group mb-3">
-                                                            <label for="simpleinput">Reference By:</label>
-                                                            <input type="text" class="form-control"
-                                                                   name="reference_by"
-                                                                   value="{{ old('reference_by') }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 mb-1">
@@ -507,11 +502,14 @@
                                                             <div class="form-check form-check-inline">
                                                                 <input type="radio" value="unpaid" name="fees"
                                                                        class="form-check-input"
-                                                                       {{ old('fees') == 'unpaid' ? 'checked' : '' }} checked>
+                                                                       {{ old('fees') == 'unpaid' ? 'checked' : '' }}>
                                                                 <label class="form-check-label" for="medium_hindi">
                                                                     Unpaid
                                                                 </label>
                                                             </div>
+                                                            @error('fees')
+                                                                <span class="text-danger">{{$message}}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
 
@@ -534,7 +532,7 @@
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
                                                                         <input type="date" class="form-control" name="fp_date"
-                                                                               min="{{ date('Y-m-d') }}" value="{{ old('fp_date',date('Y-m-d')) }}" id="fp_date">
+                                                                               min="{{ date('Y-m-d') }}"  id="fp_date">
                                                                         @error('fp_date')
                                                                             <span class="text-danger">{{$message}}</span>
                                                                         @enderror
@@ -556,7 +554,7 @@
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
                                                                         <input type="date" class="form-control" name="report_date"
-                                                                               min="{{ date('Y-m-d') }}" value="{{ old('report_date',date('Y-m-d')) }}" id="fp_date">
+                                                                               min="{{ date('Y-m-d') }}" id="fp_date">
                                                                         @error('report_date')
                                                                             <span class="text-danger">{{$message}}</span>
                                                                         @enderror
@@ -571,14 +569,14 @@
                                                                                class="form-check">&nbsp;&nbsp;
                                                                         <label class="form-check-label"
                                                                                for="counselling_by">
-                                                                            Counselling By
+                                                                            Counselling Date
                                                                         </label>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
                                                                         <input type="date" class="form-control" name="counselling_date"
-                                                                               min="{{ date('Y-m-d') }}" value="{{ old('counselling_date',date('Y-m-d')) }}" id="fp_date">
+                                                                               min="{{ date('Y-m-d') }}"  id="fp_date">
                                                                         @error('counselling_date')
                                                                             <span class="text-danger">{{$message}}</span>
                                                                         @enderror
@@ -620,7 +618,7 @@
                                                                 <input type="file" class="custom-file-input"
                                                                        name="upload_student_image"
                                                                        accept="image/*"
-                                                                       value="{{old('upload_student_image')}}"/>
+                                                                       value="{{old('upload_student_image')}}" onchange="imagePreview(this)"/>
                                                                 <label class="custom-file-label" for="customFile">Choose
                                                                     file</label>
                                                                 {{--                                                               onchange="loadFile(event)"--}}
@@ -630,6 +628,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <img src="" alt="" id="student-photo">
                                                     <div class="col-md-6">
                                                         <div class="form-group mb-2">
                                                             <label for="pdf">Student Analysis PDF:</label>
@@ -669,8 +668,23 @@
 @endsection
 @push('scripts')
     <script>
-        $(document).ready(function ()
-        {
+        // $(document).ready(function ()
+        // {
+
+        //      function imagePreview(input) {
+        //         console.log('hii');
+        //         if (input.target.files[0]) {
+        //             var reader = new FileReader();
+                    
+        //             reader.onload = function (e) {
+        //                 $('#student-photo').attr('src', e.target.result);
+        //             }
+                    
+        //             reader.readAsDataURL(input.target.files[0]);
+        //         }
+        // }
+
+
             var form = $('#quickForm');
             var validator = form.validate({
                 rules: {
@@ -693,9 +707,13 @@
                     },
                     father_contact_no: {
                         required: true,
+                        maxlength: 10,
+                        number : true,
                     },
                     mother_contact_no: {
                         required: true,
+                        maxlength: 10,
+                        number : true,
                     },
                     standard: {
                         required: true,
@@ -703,19 +721,7 @@
                     medium: {
                         required: true,
                     },
-                    school_name: {
-                        required: true,
-                    },
-                    school_time_to: {
-                        required: true,
-                    },
-                    school_time_from: {
-                        required: true,
-                    },
-                    extra_tuition_time_to: {
-                        required: true,
-                    },
-                    extra_tuition_time_from: {
+                    fees: {
                         required: true,
                     },
                     dob: {
@@ -756,20 +762,8 @@
                     medium: {
                         required: "Please select a medium ",
                     },
-                    school_name: {
-                        required: "Please enter a school_name ",
-                    },
-                    school_time_to: {
-                        required: "Please enter a school_time ",
-                    },
-                    school_time_from: {
-                        required: "Please enter a school_time ",
-                    },
-                    extra_tuition_time_to: {
-                        required: "Please enter a Tuition_time ",
-                    },
-                    extra_tuition_time_from: {
-                        required: "Please enter a Tuition_time ",
+                    fees: {
+                        required: "Please select a fees ",
                     },
                     dob: {
                         required: "Please enter a dob ",

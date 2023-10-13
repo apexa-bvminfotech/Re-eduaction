@@ -63,8 +63,9 @@ class RtcController extends Controller
             'rtc_name' => 'required',
             'branch_id' => 'required',
             'person_name' => 'required',
-            'contact' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
+            'contact' => 'required|max:10|numeric',
             'address' => 'required',
+            'is_active' => 'required',
         ]);
         $data = [
             'rtc_no' => $request->input('rtc_no'),
@@ -126,7 +127,7 @@ class RtcController extends Controller
             'rtc_name' => 'required',
             'branch_id' => 'required',
             'person_name' => 'required',
-            'contact' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
+            'contact' => 'required|max:10|numeric',
             'address' => 'required',
         ]);
 

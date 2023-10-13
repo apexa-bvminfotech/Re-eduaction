@@ -92,7 +92,7 @@
                                                                         <br>
                                                                         <div class="form-check form-check-inline">
                                                                             <input class="form-check-input" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $regularStaff->slot->id }}][student_details][{{ $key }}][attendance_type]" 
-                                                                                value="1" required checked>
+                                                                                value="1" required>
                                                                             <label class="form-check-label" for="inlineRadio1">Present</label>
                                                                         </div>
                                                                         <div class="form-check form-check-inline">
@@ -175,7 +175,7 @@
 
                                                                             <div class="form-check form-check-inline">
                                                                                 <input class="form-check-input" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details][{{ $key }}][attendance_type]" 
-                                                                                    value="1" required checked>
+                                                                                    value="1" required>
                                                                                 <label class="form-check-label" for="inlineRadio1">Present</label>
                                                                             </div>
                                                                             <div class="form-check form-check-inline">

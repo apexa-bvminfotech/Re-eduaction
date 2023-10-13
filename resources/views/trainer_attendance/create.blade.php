@@ -45,13 +45,10 @@
                                                         max="{{ now()->format('Y-m-d') }}" name="date" required>
                                                 </div>
                                             </div>
-
-                                            {{-- //regular staff --}}
                                             @foreach ($trainer as $t)
                                                 @php
-                                                    $isTrainerNameDisplayed = false;
+                                                    $regularSlottrainerIds = [];
                                                 @endphp
-
                                                 @if (isset($studentStaffAssign[$t->name]))
                                                     <div class="row">
                                                         <div class="col-md-3">
@@ -61,12 +58,13 @@
                                                                     value="{{ $t->name }}" class="form-control">
                                                             </div>
                                                         </div>
+                                                        {{-- for Regular staff  --}}
                                                         <div class="col-md-9">
                                                             @foreach ($studentStaffAssign[$t->name]->groupBy('slot_id') as $slotGroup)
                                                                 @foreach ($slotGroup as $key => $regularStaff)
-                                                                    @if ($key === 0)
-                                                                        <div class="form-group">
-                                                                            <div class="row">
+                                                                    <div class="form-group">
+                                                                        <div class="row">
+                                                                            @if($key === 0)
                                                                                 <div class="col-md-3">
                                                                                     <div class="form-group">
                                                                                         <label
@@ -89,7 +87,7 @@
                                                                                         <input type="hidden" readonly
                                                                                             name="data[{{ $regularStaff->slot->id }}][slot_type]"
                                                                                             value="Regular"
-                                                                                            class="form-control">
+                                                                                            class="form-control">    
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-md-3">
@@ -102,7 +100,7 @@
                                                                                             <input class="form-check-input"
                                                                                                 type="radio"
                                                                                                 name="data[{{ $regularStaff->slot->id }}][status]"
-                                                                                                value="P" required checked>
+                                                                                                value="P" required>
                                                                                             <label class="form-check-label"
                                                                                                 for="inlineRadio1" >Present</label>
                                                                                         </div>
@@ -129,28 +127,41 @@
                                                                                             class="form-control">
                                                                                     </div>
                                                                                 </div>
-                                                                            </div>
+                                                                            @endif           
                                                                         </div>
-                                                                    @endif
+                                                                    </div>
+                                                                    @php
+                                                                        $regularSlottrainerIds[] = $regularStaff->trainer_id;
+                                                                    @endphp
                                                                 @endforeach
                                                             @endforeach
                                                         </div>
                                                     </div>
                                                 @endif
 
-                                                {{--      //proxy staff --}}
+                                                {{-- for Proxy staff --}}
                                                 @if (isset($proxyStaff[$t->name]))
                                                     @foreach ($proxyStaff[$t->name]->groupBy('slot_id') as $slotGroup)
+                                                        @php
+                                                            $proxyStaffTrainerIds = [];
+                                                        @endphp
                                                         @foreach ($slotGroup as $key => $proxy)
-                                                            @if ($key === 0)
-                                                                @if ($t->name !== $proxy->trainer_name)
-                                                                    <div class="row">
-                                                                        <div class="col-md-3 "> 
-                                                                        </div>
-                                                                        <div class="col-md-9">
+                                                            {{-- @if ($t->name == $proxy->trainer->name) --}}
+                                                                <div class="row">
+                                                                    <div class="col-md-3">
+                                                                        @if(!in_array($t->id,$regularSlottrainerIds) && !in_array($t->id,$proxyStaffTrainerIds))
                                                                             <div class="form-group">
-                                                                                <div class="row">
-                                                                                    <div class="col-md-3">
+                                                                                <label for="simpleinput">Trainer name</label> 
+                                                                                <input type="text" readonly
+                                                                                    value="{{ $t->name }}" class="form-control">
+                                                                            </div>
+                                                                        @endif
+                                                                    </div>
+                                                                    <div class="col-md-9">
+                                                                        <div class="form-group">
+                                                                            <div class="row">
+                                                                                <div class="col-md-3">
+                                                                                    @if ($key === 0)
                                                                                         <div class="form-group">
                                                                                             <label
                                                                                                 for="simpleinput">Proxy-slot
@@ -177,54 +188,57 @@
                                                                                                     class="form-control">
                                                                                             </div>
                                                                                         </div>
-                                                                                    </div>
-                                                                                    <div class="col-md-3">
-                                                                                        <div class="form-group">
+                                                                                    @endif
+                                                                                </div>
+                                                                                <div class="col-md-3">
+                                                                                    <div class="form-group">
+                                                                                        <label
+                                                                                            for="simpleinput">Attendance</label>
+                                                                                        <br>
+                                                                                        <div
+                                                                                            class="form-check form-check-inline">
+                                                                                            <input
+                                                                                                class="form-check-input"
+                                                                                                type="radio"
+                                                                                                name="data[{{ $proxy->slot->id }}][status]"
+                                                                                                value="P" required>
                                                                                             <label
-                                                                                                for="simpleinput">Attendance</label>
-                                                                                            <br>
-                                                                                            <div
-                                                                                                class="form-check form-check-inline">
-                                                                                                <input
-                                                                                                    class="form-check-input"
-                                                                                                    type="radio"
-                                                                                                    name="data[{{ $proxy->slot->id }}][status]"
-                                                                                                    value="P" required checked>
-                                                                                                <label
-                                                                                                    class="form-check-label"
-                                                                                                    for="inlineRadio1">Present</label>
-                                                                                            </div>
-                                                                                            <div
-                                                                                                class="form-check form-check-inline">
-                                                                                                <input
-                                                                                                    class="form-check-input"
-                                                                                                    type="radio"
-                                                                                                    name="data[{{  $proxy->slot->id }}][status]"
-                                                                                                    value="A" required>
-                                                                                                <label
-                                                                                                    class="form-check-label"
-                                                                                                    for="inlineRadio2">Absent</label>
-                                                                                            </div>
+                                                                                                class="form-check-label"
+                                                                                                for="inlineRadio1">Present</label>
                                                                                         </div>
-                                                                                    </div>
-                                                                                    @error('status')
-                                                                                        <span class="text-danger">{{$message}}</span>
-                                                                                    @enderror
-                                                                                    <div class="col-md-3">
-                                                                                        <div class="form-group">
-                                                                                            <label for="simpleinput">Absent
-                                                                                                reason</label>
-                                                                                            <input type="text"
-                                                                                                name="data[{{  $proxy->slot->id }}][absent_reason]"
-                                                                                                class="form-control">
+                                                                                        <div
+                                                                                            class="form-check form-check-inline">
+                                                                                            <input
+                                                                                                class="form-check-input"
+                                                                                                type="radio"
+                                                                                                name="data[{{  $proxy->slot->id }}][status]"
+                                                                                                value="A" required>
+                                                                                            <label
+                                                                                                class="form-check-label"
+                                                                                                for="inlineRadio2">Absent</label>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
+                                                                                @error('status')
+                                                                                    <span class="text-danger">{{$message}}</span>
+                                                                                @enderror
+                                                                                <div class="col-md-3">
+                                                                                    <div class="form-group">
+                                                                                        <label for="simpleinput">Absent
+                                                                                            reason</label>
+                                                                                        <input type="text"
+                                                                                            name="data[{{  $proxy->slot->id }}][absent_reason]"
+                                                                                            class="form-control">
+                                                                                    </div>
+                                                                                </div>    
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                @endif
-                                                            @endif
+                                                                    @php
+                                                                        $proxyStaffTrainerIds[] = $proxy->trainer_id;
+                                                                    @endphp
+                                                                </div>
+                                                            {{-- @endif --}}
                                                         @endforeach
                                                     @endforeach
                                                 @endif
@@ -257,12 +271,12 @@
                 rules : {
                     status : {
                         required: true,
-                    }
+                    },
                 },
                 messages: {
                     status: {
                         required: 'Please fill your attendance .',
-                    }
+                    },
                 },
                 errorElement: 'span',
                 errorPlacement: function (error, element) {

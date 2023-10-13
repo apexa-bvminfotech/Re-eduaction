@@ -118,17 +118,18 @@
                                                         </a>
                                                     </td>
                                                 </tr>
-                                                <tr>
+                                                <tr>   
                                                     <th><b>Courses:</b></th>
                                                     <td>
-                                                        @foreach($student->courses as $key => $cor)
-                                                            <b>{{ $key+1 }}:</b> {{ $cor->course->course_name }}<br>
-                                                        @endforeach
-                                                    </td>
-                                                    <th><b>Course Material:</b></th>
-                                                    <td>
-                                                        @foreach ($student->studentMaterial as $key=>$material)
-                                                            <b>{{ $key+1 }}:</b> {{ $material->material->material_name }}<br>
+                                                        @foreach($student->courses as $key => $course)
+                                                            <b>{{ $key+1 }}:</b> {{ $course->course->course_name }}
+                                                            <br>
+                                                            @foreach ($course->course->courseMaterial as $material)
+                                                                @if($material->studentCourseMaterial !== null)
+                                                                    <b>Course Material :- </b> {{ $material->material_name }}
+                                                                @endif
+                                                            @endforeach    
+                                                            <br>
                                                         @endforeach
                                                     </td>
                                                 </tr>
@@ -216,7 +217,10 @@
                                                             @if($counter == count( $proxy_staff_details ) - 1)
                                                                 <td>
                                                                     @can('student-proxy-staff-edit')
-                                                                        <button class="btn btn-success btn-edit-proxy-slot" data-trainer-id={{ $psd->trainer_id }} data-student-id={{ $psd->student_id }} data-old-slot-id={{ $psd->slot_id }}>Edit Slot</button>
+                                                                        <button type="button"
+                                                                            class="btn btn-success btn-edit-proxy-slot" data-trainer-id={{ $psd->trainer_id }} data-student-id={{ $psd->student_id }} data-old-slot-id={{ $psd->slot_id }}>
+                                                                            Edit Slot
+                                                                        </button>
                                                                     @endcan
                                                                 </td>
                                                             @else
@@ -279,9 +283,6 @@
                                         </div>
                                     </form>
                                     <div class="tab-pane" id="timeline1">
-                                        @php
-                                            $counter = 0;
-                                        @endphp
                                         <div class="post">
                                             <table class="table table-striped">
                                                 <thead>
@@ -299,18 +300,17 @@
                                                             <td>{{$as->trainer->name}}</td>
                                                             <td>{{$as->slot->slot_time}}</td>
                                                             <td>{{$as->date}}</td>
-                                                            @if($counter == count( $assignStaff ) - 1)
-                                                                <td>
+                                                            <td>
+                                                                @if($loop->first)
                                                                     @can('student-regular-staff-edit')
-                                                                        <button class="btn btn-success btn-edit-regular-slot" data-trainer-id={{ $as->trainer_id }} data-student-id={{ $as->student_id }} data-old-slot-id={{ $as->slot_id }}>Edit Slot</button>
+                                                                        <button type="button"
+                                                                            class="btn btn-success btn-edit-regular-slot  btn-md" data-trainer-id={{ $as->trainer_id }} data-student-id={{ $as->student_id }} data-old-slot-id={{ $as->slot_id }}>Edit Slot
+                                                                        </button>
                                                                     @endcan
-                                                                </td>
-                                                            @endif
+                                                                @endif
+                                                            </td>   
                                                             <td>{!! $as->is_active == 0 ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
                                                         </tr>
-                                                        @php
-                                                            $counter = $counter + 1;
-                                                        @endphp
                                                     @endforeach
                                                 </tbody>
                                             </table>
@@ -525,7 +525,7 @@
                                         <table class="table table-bordered table-striped" id="courseTable" >
                                             <input type="hidden" name="student_id" class="form-control student_id" value="{{$student->id}}">
                                             <input type="hidden" name="course_id" class="form-control course_id" value="{{$student_course->course_id}}">
-                                            <input type="hidden" name="trainer_id" class="form-control trainer" value="{{$trainer->trainer_id}}">
+                                            {{-- <input type="hidden" name="trainer_id" class="form-control trainer" value="{{$trainer->trainer_id}}"> --}}
                                             @if($student_course->course->subcourses->isNotEmpty())
                                                 <tr>
                                                     <td class="text-center">Before</td>
@@ -709,7 +709,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <div class="card-header">
+                                <div class="card-header" style="background-color:lightgray">
                                     <div class="row">
                                         <div class="col-md-8">
                                             <h5 class=""><b>Attendance</b></h5>
@@ -724,7 +724,7 @@
                                                     <label for="end-date" class="mr-2">To :</label>
                                                     <input type="date" class="form-control" id="to_date" name="to_date" value="{{ !empty($toDate) ? $toDate : '' }}">
                                                 </div>
-                                                <button type="button" class="btn btn-primary search-btn">
+                                                <button type="button" class="btn btn-secondary search-btn">
                                                     <i class="fas fa-search"></i>
                                                 </button>
                                             </form>
@@ -736,20 +736,18 @@
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>Trainer Name</th>
-                                                <th>Slot Time</th>
                                                 <th>Date</th>
+                                                <th>Slot Time</th>
                                                 <th>Status</th>
-                                                <th>Slot Type</th>
+                                                <th>Trainer Name</th>
                                                 <th>Absent Reason</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($studentAttendance as $attendance)
                                                 <tr>
-                                                    <td>{{ $attendance->trainer->name }}</td>
-                                                    <td>{{ $attendance->slot->slot_time }}</td>
                                                     <td>{{ date('d-m-Y', strtotime($attendance->attendance_date)) }}</td>
+                                                    <td>{{ $attendance->slot->slot_time }} / {{ $attendance->slot_type }}</td>
                                                     <td>
                                                         @if($attendance->status == 'A')
                                                             Absent
@@ -757,9 +755,7 @@
                                                             Present
                                                         @endif
                                                     </td>
-                                                    <td>
-                                                        {{ $attendance->slot_type }}
-                                                    </td>
+                                                    <td>{{ $attendance->trainer->name }}</td>
                                                     <td>
                                                         @if($attendance->absent_reason !== null)
                                                             {{ $attendance->absent_reason }}

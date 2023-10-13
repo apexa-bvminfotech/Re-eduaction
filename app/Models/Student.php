@@ -73,4 +73,7 @@ class Student extends Model
     public function studentptm(){
         return $this->hasMany(StudentPtm::class);
     }
+    public function studentAttendance(){
+        return $this->hasMany(StudentAttendance::class)->whereDate('attendance_date', now()->format('Y-m-d'));
+    }
 }

@@ -67,7 +67,7 @@
                         </span>
                     @enderror
                 </div>
-                <div class="row">
+                <div class="row mb-3">
                     <div class="col-8">
                         <div class="icheck-primary">
                             <input type="checkbox" id="remember">
@@ -82,10 +82,15 @@
                     </div>
                     <!-- /.col -->
                 </div>
+                <div class="row mb-3">
+                    <div class="col-8">
+                        <a href="{{ route('reset.password.form') }}" class="btn btn-primary"> Change Password </a>
+                    </div>  
+                </div>
             </form>
             <!-- /.social-auth-links -->
             <p class="mb-1">
-                <a href="{{route('password.request')}}">I forgot my password</a>
+                <a href="{{route('password.update')}}">I forgot my password</a>
             </p>
         </div>
         <!-- /.card-body -->

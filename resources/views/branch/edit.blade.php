@@ -48,7 +48,7 @@
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="simpleinput">Authorized Person Contact:</label>
-                                        <input type="tel" name="authorized_person_contact" placeholder="12345 67890" value="{{ $branch->authorized_person_contact }}" class="form-control" pattern="[0-9]{5}[\s]{1}[0-9]{5}">
+                                        <input type="tel" name="authorized_person_contact" placeholder="1234567890" value="{{ $branch->authorized_person_contact }}" class="form-control">
 
                                         @error('authorized_person_contact')
                                             <span class="text-danger">{{$message}}</span>

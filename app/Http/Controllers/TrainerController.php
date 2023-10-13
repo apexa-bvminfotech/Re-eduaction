@@ -43,10 +43,11 @@ class TrainerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'emp_id' => 'required|unique:trainers,emp_id',
             'surname' => 'required',
             'name' => 'required|max:255',
             'father_name' => 'required|max:255',
-            'phone' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
+            'phone' => 'required|max:10|numeric',
             'email_id' => 'required|email|unique:users,email',
             'qualification' => 'required',
             'dob' => 'required',
@@ -56,11 +57,12 @@ class TrainerController extends Controller
             'emer_phone' => 'required',
             'emer_relationship' => 'required',
             'emer_address' => 'required',
-            'photo' => 'required',
-            'aadhaar_card' => 'required',
-            'last_edu_markSheet' => 'required',
-            'bank_passbook' => 'required',
+            'photo' => 'nullable',
+            'aadhaar_card' => 'nullable',
+            'last_edu_markSheet' => 'nullable',
+            'bank_passbook' => 'nullable',
             'terms_conditions' => 'required',
+            'emp_type' => 'required',
             'is_active' => 'required',
         ]);
 
@@ -205,10 +207,11 @@ class TrainerController extends Controller
     public function update(Request $request, Trainer $trainer)
     {
         $request->validate([
+            'emp_id' => 'required',
             'surname' => 'required',
             'name' => 'required|max:255',
             'father_name' => 'required|max:255',
-            'phone' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
+            'phone' => 'required|max:10|numeric',
             'email_id' => 'required|email',
             'qualification' => 'required',
             'dob' => 'required',

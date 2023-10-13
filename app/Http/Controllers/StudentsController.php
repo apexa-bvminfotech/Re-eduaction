@@ -104,15 +104,10 @@ class StudentsController extends Controller
             'address' => 'required',
             'gender' => 'required',
             'email_id' => 'nullable|email',
-            'father_contact_no' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
-            'mother_contact_no' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
+            'father_contact_no' => 'required|max:10|numeric',
+            'mother_contact_no' => 'required|max:10|numeric',
             'standard' => 'required|numeric|max:12',
             'medium' => 'required',
-            'school_name' => 'required|max:255',
-            'school_time_to' => 'required',
-            'school_time_from' => 'required',
-            'extra_tuition_time_to' => 'required',
-            'extra_tuition_time_from' => 'required',
             'dob' => 'required',
             'age' => 'required',
             'course_id' => 'required|exists:courses,id',
@@ -225,8 +220,7 @@ class StudentsController extends Controller
     public function show($id)
     {
         $student = Student::with('courses','studentDmit','studentStatus','branch','studentMaterial.material')->find($id);
-        $assignStaff = StudentStaffAssign::orderBy('id')->where('student_id', $student->id)->with('Trainer', 'Slot')->get();
-
+        $assignStaff = StudentStaffAssign::orderBy('id','DESC')->where('student_id', $student->id)->with('Trainer', 'Slot')->get();
         $studentCompleteCourses = StudentCourseComplete::where('status',1)->where('student_id',$id)->pluck('id')->toArray();
         $approvedCourse= StudentCourseComplete::where('status',2)->where('student_id',$id)->pluck('id')->toArray();
         $proxy_staff_details = $student->proxyStaffAssignments;
@@ -299,15 +293,10 @@ class StudentsController extends Controller
             'father_name' => 'required|max:255',
             'address' => 'required',
             'gender' => 'required',
-            'father_contact_no' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
-            'mother_contact_no' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
+            'father_contact_no' => 'required|max:10|numeric',
+            'mother_contact_no' => 'required|max:10|numeric',
             'standard' => 'required|min:1|max:12',
             'medium' => 'required',
-            'school_name' => 'required|max:255',
-            'school_time_to' => 'required',
-            'school_time_from' => 'required',
-            'extra_tuition_time_to' => 'required',
-            'extra_tuition_time_from' => 'required',
             'dob' => 'required',
             'age' => 'required',
         ]);

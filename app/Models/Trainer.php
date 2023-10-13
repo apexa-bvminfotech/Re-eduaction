@@ -28,5 +28,13 @@ class Trainer extends Model
     public function slots(){
         return $this->hasMany(Slot::class);
     }
-
+    public function trainerAttendance(){
+        return $this->hasMany(TrainerAttendance::class)->whereDate('date', now()->format('Y-m-d'));
+    }
+    public function trainerProxySlot(){
+        return $this->hasMany(StudentProxyStaffAssign::class)->whereDate('starting_date', now()->format('Y-m-d'))->whereDate('ending_date', now()->format('Y-m-d'));
+    }
+    public function studentAttendance(){
+        return $this->hasMany(StudentAttendance::class)->whereDate('attendance_date', now()->format('Y-m-d'));
+    }
 }

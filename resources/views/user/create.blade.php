@@ -76,7 +76,7 @@
                                 <div class="form-group row">
                                     <label for="simpleinput" class="col-sm-3 col-form-label">Contact</label>
                                     <div class="col-sm-9">
-                                        <input type="tel" name="contact" placeholder="12345 67890" value="{{ old('contact') }}" class="form-control" pattern="[0-9]{5}[\s]{1}[0-9]{5}">
+                                        <input type="tel" name="contact" placeholder="1234567890" value="{{ old('contact') }}" class="form-control">
                                         @error('contact')
                                             <span class="text-danger">{{$message}}</span>
                                         @enderror
@@ -114,11 +114,11 @@
                                     <label for="status" class="col-sm-3 col-form-label">Status </label>
                                     <div class="col-sm-9 d-flex justify-content-evenly">
                                         <div class="custom-control custom-radio">
-                                            <input class="custom-control-input" type="radio" id="customRadio1" name="is_active" value="0" {{ old('is_active') == 0 ? 'checked' : '' }} checked>
+                                            <input class="custom-control-input" type="radio" id="customRadio1" name="is_active" value="0" required>
                                             <label for="customRadio1" class="custom-control-label">Active</label>
                                         </div>
                                         <div class="custom-control custom-radio ml-2">
-                                            <input class="custom-control-input custom-control-input-danger" value="1" type="radio" id="customRadio4" name="is_active" {{ old('is_active') == 1 ? 'checked' : '' }}>
+                                            <input class="custom-control-input custom-control-input-danger" value="1" type="radio" id="customRadio4" name="is_active" required>
                                             <label for="customRadio4" class="custom-control-label">Deactive</label>
                                         </div>&nbsp;
                                         @error('is_active')

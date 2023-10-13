@@ -21,7 +21,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="card card-primary">
-                            {!! Form::open(array('route' => 'rtc.store','method'=>'POST')) !!}
+                            {!! Form::open(array('route' => 'rtc.store','method'=>'POST',)) !!}
                             <div class="card-body">
                                 <div class="form-group row">
                                     <label for="inputtext" class="col-sm-3">Branch Name</label>
@@ -73,7 +73,7 @@
                                 <div class="form-group row">
                                     <label for="inputEmail3" class="col-sm-3">Contact</label>
                                     <div class="col-sm-9">
-                                        <input type="tel" name="contact" placeholder="12345 67890" value="{{ old('contact') }}" class="form-control" pattern="[0-9]{5}[\s]{1}[0-9]{5}">
+                                        <input type="tel" name="contact" placeholder="1234567890" value="{{ old('contact') }}" class="form-control">
                                         @error('contact')
                                             <span class="text-danger">{{$message}}</span>
                                         @enderror
@@ -84,20 +84,19 @@
                                     <div class="col-sm-9 d-flex justify-content-evenly">
                                         <div class="custom-control custom-radio">
                                             <input class="custom-control-input" type="radio" id="customRadio1"
-                                                   name="is_active" value="0" {{ old('is_active') == 0 ? 'checked' : '' }} checked>
+                                                   name="is_active" value="0" required>
                                             <label for="customRadio1" class="custom-control-label">Active</label>
                                         </div>
                                         <div class="custom-control custom-radio ml-2">
                                             <input class="custom-control-input custom-control-input-danger" value="1"
-                                                   type="radio" id="customRadio4" name="is_active" {{ old('is_active') == 1 ? 'checked' : '' }}>
+                                                   type="radio" id="customRadio4" name="is_active" required>
                                             <label for="customRadio4" class="custom-control-label">Deactive</label>
+                                            @error('is_active')
+                                                <span class="text-danger">{{$message}}</span>
+                                            @enderror
                                         </div>
-                                        @error('status')
-                                            <span class="text-danger">{{$message}}</span>
-                                        @enderror
                                     </div>
-                                </div>
-
+                                </div>   
                             </div>
                             <!-- /.card-body -->
 
