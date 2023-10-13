@@ -78,7 +78,7 @@
                                 <div class="form-group row">
                                     <label for="inputEmail3" class="col-sm-3 col-form-label">Contact</label>
                                     <div class="col-sm-9">
-                                        <input type="tel" name="contact" placeholder="12345 67890" value="{{$rtc->contact}}" class="form-control" pattern="[0-9]{5}[\s]{1}[0-9]{5}">
+                                        <input type="tel" name="contact" placeholder="1234567890" value="{{$rtc->contact}}" class="form-control">
                                         @error('contact')
                                             <span class="text-danger">{{$message}}</span>
                                         @enderror

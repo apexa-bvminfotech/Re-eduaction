@@ -49,10 +49,11 @@ class UserController extends Controller
             'surname' => 'required|max:255',
             'father_name' => 'required|max:255',
             'email' => 'nullable',
-            'contact' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
+            'contact' => 'required|max:10|numeric',
             'role' => 'required',
             'is_active' => 'required',
             'user_profile' => 'nullable|mimes:jpeg,png,jpg|max:2048',
+            'is_active' => 'required',
         ]);
 
         $user_profile = null;
@@ -116,8 +117,9 @@ class UserController extends Controller
             'name' => 'required|max:255',
             'father_name' => 'required|max:255',
             'user_profile' => 'nullable|mimes:jpeg,png,jpg|max:2048',
-            'contact' => 'required|regex:/[0-9]{5}[\s]{1}[0-9]{5}/',
+            'contact' => 'required|max:10|numeric',
             'role' => 'required',
+            'is_active' => 'required',
         ]);
 
         $user_profile = $user->user_profile;

@@ -158,8 +158,7 @@
                                                             <label for="contact number">Mother Contact No:</label>
                                                             <input type="tel" class="form-control"
                                                                    name="mother_contact_no"
-                                                                   placeholder="12345 67890"
-                                                                   pattern="[0-9]{5}[\s]{1}[0-9]{5}"
+                                                                   placeholder="1234567890"
                                                                    id="mother_contact_no"
                                                                    value="{{ $student->mother_contact_no }}">
                                                             @error('mother_contact_no')
@@ -172,8 +171,7 @@
                                                             <label for="contact number">Father Contact No:</label>
                                                             <input type="tel" class="form-control"
                                                                    name="father_contact_no"
-                                                                   placeholder="12345 67890"
-                                                                   pattern="[0-9]{5}[\s]{1}[0-9]{5}"
+                                                                   placeholder="1234567890"
                                                                    id="father_contact_no"
                                                                    value="{{ $student->father_contact_no }}">
                                                             @error('father_contact_no')
@@ -439,7 +437,7 @@
                                             <div class="card-body">
                                                 <div class="row">
 
-                                                    <div class="col-md-3 mb-1">
+                                                    <div class="col-md-4 mb-1">
                                                         <div class="form-group mb-3">
                                                             <label for="demo">Demo Taken By:</label>
                                                             <br>
@@ -454,7 +452,23 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-3 mb-1">
+                                                    <div class="col-md-4 mb-1">
+                                                        <div class="form-group mb-3">
+                                                            <label for="simpleinput">Demo Counselling By:</label>
+                                                            <input type="text" class="form-control"
+                                                                   name="counselling_by"
+                                                                   value="{{$student->counselling_by}}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4 mb-1">
+                                                        <div class="form-group mb-3">
+                                                            <label for="simpleinput">Reference By:</label>
+                                                            <input type="text" class="form-control"
+                                                                   name="reference_by"
+                                                                   value="{{$student->reference_by}}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 mb-1">
                                                         <div class="form-group">
                                                             <label for="name">Analysis Trainer Name: </label>
                                                             <select class="form-control select2"
@@ -468,22 +482,8 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6 mb-1">
-                                                        <div class="form-group mb-3">
-                                                            <label for="simpleinput">Counselling By:</label>
-                                                            <input type="text" class="form-control"
-                                                                   name="counselling_by"
-                                                                   value="{{$student->counselling_by}}">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6 mb-1">
-                                                        <div class="form-group mb-3">
-                                                            <label for="simpleinput">Reference By:</label>
-                                                            <input type="text" class="form-control"
-                                                                   name="reference_by"
-                                                                   value="{{$student->reference_by}}">
-                                                        </div>
-                                                    </div>
+                                                   
+                                                    
                                                     <div class="col-md-6 mb-1">
                                                         <div class="form-group">
                                                             <label for="payment">Payment Condition:</label>
@@ -540,6 +540,9 @@
                                                                 Unpaid
                                                             </label>
                                                         </div>
+                                                        @error('fees')
+                                                            <span class="text-danger">{{$message}}</span>
+                                                        @enderror
                                                     </div>
                                                     <div class="col-md-12 mb-1">
                                                         <div class="form-group">
@@ -597,7 +600,7 @@
                                                                                class="form-check">&nbsp;&nbsp;
                                                                         <label class="form-check-label"
                                                                                for="counselling_by">
-                                                                            Counselling By
+                                                                            Counselling Date
                                                                         </label>
                                                                     </div>
                                                                 </div>
@@ -739,11 +742,18 @@
                     gender: {
                         required: true,
                     },
+                    fees: {
+                        required: true,
+                    },
                     father_contact_no: {
                         required: true,
+                        maxlength: 10,
+                        number : true,
                     },
                     mother_contact_no: {
                         required: true,
+                        maxlength: 10,
+                        number : true,
                     },
                     standard: {
                         required: true,
@@ -787,7 +797,10 @@
                         required: "Please enter a address ",
                     },
                     gender: {
-                        required: "Please enter a gender ",
+                        required: "Please select a gender ",
+                    },
+                    fees: {
+                        required: "Please select a fees ",
                     },
                     father_contact_no: {
                         required: "Please enter a father_contact_no ",

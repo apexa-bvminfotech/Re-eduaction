@@ -100,7 +100,7 @@
                                                                                             <input class="form-check-input"
                                                                                                 type="radio"
                                                                                                 name="data[{{ $regularStaff->slot->id }}][status]"
-                                                                                                value="P" required checked>
+                                                                                                value="P" required>
                                                                                             <label class="form-check-label"
                                                                                                 for="inlineRadio1" >Present</label>
                                                                                         </div>
@@ -201,7 +201,7 @@
                                                                                                 class="form-check-input"
                                                                                                 type="radio"
                                                                                                 name="data[{{ $proxy->slot->id }}][status]"
-                                                                                                value="P" required checked>
+                                                                                                value="P" required>
                                                                                             <label
                                                                                                 class="form-check-label"
                                                                                                 for="inlineRadio1">Present</label>
@@ -271,12 +271,12 @@
                 rules : {
                     status : {
                         required: true,
-                    }
+                    },
                 },
                 messages: {
                     status: {
                         required: 'Please fill your attendance .',
-                    }
+                    },
                 },
                 errorElement: 'span',
                 errorPlacement: function (error, element) {
