@@ -67,7 +67,7 @@ Route::group(['middleware'=>['auth']],function (){
     Route::resource('trainer_attendance', 'TrainerAttendanceController');
     Route::resource('student_attendance','StudentAttendanceController');
     Route::resource('course', 'CourseController');
-    Route::resource('appreciation', 'AppreciationController');
+    Route::resource('appreciation', 'appreciationController');
     Route::resource('point', 'PointController')->only(['destroy']);
     Route::resource('subCourse', 'SubCourseController')->only(['destroy']);
     Route::resource('user','UserController');
