@@ -28,7 +28,7 @@ Auth::routes();
 Route::get('/dashboard', function () {
     $user =  Auth::user()->type;
     if ($user == 0) {
-        return redirect()->route('home');
+        return redirect()->route('admindashboard.index');
     } elseif ($user == 1) {
         return redirect()->route('trainerdashboard.index');
     } else {

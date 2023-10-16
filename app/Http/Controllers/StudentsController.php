@@ -164,14 +164,13 @@ class StudentsController extends Controller
             'dob' => $request->dob,
             'age' => $request->age,
             'payment_condition' => $request->payment_condition,
-            'counselling_by' => $request->counselling_by,
+            'counselling_by' => $request->demo_counselling_by,
             'reference_by' => $request->reference_by,
             'demo_trainer_id' => $request->demo_trainer_id ? $request->demo_trainer_id : 0,
             'branch_id' => $request->input('branch_id'),
             'fees' => $request->fees,
             'extra_note' => $request->extra_note,
             'analysis_trainer_id' => $request->analysis_trainer_id ? $request->analysis_trainer_id : 0,
-            'stf' => $request->stf,
             'upload_analysis' => $upload_analysis,
             'upload_student_image' => $upload_student_image,
             'user_id' => $user->id,
@@ -191,8 +190,18 @@ class StudentsController extends Controller
             'fp_date' => $request->fp_date,
             'report' => $request->report ? 1 : 0,
             'report_date' => $request->report_date,
+            'key_point' => $request->key_point ? 1 : 0,
+            'key_point_date' => $request->key_point_date,
             'counselling_by' => $request->counselling_by ? 1 : 0,
             'counselling_date' => $request->counselling_date,
+            'counselling_by_trainer' => $request->counselling_by_trainer ? 1 : 0,
+            'counselling_by_trainer_name' => $request->counselling_by_trainer_name,
+            'stf_gujarati' => $request->stf_gujarati,
+            'stf_hindi' => $request->stf_hindi,
+            'stf_english' => $request->stf_english,
+            'stf_maths' => $request->stf_maths,
+            'stf_self_development' => $request->stf_self_development,
+            'stf_others' => $request->stf_others,
         ]);
 
         foreach($request->course_id as $course_id){
@@ -219,7 +228,7 @@ class StudentsController extends Controller
 
     public function show($id)
     {
-        $student = Student::with('courses','studentDmit','studentStatus','branch','studentMaterial.material')->find($id);
+        $student = Student::with('courses','studentDmit','studentStatus','branch','studentMaterial.material','studentTrainer.trainer')->find($id);
         $assignStaff = StudentStaffAssign::orderBy('id','DESC')->where('student_id', $student->id)->with('Trainer', 'Slot')->get();
         $studentCompleteCourses = StudentCourseComplete::where('status',1)->where('student_id',$id)->pluck('id')->toArray();
         $approvedCourse= StudentCourseComplete::where('status',2)->where('student_id',$id)->pluck('id')->toArray();
@@ -366,14 +375,13 @@ class StudentsController extends Controller
             'age' => $request->age,
             'course_material_id' => json_encode($request->course_material),
             'payment_condition' => $request->payment_condition,
-            'counselling_by' => $request->counselling_by,
+            'counselling_by' => $request->demo_counselling_by,
             'reference_by' => $request->reference_by,
             'demo_trainer_id' => $request->demo_trainer_id ? $request->demo_trainer_id : 0,
             'branch_id' => $request->input('branch_id'),
             'fees' => $request->fees,
             'extra_note' => $request->extra_note,
             'analysis_trainer_id' => $request->analysis_trainer_id ? $request->analysis_trainer_id : 0,
-            'stf' => $request->stf,
             'upload_analysis' => $upload_analysis,
             'upload_student_image' => $upload_student_image,
         ]);
@@ -408,8 +416,18 @@ class StudentsController extends Controller
             'fp_date' => $request->fp_date,
             'report' => $request->report ? 1 : 0,
             'report_date' => $request->report_date,
+            'key_point' => $request->key_point ? 1 : 0,
+            'key_point_date' => $request->key_point_date,
             'counselling_by' => $request->counselling_by ? 1 : 0,
             'counselling_date' => $request->counselling_date,
+            'counselling_by_trainer' => $request->counselling_by_trainer ? 1 : 0,
+            'counselling_by_trainer_name' => $request->counselling_by_trainer_name,
+            'stf_gujarati' => $request->stf_gujarati,
+            'stf_hindi' => $request->stf_hindi,
+            'stf_english' => $request->stf_english,
+            'stf_maths' => $request->stf_maths,
+            'stf_self_development' => $request->stf_self_development,
+            'stf_others' => $request->stf_others,
         ]);
 
         return redirect()->route('student.index')->with('success', 'Student updated successfully');

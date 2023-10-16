@@ -432,9 +432,9 @@
                                                                name="other_allowance"
                                                                value="{{ old('other_allowance') }}">
                                                     </div>
-                                                    <div class="col-md-4 mb-1">
+                                                    <div class="col-md-4">
                                                         <div class="form-group mb-3">
-                                                            <label for="inputtext" class="col-sm-3 col-form-label">Branch
+                                                            <label for="inputtext">Branch
                                                                 Name:</label>
                                                             <select class="form-control select2" name="branch_id"
                                                                     required>
@@ -446,9 +446,9 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-4 mb-1">
+                                                    <div class="col-md-4">
                                                         <div class="form-group mb-3">
-                                                            <label for="inputtext" class="col-sm-3 col-form-label">Course
+                                                            <label for="inputtext">Course
                                                                 Name:</label>
                                                             <select class="form-control select2" name="course_id[]" multiple="multiple" data-placeholder="Select a course">
                                                                 <option value="">--- Select Course ---</option>
@@ -460,7 +460,7 @@
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group mb-2">
-                                                            <label for="inputtext" class="col-sm-3 col-form-label">Role
+                                                            <label for="inputtext">Role
                                                                 Name:</label>
                                                             <select class="form-control select2" name="role_id"
                                                                     required>

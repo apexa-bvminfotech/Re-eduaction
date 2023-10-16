@@ -34,7 +34,7 @@ class Student extends Model
     }
     public function proxyStaffAssignments()
     {
-        return $this->hasMany(StudentProxyStaffAssign::class, 'student_id');
+        return $this->hasMany(StudentProxyStaffAssign::class, 'student_id')->orderby('id','DESC');
     }
     public function assignedStaff()
     {
@@ -49,7 +49,7 @@ class Student extends Model
     }
     public function studentStatus()
     {
-        return $this->hasMany(StudentStatus::class, 'student_id');
+        return $this->hasMany(StudentStatus::class, 'student_id')->orderby('id','DESC');
     }
     public function isActiveStatus()
     {

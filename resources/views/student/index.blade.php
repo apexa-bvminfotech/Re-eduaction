@@ -57,15 +57,16 @@
                                             <td>
                                                 <div class="flex justify-between">
                                                     <a href="{{ route('student.show',$s->id) }}"
-                                                       class="btn btn-info btn-sm" title="Show">
+                                                       class="btn btn-info btn-sm mb-1" title="Show">
                                                         <i class="fa fa-eye"></i>
                                                     </a>
                                                     @can('student-edit')
                                                         <a href="{{ route('student.edit',$s->id) }}"
-                                                           class="btn btn-success btn-sm" title="Edit">
+                                                           class="btn btn-success btn-sm mb-1" title="Edit">
                                                             <i class="fa fa-edit"></i>
                                                         </a>
                                                     @endcan
+                                                    <br>
 {{--                                                    @can('student-delete')--}}
 {{--                                                        {!! Form::open(['method' => 'DELETE','route' => ['student.destroy', $s->id],'style'=>'display:inline']) !!}--}}
 {{--                                                        <button type="submit" class="btn btn-danger btn-sm"--}}
@@ -77,22 +78,22 @@
                                                     @can('student-edit')
                                                         @if($s->isActiveStatus()->status == 'Start')
                                                             <button type="button"
-                                                                    class="btn  btn-secondary btn-assign btn-sm"
+                                                                    class="btn  btn-secondary btn-assign btn-sm mb-1"
                                                                     data-id="{{$s->id}}"
                                                                     data-assigned="{{ $s->isStaffAssigned() ? 'true' : 'false' }}">
                                                                 {{ $s->isStaffAssigned() ? 'Shift Trainer' : 'Assign Trainer' }}
                                                             </button>
                                                             <button type="button"
-                                                                    class="btn btn-secondary btn-proxy btn-sm"
+                                                                    class="btn btn-secondary btn-proxy btn-sm mb-1"
                                                                     data-id="{{$s->id}}"> Assign Proxy Trainer
-                                                            </button>
+                                                            </button><br>
                                                             <button type="button"
-                                                                    class="btn btn-secondary btn-student-leave btn-sm"
+                                                                    class="btn btn-secondary btn-student-leave btn-sm mb-1"
                                                                     data-id="{{$s->id}}"> Approved Leave
                                                             </button>
                                                         @endif
                                                         <button type="button"
-                                                                class="btn btn-secondary btn-student-status btn-sm"
+                                                                class="btn btn-secondary btn-student-status btn-sm mb-1"
                                                                 data-id="{{$s->id}}"> Change status
                                                         </button>
                                                     @endcan

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer('report')->default(0);
             $table->date('report_date')->nullable();
             $table->integer('counselling_by')->default(0);
-            $table->date('counselling_date')->nullable();
+            $table->string('counselling_date')->nullable();
             $table->timestamps();
         });
     }

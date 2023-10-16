@@ -456,7 +456,7 @@
                                                         <div class="form-group mb-3">
                                                             <label for="simpleinput">Demo Counselling By:</label>
                                                             <input type="text" class="form-control"
-                                                                   name="counselling_by"
+                                                                   name="demo_counselling_by"
                                                                    value="{{$student->counselling_by}}">
                                                         </div>
                                                     </div>
@@ -508,7 +508,7 @@
                                                     </div>
                                                     <div class="col-md-4 mb-1">
                                                         <div class="form-group mb-3">
-                                                            <label for="inputtext" class="col-sm-3 col-form-label">Branch
+                                                            <label for="inputtext">Branch
                                                                 Name:</label>
                                                             <select class="form-control select2" name="branch_id"
                                                                     required>
@@ -595,6 +595,28 @@
                                                             <div class="row">
                                                                 <div class="col-md-3">
                                                                     <div class="form-check form-check-inline">
+                                                                        <input type="checkbox" name="key_point"
+                                                                               {{ old('key_point') == 1 ? 'checked' : '' }}
+                                                                               class="form-check">&nbsp;&nbsp;
+                                                                        <label class="form-check-label"
+                                                                               for="fp">
+                                                                            Key Point
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <input type="date" class="form-control" name="key_point_date"
+                                                                               min="{{ date('Y-m-d') }}"  id="key_point_date">
+                                                                        @error('key_point_date')
+                                                                            <span class="text-danger">{{$message}}</span>
+                                                                        @enderror
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <div class="form-check form-check-inline">
                                                                         <input type="checkbox" name="counselling_by"
                                                                                {{ $studentDmit->counselling_by == 1 ? 'checked' :'' }}
                                                                                class="form-check">&nbsp;&nbsp;
@@ -611,6 +633,32 @@
                                                                         @error('counselling_date')
                                                                         <span class="text-danger">{{$message}}</span>
                                                                         @enderror
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input type="checkbox" name="counselling_by_trainer"
+                                                                               {{ old('counselling_by_trainer') == 1 ? 'checked' : '' }}
+                                                                               class="form-check">&nbsp;&nbsp;
+                                                                        <label class="form-check-label"
+                                                                               for="counselling_by_trainer">
+                                                                            Counselling By Trainer
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <select name="counselling_by_trainer_name"
+                                                                                class="form-control select2">
+                                                                            <option value="">---- Select Trainer ----</option>
+                                                                            @foreach($trainer as $key=>$t)
+                                                                                <option
+                                                                                    value="{{$t->id}}"
+                                                                                    @if($student->demo_trainer_id==$t->id) selected @endif>{{$t->name}}</option>
+                                                                            @endforeach
+                                                                        </select>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -635,15 +683,64 @@
                                              aria-labelledby="office-use-part-trigger">
                                             <div class="card-body">
                                                 <div class="row">
-                                                    <div class="col-md-6 mb-1">
-                                                        <div class="form-group mb-3">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
                                                             <label for="simpleinput">STF:</label>
-                                                            <input type="text" class="form-control"
-                                                                   name="stf"
-                                                                   value="{{$student->stf}}">
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6 mb-1">
+                                                    <div class="col-md-12 mb-2">
+                                                        <div class="form-group">
+                                                            <label>Gujarati</label>
+                                                            <textarea id="summernote1" name="stf_gujarati">{{ $studentDmit->stf_gujarati }}</textarea>
+                                                            @error('stf_gujarati')
+                                                                <span class="text-danger">{{$message}}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 mb-2">
+                                                        <div class="form-group">
+                                                            <label>Hindi</label>
+                                                            <textarea id="summernote2" name="stf_hindi" >{{ $studentDmit->stf_hindi }}</textarea>
+                                                            @error('stf_hindi')
+                                                                <span class="text-danger">{{$message}}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 mb-2">
+                                                        <div class="form-group">
+                                                            <label >English</label>
+                                                            <textarea id="summernote3" name="stf_english">{{ $studentDmit->stf_english }}</textarea>
+                                                            @error('stf_english')
+                                                                <span class="text-danger">{{$message}}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 mb-2">
+                                                        <div class="form-group">
+                                                            <label >Maths</label>
+                                                            <textarea id="summernote4" name="stf_maths">{{ $studentDmit->stf_maths }}</textarea>
+                                                            @error('stf_maths')
+                                                                <span class="text-danger">{{$message}}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 mb-2">
+                                                        <div class="form-group">
+                                                            <label>SeIf Development</label>
+                                                            <textarea id="summernote5" name="stf_self_development">{{ $studentDmit->stf_self_development }}</textarea>
+                                                            @error('stf_self_development')
+                                                                <span class="text-danger">{{$message}}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 mb-2">
+                                                        <div class="form-group">
+                                                            <label>Others</label>
+                                                            <textarea id="summernote6" name="stf_others">{{ $studentDmit->stf_others }}</textarea>
+                                                            @error('stf_others')
+                                                                <span class="text-danger">{{$message}}</span>
+                                                            @enderror
+                                                        </div>
                                                     </div>
                                                     <div class="col-md-6 mb-4">
                                                         <div class="form-group mb-2">
@@ -714,6 +811,25 @@
         }
 
         $(document).ready(function () {
+            $('#summernote1').summernote({
+                height: 150
+            });
+            $('#summernote2').summernote({
+                height: 150
+            });
+            $('#summernote3').summernote({
+                height: 150
+            });
+            $('#summernote4').summernote({
+                height: 150
+            });
+            $('#summernote5').summernote({
+                height: 150
+            });
+            $('#summernote6').summernote({
+                height: 150
+            });
+
             //script for image preview
             function readURL(input) {
                 $('#editImageContainer').css('display','none');
@@ -731,7 +847,6 @@
             }
 
             $(".filePhoto").change(function() {
-                console.log("hello");
                 readURL(this);
             });
 
