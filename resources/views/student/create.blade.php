@@ -618,17 +618,18 @@
                                                                 <input type="file" class="custom-file-input"
                                                                        name="upload_student_image"
                                                                        accept="image/*"
-                                                                       value="{{old('upload_student_image')}}" onChange="imagePreview(this)"/>
+                                                                       value="{{old('upload_student_image')}}" id="filePhoto"/>
                                                                 <label class="custom-file-label" for="customFile">Choose
                                                                     file</label>
-                                                                {{--                                                               onchange="loadFile(event)"--}}
+                                                                    <div style="display: none;" id="imageContainer">
+                                                                        <img id="previewHolder" alt="Uploaded Image Preview Holder"  width="100" height="100"/>
+                                                                    </div>
                                                                 @error('upload_student_image')
                                                                 <span class="text-danger"> {{$message}} </span>
                                                                 @enderror
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <img src="" alt="" id="student-photo">
                                                     <div class="col-md-6">
                                                         <div class="form-group mb-2">
                                                             <label for="pdf">Student Analysis PDF:</label>
@@ -670,20 +671,24 @@
     <script>
         $(document).ready(function ()
         {
+            //script for image preview
+            function readURL(input) {
+                $('#imageContainer').css('display','block');
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#previewHolder').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                } else {
+                    alert('select a file to see preview');
+                    $('#previewHolder').attr('src', '');
+                }
+            }
 
-            // function imagePreview(input) {
-            //     console.log('hii');
-            //     if (input.target.files[0]) {
-            //         var reader = new FileReader();
-                    
-            //         reader.onload = function (e) {
-            //             $('#student-photo').attr('src', e.target.result);
-            //         }
-                    
-            //         reader.readAsDataURL(input.target.files[0]);
-            //     }
-            // }
-
+            $("#filePhoto").change(function() {
+                readURL(this);
+            });
 
             var form = $('#quickForm');
             var validator = form.validate({

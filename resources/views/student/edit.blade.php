@@ -650,12 +650,17 @@
                                                             <label for="student image">Student Profile Photo:</label>
                                                             <div class="custom-file">
                                                                 <input type="file" name="upload_student_image"
-                                                                       class="custom-file-input"
+                                                                       class="custom-file-input filePhoto"
                                                                        id="image" accept="image/*">
                                                                 <label class="custom-file-label" for="customFile">Choose
                                                                     file</label>
-                                                                <img src="{{asset('assets/student/images/'. $student->upload_student_image )}}"
-                                                                     width="100" height="100">
+                                                                <div id="editImageContainer">
+                                                                    <img src="{{asset('assets/student/images/'. $student->upload_student_image )}}"
+                                                                    width="100" height="100">
+                                                                </div>   
+                                                                <div style="display: none;" id="imageContainer">
+                                                                    <img id="previewHolder" alt="Uploaded Image Preview Holder" width="100px" height="100px"/>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -709,6 +714,26 @@
         }
 
         $(document).ready(function () {
+            //script for image preview
+            function readURL(input) {
+                $('#editImageContainer').css('display','none');
+                $('#imageContainer').css('display','block');
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#previewHolder').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                } else {
+                    alert('select a file to see preview');
+                    $('#previewHolder').attr('src', '');
+                }
+            }
+
+            $(".filePhoto").change(function() {
+                console.log("hello");
+                readURL(this);
+            });
 
             $('#timepicker').datetimepicker({
                 format: 'LT'
