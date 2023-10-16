@@ -761,21 +761,6 @@
                     medium: {
                         required: true,
                     },
-                    school_name: {
-                        required: true,
-                    },
-                    school_time_to: {
-                        required: true,
-                    },
-                    school_time_from: {
-                        required: true,
-                    },
-                    extra_tuition_time_to: {
-                        required: true,
-                    },
-                    extra_tuition_time_from: {
-                        required: true,
-                    },
                     dob: {
                         required: true,
                     },
@@ -813,9 +798,6 @@
                     },
                     medium: {
                         required: "Please enter a medium ",
-                    },
-                    school_name: {
-                        required: "Please enter a school_name ",
                     },
                     dob: {
                         required: "Please enter a dob ",

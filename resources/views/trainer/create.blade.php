@@ -127,7 +127,7 @@
                                                             <label for="inputMailForm">Email address:</label>
                                                             <input id="inputMailForm" type="email" name="email_id" class="form-control" placeholder="Enter Email Address" value="{{ old('email_id') }}">
                                                             @error('email_id')
-                                                            <span class="text-danger">{{ $email_id }}</span>
+                                                            <span class="text-danger">{{ $message }}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
@@ -167,7 +167,7 @@
                                                                 </div>
                                                             </div>
                                                             @error('marital_status')
-                                                            <span class="text-danger">{{ $marital_status }}</span>
+                                                                <span class="text-danger">{{ $marital_status }}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
@@ -477,14 +477,14 @@
                                                         <div class="custom-control custom-radio">
                                                             <input class="custom-control-input" type="radio"
                                                                    id="customRadio1" name="is_active" value="0"
-                                                                   {{ old('is_active') == 0 ? 'checked' : '' }}>
+                                                                  >
                                                             <label for="customRadio1" class="custom-control-label">Active</label>
                                                         </div>
                                                         <div class="custom-control custom-radio ml-2">
                                                             <input
                                                                 class="custom-control-input custom-control-input-danger"
                                                                 value="1" type="radio" id="customRadio4"
-                                                                name="is_active" {{ old('is_active') == 1 ? 'checked' : '' }}>
+                                                                name="is_active">
                                                             <label for="customRadio4" class="custom-control-label">Deactive</label>
                                                         </div>
                                                     </div>

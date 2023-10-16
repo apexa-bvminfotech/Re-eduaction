@@ -41,7 +41,7 @@ class BranchController extends Controller
             'name' => 'required|max:255',
             'address' => 'required',
             'authorized_person_name' => 'required',
-            'authorized_person_contact' => 'required|max:10|numeric',
+            'authorized_person_contact' => 'required|digits:10|numeric',
         ]);
         $branch = Branch::Create([
             'name' => $request->name,
@@ -88,7 +88,7 @@ class BranchController extends Controller
             'name' => 'required|max:255',
             'address' => 'required',
             'authorized_person_name' => 'required',
-            'authorized_person_contact' => 'required|max:10|numeric',
+            'authorized_person_contact' => 'required|digits:10|numeric',
         ]);
         $branch->update([
             'name' => $request->name,

@@ -618,7 +618,7 @@
                                                                 <input type="file" class="custom-file-input"
                                                                        name="upload_student_image"
                                                                        accept="image/*"
-                                                                       value="{{old('upload_student_image')}}" onchange="imagePreview(this)"/>
+                                                                       value="{{old('upload_student_image')}}" onChange="imagePreview(this)"/>
                                                                 <label class="custom-file-label" for="customFile">Choose
                                                                     file</label>
                                                                 {{--                                                               onchange="loadFile(event)"--}}
@@ -668,21 +668,21 @@
 @endsection
 @push('scripts')
     <script>
-        // $(document).ready(function ()
-        // {
+        $(document).ready(function ()
+        {
 
-        //      function imagePreview(input) {
-        //         console.log('hii');
-        //         if (input.target.files[0]) {
-        //             var reader = new FileReader();
+            // function imagePreview(input) {
+            //     console.log('hii');
+            //     if (input.target.files[0]) {
+            //         var reader = new FileReader();
                     
-        //             reader.onload = function (e) {
-        //                 $('#student-photo').attr('src', e.target.result);
-        //             }
+            //         reader.onload = function (e) {
+            //             $('#student-photo').attr('src', e.target.result);
+            //         }
                     
-        //             reader.readAsDataURL(input.target.files[0]);
-        //         }
-        // }
+            //         reader.readAsDataURL(input.target.files[0]);
+            //     }
+            // }
 
 
             var form = $('#quickForm');

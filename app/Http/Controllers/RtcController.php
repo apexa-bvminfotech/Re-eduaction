@@ -63,7 +63,7 @@ class RtcController extends Controller
             'rtc_name' => 'required',
             'branch_id' => 'required',
             'person_name' => 'required',
-            'contact' => 'required|max:10|numeric',
+            'contact' => 'required|digits:10|numeric',
             'address' => 'required',
             'is_active' => 'required',
         ]);
@@ -127,7 +127,7 @@ class RtcController extends Controller
             'rtc_name' => 'required',
             'branch_id' => 'required',
             'person_name' => 'required',
-            'contact' => 'required|max:10|numeric',
+            'contact' => 'required|digits:10|numeric',
             'address' => 'required',
         ]);
 
