@@ -58,7 +58,7 @@
                                             <label for="dob">Date</label>
                                             <input type="date" class="form-control" name="date"
                                                    placeholder="enter birthdate"
-                                                   value="{{ old('dob',date('Y-m-d')) }}" id="dob">
+                                                   value="" id="dob">
                                             @error('date')
                                                 <span class="text-danger">{{$message}}</span>
                                             @enderror

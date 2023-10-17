@@ -546,9 +546,9 @@
                                                                name="other_allowance"
                                                                value="{{ old('other_allowance',$trainer->other_allowance) }}">
                                                     </div>
-                                                    <div class="col-md-4 mb-1">
+                                                    <div class="col-md-4">
                                                         <div class="form-group mb-3">
-                                                            <label for="inputtext" class="col-sm-3 col-form-label">Branch
+                                                            <label for="inputtext">Branch
                                                                 Name:</label>
                                                             <select class="form-control select2" name="branch_id"
                                                                     required>
@@ -560,10 +560,9 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-4 mb-1">
-                                                        <div class="form-group mb-3">
-                                                            <label for="inputtext" class="col-sm-3 col-form-label">Course Name:</label>
-
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="inputtext">Course Name:</label>
                                                             <select class="form-control select2" name="course_id[]" multiple="multiple" data-placeholder="Select a course">
                                                                 <option value="">--- Select Course ---</option>
                                                                 @if ($course)
@@ -575,8 +574,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
-                                                        <div class="form-group mb-2">
-                                                            <label for="inputtext" class="col-sm-3 col-form-label">Role Name:</label>
+                                                        <div class="form-group">
+                                                            <label for="inputtext">Role Name:</label>
                                                             <select class="form-control select2" name="role_id" required>
                                                                 <option value="">--- Select Role ---</option>
                                                                 @foreach($roles as $key => $r)
@@ -587,7 +586,7 @@
                                                         </div>
                                                     </div>
                                                     <label for="status" class="col-sm-1 col-form-label">Status:</label>
-                                                    <div class="col-sm-9 mt-2 d-flex justify-content-evenly">
+                                                    <div class="col-sm-9 mt-2 d-flex justify-content-evenly form-group">
                                                         <div class="custom-control custom-radio">
                                                             <input class="custom-control-input" type="radio"
                                                                    id="customRadio1"
@@ -627,12 +626,17 @@
                                                             <label for="inputtext">Passport Size Photo</label>
                                                             <div class="custom-file">
                                                                 <input type="file" class="custom-file-input"
-                                                                       name="photo" accept="image/*">
+                                                                       name="photo" accept="image/*" id="profilePhoto">
                                                                 <label class="custom-file-label" for="customFile">Choose
                                                                     file</label>
-                                                                <img
-                                                                    src="{{asset('assets/trainer/' . $trainer->photo)}}"
-                                                                    width="100" height="100">
+                                                                <div id="editProfilePhotoContainer">
+                                                                    <img
+                                                                        src="{{asset('assets/trainer/' . $trainer->photo)}}"
+                                                                        width="100" height="100">
+                                                                </div>
+                                                                <div style="display: none;" id="profilePhotoContainer">
+                                                                    <img id="profilePhotoHolder" alt="Uploaded Image Preview Holder"  width="100" height="100"/>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -641,12 +645,17 @@
                                                             <label for="inputtext">Aadhaar Card</label>
                                                             <div class="custom-file">
                                                                 <input type="file" class="custom-file-input"
-                                                                       name="aadhaar_card" accept="image/*">
+                                                                       name="aadhaar_card" accept="image/*" id="adharCard">
                                                                 <label class="custom-file-label" for="customFile">Choose
                                                                     file</label>
-                                                                <img
-                                                                    src="{{asset('assets/trainer/' . $trainer->aadhaar_card)}}"
-                                                                    width="100" height="100">
+                                                                <div id="editAdharCardContainer">
+                                                                    <img
+                                                                        src="{{asset('assets/trainer/' . $trainer->aadhaar_card)}}"
+                                                                        width="100" height="100">
+                                                                </div>
+                                                                <div style="display: none;" id="adharCardContainer">
+                                                                    <img id="adharCardHolder" alt="Uploaded Image Preview Holder"  width="100" height="100"/>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -655,12 +664,17 @@
                                                             <label for="inputtext">Last Education MarkSheet</label>
                                                             <div class="custom-file">
                                                                 <input type="file" class="custom-file-input"
-                                                                       name="last_edu_markSheet" accept="image/*">
+                                                                       name="last_edu_markSheet" accept="image/*" id="lastEduMarkSheet">
                                                                 <label class="custom-file-label" for="customFile">Choose
                                                                     file</label>
-                                                                <img
-                                                                    src="{{asset('assets/trainer/' . $trainer->last_edu_markSheet)}}"
-                                                                    width="100" height="100">
+                                                                <div id="editLastEduMarksheet">
+                                                                    <img
+                                                                        src="{{asset('assets/trainer/' . $trainer->last_edu_markSheet)}}"
+                                                                        width="100" height="100">
+                                                                </div>
+                                                                <div style="display: none;" id="lastEduMarkSheetContainer">
+                                                                    <img id="lastEduMarkSheetHolder" alt="Uploaded Image Preview Holder"  width="100" height="100"/>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -669,12 +683,17 @@
                                                             <label for="inputtext">Choose Bank Passbook Photo</label>
                                                             <div class="custom-file">
                                                                 <input type="file" class="custom-file-input"
-                                                                       name="bank_passbook" accept="image/*">
+                                                                       name="bank_passbook" accept="image/*" id="passbookPhoto">
                                                                 <label class="custom-file-label" for="customFile">Choose
                                                                     file</label>
-                                                                <img
-                                                                    src="{{asset('assets/trainer/' . $trainer->bank_passbook)}}"
-                                                                    width="100" height="100">
+                                                                <div id="editPassbookPhoto">
+                                                                    <img
+                                                                        src="{{asset('assets/trainer/' . $trainer->bank_passbook)}}"
+                                                                        width="100" height="100">
+                                                                </div>
+                                                                <div style="display: none;" id="passbookPhotoContainer">
+                                                                    <img id="passbookPhotoHolder" alt="Uploaded Image Preview Holder"  width="100" height="100"/>
+                                                                </div>   
                                                             </div>
                                                         </div>
                                                     </div>
@@ -731,9 +750,43 @@
 @push('scripts')
     <script type="text/javascript">
         $(document).ready(function () {
+            //script for image preview
+            $('#editImageContainer').css('display','none');
+            function readURL(input, containerId, holderId, editId) {
+                $('#' + editId).css('display','none');
+                $('#' + containerId).css('display', 'block');
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#' + holderId).attr('src', e.target.result);
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                } else {
+                    alert('Select a file to see the preview');
+                    $('#' + holderId).attr('src', '');
+                }
+            }
+
+            $("#profilePhoto").change(function () {
+                readURL(this, 'profilePhotoContainer', 'profilePhotoHolder', 'editProfilePhotoContainer');
+            });
+
+            $("#adharCard").change(function () {
+                readURL(this, 'adharCardContainer', 'adharCardHolder','editAdharCardContainer');
+            });
+
+            $("#lastEduMarkSheet").change(function () {
+                readURL(this, 'lastEduMarkSheetContainer', 'lastEduMarkSheetHolder', 'editLastEduMarksheet');
+            });
+
+            $("#passbookPhoto").change(function () {
+                readURL(this, 'passbookPhotoContainer', 'passbookPhotoHolder', 'editPassbookPhoto');
+            });
+
             $('#summernote').summernote({
                 height: 250
             });
+
             var form = $('#quickForm');
             var validator = form.validate({
                 rules: {

@@ -28,8 +28,11 @@
                                     <label for="customFile" class="col-sm-3 col-form-label">Profile Photo</label>
                                     <div class="col-sm-9">
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="customFile" name="user_profile" accept="image/*">
-                                            <label class="custom-file-label" for="customFile">Choose Profile Photo</label>
+                                            <input type="file" class="custom-file-input filePhoto" id="customFile" name="user_profile" accept="image/*">
+                                            <label class="custom-file-label" for="customFile">Choose Profile Photo</label>   
+                                        </div>
+                                        <div style="display: none;" id="imageContainer">
+                                            <img id="previewHolder" alt="Uploaded Image Preview Holder"  width="100" height="100"/>
                                         </div>
                                         @error('user_profile')
                                         <span class="text-danger">{{ $message }}</span>
@@ -140,5 +143,27 @@
             </div>
         </section>
     </div>
-
 @endsection
+@push('scripts')
+    <script>
+        //script for image preview
+        function readURL(input) {
+            $('#imageContainer').css('display','block');
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#previewHolder').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                alert('select a file to see preview');
+                $('#previewHolder').attr('src', '');
+            }
+        }
+
+        $(".filePhoto").change(function() {
+            readURL(this);
+        });
+
+    </script>
+@endpush

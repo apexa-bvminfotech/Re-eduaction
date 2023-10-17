@@ -34,14 +34,6 @@
                                 <p class="text-muted text-center">Student</p>
                                 <ul class="list-group  mb-3">
                                     <li class="list-group-item">
-                                        <b>Course:</b>
-                                        <a class="float-right">
-                                            @foreach($student->courses as $key => $cor)
-                                                <b>{{ $key+1 }}:</b> {{ $cor->course->course_name }}<br>
-                                            @endforeach
-                                        </a>
-                                    </li>
-                                    <li class="list-group-item">
                                         <b>Demo taken:</b> <a class="float-right">{{ $student->trainer->name ?? ''}}</a>
                                     </li>
                                     <li class="list-group-item">
@@ -56,6 +48,18 @@
                                     <li class="list-group-item">
                                         <b>Medium:</b> <a class="float-right">{{ $student->medium ?? ''}}</a>
                                     </li>
+                                    <li class="list-group-item">
+                                        <b>Trainer Name :</b> <a class="float-right">{{ $student->studentTrainer->trainer->name ?? ''}}</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Course:</b>
+                                        <a class="float-right">
+                                            @foreach($student->courses as $key => $cor)
+                                                <b>{{ $key+1 }}:</b> {{ $cor->course->course_name }}<br>
+                                                <b>Start Date : </b>{{ !empty($cor->start_date) ? date('d-m-Y',strtotime($cor->start_date)) : ''}}<br>
+                                            @endforeach
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -65,7 +69,7 @@
                             <div class="card-header p-2 d-flex">
                                 <ul class="nav nav-pills col-12">
                                     <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Personal Information</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">School Detail</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Office Use Only</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#proxy_detail" data-toggle="tab">Proxy staff Details</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#timeline1" data-toggle="tab">Assign Staff</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#timeline2" data-toggle="tab">Absent Student Attendance Show</a></li>
@@ -193,9 +197,6 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="proxy_detail">
-                                        @php
-                                            $counter = 0;
-                                        @endphp
                                         <div class="post">
                                             <table class="table table-striped">
                                                 <thead>
@@ -214,7 +215,7 @@
                                                             <td>{{$psd->slot->slot_time}}</td>
                                                             <td>{{$psd->starting_date}}</td>
                                                             <td>{{$psd->ending_date}}</td>
-                                                            @if($counter == count( $proxy_staff_details ) - 1)
+                                                            @if($loop->first)
                                                                 <td>
                                                                     @can('student-proxy-staff-edit')
                                                                         <button type="button"
@@ -227,9 +228,6 @@
                                                                 <td></td>
                                                             @endif
                                                         </tr>
-                                                        @php
-                                                             $counter = $counter + 1;
-                                                        @endphp
                                                     @endforeach
                                                 </tbody>
                                             </table>
