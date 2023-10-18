@@ -11,6 +11,7 @@ use App\Models\Trainer;
 use App\Models\TrainerAttendance;
 use Illuminate\Contracts\Auth\Guard;
 use App\Http\Requests\StudentAttendanceRequest;
+use App\Rules\StudentAttendanceRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -43,7 +44,7 @@ class StudentAttendanceController extends Controller
             $studenAttendance = DB::table("students_attendance")
                 ->select('students_attendance.attendance_date', DB::raw('count(IF(attendance_type = 1, 1, NULL)) as present'),
                     DB::raw('count(IF(attendance_type = 0, 1, NULL)) as absent'))
-                ->join('student_staff_assigns', 'student_staff_assigns.trainer_id','students_attendance.user_id')
+                ->join('student_staff_assigns', 'student_staff_assigns.trainer_id','students_attendance.trainer_id')
                 ->where('student_staff_assigns.is_active', 0)
                 ->groupBy('students_attendance.attendance_date')
                 ->orderBy('students_attendance.attendance_date', 'DESC')->get();
@@ -71,7 +72,12 @@ class StudentAttendanceController extends Controller
         }
         else{
             $trainer = Trainer::orderBy('id', 'DESC')->get();
-            $studentStaffAssign = StudentStaffAssign::orderBy('id', 'DESC')->where('is_active','0')->with('trainer','student','slot')->get()->groupBy('trainer.name');
+            $trainerAttendance = TrainerAttendance::whereDate('date', now()->format('Y-m-d'))->where('status','A')->get();
+            $trainerIds = [];
+            foreach($trainerAttendance as $atten){
+                $trainerIds[] = $atten->trainer_id;
+            }
+            $studentStaffAssign = StudentStaffAssign::orderBy('id', 'DESC')->whereNotIn('trainer_id',$trainerIds)->where('is_active','0')->with('trainer','student','slot')->get()->groupBy('trainer.name');
             $proxyStaff = StudentProxyStaffAssign::orderBy('id', 'DESC')->whereDate('starting_date', now()->format('Y-m-d'))
                 ->whereDate('ending_date', now()->format('Y-m-d'))->with('trainer','student','slot')
                 ->get()->groupBy('trainer.name');
@@ -88,18 +94,28 @@ class StudentAttendanceController extends Controller
      */
     public function store(StudentAttendanceRequest $request)
     {
+        if(Auth::user()->type == 0){
+            $request->validate([
+                'attendance_date' => 'required|unique:students_attendance,attendance_date',
+            ]);
+        }
         $date = date('Y-m-d', strtotime($request->attendance_date));
+
         foreach($request->trainer_id as $key => $tarinerId){
             foreach($request->input("attendance_details_".$tarinerId) as $atten_key => $atten_value){
                 foreach($atten_value['student_details'] as $key => $stu_detail){
+                    if(Auth::user()->type == 1){
+                        $studentAttendance = StudentAttendance::where('attendance_date',$date)->where('trainer_id',$tarinerId)->first();
+                        if($studentAttendance){
+                            return back()->with('error', 'Date is already taken !!');
+                        }
+                    }
                     StudentAttendance::Create([
                         'student_id' => $stu_detail['student_id'],
                         'attendance_type' =>   $stu_detail['attendance_type'],
                         'user_id' => Auth::user()->id,
                         'attendance_date' =>  $date,
                         'absent_reason' => $stu_detail['absent_reason'],
-                        'created_at' =>  date('Y-m-d H:i:s'),
-                        'updated_at' =>  date('Y-m-d H:i:s'),
                         'trainer_id' =>  $tarinerId,
                         'slot_id' =>  $atten_value['slot_id'],
                         'slot_type' =>  $atten_value['slot_type']
@@ -124,7 +140,6 @@ class StudentAttendanceController extends Controller
             ->join('slots', 'slots.id', 'students_attendance.slot_id')
             ->join('students','students.id','students_attendance.student_id')
             ->with('slot')->get()->groupby('trainer.name');
-
         return view('student_attendance.show',compact('studentAttendance'));
     }
 
@@ -138,13 +153,55 @@ class StudentAttendanceController extends Controller
     public function edit($date)
     {
         $EditDate = $date;
-        $studentAttendance = StudentAttendance::select('students_attendance.*', 'students.id as studentID', 'students.name as student_name','trainers.id as trainerID', 'trainers.name', 'slots.slot_time')
+        $user = Auth::user();
+
+        if(Auth::user()->type == 1){
+            $studentAttendance = StudentAttendance::select('students_attendance.*', 'students.id as studentID', 'students.name as student_name','trainers.id as trainerID', 'trainers.name', 'slots.slot_time')
+            ->Where('attendance_date', $date)
+            ->join('students', 'students.id', 'students_attendance.student_id')
+            ->join('trainers', 'trainers.id', 'students_attendance.trainer_id')
+            ->join('slots', 'slots.id', 'students_attendance.slot_id')
+            ->where('trainers.user_id',$user->id)
+            ->orderBy('students_attendance.id', 'ASC')->get()->groupby('trainer.name');
+        }
+        else{
+            $studentAttendance = StudentAttendance::select('students_attendance.*', 'students.id as studentID', 'students.name as student_name','trainers.id as trainerID', 'trainers.name', 'slots.slot_time')
             ->Where('attendance_date', $date)
             ->join('students', 'students.id', 'students_attendance.student_id')
             ->join('trainers', 'trainers.id', 'students_attendance.trainer_id')
             ->join('slots', 'slots.id', 'students_attendance.slot_id')
             ->orderBy('students_attendance.id', 'ASC')->get()->groupby('trainer.name');
-            return view('student_attendance.edit', compact('studentAttendance', 'EditDate'));
+        }
+
+        $trainerIds = [];
+        foreach($studentAttendance as $atten){
+            foreach($atten as $a){
+                if(!in_array($a->trainer_id,$trainerIds)){
+                    $trainerIds[] = $a->trainer_id;
+                }
+            }
+        }
+
+        if(Auth::user()->type == 1){
+            $trainer = Trainer::where('user_id',$user->id)->orderBy('id', 'DESC')->get();
+            $studentStaffAssign = StudentStaffAssign::orderBy('id', 'DESC')->where('is_active','0')->with('trainer','student','slot')->get()->groupBy('trainer.name');
+            $proxyStaff = StudentProxyStaffAssign::orderBy('id', 'DESC')->whereDate('starting_date', now()->format('Y-m-d'))
+                ->whereDate('ending_date', now()->format('Y-m-d'))->with('trainer','student','slot')
+                ->get()->groupBy('trainer.name');
+        }
+        else{
+            $trainer = Trainer::orderBy('id', 'DESC')->get();
+            $trainerAttendance = TrainerAttendance::whereDate('date', now()->format('Y-m-d'))->where('status','A')->get();
+            $trainerId = [];
+            foreach($trainerAttendance as $atten){
+                $trainerId[] = $atten->trainer_id;
+            }
+            $studentStaffAssign = StudentStaffAssign::orderBy('id', 'DESC')->whereNotIn('trainer_id',$trainerId)->whereNotIn('trainer_id',$trainerIds)->where('is_active','0')->with('trainer','student','slot')->get()->groupBy('trainer.name');
+            $proxyStaff = StudentProxyStaffAssign::orderBy('id', 'DESC')->whereNotIn('trainer_id',$trainerId)->whereNotIn('trainer_id',$trainerIds)->whereDate('starting_date', now()->format('Y-m-d'))
+                ->whereDate('ending_date', now()->format('Y-m-d'))->with('trainer','student','slot')
+                ->get()->groupBy('trainer.name');
+        }
+        return view('student_attendance.edit', compact('studentAttendance', 'EditDate','trainer', 'proxyStaff', 'studentStaffAssign'));
     }
 
     /**
@@ -160,18 +217,29 @@ class StudentAttendanceController extends Controller
         foreach($request->trainer_id as $key => $tarinerId){
             foreach($request->input("attendance_details_".$tarinerId) as $atten_key => $atten_value){
                 foreach($atten_value['student_details'] as $key => $stu_detail){
-                    StudentAttendance::where('attendance_date',$date)->where('id',$stu_detail['student_attendance_id'])->update([
-                        'student_id' => $stu_detail['student_id'],
-                        'attendance_type' =>   $stu_detail['attendance_type'],
-                        'user_id' => Auth::user()->id,
-                        'attendance_date' =>  $date,
-                        'absent_reason' => $stu_detail['absent_reason'],
-                        'created_at' =>  date('Y-m-d H:i:s'),
-                        'updated_at' =>  date('Y-m-d H:i:s'),
-                        'trainer_id' =>  $tarinerId,
-                        'slot_id' =>  $atten_value['slot_id'],
-                        'slot_type' =>  $atten_value['slot_type']
-                    ]);
+                    if($stu_detail['student_attendance_id'] == null){
+                        StudentAttendance::Create([
+                            'student_id' => $stu_detail['student_id'],
+                            'attendance_type' =>   $stu_detail['attendance_type'],
+                            'user_id' => Auth::user()->id,
+                            'attendance_date' =>  $date,
+                            'absent_reason' => $stu_detail['absent_reason'],
+                            'trainer_id' =>  $tarinerId,
+                            'slot_id' =>  $atten_value['slot_id'],
+                            'slot_type' =>  $atten_value['slot_type']
+                        ]);
+                    }else{
+                        StudentAttendance::where('attendance_date',$date)->where('id',$stu_detail['student_attendance_id'])->update([
+                            'student_id' => $stu_detail['student_id'],
+                            'attendance_type' =>   $stu_detail['attendance_type'],
+                            'user_id' => Auth::user()->id,
+                            'attendance_date' =>  $date,
+                            'absent_reason' => $stu_detail['absent_reason'],
+                            'trainer_id' =>  $tarinerId,
+                            'slot_id' =>  $atten_value['slot_id'],
+                            'slot_type' =>  $atten_value['slot_type']
+                        ]);
+                    }   
                 }
             }
         }  

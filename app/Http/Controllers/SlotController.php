@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Branch;
 use App\Models\Rtc;
 use App\Models\Slot;
+use App\Models\StudentProxyStaffAssign;
+use App\Models\StudentStaffAssign;
 use App\Models\Trainer;
+use App\Models\TrainerAttendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,9 +37,15 @@ class SlotController extends Controller
         if(Auth::user()->type == 1){
             $slot = Slot::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'DESC')->get();
         }
-        return view('slot.index', compact('slot'))->with('i');
+        $trainerAttendances = TrainerAttendance::whereDate('date', now()->format('Y-m-d'))->where('status','A')->get();
+        $studentStaffAssign = StudentStaffAssign::where('is_active','0')->get();
+        $trainerId = [];
+        foreach($trainerAttendances as $trainer){
+            $trainerId[] = $trainer->trainer_id;
+        }
+        $trainers = Trainer::whereNotIn('id',$trainerId)->where('is_active', 0)->orderBy('id', 'desc')->get();
+        return view('slot.index', compact('slot','trainerAttendances','trainers','studentStaffAssign'))->with('i');
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -183,4 +192,44 @@ class SlotController extends Controller
         return response()->json(['trainer' => $trainer, 'rtc' => $rtc]);
     }
 
+    public function assignProxySlot(Request $request)
+    {
+        $existingSlot = Slot::where('trainer_id',$request->trainer_id)->where('slot_time',$request->slot_time)->first();
+        if($existingSlot)
+        {
+            return response()->json(['success'=> 'true']);
+        }
+        else{
+            $slot = Slot::create([
+                'slot_time' => $request->slot_time,
+                'trainer_id' => $request->trainer_id,
+                'rtc_id' => $request->rtc_id,
+                'branch_id' => $request->branch_id,
+                'whatsapp_group_name' => $request->whatsapp_group_name,
+            ]);
+            return response()->json(['success'=> 'true', 'data' => $slot]);
+        }
+    }
+
+    public function submitProxySlot(Request $request)
+    {
+        $trainerRegularSlot = StudentStaffAssign::where('slot_id',$request->slot_id)->where('trainer_id',$request->trainer_id)->where('is_active','0')->first();
+        if($trainerRegularSlot){
+            return back()->with('error', 'Trainer is already assigned as regular staff');
+        }
+
+        $getTrainer = StudentStaffAssign::where('slot_id',$request->slot_id)->where('trainer_id',$request->old_trainer_id)->where('is_active','0')->get();
+    
+        $slot = Slot::where('slot_time',$request->slot_time)->where('trainer_id',$request->trainer_id)->first();
+        foreach($getTrainer as $proxyTrainer){
+            StudentProxyStaffAssign::create([
+                'student_id' => $proxyTrainer->student_id,
+                'trainer_id' => $request->trainer_id,
+                'slot_id' => $slot->id,
+                'starting_date' => $request->starting_date,
+                'ending_date' => $request->ending_date,
+            ]);
+        }    
+        return redirect()->back()->with('success', 'Trainer shifted succesfully !!');
+    }
 }
