@@ -161,12 +161,6 @@
                                                     <th><b>Branch Name:</b></th>
                                                     <td>{{ $student->branch->name }}</td>
                                                 </tr>
-                                                <tr>
-                                                    <th><b>STF:</b></th>
-                                                    <td>{{$student->stf}}</td>
-                                                    <th></th>
-                                                    <td></td>
-                                                </tr>
                                                 @if($student->studentDmit)
                                                     <tr>
                                                         <th><b>DMIT Details</b></th>
@@ -191,6 +185,48 @@
                                                         <td>{!! $student->studentDmit->counselling_by ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
                                                         <th><b>Counselling by Date</b></th>
                                                         <td>{{ $student->studentDmit->counselling_date ?? '' }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><b>STF Details</b></th>
+                                                        <td></td>
+                                                        <th></th>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><b>Gujarati</b></th>
+                                                        <td>{!! $student->studentDmit->stf_gujarati !!}</td>
+                                                        <th></th>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><b>Hindi</b></th>
+                                                        <td>{!! $student->studentDmit->stf_hindi !!}</td>
+                                                        <th></th>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><b>English</b></th>
+                                                        <td>{!! $student->studentDmit->stf_english !!}</td>
+                                                        <th></th>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><b>Maths</b></th>
+                                                        <td>{!! $student->studentDmit->stf_maths !!}</td>
+                                                        <th></th>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><b>Self Development</b></th>
+                                                        <td>{!! $student->studentDmit->stf_self_development !!}</td>
+                                                        <th></th>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><b>Others</b></th>
+                                                        <td>{!! $student->studentDmit->stf_others !!}</td>
+                                                        <th></th>
+                                                        <td></td>
                                                     </tr>
                                                 @endif
                                             </table>
