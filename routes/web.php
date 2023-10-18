@@ -86,6 +86,8 @@ Route::group(['middleware'=>['auth']],function (){
     Route::get('changeBranchStatus','BranchController@changeBranchStatus');
 
     Route::get('get-trainer-data','SlotController@gettrainerdata')->name('get-trainer-data');
+    Route::get('assign-proxy-slot','SlotController@assignProxySlot')->name('slot.assign-proxy-slot');
+    Route::post('submit-proxy-slot','SlotController@submitProxySlot')->name('slot.submit-proxy-slot');
     Route::get('myprofile', 'UserController@profile')->name('profile');
     Route::post('user/{user}/update-profile-image', 'UserController@updateProfileImage')->name('user.update-profile-image');
 

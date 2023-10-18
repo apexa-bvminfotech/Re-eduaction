@@ -731,41 +731,82 @@
                                 </div>
                                 <hr>
                                 <div class="card-body">
-                                    <table class="table table-bordered">
+                                    <table class="table table-bordered table-striped">
+                                        @php
+                                            $startDate = now()->startOfMonth();
+                                            $endDate = now()->endOfMonth();
+                                            $numberOfDays = $startDate->daysInMonth;
+                                        @endphp
                                         <thead>
                                             <tr>
-                                                <th>Date</th>
-                                                <th>Slot Time</th>
-                                                <th>Status</th>
-                                                <th>Trainer Name</th>
-                                                <th>Absent Reason</th>
+                                                <th>Slot</th>
+                                                <th>Total A :-</th>
+                                                <th>Total P :-</th>
+                                                
+                                                @for ($day = 1; $day <= $numberOfDays; $day++)
+                                                    <th>
+                                                        {{ $startDate->format('d-m') }}<br>
+                                                    </th>
+                                                    @php
+                                                        $startDate->addDay();
+                                                    @endphp
+                                                @endfor
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($studentAttendance as $attendance)
+                                            @foreach ($studentAttendances as $key => $attendance)
+                                                @php
+                                                    $sDate = now()->startOfMonth();
+                                                    $eDate = now()->endOfMonth();
+                                                    $numberOfDays = $sDate->daysInMonth;
+                                                @endphp
+                                                @php
+                                                    $totalAbsentStudent = 0;
+                                                @endphp
+                                                @php
+                                                    $totalPresentStudent = 0;
+                                                @endphp
+                                                @foreach ($attendance as $atd)    
+                                                    @if($atd->attendance_type == '0')
+                                                        @php
+                                                            $totalAbsentStudent++;
+                                                        @endphp 
+                                                    @else
+                                                        @php
+                                                            $totalPresentStudent++;
+                                                        @endphp
+                                                    @endif
+                                                @endforeach
+                                            
                                                 <tr>
-                                                    <td>{{ date('d-m-Y', strtotime($attendance->attendance_date)) }}</td>
-                                                    <td>{{ $attendance->slot->slot_time }} / {{ $attendance->slot_type }}</td>
+                                                    <td>{{ $key }}</td>
+                                                    <td> {{ $totalAbsentStudent }}</td>
+                                                    <td> {{ $totalPresentStudent }}</td>
+                                                    @for ($day = 1; $day <= $numberOfDays; $day++)
                                                     <td>
-                                                        @if($attendance->status == 'A')
-                                                            Absent
-                                                        @else
-                                                            Present
-                                                        @endif
+                                                        @foreach ($attendance as $atd)
+                                                            @php
+                                                                $attendanceDate = \Carbon\Carbon::parse($atd->attendance_date);
+                                                            @endphp
+                                                            @if ($attendanceDate->format('Y-m-d') == $sDate->format('Y-m-d'))
+                                                                @if ($atd->attendance_type == '1')
+                                                                    1
+                                                                @else
+                                                                    0
+                                                                @endif
+                                                            @endif
+                                                        @endforeach
                                                     </td>
-                                                    <td>{{ $attendance->trainer->name }}</td>
-                                                    <td>
-                                                        @if($attendance->absent_reason !== null)
-                                                            {{ $attendance->absent_reason }}
-                                                        @else
-                                                        -
-                                                        @endif
-                                                    </td>
+                                                        @php
+                                                            $sDate->addDay();
+                                                        @endphp
+                                                    @endfor
                                                 </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
-                                </div>
+
+                                </div>    
                             </div>
                         </div>
                     </div>

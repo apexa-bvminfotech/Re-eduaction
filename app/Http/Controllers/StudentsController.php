@@ -236,6 +236,7 @@ class StudentsController extends Controller
         $student_leave_show =  StudentApproveLeave::orderBy('id')->where('student_id', $student->id)->get();
         $student_appreciation = StudentCourse::orderBy('id')->where('student_id', $student->id)->With('course', 'appreciation')->get();
         $trainer = StudentStaffAssign::where(['student_id' => $id, 'is_active' => 0])->first();
+        $studentAttendance = StudentAttendance::orderBy('id')->where('student_id', $student->id)->with('slot','trainer')->get();
 
         $fromDate = '';
         $toDate = '';
@@ -247,7 +248,7 @@ class StudentsController extends Controller
             $toDate = $_GET['toDate'];
         }
 
-        $qurey = StudentAttendance::orderBy('id')->where('student_id', $student->id);
+        $qurey = StudentAttendance::join('slots','students_attendance.slot_id','slots.id')->where('student_id', $student->id);
 
         if($fromDate != '' && $fromDate != null){
             $qurey->whereDate('attendance_date', '>=', date('Y-m-d', strtotime($fromDate)));
@@ -257,9 +258,8 @@ class StudentsController extends Controller
             $qurey->whereDate('attendance_date', '<=',  date('Y-m-d', strtotime($toDate)));
         }
 
-        $studentAttendance = $qurey->with('slot','trainer')->get();
-
-        return view('student.show', compact('student', 'assignStaff', 'studentAttendance', 'proxy_staff_details','studentCompleteCourses','approvedCourse','student_leave_show','student_appreciation','fromDate','toDate', 'trainer'));
+        $studentAttendances = $qurey->get()->groupby('slot_time');
+        return view('student.show', compact('student', 'assignStaff', 'studentAttendance', 'proxy_staff_details','studentCompleteCourses','approvedCourse','student_leave_show','student_appreciation','fromDate','toDate', 'trainer','studentAttendances'));
     }
 
     public function edit($id)
@@ -291,7 +291,7 @@ class StudentsController extends Controller
             $trainer = Trainer::orderBy('id')->where(['is_active' => 0, 'branch_id' => Auth::user()->branch_id])->get();
             $branch = Branch::where('id', Auth::user()->branch_id)->orderBy('id', 'DESC')->get();
         }
-        return view('student.edit', compact('student', 'role', 'course', 'trainer','branch', 'courseID', 'studentDmit','courseWiseMaterial','selectedMaterial','courseMaterialIds'));
+        return view('student.edit', compact('student', 'role', 'course', 'trainer','branch', 'courseID', 'studentDmit','courseWiseMaterial','selectedMaterial','courseMaterialIds','period'));
     }
 
     public function update(Request $request, Student $student)

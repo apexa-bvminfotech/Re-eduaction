@@ -83,10 +83,10 @@
                                                                     data-assigned="{{ $s->isStaffAssigned() ? 'true' : 'false' }}">
                                                                 {{ $s->isStaffAssigned() ? 'Shift Trainer' : 'Assign Trainer' }}
                                                             </button>
-                                                            <button type="button"
+                                                            {{-- <button type="button"
                                                                     class="btn btn-secondary btn-proxy btn-sm mb-1"
                                                                     data-id="{{$s->id}}"> Assign Proxy Trainer
-                                                            </button><br>
+                                                            </button><br> --}}
                                                             <button type="button"
                                                                     class="btn btn-secondary btn-student-leave btn-sm mb-1"
                                                                     data-id="{{$s->id}}"> Approved Leave

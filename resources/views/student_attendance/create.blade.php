@@ -92,18 +92,15 @@
                                                                         <br>
                                                                         <div class="form-check form-check-inline">
                                                                             <input class="form-check-input" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $regularStaff->slot->id }}][student_details][{{ $key }}][attendance_type]" 
-                                                                                value="1" required>
+                                                                                value="1">
                                                                             <label class="form-check-label" for="inlineRadio1">Present</label>
                                                                         </div>
                                                                         <div class="form-check form-check-inline">
                                                                             <input class="form-check-input" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $regularStaff->slot->id }}][student_details][{{ $key }}][attendance_type]" 
-                                                                                value="0" required>
+                                                                                value="0">
                                                                             <label class="form-check-label" for="inlineRadio2">Absent</label>
                                                                         </div>
                                                                     </div>
-                                                                    @error('attendance_type')
-                                                                        <span class="text-danger">{{ $message }}</span>
-                                                                    @enderror
                                                                 </div>
                                                                 <div class="col-md-3">
                                                                     <div class="form-group">
@@ -175,18 +172,15 @@
 
                                                                             <div class="form-check form-check-inline">
                                                                                 <input class="form-check-input" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details][{{ $key }}][attendance_type]" 
-                                                                                    value="1" required>
+                                                                                    value="1">
                                                                                 <label class="form-check-label" for="inlineRadio1">Present</label>
                                                                             </div>
                                                                             <div class="form-check form-check-inline">
                                                                                 <input class="form-check-input" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details][{{ $key }}][attendance_type]" 
-                                                                                    value="0" required>
+                                                                                    value="0">
                                                                                 <label class="form-check-label" for="inlineRadio2">Absent</label>
                                                                             </div>
                                                                         </div>
-                                                                        @error('attendance_type')
-                                                                            <span class="text-danger">{{ $message }}</span>
-                                                                        @enderror
                                                                     </div>
                                                                     <div class="col-md-3">
                                                                         <div class="form-group">
@@ -211,7 +205,7 @@
                                     <button type="submit" class="btn btn-success mr-1">
                                         Create
                                     </button>
-                                    <a href="{{ route('trainer_attendance.index') }}"
+                                    <a href="{{ route('student_attendance.index') }}"
                                         class="btn btn-danger">Cancel</a>
                                 </div>
                                     {!! Form::close() !!}
@@ -224,34 +218,4 @@
     </div> 
 @endsection
 
-@push('scripts')
-    <script>
-        $(document).ready(function(){
-            var form = $('#quickForm');
-            var validator = form.validate({
-                rules : {
-                    attendance_type : {
-                        required: true,
-                    }
-                },
-                messages: {
-                    attendance_type: {
-                        required: 'Please fill your attendance .',
-                    }
-                },
-                errorElement: 'span',
-                errorPlacement: function (error, element) {
-                    error.addClass('invalid-feedback');
-                    element.closest('.form-group').append(error);
-                },
-                highlight: function (element, errorClass, validClass) {
-                    $(element).closest('.form-check').addClass('is-invalid');
-                },
-                unhighlight: function (element, errorClass, validClass) {
-                    $(element).removeClass('is-invalid');
-                }
-            });
-        });
-    </script>
-@endpush
 

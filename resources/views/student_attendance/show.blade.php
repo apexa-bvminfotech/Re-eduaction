@@ -6,12 +6,12 @@
             <div class="container-fluid">
                 <div class="row mb-12">
                     <div class="col-sm-6">
-                        <h1>Trainer Attendance Detail</h1>
+                        <h1>Student Attendance Detail</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active"><a href="{{ route('trainer_attendance.index') }}">Show Trainer Attendance List</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ route('student_attendance.index') }}">Show Trainer Attendance List</a></li>
                         </ol>
                     </div>
                 </div>
@@ -21,7 +21,7 @@
             <div class="container-fluid">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Trainer attendance list</h3>
+                        <h3 class="card-title">Student attendance list</h3>
                     </div>
                       <!-- /.card-header -->
                     <div class="card-body">
