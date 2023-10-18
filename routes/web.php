@@ -24,7 +24,10 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
+Route::get('/migrate', function() {
+    Artisan::call('migrate');
+    echo "Migration run success<br>";
+});
 
 Route::get('/dashboard', function () {
     $user =  Auth::user()->type;
@@ -131,5 +134,7 @@ Route::group(['middleware'=>['auth']],function (){
         Artisan::call('view:clear');
         echo "view is cleared<br>";
     });
+
+
 });
 
