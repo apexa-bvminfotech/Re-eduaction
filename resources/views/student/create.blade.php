@@ -707,9 +707,6 @@
                                                             @enderror
                                                         </div>
                                                     </div>
-
-                                                    <div class="col-md-6 mb-1">
-                                                    </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group mb-2">
                                                             <label for="student image">Student Profile Photo:</label>
@@ -770,6 +767,26 @@
     <script>
         $(document).ready(function ()
         {
+            //script for stf editor
+            $('#summernote1').summernote({
+                height: 150
+            });
+            $('#summernote2').summernote({
+                height: 150
+            });
+            $('#summernote3').summernote({
+                height: 150
+            });
+            $('#summernote4').summernote({
+                height: 150
+            });
+            $('#summernote5').summernote({
+                height: 150
+            });
+            $('#summernote6').summernote({
+                height: 150
+            });
+
             //script for image preview
             function readURL(input) {
                 $('#imageContainer').css('display','block');

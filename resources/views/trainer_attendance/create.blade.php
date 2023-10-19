@@ -42,7 +42,7 @@
                                                 <div class="form-group">
                                                     <label for="example-date">Date</label>
                                                     <input class="form-control" type="date" value="{{ date('Y-m-d') }}"
-                                                        max="{{ now()->format('Y-m-d') }}" name="date" required>
+                                                        max="{{ now()->format('Y-m-d') }}" name="date">
                                                 </div>
                                             </div>
                                             @foreach ($trainer as $t)
@@ -100,7 +100,7 @@
                                                                                             <input class="form-check-input"
                                                                                                 type="radio"
                                                                                                 name="data[{{ $regularStaff->slot->id }}][status]"
-                                                                                                value="P" required>
+                                                                                                value="P">
                                                                                             <label class="form-check-label"
                                                                                                 for="inlineRadio1" >Present</label>
                                                                                         </div>
@@ -109,15 +109,13 @@
                                                                                             <input class="form-check-input"
                                                                                                 type="radio"
                                                                                                 name="data[{{ $regularStaff->slot->id }}][status]"
-                                                                                                value="A" required>
+                                                                                                value="A">
+                                                                                            <input type="hidden" name="data[{{ $regularStaff->slot->id }}][attendance_type]" value="null">
                                                                                             <label class="form-check-label"
                                                                                                 for="inlineRadio2">Absent</label>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
-                                                                                @error('status')
-                                                                                    <span class="text-danger">{{$message}}</span>
-                                                                                @enderror
                                                                                 <div class="col-md-3">
                                                                                     <div class="form-group">
                                                                                         <label for="simpleinput">Absent
@@ -201,7 +199,9 @@
                                                                                                 class="form-check-input"
                                                                                                 type="radio"
                                                                                                 name="data[{{ $proxy->slot->id }}][status]"
-                                                                                                value="P" required>
+                                                                                                value="P">
+                                                                                            <input type="hidden" name="data[{{ $proxy->slot->id }}][attendance_type]" value="null">
+
                                                                                             <label
                                                                                                 class="form-check-label"
                                                                                                 for="inlineRadio1">Present</label>
@@ -212,16 +212,13 @@
                                                                                                 class="form-check-input"
                                                                                                 type="radio"
                                                                                                 name="data[{{  $proxy->slot->id }}][status]"
-                                                                                                value="A" required>
+                                                                                                value="A">
                                                                                             <label
                                                                                                 class="form-check-label"
                                                                                                 for="inlineRadio2">Absent</label>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
-                                                                                @error('status')
-                                                                                    <span class="text-danger">{{$message}}</span>
-                                                                                @enderror
                                                                                 <div class="col-md-3">
                                                                                     <div class="form-group">
                                                                                         <label for="simpleinput">Absent
@@ -262,34 +259,3 @@
         </section>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $(document).ready(function(){
-            var form = $('#quickForm');
-            var validator = form.validate({
-                rules : {
-                    status : {
-                        required: true,
-                    },
-                },
-                messages: {
-                    status: {
-                        required: 'Please fill your attendance .',
-                    },
-                },
-                errorElement: 'span',
-                errorPlacement: function (error, element) {
-                    error.addClass('invalid-feedback');
-                    element.closest('.form-group').append(error);
-                },
-                highlight: function (element, errorClass, validClass) {
-                    $(element).closest('.form-check').addClass('is-invalid');
-                },
-                unhighlight: function (element, errorClass, validClass) {
-                    $(element).removeClass('is-invalid');
-                }
-            });
-        });
-    </script>
-@endpush

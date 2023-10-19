@@ -10,7 +10,7 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active"><a href="{{ route('student_ptm.index') }}">Show RTC List</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ route('student_ptm.index') }}">Show Student PTM List</a></li>
                         </ol>
                     </div>
                 </div>
@@ -105,7 +105,7 @@
 
                             <div class="card-footer justify-content-end d-flex" >
                                 <button type="submit" class="btn btn-primary mr-2">Create</button>
-                                <a href="{{ route('rtc.index') }}" class="btn btn-danger">Cancel</a>
+                                <a href="{{ route('student_ptm.index') }}" class="btn btn-danger">Cancel</a>
                             </div>
                             {!! Form::close() !!}
                         </div>

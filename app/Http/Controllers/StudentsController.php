@@ -228,7 +228,7 @@ class StudentsController extends Controller
 
     public function show($id)
     {
-        $student = Student::with('courses','studentDmit','studentStatus','branch','studentMaterial.material','studentTrainer.trainer')->find($id);
+        $student = Student::with('courses','studentDmit.trainer','studentStatus','branch','studentMaterial.material','studentTrainer.trainer')->find($id);
         $assignStaff = StudentStaffAssign::orderBy('id','DESC')->where('student_id', $student->id)->with('Trainer', 'Slot')->get();
         $studentCompleteCourses = StudentCourseComplete::where('status',1)->where('student_id',$id)->pluck('id')->toArray();
         $approvedCourse= StudentCourseComplete::where('status',2)->where('student_id',$id)->pluck('id')->toArray();
@@ -291,7 +291,7 @@ class StudentsController extends Controller
             $trainer = Trainer::orderBy('id')->where(['is_active' => 0, 'branch_id' => Auth::user()->branch_id])->get();
             $branch = Branch::where('id', Auth::user()->branch_id)->orderBy('id', 'DESC')->get();
         }
-        return view('student.edit', compact('student', 'role', 'course', 'trainer','branch', 'courseID', 'studentDmit','courseWiseMaterial','selectedMaterial','courseMaterialIds','period'));
+        return view('student.edit', compact('student', 'role', 'course', 'trainer','branch', 'courseID', 'studentDmit','courseWiseMaterial','selectedMaterial','courseMaterialIds'));
     }
 
     public function update(Request $request, Student $student)
@@ -457,12 +457,13 @@ class StudentsController extends Controller
             'slot_id' => 'required|integer',
         ]);
 
-        $existingProxyStaff = StudentProxyStaffAssign::where(['trainer_id' => $request->trainer_id, 'slot_id' => $request->slot_id])->first();
+        $existingProxyStaff = StudentProxyStaffAssign::where(['trainer_id' => $request->trainer_id, 'slot_id' => $request->slot_id])
+                ->whereDate('starting_date', now()->format('Y-m-d'))->whereDate('ending_date', now()->format('Y-m-d'))->first();
             if ($existingProxyStaff) {
-                return back()->with('error', 'Trainer is already Assigned as proxy staff for this student and for this slot');
+                return back()->with('error', 'Trainer is already Assigned as proxy staff for this for this slot');
             }
 
-        $student = StudentStaffAssign::where(['student_id' => $request->student_id, 'trainer_id' => $request->trainer_id] )->where('is_active', 0)->first();
+        $student = StudentStaffAssign::where(['slot_id' => $request->slot_id, 'trainer_id' => $request->trainer_id, 'student_id' => $request->student_id] )->where('is_active', 0)->first();
 
         if ($student) {
                 return back()->with('error', 'Trainer is already Assigned');

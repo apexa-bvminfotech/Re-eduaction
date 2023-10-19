@@ -105,7 +105,7 @@
                                                     <th><b>Extra Tuition Time:</b></th>
                                                     <td>{{$student->extra_tuition_time}}</td>
                                                     <th><b>Date Of Birth:</b></th>
-                                                    <td>{{$student->dob}}</td>
+                                                    <td>{{date('d-m-Y',strtotime($student->dob))}}</td>
                                                 </tr>
                                                 <tr>
                                                     <th><b>Age:</b></th>
@@ -122,17 +122,18 @@
                                                         </a>
                                                     </td>
                                                 </tr>
-                                                <tr>   
+                                                <tr>      
                                                     <th><b>Courses:</b></th>
                                                     <td>
                                                         @foreach($student->courses as $key => $course)
                                                             <b>{{ $key+1 }}:</b> {{ $course->course->course_name }}
                                                             <br>
-                                                            @foreach ($course->course->courseMaterial as $material)
-                                                                @if($material->studentCourseMaterial !== null)
-                                                                    <b>Course Material :- </b> {{ $material->material_name }}
-                                                                @endif
-                                                            @endforeach    
+                                                        @endforeach
+                                                    </td>
+                                                    <th>Course Material :</th>
+                                                    <td>
+                                                        @foreach ($student->studentMaterial as $key => $material)
+                                                            <b>{{ $key+1 }}:</b> {{ $material->material->material_name }}
                                                             <br>
                                                         @endforeach
                                                     </td>
@@ -181,10 +182,22 @@
                                                         <td>{{ $student->studentDmit->report_date ?? '' }}</td>
                                                     </tr>
                                                     <tr>
+                                                        <th><b>Key Point</b></th>
+                                                        <td>{!! $student->studentDmit->key_point ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
+                                                        <th><b>Key Point Date</b></th>
+                                                        <td>{{ $student->studentDmit->key_point_date ?? '' }}</td>
+                                                    </tr>
+                                                    <tr>
                                                         <th><b>Counselling By</b></th>
                                                         <td>{!! $student->studentDmit->counselling_by ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
                                                         <th><b>Counselling by Date</b></th>
                                                         <td>{{ $student->studentDmit->counselling_date ?? '' }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><b>Counselling By Trainer</b></th>
+                                                        <td>{!! $student->studentDmit->counselling_by_trainer ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
+                                                        <th><b>Counselling By Trainer Name</b></th>
+                                                        <td>{{ $student->studentDmit->trainer->name ?? '' }}</td>
                                                     </tr>
                                                     <tr>
                                                         <th><b>STF Details</b></th>

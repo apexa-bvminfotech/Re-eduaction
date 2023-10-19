@@ -596,8 +596,7 @@
                                                                 <div class="col-md-3">
                                                                     <div class="form-check form-check-inline">
                                                                         <input type="checkbox" name="key_point"
-                                                                               {{ old('key_point') == 1 ? 'checked' : '' }}
-                                                                               class="form-check">&nbsp;&nbsp;
+                                                                               class="form-check" {{ $studentDmit->key_point == 1 ? 'checked' :'' }}>&nbsp;&nbsp;
                                                                         <label class="form-check-label"
                                                                                for="fp">
                                                                             Key Point
@@ -607,7 +606,7 @@
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
                                                                         <input type="date" class="form-control" name="key_point_date"
-                                                                               min="{{ date('Y-m-d') }}"  id="key_point_date">
+                                                                               min="{{ date('Y-m-d') }}"  id="key_point_date" value="{{ $studentDmit->key_point_date }}">
                                                                         @error('key_point_date')
                                                                             <span class="text-danger">{{$message}}</span>
                                                                         @enderror
@@ -640,8 +639,7 @@
                                                                 <div class="col-md-3">
                                                                     <div class="form-check form-check-inline">
                                                                         <input type="checkbox" name="counselling_by_trainer"
-                                                                               {{ old('counselling_by_trainer') == 1 ? 'checked' : '' }}
-                                                                               class="form-check">&nbsp;&nbsp;
+                                                                               class="form-check" {{ $studentDmit->counselling_by_trainer == 1 ? 'checked' :'' }}>&nbsp;&nbsp;
                                                                         <label class="form-check-label"
                                                                                for="counselling_by_trainer">
                                                                             Counselling By Trainer

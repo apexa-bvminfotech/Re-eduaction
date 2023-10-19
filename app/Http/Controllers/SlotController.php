@@ -44,7 +44,8 @@ class SlotController extends Controller
             $trainerId[] = $trainer->trainer_id;
         }
         $trainers = Trainer::whereNotIn('id',$trainerId)->where('is_active', 0)->orderBy('id', 'desc')->get();
-        return view('slot.index', compact('slot','trainerAttendances','trainers','studentStaffAssign'))->with('i');
+        $proxyStaff = StudentProxyStaffAssign::whereDate('starting_date', now()->format('Y-m-d'))->whereDate('ending_date', now()->format('Y-m-d'))->get();
+        return view('slot.index', compact('slot','trainerAttendances','trainers','studentStaffAssign','proxyStaff'))->with('i');
     }
     /**
      * Show the form for creating a new resource.
