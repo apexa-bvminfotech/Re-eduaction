@@ -54,6 +54,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {{-- {{ dd( $slot) }} --}}
+
                                         @foreach ($slot as $key => $s)
                                             <tr>
                                                 <td>{{ $s->id }}</td>
@@ -73,20 +75,20 @@
                                                     <td>
                                                         <a href="{{ route('slot.edit',$s->id) }}" class="btn btn-success btn-sm" title="Edit"><i class="fa fa-edit"></i> Edit</a>
                                                         @foreach($trainerAttendances as $key => $attendance)
-                                                        @php
-                                                            $slotId = [];
-                                                        @endphp
+                                                            @php
+                                                                $slotId = [];
+                                                            @endphp
                                                             @foreach($studentStaffAssign as $key => $studentStaff)
                                                                 @if($attendance->trainer_id == $s->trainer_id && $attendance->slot_id == $s->id)
                                                                     @if($studentStaff->trainer_id == $s->trainer_id && $studentStaff->slot_id == $s->id && $studentStaff->is_active == '0')
-                                                                        @if(!in_array($studentStaff->slot_id,$slotId))
+                                                                        {{-- @if(!in_array($studentStaff->slot_id,$slotId)) --}}
                                                                             <button class="btn btn-secondary btn-proxy btn-sm mb-1 mt-1" data-slot-time="{{ $s->slot_time }}" value="{{ $s->id }}"
                                                                                 data-rtc-id="{{ $s->rtc->id }}" data-branch-id="{{ $s->branch->id }}" data-whtsapp-grp="{{ $s->whatsapp_group_name }}"
                                                                                 data-slot-id="{{ $s->id }}" data-old-trainer-id="{{ $s->trainer->id }}" data-trainer-id="{{ $s->trainer->id }}"> 
                                                                                 Assign Proxy Trainer
                                                                             </button>
-                                                                        @endif     
-                                                                    @endif    
+                                                                        {{-- @endif      --}}
+                                                                    @endif      
                                                                 @endif
                                                                 @php
                                                                     $slotId[] = $studentStaff->slot_id;

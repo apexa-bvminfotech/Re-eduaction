@@ -138,13 +138,23 @@ class StudentAttendanceController extends Controller
      */
     public function show($date)
     {
-        $studentAttendance = StudentAttendance::select('students_attendance.*','trainers.name','slots.slot_time','students.name')
+        if(Auth::user()->type == 1){
+            $studentAttendance = StudentAttendance::select('students_attendance.*','trainers.name','slots.slot_time','students.name')
             ->where('attendance_date',$date)
             ->join('trainers', 'trainers.id', 'students_attendance.trainer_id')
             ->join('slots', 'slots.id', 'students_attendance.slot_id')
             ->join('students','students.id','students_attendance.student_id')
             ->where('trainers.user_id',Auth::user()->id)
             ->with('slot')->get()->groupby('trainer.name');
+        }else{
+            $studentAttendance = StudentAttendance::select('students_attendance.*','trainers.name','slots.slot_time','students.name')
+            ->where('attendance_date',$date)
+            ->join('trainers', 'trainers.id', 'students_attendance.trainer_id')
+            ->join('slots', 'slots.id', 'students_attendance.slot_id')
+            ->join('students','students.id','students_attendance.student_id')
+            ->with('slot')->get()->groupby('trainer.name');
+        }
+       
         return view('student_attendance.show',compact('studentAttendance'));
     }
 
@@ -250,7 +260,7 @@ class StudentAttendanceController extends Controller
                 }
             }
         }  
-        return redirect()->route('student_attendance.index')->with('success', 'Student Attendence Created successfully');
+        return redirect()->route('student_attendance.index')->with('success', 'Student Attendence Updated successfully');
     }
 
     /**

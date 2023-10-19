@@ -463,7 +463,7 @@ class StudentsController extends Controller
                 return back()->with('error', 'Trainer is already Assigned as proxy staff for this for this slot');
             }
 
-        $student = StudentStaffAssign::where(['slot_id' => $request->slot_id, 'trainer_id' => $request->trainer_id] )->where('is_active', 0)->first();
+        $student = StudentStaffAssign::where(['slot_id' => $request->slot_id, 'trainer_id' => $request->trainer_id, 'student_id' => $request->student_id] )->where('is_active', 0)->first();
 
         if ($student) {
                 return back()->with('error', 'Trainer is already Assigned');

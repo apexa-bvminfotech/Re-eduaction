@@ -342,7 +342,7 @@
                                         Update
                                     </button>
                                     <a href="{{ route('student_attendance.index') }}"
-                                        class="btn btn-danger">Cancel</a>
+                                        class="btn btn-danger">Cancel</a>   
                                 </div>
                                     {!! Form::close() !!}
                             </div>

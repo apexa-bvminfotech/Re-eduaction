@@ -125,7 +125,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link @if(Route::currentRouteName() == 'trainer_attendance.index')active  @endif">
+                        <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-file"></i>
                             <p> Reports
                                 <i class="fas fa-angle-left right"></i>
@@ -182,7 +182,7 @@
                             @endcan
                             @can('student-list-with-course-detail-report')
                                 <li class="nav-item">
-                                    <a href="{{ route('report.student-list-with-course-detail') }}" class="nav-link @if(Route::currentRouteName() == 'report.course-wise-student-list')active  @endif">
+                                    <a href="{{ route('report.student-list-with-course-detail') }}" class="nav-link @if(Route::currentRouteName() == 'report.student-list-with-course-detail')active  @endif">
                                         <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
                                         <p>Student List with Course Detail</p>
                                     </a>
