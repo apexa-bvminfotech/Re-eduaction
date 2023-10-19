@@ -267,7 +267,7 @@
                                                         </tr>
                                                         <tr>
                                                             <th>Role</th>
-                                                            {{-- <td>{{$trainer->user->roles->first()->name}}</td> --}}
+                                                            <td>{{$trainer->user->roles->first()->name}}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Status</th>

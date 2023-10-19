@@ -546,9 +546,9 @@
                                                                 <label class="custom-file-label" for="customFile">Choose
                                                                     file</label>
                                                             </div>
-                                                        </div>
-                                                        <div style="display: none;" id="passbookPhotoContainer">
-                                                            <img id="passbookPhotoHolder" alt="Uploaded Image Preview Holder"  width="100" height="100"/>
+                                                            <div style="display: none;" id="passbookPhotoContainer">
+                                                                <img id="passbookPhotoHolder" alt="Uploaded Image Preview Holder"  width="100" height="100"/>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

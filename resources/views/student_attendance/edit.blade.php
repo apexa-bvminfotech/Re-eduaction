@@ -218,6 +218,7 @@
                                                                             <input type="hidden" readonly name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{ $regularStaff->slot->id }}][slot_id]"  value="{{ $regularStaff->slot->id }}" class="form-control">
                                                                             <input type="hidden" readonly name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{ $regularStaff->slot->id }}][student_details][{{ $key }}][student_id]"  value="{{ $regularStaff->student->id }}" class="form-control">
                                                                             <input type="hidden" readonly name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{ $regularStaff->slot->id }}][student_details][{{ $key }}][student_attendance_id]"  value="" class="form-control">
+                                                                            <input type="hidden" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $regularStaff->slot->id }}][student_details][{{ $key }}][attendance_type]" value="null">
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-3">
@@ -302,6 +303,7 @@
                                                                                 <input type="hidden" readonly name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][slot_id]"  value="{{  $proxy->slot->id }}" class="form-control">
                                                                                 <input type="hidden" readonly name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details][{{ $key }}][student_id]"  value="{{ $proxy->student->id }}" class="form-control">
                                                                                 <input type="hidden" readonly name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details][{{ $key }}][student_attendance_id]"  value="{{ $slotGroup->id }}" class="form-control">
+                                                                                <input type="hidden" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $regularStaff->slot->id }}][student_details][{{ $key }}][attendance_type]" value="null">
 
                                                                                 <div class="form-check form-check-inline">
                                                                                     <input class="form-check-input" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details][{{ $key }}][attendance_type]" 
@@ -339,7 +341,7 @@
                                     <button type="submit" class="btn btn-success mr-1">
                                         Update
                                     </button>
-                                    <a href="{{ route('trainer_attendance.index') }}"
+                                    <a href="{{ route('student_attendance.index') }}"
                                         class="btn btn-danger">Cancel</a>
                                 </div>
                                     {!! Form::close() !!}

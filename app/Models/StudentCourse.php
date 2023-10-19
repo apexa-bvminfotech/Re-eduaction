@@ -18,12 +18,12 @@ class StudentCourse extends Model
         return $this->belongsTo(Appreciation::class);
     }
     public function courseWiseMaterial(){
-        return $this->belongsTo(CourseWiseMaterial::class,'course_id','id');
+        return $this->hasMany(CourseWiseMaterial::class,'course_id','course_id');
     }
     public function student(){
         return $this->belongsTo(Student::class);
     }
-    // public function studentCourseMaterial(){
-    //     return $this->belongsTo(StudentCourseMaterial::class,'student_id','student_id');
-    // }
+    public function studentCourseMaterial(){
+        return $this->belongsTo(StudentCourseMaterial::class,'student_id','student_id');
+    }
 }

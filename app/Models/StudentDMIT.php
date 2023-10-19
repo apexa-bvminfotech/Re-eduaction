@@ -14,4 +14,7 @@ class StudentDMIT extends Model
     public function student(){
         return $this->belongsTo(Student::class);
     }
+    public function trainer(){
+        return $this->belongsTo(Trainer::class,'counselling_by_trainer_name','id');
+    }
 }
