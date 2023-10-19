@@ -82,20 +82,20 @@ class TrainerAttendanceController extends Controller
         $date = date('Y-m-d', strtotime($request->date));
 
         foreach ($request->data as $key => $r) {
-            $data = [
-                'trainer_id' => $r['trainer_id'],
-                'slot_id' =>  $r['slot_id'],
-                'status' => $r['status'],
-                'absent_reason' => $r['absent_reason'],
-                'slot_type' => $r['slot_type'],
-                'date' =>  $date,
-            ];
-            TrainerAttendance::Create($data);
-        }
-
-        return redirect()->route('trainer_attendance.index')
+            if($r['attendance_type'] !== "null"){
+                $data = [
+                    'trainer_id' => $r['trainer_id'],
+                    'slot_id' =>  $r['slot_id'],
+                    'status' => $r['status'],
+                    'absent_reason' => $r['absent_reason'],
+                    'slot_type' => $r['slot_type'],
+                    'date' =>  $date,
+                ];
+                TrainerAttendance::Create($data);
+            }
+            return redirect()->route('trainer_attendance.index')
             ->with('success', 'trainer attendance add successfully');
-
+        }
     }
 
     /**
