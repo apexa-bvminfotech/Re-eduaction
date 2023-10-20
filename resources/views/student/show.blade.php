@@ -477,7 +477,7 @@
                                                         <tr>
                                                             <td>{{ $key+1 }}</td>
                                                             <td>{{$appreciation->course->course_name}}</td>
-                                                            <td>{{$appreciation->appreciation->appreciation_name}}</td>
+                                                            <td>{{!empty($appreciation->appreciation->appreciation_name) ? $appreciation->appreciation->appreciation_name : null}}</td>
                                                             @if($appreciation->appreciation_given_date !== NULL)
                                                                 <td>{{ $appreciation_given_date = date('d-m-Y', strtotime($appreciation->appreciation_given_date)) }}</td>
                                                             @else
@@ -912,8 +912,8 @@
         <form id="appreciationForm" action="{{ route('student.studentAppreciation') }}" method="POST">
             @csrf
             <input type="hidden" name="student_course_appreciation_id" class="form-control student_course_appreciation_id"  id="student_course_appreciation_id" value="" required>
-            <input type="hidden" name="student_id" class="form-control student_id" id="student_id" value="" required>
-            <div class="modal fade" id="verticalModal2" tabindex="-1" role="dialog"
+            <input type="hidden" name="student_id" class="form-control student_id" id="apprecation_student_id" value="" required>
+            <div class="modal fade" id="verticalModal4" tabindex="-1" role="dialog"
                  aria-labelledby="verticalModalTitle"
                  style="display: none;" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -969,9 +969,9 @@
         $(document).on('click', '.btn-student-appreciation', function () {
             let id = $(this).data('id');
             let student_id = $(this).data('student-id');
-            $('#student_id').val(student_id);
+            $('#apprecation_student_id').val(student_id);
             $('#student_course_appreciation_id').val(id);
-            $('#verticalModal2').modal('toggle');
+            $('#verticalModal4').modal('toggle');
         });
 
         $(document).on('click', '.appreciation-form-submit', function () {

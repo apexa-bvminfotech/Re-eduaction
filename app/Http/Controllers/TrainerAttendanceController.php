@@ -111,6 +111,7 @@ class TrainerAttendanceController extends Controller
             ->join('trainers', 'trainers.id', 'trainer_attendances.trainer_id')
             ->join('slots', 'slots.id', 'trainer_attendances.slot_id')
             ->get()->groupby('trainer.name');
+
         return view('trainer_attendance.show',compact('trainerAttendance'));
     }
 
@@ -123,12 +124,12 @@ class TrainerAttendanceController extends Controller
     public function edit($date)
     {
         $EditDate = $date;
-        $trainerAttendance = TrainerAttendance::select('trainer_attendances.*', 'trainers.id as trainerID', 'trainers.name', 'slots.slot_time')
-            ->Where('date', $date)
-            ->join('trainers', 'trainers.id', 'trainer_attendances.trainer_id')
-            ->join('slots', 'slots.id', 'trainer_attendances.slot_id')
-            ->orderBy('trainer_attendances.id', 'ASC')->get()->groupby('trainer.name');
-            return view('trainer_attendance.edit', compact('trainerAttendance', 'EditDate'));
+        $trainer = Trainer::orderBy('id', 'DESC')->get();
+        $trainerAttendance = TrainerAttendance::where('date',$EditDate)->get();
+        $studentStaffAssign = StudentStaffAssign::orderBy('id', 'DESC')->where('is_active','0')->with('trainer')->get()->groupBy('trainer.name');
+        $proxyStaff = StudentProxyStaffAssign::orderBy('id', 'DESC')->whereDate('starting_date', now()->format('Y-m-d'))->whereDate('ending_date', now()->format('Y-m-d'))->with('trainer')
+            ->get()->groupBy('trainer.name');
+        return view('trainer_attendance.edit', compact('trainer', 'proxyStaff', 'studentStaffAssign','trainerAttendance','EditDate'));
     }
 
     /**
@@ -140,23 +141,37 @@ class TrainerAttendanceController extends Controller
      */
     public function update(Request $request, $date)
     {
+        $date = date('Y-m-d', strtotime($request->date));
+
         $this->validate($request, [
             'date' => 'required',
         ]);
-        foreach ($request->data as $key => $r) {
+
+        foreach($request->data as $key => $r){
             if(isset($r['status'])){
-                $data = [
-                    'status' => $r['status'],
-                    'absent_reason' => $r['absent_reason'],
-                ];
-                TrainerAttendance::where('id', $r['id'])->update($data);
+                if(!isset($r['trainer_attendance_id'])){
+                    TrainerAttendance::create([
+                        'trainer_id' => $r['trainer_id'],
+                        'slot_id' =>  $r['slot_id'],
+                        'status' => $r['status'],
+                        'slot_type' => $r['slot_type'],
+                        'date' =>  $date,
+                        'absent_reason' => isset($r['absent_reason']) ? $r['absent_reason'] : null,
+                    ]);
+                }
+                else{
+                    TrainerAttendance::where('id',$r['trainer_attendance_id'])->update([
+                        'absent_reason' => isset($r['absent_reason']) ? $r['absent_reason'] : null,
+                        'status' => $r['status'],
+                    ]);
+                }
             }
         }
+
         return redirect()->route('trainer_attendance.index')
             ->with('success', 'Updated successfully');
 
     }
-
     /**
      * Remove the specified resource from storage.
      *
