@@ -82,7 +82,7 @@ class TrainerAttendanceController extends Controller
         $date = date('Y-m-d', strtotime($request->date));
 
         foreach ($request->data as $key => $r) {
-            if($r['attendance_type'] !== "null"){
+            if(isset($r['status'])){
                 $data = [
                     'trainer_id' => $r['trainer_id'],
                     'slot_id' =>  $r['slot_id'],
@@ -93,9 +93,9 @@ class TrainerAttendanceController extends Controller
                 ];
                 TrainerAttendance::Create($data);
             }
-            return redirect()->route('trainer_attendance.index')
-            ->with('success', 'trainer attendance add successfully');
         }
+        return redirect()->route('trainer_attendance.index')
+        ->with('success', 'trainer attendance add successfully');
     }
 
     /**
@@ -144,11 +144,13 @@ class TrainerAttendanceController extends Controller
             'date' => 'required',
         ]);
         foreach ($request->data as $key => $r) {
-            $data = [
-                'status' => $r['status'],
-                'absent_reason' => $r['absent_reason'],
-            ];
-            TrainerAttendance::where('id', $r['id'])->update($data);
+            if(isset($r['status'])){
+                $data = [
+                    'status' => $r['status'],
+                    'absent_reason' => $r['absent_reason'],
+                ];
+                TrainerAttendance::where('id', $r['id'])->update($data);
+            }
         }
         return redirect()->route('trainer_attendance.index')
             ->with('success', 'Updated successfully');

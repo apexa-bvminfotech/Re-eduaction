@@ -254,7 +254,6 @@
                                                 </div>
                                             </div>
                                         @endif
-
                                         @if (isset($proxyStaff[$t->name]))
                                             @foreach ($proxyStaff[$t->name]->groupBy('slot_id') as $slotGroup)
                                                 @php
