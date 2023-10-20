@@ -148,12 +148,13 @@
                                                                 <div class="col-md-3">
                                                                     <div class="form-group">
                                                                         <label for="simpleinput">Absent reason</label>
-                                                                        @foreach ($studentAttendance as $at)
+                                                                        <input type="text" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $regularStaff->slot->id }}][student_details][{{ $key }}][absent_reason]" 
+                                                                                    class="form-control" value="">
+                                                                        {{-- @foreach ($studentAttendance as $at)
                                                                             @if($t->id == $at->trainer_id && $regularStaff->slot->id == $at->slot_id && $regularStaff->student->id == $at->student_id)
-                                                                                <input type="text" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $regularStaff->slot->id }}][student_details][{{ $key }}][absent_reason]" 
-                                                                                    class="form-control" value="{{ $at->absent_reason }}">
+                                                                                
                                                                             @endif
-                                                                        @endforeach
+                                                                        @endforeach --}}
                                                                     </div> 
                                                                 </div>  
                                                             </div>
@@ -250,12 +251,13 @@
                                                                     <div class="col-md-3">
                                                                         <div class="form-group">
                                                                             <label for="simpleinput">Absent reason</label>
-                                                                            @foreach ($studentAttendance as $at)
+                                                                            <input type="text" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details][{{ $key }}][absent_reason]" 
+                                                                                        class="form-control" value="">
+                                                                            {{-- @foreach ($studentAttendance as $at)
                                                                                 @if($t->id == $at->trainer_id && $regularStaff->slot->id == $at->slot_id && $regularStaff->student->id == $at->student_id)
-                                                                                    <input type="text" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details][{{ $key }}][absent_reason]" 
-                                                                                        class="form-control" value="{{ $at->absent_reason }}">
+                                                                                    
                                                                                 @endif
-                                                                            @endforeach
+                                                                            @endforeach --}}
                                                                         </div> 
                                                                     </div>    
                                                                 </div>
