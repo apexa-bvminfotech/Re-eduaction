@@ -55,19 +55,22 @@
                                         $absentStudentId = [];
                                         $absentTrainerId = [];
                                         $absentSlotId = [];
+                                        $absentReasonId = [];
                                     @endphp
                                     @foreach ($studentAttendance as $atten)
-                                        @if($atten->attendance_type == '0')
+                                        @if($atten->attendance_type == '1')
                                             @php
                                                 $presentStudentId[] = $atten->student_id;
                                                 $presentTrainerId[] = $atten->trainer_id;
                                                 $presentSlotId[] = $atten->slot_id;
+                                                $absentReasonId[] = $atten->absent_reason;
                                             @endphp
                                         @else
                                             @php
                                                 $absentStudentId[] = $atten->student_id;
                                                 $absentTrainerId[] = $atten->trainer_id;
                                                 $absentSlotId[] = $atten->slot_id;
+                                                $absentReasonId[] = $atten->absent_reason;
                                             @endphp
                                         @endif
                                     @endforeach
@@ -117,7 +120,7 @@
                                                                     <div class="form-group">
                                                                         <label for="simpleinput">Attendance</label>
                                                                         <br>
-                                                                        @if (in_array($t->id,$absentTrainerId) && in_array($regularStaff->slot->id,$absentSlotId) && in_array($regularStaff->student->id,$absentStudentId))
+                                                                        @if (in_array($t->id,$presentTrainerId) && in_array($regularStaff->slot->id,$presentSlotId) && in_array($regularStaff->student->id,$presentStudentId))
                                                                             <div class="form-check form-check-inline">
                                                                                 <input class="form-check-input" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $regularStaff->slot->id }}][student_details][{{ $key }}][attendance_type]" 
                                                                                     value="1" checked>
@@ -130,7 +133,7 @@
                                                                                 <label class="form-check-label" for="inlineRadio1">Present</label>
                                                                             </div>
                                                                         @endif
-                                                                        @if (in_array($t->id,$presentTrainerId) && in_array($regularStaff->slot->id,$presentSlotId) && in_array($regularStaff->student->id,$presentStudentId))
+                                                                        @if (in_array($t->id,$absentTrainerId) && in_array($regularStaff->slot->id,$absentSlotId) && in_array($regularStaff->student->id,$absentStudentId))
                                                                             <div class="form-check form-check-inline">
                                                                                 <input class="form-check-input" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $regularStaff->slot->id }}][student_details][{{ $key }}][attendance_type]" 
                                                                                     value="0" checked>
@@ -148,7 +151,16 @@
                                                                 <div class="col-md-3">
                                                                     <div class="form-group">
                                                                         <label for="simpleinput">Absent reason</label>
-                                                                        @foreach ($studentAttendance as $at)
+                                                                        {{ json_encode($absentSlotId) }}
+                                                                        {{ $regularStaff->slot->id }}
+                                                                        @if(in_array($regularStaff->student->id,$absentStudentId) && in_array($regularStaff->slot->id,$absentSlotId))
+                                                                            <input type="text" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $regularStaff->slot->id }}][student_details][{{ $key }}][absent_reason]" 
+                                                                                class="form-control" value="{{ $t->absent_reason }}"> 
+                                                                        @else
+                                                                            <input type="text" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $regularStaff->slot->id }}][student_details][{{ $key }}][absent_reason]" 
+                                                                                class="form-control" value="Testing">
+                                                                        @endif
+                                                                        {{-- @foreach ($studentAttendance as $at)
                                                                             @php
                                                                                 $absentReasonStudentId = [];
                                                                                 $absentReasonTrainerId = [];
@@ -170,11 +182,11 @@
                                                                             @if (in_array($t->id,$absentReasonTrainerId) && in_array($regularStaff->slot->id,$absentReasonSlotId) && in_array($regularStaff->student->id,$absentReasonStudentId))
                                                                                 <input type="text" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $regularStaff->slot->id }}][student_details][{{ $key }}][absent_reason]" 
                                                                                     class="form-control" value="{{ $at->absent_reason }}">
-                                                                            @elseif (in_array($t->id,$absentReasonTrainerId) && in_array($regularStaff->slot->id,$absentReasonSlotId) && in_array($regularStaff->student->id,$absentReasonStudentId))
+                                                                            @else
                                                                                 <input type="text" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $regularStaff->slot->id }}][student_details][{{ $key }}][absent_reason]" 
                                                                                     class="form-control" value="">
                                                                             @endif
-                                                                        @endforeach
+                                                                        @endforeach --}}
                                                                     </div> 
                                                                 </div>  
                                                             </div>
@@ -240,7 +252,7 @@
                                                                                 @endif
                                                                             @endforeach
                                                                             
-                                                                            @if (in_array($t->id,$absentTrainerId) && in_array($proxy->slot->id,$absentSlotId) && in_array($proxy->student->id,$absentStudentId))
+                                                                            @if (in_array($t->id,$presentTrainerId) && in_array($proxy->slot->id,$presentSlotId) && in_array($proxy->student->id,$presentStudentId))
                                                                                 <div class="form-check form-check-inline">
                                                                                     <input class="form-check-input" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details][{{ $key }}][attendance_type]" 
                                                                                         value="1" checked>
@@ -253,7 +265,7 @@
                                                                                     <label class="form-check-label" for="inlineRadio1">Present</label>
                                                                                 </div>
                                                                             @endif
-                                                                            @if (in_array($t->id,$presentTrainerId) && in_array($proxy->slot->id,$presentSlotId) && in_array($proxy->student->id,$presentStudentId))
+                                                                            @if (in_array($t->id,$absentTrainerId) && in_array($proxy->slot->id,$absentSlotId) && in_array($proxy->student->id,$absentStudentId))
                                                                                 <div class="form-check form-check-inline">
                                                                                     <input class="form-check-input" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details][{{ $key }}][attendance_type]" 
                                                                                         value="0" checked>
