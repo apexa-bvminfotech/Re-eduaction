@@ -210,7 +210,7 @@ class StudentsController extends Controller
                 'student_id' => $student->id,
                 'course_id' => $course_id,
                 'user_id' => $user->id,
-                'appreciation_id' => $getAppreciation->id,
+                'appreciation_id' => $getAppreciation ? $getAppreciation->id : null,
             ]);
         }
 
@@ -394,7 +394,7 @@ class StudentsController extends Controller
                     'student_id' => $student->id,
                     'course_id' => $course_id,
                     'user_id' => $user->id,
-                    'appreciation_id' => $getAppreciation->id,
+                    'appreciation_id' => $getAppreciation ? $getAppreciation->id : null,
                 ]);
             }
         }
@@ -757,6 +757,13 @@ class StudentsController extends Controller
 
     public function studentLeaveApprove(Request $request)
     {
+        $request->validate([
+            'student_id' => 'required|integer',
+            'start_date' => 'required',
+            'end_date' => 'required',
+            'reason' => 'required',
+        ]);
+
         $existingProxyStaff = StudentApproveLeave::where('student_id', $request->student_id)
             ->whereDate('start_date' ,'<=', $request->start_date)
             ->whereDate('end_date', '>=', $request->end_date)
