@@ -16,6 +16,16 @@
                 </div>
             </div>
         </section>
+        @if (count($errors) > 0)
+            <div class="alert alert-danger">
+                <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
@@ -42,10 +52,10 @@
                                     <label for="inputtext" class="col-sm-3 col-form-label">Appreciation Name</label>
                                     <div class="col-sm-9">
                                         <input type="text" name="appreciation_name" class="form-control" placeholder="Enter appreciation name" value="{{ old('appreciation_name') }}" required>
+                                        @error('appreciation_name')
+                                            <span class="text-danger">{{$message}}</span>
+                                        @enderror
                                     </div>
-                                    @error('appreciation_name')
-                                        <span class="text-danger">{{$message}}</span>
-                                    @enderror
                                 </div>
                             </div>
 

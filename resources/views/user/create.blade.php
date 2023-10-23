@@ -17,6 +17,16 @@
                 </div>
             </div><!-- /.container-fluid -->
         </section>
+        @if (count($errors) > 0)
+            <div class="alert alert-danger">
+                <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
@@ -117,11 +127,11 @@
                                     <label for="status" class="col-sm-3 col-form-label">Status </label>
                                     <div class="col-sm-9 d-flex justify-content-evenly">
                                         <div class="custom-control custom-radio">
-                                            <input class="custom-control-input" type="radio" id="customRadio1" name="is_active" value="0" required>
+                                            <input class="custom-control-input" type="radio" id="customRadio1" name="is_active" value="0" required @if(old('is_active') == '0') checked @endif>
                                             <label for="customRadio1" class="custom-control-label">Active</label>
                                         </div>
                                         <div class="custom-control custom-radio ml-2">
-                                            <input class="custom-control-input custom-control-input-danger" value="1" type="radio" id="customRadio4" name="is_active" required>
+                                            <input class="custom-control-input custom-control-input-danger" value="1" type="radio" id="customRadio4" name="is_active" required @if(old('is_active') == '1') checked @endif>
                                             <label for="customRadio4" class="custom-control-label">Deactive</label>
                                         </div>&nbsp;
                                         @error('is_active')
