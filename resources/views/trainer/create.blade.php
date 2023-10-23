@@ -143,7 +143,7 @@
                                                     <div class="col-md-4 mb-1">
                                                         <div class="form-group">
                                                             <label for="dob">Date Of Birth:</label>
-                                                            <input type="date" class="form-control" name="dob" placeholder="Enter Birthdate" max="{{ date('Y-m-d') }}">
+                                                            <input type="date" class="form-control" name="dob" placeholder="Enter Birthdate" max="{{ date('Y-m-d') }}"  value="{{ !empty(old('dob')) ? old('dob', date('Y-m-d')) : null }}">
                                                             @error('dob')
                                                             <span class="text-danger">{{ $dob }}</span>
                                                             @enderror
@@ -155,14 +155,14 @@
                                                             <br/>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio mt-2">
-                                                                    <input type="radio" id="married" class="custom-control-input" name="marital_status" value="1" {{ old('marital_status')}}>
+                                                                    <input type="radio" id="married" class="custom-control-input" name="marital_status" value="1" @if(old('marital_status') == '1')checked @endif>
                                                                     <label for="married" class="custom-control-label" style="font-weight: normal">Married</label>
 
                                                                 </div>
                                                             </div>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio mt-1">
-                                                                    <input type="radio" id="unmarried" class="custom-control-input" name="marital_status" value="0" {{ old('marital_status')}}>
+                                                                    <input type="radio" id="unmarried" class="custom-control-input" name="marital_status" value="0" {{ old('marital_status')}} @if(old('marital_status') == '0')checked @endif>
                                                                     <label for="unmarried" class="custom-control-label" style="font-weight: normal">Unmarried</label>
                                                                 </div>
                                                             </div>
@@ -250,13 +250,13 @@
                                                             <br>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio">
-                                                                    <input class="custom-control-input" type="radio" id="freelancerRadio" name="emp_type" value="1">
+                                                                    <input class="custom-control-input" type="radio" id="freelancerRadio" name="emp_type" value="1" @if(old('emp_type') == '1') checked @endif>
                                                                     <label for="freelancerRadio" class="custom-control-label">Freelancer</label>
                                                                 </div>
                                                             </div>
                                                             <div class="form-check form-check-inline">
                                                                 <div class="custom-control custom-radio ml-2">
-                                                                    <input class="custom-control-input" type="radio" id="fixedRadio" name="emp_type" value="0">
+                                                                    <input class="custom-control-input" type="radio" id="fixedRadio" name="emp_type" value="0" @if(old('emp_type') == '0')checked @endif>
                                                                     <label for="fixedRadio" class="custom-control-label">Fixed</label>
                                                                 </div>
                                                             </div>
@@ -279,7 +279,7 @@
                                                             </div>
                                                             <div class="col-sm-5">
                                                                 <div class="input-group date" id="timepicker2" data-target-input="nearest">
-                                                                    <input type="date" class="form-control" name="joining_date_from">
+                                                                    <input type="date" class="form-control" name="joining_date_from"  value="{{ !empty(old('joining_date_from')) ? old('joining_date_from', date('Y-m-d')) : null }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-1" style="display: flex;justify-content: space-around;">
@@ -287,7 +287,7 @@
                                                             </div>
                                                             <div class="col-sm-5">
                                                                 <div class="input-group date" id="timepicker3" data-target-input="nearest">
-                                                                    <input type="date" class="form-control " name="joining_date_to">
+                                                                    <input type="date" class="form-control " name="joining_date_to"  value="{{ !empty(old('joining_date_to')) ? old('joining_date_to', date('Y-m-d')) : null }}">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -297,12 +297,14 @@
                                                         <div class="row">
                                                             <div class="col-md-4">
                                                                 <div class="form-group mb-3">
-                                                                    <input placeholder="i-card date" class="form-control textbox-n" name="i_card_date" type="date" id="date" max="{{ date('Y-m-d') }}"/>
+                                                                    <input placeholder="i-card date" class="form-control textbox-n" name="i_card_date" type="date" id="date" max="{{ date('Y-m-d') }}"
+                                                                        value="{{ !empty(old('i_card_date')) ? old('i_card_date', date('Y-m-d')) : null }}"/>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group mb-3">
-                                                                    <input type="date" class="form-control textbox-n" name="i_card_return_date" placeholder="i-card return date"  max="{{ date('Y-m-d') }}">
+                                                                    <input type="date" class="form-control textbox-n" name="i_card_return_date" placeholder="i-card return date"  max="{{ date('Y-m-d') }}"
+                                                                        value="{{ !empty(old('i_card_return_date')) ? old('i_card_return_date', date('Y-m-d')) : null }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
@@ -320,7 +322,8 @@
                                                                            name="uniform_date"
                                                                            type="date"
                                                                            id="date"
-                                                                            max="{{ date('Y-m-d') }}"/>
+                                                                            max="{{ date('Y-m-d') }}"
+                                                                            value="{{ !empty(old('uniform_date')) ? old('uniform_date', date('Y-m-d')) : null }}"/>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
@@ -328,7 +331,8 @@
                                                                     <input type="date" class="form-control textbox-n"
                                                                            name="uniform_return_date"
                                                                            placeholder="uniform return date"
-                                                                           max="{{ date('Y-m-d') }}">
+                                                                           max="{{ date('Y-m-d') }}"
+                                                                           value="{{ !empty(old('uniform_return_date')) ? old('uniform_return_date', date('Y-m-d')) : null }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
@@ -348,7 +352,8 @@
                                                                            name="material_date"
                                                                            type="date"
                                                                            id="date"
-                                                                            max="{{ date('Y-m-d') }}"/>
+                                                                            max="{{ date('Y-m-d') }}"
+                                                                            value="{{ !empty(old('material_date')) ? old('material_date', date('Y-m-d')) : null }}"/>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
@@ -356,14 +361,15 @@
                                                                     <input type="date" class="form-control textbox-n"
                                                                            name="material_return_date"
                                                                            placeholder="material return date"
-                                                                            max="{{ date('Y-m-d') }}">
+                                                                            max="{{ date('Y-m-d') }}"
+                                                                            value="{{ !empty(old('material_return_date')) ? old('material_return_date', date('Y-m-d')) : null }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group mb-3">
                                                                     <input type="text" class="form-control"
                                                                            name="material_note" placeholder="add note"
-                                                                           >
+                                                                           value="{{ old('material_note') }}">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -376,7 +382,8 @@
                                                                            name="offer_letter_date"
                                                                            type="date"
                                                                            id="date"
-                                                                            max="{{ date('Y-m-d') }}"/>
+                                                                            max="{{ date('Y-m-d') }}"
+                                                                            value="{{ !empty(old('offer_letter_date')) ? old('material_return_date', date('Y-m-d')) : null }}"/>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">
@@ -397,7 +404,8 @@
                                                                            name="bond_date"
                                                                            type="date"
                                                                            id="date"
-                                                                            max="{{ date('Y-m-d') }}"/>
+                                                                            max="{{ date('Y-m-d') }}"
+                                                                            value="{{ !empty(old('bond_date')) ? old('bond_date', date('Y-m-d')) : null }}"/>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">
@@ -476,15 +484,15 @@
                                                     <div class="col-sm-9 mt-2 d-flex justify-content-evenly form-group">
                                                         <div class="custom-control custom-radio">
                                                             <input class="custom-control-input" type="radio"
-                                                                   id="customRadio1" name="is_active" value="0"
+                                                                   id="customRadio1" name="is_active" value="0" @if(old('is_active') == '0') checked @endif
                                                                   required>
                                                             <label for="customRadio1" class="custom-control-label">Active</label>
                                                         </div>
                                                         <div class="custom-control custom-radio ml-2">
                                                             <input
                                                                 class="custom-control-input custom-control-input-danger"
-                                                                value="1" type="radio" id="customRadio4"
-                                                                name="is_active" required>
+                                                                value="1" type="radio" id="customRadio4" 
+                                                                name="is_active" required @if(old('is_active') == '1') checked @endif>
                                                             <label for="customRadio4" class="custom-control-label">Deactive</label>
                                                         </div>
                                                     </div>  
@@ -566,7 +574,7 @@
                                                                    class="m-2" required>
                                                             <label for="terms & condition">Terms & Conditions:</label>
                                                             @error('terms_conditions')
-                                                            <span class="text-danger">{{ $terms_conditions }}</span>
+                                                            {{-- <span class="text-danger">{{ $terms_conditions }}</span> --}}
                                                             @enderror
                                                         </div>
                                                     </div>

@@ -214,7 +214,7 @@ class SlotController extends Controller
 
     public function submitProxySlot(Request $request)
     {
-        $trainerRegularSlot = StudentStaffAssign::where('slot_id',$request->slot_id)->where('trainer_id',$request->trainer_id)->where('is_active','0')->first();
+        $trainerRegularSlot = StudentStaffAssign::join('slots','slots.id','student_staff_assigns.slot_id')->where('slot_time',$request->slot_time)->where('student_staff_assigns.trainer_id',$request->trainer_id)->where('student_staff_assigns.is_active','0')->first();
         if($trainerRegularSlot){
             return back()->with('error', 'Trainer is already assigned as regular staff');
         }

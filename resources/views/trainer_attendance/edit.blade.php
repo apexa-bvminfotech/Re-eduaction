@@ -169,13 +169,31 @@
                                                                                 <div class="col-md-3">
                                                                                     <div class="form-group">
                                                                                         <label for="simpleinput">Absent reason</label>
-                                                                                        <input type="text"  name="data[{{  $regularStaff->slot->id }}][absent_reason]"
-                                                                                                    class="form-control" value="{{ $ta->absent_reason }}">
-                                                                                        {{-- @foreach ($trainerAttendance as $ta)
-                                                                                            @if($t->id == $ta->trainer_id && $regularStaff->slot->id == $ta->slot_id)
-                                                                                                
+                                                                                        @foreach ($trainerAttendance as $at)
+                                                                                            @php
+                                                                                                $absentReasonStudentId = [];
+                                                                                                $absentReasonTrainerId = [];
+                                                                                                $absentReasonSlotId = [];
+                                                                                            @endphp
+                                                                                            @if($at->absent_reason !== null)
+                                                                                                @php
+                                                                                                    $absentReasonTrainerId[] = $at->trainer_id;
+                                                                                                    $absentReasonSlotId[] = $at->slot_id;
+                                                                                                @endphp
+                                                                                            @else
+                                                                                                @php
+                                                                                                    $absentReasonTrainerId[] = $at->trainer_id;
+                                                                                                    $absentReasonSlotId[] = $at->slot_id;
+                                                                                                @endphp
                                                                                             @endif
-                                                                                        @endforeach --}}
+                                                                                            @if (in_array($t->id,$absentReasonTrainerId) && in_array($regularStaff->slot->id,$absentReasonSlotId))
+                                                                                                <input type="text"  name="data[{{  $regularStaff->slot->id }}][absent_reason]"
+                                                                                                    class="form-control" value="{{ $at->absent_reason }}">
+                                                                                            @elseif (in_array($t->id,$absentReasonTrainerId) && in_array($regularStaff->slot->id,$absentReasonSlotId))
+                                                                                                <input type="text"  name="data[{{  $regularStaff->slot->id }}][absent_reason]"
+                                                                                                    class="form-control" value="">
+                                                                                            @endif
+                                                                                        @endforeach
                                                                                     </div> 
                                                                                 </div> 
                                                                             @endif           
@@ -306,13 +324,30 @@
                                                                                 <div class="col-md-3">
                                                                                     <div class="form-group">
                                                                                         <label for="simpleinput">Absent reason</label>
-                                                                                        <input type="text"  name="data[{{  $proxy->slot->id }}][absent_reason]"
-                                                                                                    class="form-control" value="">
-                                                                                        {{-- @foreach ($trainerAttendance as $ta)
-                                                                                            @if($t->id == $at->trainer_id && $proxy->slot->id == $at->slot_id)
-                                                                                                
+                                                                                        @foreach ($trainerAttendance as $at)
+                                                                                            @php
+                                                                                                $absentReasonTrainerId = [];
+                                                                                                $absentReasonSlotId = [];
+                                                                                            @endphp
+                                                                                            @if($at->absent_reason !== null && $at->slot_type == 'Proxy')
+                                                                                                @php
+                                                                                                    $absentReasonTrainerId[] = $at->trainer_id;
+                                                                                                    $absentReasonSlotId[] = $at->slot_id;
+                                                                                                @endphp
+                                                                                            @else
+                                                                                                @php
+                                                                                                    $absentReasonTrainerId[] = $at->trainer_id;
+                                                                                                    $absentReasonSlotId[] = $at->slot_id;
+                                                                                                @endphp
                                                                                             @endif
-                                                                                        @endforeach --}}
+                                                                                            @if (in_array($t->id,$absentReasonTrainerId) && in_array($proxy->slot->id,$absentReasonSlotId))
+                                                                                                <input type="text"  name="data[{{  $proxy->slot->id }}][absent_reason]"
+                                                                                                    class="form-control" value="{{ $at->absent_reason }}">
+                                                                                            @elseif (in_array($t->id,$absentReasonTrainerId) && in_array($proxy->slot->id,$absentReasonSlotId))
+                                                                                                <input type="text"  name="data[{{  $proxy->slot->id }}][absent_reason]"
+                                                                                                    class="form-control" value="">
+                                                                                            @endif
+                                                                                        @endforeach
                                                                                     </div> 
                                                                                 </div>  
                                                                             </div>

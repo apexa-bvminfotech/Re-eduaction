@@ -564,7 +564,7 @@
                                             <a class="btn btn-primary btn-end" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="end_task" id="btn-end_{{ $student_course->course_id  }}">End Course</a>
                                             <span class="h6 border p-2" style="display: none;" id="display_end_date_{{ $student_course->course_id }}"> End Date :- {{ date('d-m-Y', $student_course->end_date) }}</span>
                                         @else
-                                            <span class="h6 border p-2 mr-2"> End Date :- {{ date('d-m-Y', strtotime($student_course->end_date))}}</span>
+                                            <span class="h6 border p-2"> End Date :- {{ date('d-m-Y', strtotime($student_course->end_date))}}</span>
                                             <button class="btn btn-success" disabled>Course Completed</button>
                                         @endif
                                         <button class="btn btn-success" style="display: none;" id="course-complete_{{ $student_course->course_id }}" disabled>Course Completed</button>

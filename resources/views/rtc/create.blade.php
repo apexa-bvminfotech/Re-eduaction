@@ -16,6 +16,16 @@
                 </div>
             </div>
         </section>
+        @if (count($errors) > 0)
+            <div class="alert alert-danger">
+                <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
@@ -55,7 +65,7 @@
                                 <div class="form-group row">
                                     <label for="inputEmail3" class="col-sm-3">RTC Address</label>
                                     <div class="col-sm-9">
-                                        <textarea class="form-control" name="address" placeholder="Enter RTC Address" rows="1"></textarea>
+                                        <textarea class="form-control" name="address" placeholder="Enter RTC Address" rows="1">{{ old('address') }}</textarea>
                                         @error('address')
                                             <span class="text-danger">{{$message}}</span>
                                         @enderror
@@ -84,12 +94,12 @@
                                     <div class="col-sm-9 d-flex justify-content-evenly">
                                         <div class="custom-control custom-radio">
                                             <input class="custom-control-input" type="radio" id="customRadio1"
-                                                   name="is_active" value="0" required>
+                                                   name="is_active" value="0" required @if(old('is_active') == '0') checked @endif>
                                             <label for="customRadio1" class="custom-control-label">Active</label>
                                         </div>
                                         <div class="custom-control custom-radio ml-2">
                                             <input class="custom-control-input custom-control-input-danger" value="1"
-                                                   type="radio" id="customRadio4" name="is_active" required>
+                                                   type="radio" id="customRadio4" name="is_active" required @if(old('is_active') == '1') checked @endif>
                                             <label for="customRadio4" class="custom-control-label">Deactive</label>
                                             @error('is_active')
                                                 <span class="text-danger">{{$message}}</span>
