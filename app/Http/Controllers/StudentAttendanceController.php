@@ -173,14 +173,52 @@ class StudentAttendanceController extends Controller
         if(Auth::user()->type == 1){
             $trainer = Trainer::where('user_id',$user->id)->orderBy('id', 'DESC')->get();
             $studentAttendance = StudentAttendance::where('attendance_date',$EditDate)->get();
+            $presentStudent = StudentAttendance::where('attendance_date',$EditDate)->where('attendance_type','1')->get();
+            $presentStudentId = [];
+            $presentTrainerId = [];
+            $presentSlotId = [];
+            foreach($presentStudent as $atten){
+                $presentStudentId[] = $atten->student_id;
+                $presentTrainerId[] = $atten->trainer_id;
+                $presentSlotId[] = $atten->slot_id;
+            }
+            $absentStudent = StudentAttendance::where('attendance_date',$EditDate)->where('attendance_type','0')->get();
+            $absentStudentId = [];
+            $absentTrainerId = [];
+            $absentSlotId = [];
+            foreach($absentStudent as $atd){
+                $absentStudentId[] = $atd->student_id;
+                $absentTrainerId[] = $atd->trainer_id;
+                $absentSlotId[] = $atd->slot_id;
+            }
             $studentStaffAssign = StudentStaffAssign::orderBy('id', 'DESC')->where('is_active','0')->with('trainer','student','slot')->get()->groupBy('trainer.name');
             $proxyStaff = StudentProxyStaffAssign::orderBy('id', 'DESC')->whereDate('starting_date', now()->format('Y-m-d'))
                 ->whereDate('ending_date', now()->format('Y-m-d'))->with('trainer','student','slot')
                 ->get()->groupBy('trainer.name');
         }
         else{
-            $trainer = Trainer::orderBy('id', 'DESC')->get();    
-            $studentAttendance = StudentAttendance::where('attendance_date',$EditDate)->get();
+            $trainer = Trainer::orderBy('id', 'DESC')->get(); 
+            $studentAttendance = StudentAttendance::where('attendance_date',$EditDate)->get();   
+            $presentStudent = StudentAttendance::where('attendance_date',$EditDate)->where('attendance_type','1')->get();
+            $presentStudentId = [];
+            $presentTrainerId = [];
+            $presentSlotId = [];
+            foreach($presentStudent as $atten){
+                $presentStudentId[] = $atten->student_id;
+                $presentTrainerId[] = $atten->trainer_id;
+                $presentSlotId[] = $atten->slot_id;
+            }
+
+            $absentStudent = StudentAttendance::where('attendance_date',$EditDate)->where('attendance_type','0')->get();
+            $absentStudentId = [];
+            $absentTrainerId = [];
+            $absentSlotId = [];
+            foreach($absentStudent as $atd){
+                $absentStudentId[] = $atd->student_id;
+                $absentTrainerId[] = $atd->trainer_id;
+                $absentSlotId[] = $atd->slot_id;
+            }
+            
             $trainerAttendance = TrainerAttendance::whereDate('date', now()->format('Y-m-d'))->where('status','A')->get();
             $trainerId = [];
             foreach($trainerAttendance as $atten){
@@ -191,7 +229,20 @@ class StudentAttendanceController extends Controller
                 ->whereDate('ending_date', now()->format('Y-m-d'))->with('trainer','student','slot')
                 ->get()->groupBy('trainer.name');
         }
-        return view('student_attendance.edit', compact('studentAttendance', 'EditDate','trainer', 'proxyStaff', 'studentStaffAssign'));
+        return view('student_attendance.edit', compact('studentAttendance','presentStudent','absentStudent', 'EditDate','trainer', 'proxyStaff', 'studentStaffAssign','presentStudentId','presentTrainerId','presentSlotId','absentStudentId','absentTrainerId','absentSlotId'));
+    }
+
+    public function getAbsentReason($studentId, $trainerId, $slotID, $editDate){
+        $attendance = StudentAttendance::where('student_id',$studentId)->where('trainer_id',$trainerId)
+            ->where('slot_id',$slotID)->where('attendance_date',$editDate)->first();
+            if($attendance){
+                $absentReason = $attendance->absent_reason;
+                return $absentReason;
+            }
+            else{
+                $absentReason = null;
+                return $absentReason;
+            }
     }
 
     /**

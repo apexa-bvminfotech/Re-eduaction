@@ -126,10 +126,39 @@ class TrainerAttendanceController extends Controller
         $EditDate = $date;
         $trainer = Trainer::orderBy('id', 'DESC')->get();
         $trainerAttendance = TrainerAttendance::where('date',$EditDate)->get();
+        $presentTrainer = TrainerAttendance::where('date',$EditDate)->where('status','P')->get();
+        $presentTrainerId = [];
+        $presentSlotId = [];
+        foreach($presentTrainer as $atten){
+            $presentTrainerId[] = $atten->trainer_id;
+            $presentSlotId[] = $atten->slot_id;
+        }
+
+        $absentTrainer = TrainerAttendance::where('date',$EditDate)->where('status','A')->get();
+        $absentTrainerId = [];
+        $absentSlotId = [];
+        foreach($absentTrainer as $atd){
+            $absentTrainerId[] = $atd->trainer_id;
+            $absentSlotId[] = $atd->slot_id;
+        }
+
         $studentStaffAssign = StudentStaffAssign::orderBy('id', 'DESC')->where('is_active','0')->with('trainer')->get()->groupBy('trainer.name');
         $proxyStaff = StudentProxyStaffAssign::orderBy('id', 'DESC')->whereDate('starting_date', now()->format('Y-m-d'))->whereDate('ending_date', now()->format('Y-m-d'))->with('trainer')
             ->get()->groupBy('trainer.name');
-        return view('trainer_attendance.edit', compact('trainer', 'proxyStaff', 'studentStaffAssign','trainerAttendance','EditDate'));
+        return view('trainer_attendance.edit', compact('trainer', 'proxyStaff', 'studentStaffAssign','trainerAttendance','EditDate','presentTrainerId','presentSlotId','absentTrainerId','absentSlotId'));
+    }
+
+    public function getAbsentReason($trainerId, $slotID, $editDate){
+        $attendance = TrainerAttendance::where('trainer_id',$trainerId)
+            ->where('slot_id',$slotID)->where('date',$editDate)->first();
+            if($attendance){
+                $absentReason = $attendance->absent_reason;
+                return $absentReason;
+            }
+            else{
+                $absentReason = null;
+                return $absentReason;
+            }
     }
 
     /**
