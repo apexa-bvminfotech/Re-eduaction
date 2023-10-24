@@ -606,7 +606,7 @@
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
                                                                         <input type="date" class="form-control" name="key_point_date"
-                                                                               min="{{ date('Y-m-d') }}"  id="key_point_date" value="{{ $studentDmit->key_point_date }}">
+                                                                               id="key_point_date" value="{{ $studentDmit->key_point_date }}">
                                                                         @error('key_point_date')
                                                                             <span class="text-danger">{{$message}}</span>
                                                                         @enderror

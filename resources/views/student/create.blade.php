@@ -542,7 +542,7 @@
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
                                                                         <input type="date" class="form-control" name="fp_date"
-                                                                               min="{{ date('Y-m-d') }}"  id="fp_date" value="{{ !empty(old('fp_date')) ? old('fp_date', date('Y-m-d')) : null }}">
+                                                                                 id="fp_date" value="{{ !empty(old('fp_date')) ? old('fp_date', date('Y-m-d')) : null }}">
                                                                         @error('fp_date')
                                                                             <span class="text-danger">{{$message}}</span>
                                                                         @enderror
@@ -564,7 +564,7 @@
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
                                                                         <input type="date" class="form-control" name="report_date"
-                                                                               min="{{ date('Y-m-d') }}" id="report_date" value="{{ !empty(old('report_date')) ? old('report_date', date('Y-m-d')) : null }}">
+                                                                               id="report_date" value="{{ !empty(old('report_date')) ? old('report_date', date('Y-m-d')) : null }}">
                                                                         @error('report_date')
                                                                             <span class="text-danger">{{$message}}</span>
                                                                         @enderror
@@ -586,7 +586,7 @@
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
                                                                         <input type="date" class="form-control" name="key_point_date"
-                                                                               min="{{ date('Y-m-d') }}"  id="key_point_date" value="{{ !empty(old('key_point_date')) ? old('key_point_date', date('Y-m-d')) : null }}">
+                                                                               id="key_point_date" value="{{ !empty(old('key_point_date')) ? old('key_point_date', date('Y-m-d')) : null }}">
                                                                         @error('key_point_date')
                                                                             <span class="text-danger">{{$message}}</span>
                                                                         @enderror
@@ -608,7 +608,7 @@
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
                                                                         <input type="date" class="form-control" name="counselling_date"
-                                                                               min="{{ date('Y-m-d') }}"  id="fp_date" value="{{ !empty(old('counselling_date')) ? old('counselling_date', date('Y-m-d')) : null }}">
+                                                                                id="fp_date" value="{{ !empty(old('counselling_date')) ? old('counselling_date', date('Y-m-d')) : null }}">
                                                                         @error('counselling_date')
                                                                             <span class="text-danger">{{$message}}</span>
                                                                         @enderror
