@@ -237,6 +237,9 @@ class StudentsController extends Controller
         $student_appreciation = StudentCourse::orderBy('id')->where('student_id', $student->id)->With('course', 'appreciation')->get();
         $trainer = StudentStaffAssign::where(['student_id' => $id, 'is_active' => 0])->first();
         $studentAttendance = StudentAttendance::orderBy('id')->where('student_id', $student->id)->with('slot','trainer')->get();
+    
+        $currentMonthName = Carbon::now()->format('F');
+        $numberOfDaysInCurrentMonth = Carbon::now()->daysInMonth;
 
         $fromDate = '';
         $toDate = '';
@@ -259,7 +262,20 @@ class StudentsController extends Controller
         }
 
         $studentAttendances = $qurey->get()->groupby('slot_time');
-        return view('student.show', compact('student', 'assignStaff', 'studentAttendance', 'proxy_staff_details','studentCompleteCourses','approvedCourse','student_leave_show','student_appreciation','fromDate','toDate', 'trainer','studentAttendances'));
+        $totalAbsentStudent = 0;
+        $totalPresentStudent = 0;
+        foreach($studentAttendances as $key => $attendance){   
+            foreach($attendance as $atd){
+                if($atd->attendance_type == '0'){
+                    $totalAbsentStudent++;
+                }
+                else{
+                    $totalPresentStudent++;
+                }
+            }
+        }
+        return view('student.show', compact('student', 'assignStaff', 'studentAttendance', 'proxy_staff_details','studentCompleteCourses','approvedCourse',
+            'student_leave_show','student_appreciation','fromDate','toDate', 'trainer','studentAttendances','currentMonthName','numberOfDaysInCurrentMonth','totalAbsentStudent','totalPresentStudent'));
     }
 
     public function edit($id)

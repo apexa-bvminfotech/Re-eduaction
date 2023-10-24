@@ -788,20 +788,23 @@
                                         @endphp
                                         <thead>
                                             <tr>
-                                                <th>Slot</th>
-                                                <th>Total A :-</th>
-                                                <th>Total P :-</th>
-                                                
+                                                <th colspan="3"></th>
+                                                <th colspan="{{ $numberOfDaysInCurrentMonth }}" class="text-center">{{ $currentMonthName }}</th>
+                                            </tr>
+                                            <tr>
+                                                <th style="width: 6rem" class="text-center">Slot Time</th>
+                                                <th style="width: 4rem" class="text-center">Total A :-</th>
+                                                <th style="width: 4rem" class="text-center">Total P :-</th>
                                                 @for ($day = 1; $day <= $numberOfDays; $day++)
-                                                    <th>
-                                                        {{ $startDate->format('d-m') }}<br>
+                                                    <th class="text-center">
+                                                        {{ $startDate->format('d') }}<br>
                                                     </th>
                                                     @php
                                                         $startDate->addDay();
                                                     @endphp
                                                 @endfor
                                             </tr>
-                                        </thead>
+                                        </thead> 
                                         <tbody>
                                             @foreach ($studentAttendances as $key => $attendance)
                                                 @php
@@ -809,52 +812,33 @@
                                                     $eDate = now()->endOfMonth();
                                                     $numberOfDays = $sDate->daysInMonth;
                                                 @endphp
-                                                @php
-                                                    $totalAbsentStudent = 0;
-                                                @endphp
-                                                @php
-                                                    $totalPresentStudent = 0;
-                                                @endphp
-                                                @foreach ($attendance as $atd)    
-                                                    @if($atd->attendance_type == '0')
-                                                        @php
-                                                            $totalAbsentStudent++;
-                                                        @endphp 
-                                                    @else
-                                                        @php
-                                                            $totalPresentStudent++;
-                                                        @endphp
-                                                    @endif
-                                                @endforeach
-                                            
                                                 <tr>
-                                                    <td>{{ $key }}</td>
-                                                    <td> {{ $totalAbsentStudent }}</td>
-                                                    <td> {{ $totalPresentStudent }}</td>
+                                                    <td style="width: 6rem" class="text-center">{{ $key }}</td>
+                                                    <td style="width: 4rem" class="text-center"> {{ $totalAbsentStudent }}</td>
+                                                    <td style="width: 4rem" class="text-center"> {{ $totalPresentStudent }}</td>
                                                     @for ($day = 1; $day <= $numberOfDays; $day++)
-                                                    <td>
-                                                        @foreach ($attendance as $atd)
-                                                            @php
-                                                                $attendanceDate = \Carbon\Carbon::parse($atd->attendance_date);
-                                                            @endphp
-                                                            @if ($attendanceDate->format('Y-m-d') == $sDate->format('Y-m-d'))
-                                                                @if ($atd->attendance_type == '1')
-                                                                    1
-                                                                @else
-                                                                    0
+                                                        <td class="text-center">
+                                                            @foreach ($attendance as $atd)
+                                                                @php
+                                                                    $attendanceDate = \Carbon\Carbon::parse($atd->attendance_date);
+                                                                @endphp
+                                                                @if ($attendanceDate->format('Y-m-d') == $sDate->format('Y-m-d'))
+                                                                    @if ($atd->attendance_type == '1')
+                                                                        1
+                                                                    @else
+                                                                        0
+                                                                    @endif
                                                                 @endif
-                                                            @endif
-                                                        @endforeach
-                                                    </td>
+                                                            @endforeach
+                                                        </td>
                                                         @php
                                                             $sDate->addDay();
                                                         @endphp
                                                     @endfor
                                                 </tr>
                                             @endforeach
-                                        </tbody>
+                                        </tbody>     
                                     </table>
-
                                 </div>    
                             </div>
                         </div>
