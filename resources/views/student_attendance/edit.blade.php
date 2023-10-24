@@ -48,29 +48,6 @@
                                     @php
                                         $regularSlottrainerIds = [];
                                     @endphp
-                                    @php
-                                        $presentStudentId = [];
-                                        $presentTrainerId = [];
-                                        $presentSlotId = [];
-                                        $absentStudentId = [];
-                                        $absentTrainerId = [];
-                                        $absentSlotId = [];
-                                    @endphp
-                                    @foreach ($studentAttendance as $atten)
-                                        @if($atten->attendance_type == '1')
-                                            @php
-                                                $presentStudentId[] = $atten->student_id;
-                                                $presentTrainerId[] = $atten->trainer_id;
-                                                $presentSlotId[] = $atten->slot_id;
-                                            @endphp
-                                        @else
-                                            @php
-                                                $absentStudentId[] = $atten->student_id;
-                                                $absentTrainerId[] = $atten->trainer_id;
-                                                $absentSlotId[] = $atten->slot_id;
-                                            @endphp
-                                        @endif
-                                    @endforeach
                                     {{-- for regular stff --}}
                                     @if (isset($studentStaffAssign[$t->name]))
                                         <div class="row">
@@ -84,14 +61,6 @@
                                             <div class="col-md-9">
                                                 @foreach ($studentStaffAssign[$t->name]->groupBy('slot_id') as $slotGroup)
                                                     @foreach ($slotGroup as $key => $regularStaff)
-                                                        @php
-                                                            $regularAttendance = \App\Models\StudentAttendance::where('student_id',$regularStaff->student->id)->where('trainer_id',$t->id)->where('slot_id',$regularStaff->slot->id)->where('attendance_date',$EditDate)->first();
-                                                            if ($regularAttendance) {
-                                                                $absentReason = $regularAttendance->absent_reason;
-                                                            } else {
-                                                                $absentReason = null; 
-                                                            }
-                                                        @endphp
                                                         <div class="form-group">
                                                             <div class="row">
                                                                 <div class="col-md-3">
@@ -154,7 +123,10 @@
                                                                         @endif
                                                                     </div>
                                                                 </div>
-                                                                   
+                                                                @php
+                                                                    $studentAttendanceController = new App\Http\Controllers\StudentAttendanceController();
+                                                                    $absentReason = $studentAttendanceController->getAbsentReason($regularStaff->student->id,$t->id,$regularStaff->slot->id,$EditDate);
+                                                                @endphp
                                                                 <div class="col-md-3">
                                                                     <div class="form-group">
                                                                         <label for="simpleinput">Absent reason</label>
@@ -179,14 +151,6 @@
                                                 $proxyStaffTrainerIds = [];
                                             @endphp
                                             @foreach ($slotGroup as $key => $proxy)
-                                                @php
-                                                    $proxyAttendance = \App\Models\StudentAttendance::where('student_id',$proxy->student->id)->where('trainer_id',$t->id)->where('slot_id',$proxy->slot->id)->where('attendance_date',$EditDate)->first();
-                                                    if ($proxyAttendance) {
-                                                        $absentReason = $proxyAttendance->absent_reason;
-                                                    } else {
-                                                        $absentReason = null; 
-                                                    }
-                                                @endphp
                                                     <div class="row">
                                                     <div class="col-md-3">
                                                         @if(!in_array($t->id,$regularSlottrainerIds) && !in_array($t->id,$proxyStaffTrainerIds))
@@ -262,6 +226,10 @@
                                                                         @endif
                                                                     </div>
                                                                 </div> 
+                                                                @php
+                                                                    $studentAttendanceController = new App\Http\Controllers\StudentAttendanceController();
+                                                                    $absentReason = $studentAttendanceController->getAbsentReason($proxy->student->id,$t->id,$proxy->slot->id,$EditDate);
+                                                                @endphp
                                                                 <div class="col-md-3">
                                                                     <div class="form-group">
                                                                         <label for="simpleinput">Absent reason</label>
