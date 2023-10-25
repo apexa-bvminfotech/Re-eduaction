@@ -50,7 +50,6 @@ class ReportController extends Controller
         }
         $data['studentList'] = $qurey->get();
         $data['studentList'] = $qurey->with('statusStudent','studentTrainer.trainer')->get();
-        // dd($data['studentList']);
 
         return view('reports.student_list', $data);
     }

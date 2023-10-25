@@ -146,7 +146,7 @@
                                     <div class="col-md-2">
                                         <div class="small-box bg-secondary">
                                             <div class="inner">   
-                                                <h5>Branch :- {{ $branch->name }}</h5>
+                                                <h5 style="color: deepskyblue">{{ $branch->name }}</h5>
                                                 @php
                                                     $countAbsent = 0;
                                                 @endphp
@@ -181,7 +181,7 @@
                                     <div class="col-md-2">
                                         <div class="small-box bg-warning">
                                             <div class="inner">   
-                                                <h5>Branch :- {{ $branch->name }}</h5>
+                                                <h5 style="color: mediumvioletred">{{ $branch->name }}</h5>
                                                 @php
                                                     $stuAbsent = 0;
                                                 @endphp
@@ -229,12 +229,12 @@
                                             @if(in_array('none',$trainerSlot))
                                                 <div class="small-box bg-info">
                                                     <div class="inner">
-                                                        <h5>Branch :- {{ $branch->name }}</h5>
+                                                        <h5 style="color: lightpink">{{ $branch->name }}</h5>
                                                         @foreach ($branch->trainer as $trainer)
                                                             @if($trainer->trainerProxySlot->isNotEmpty())
-                                                                <h5>Trainer Name :- {{ $trainer->name }}</h5>
+                                                                <h5 style="color: lightpink">Trainer Name :- {{ $trainer->name }}</h5>
                                                                 @foreach ($trainer->trainerProxySlot as $slot)
-                                                                    <h5>Slot Time :- {{ $slot->slot->slot_time }}</h5>
+                                                                    <h5 style="color: lightpink">Slot Time :- {{ $slot->slot->slot_time }}</h5>
                                                                 @endforeach
                                                             @endif    
                                                         @endforeach

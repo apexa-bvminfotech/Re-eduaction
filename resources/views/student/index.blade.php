@@ -37,12 +37,12 @@
                                     <thead>
                                     <tr>
                                         <th>ID</th>
+                                        <th>Name</th>
                                         <th><span></span></th>
-                                        <th>Course</th>
                                         <th><span></span></th>
                                         <th>Phone</th>
-                                        <th>Std</th>
-                                        <th>Medium</th>
+                                        <th><span></span></th>
+                                        <th><span></span></th>
                                         <th><span></span></th>
                                         <th>Action</th>
                                     </tr>
@@ -159,7 +159,7 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Close
                                     </button>
-                                    <button type="button" class="btn mb-2 btn-primary">Submit</button>
+                                    <button type="button" class="btn mb-2 btn-primary btn-staff-assign">Submit</button>
                                 </div>
                             </div>
                         </div>
@@ -256,6 +256,7 @@
                                         <div class="form-group">
                                             <label for="text">Leave Reason:</label>
                                             <input type="text" class="form-control" name="reason" required>
+                                            <div id="custom-error-message" style="color: #dc3545;"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -356,7 +357,7 @@
                     });
                 }
             });
-            $(document).on('click', '.btn-primary', function () {
+            $(document).on('click', '.btn-staff-assign', function () {
                 $('#assignStaffForm').submit();
             });
 
@@ -404,8 +405,15 @@
                 $('#verticalModal2').modal('toggle');
             });
 
-            $(document).on('click', '.leave-submit', function () {
-                $('#leaveApprovedForm').submit();
+            $('.leave-submit').on('click', function () {
+                var reason = $('input[name="reason"]').val().trim();
+                if (reason === '') {
+                    $('#custom-error-message').text('Please enter a leave reason.');
+                } else {
+                    $('#custom-error-message').text('');
+
+                    $('#leaveApprovedForm').submit();
+                }
             });
 
             $(document).on('click', '.btn-student-status', function () {
@@ -443,7 +451,7 @@
                     "responsive": true, "lengthChange": false, "autoWidth": false,
                     "buttons": ["csv", "excel", "pdf", "print"],
                     initComplete: function () {
-                        this.api().columns([1, 3, 7]).every(function () {
+                        this.api().columns([2, 3, 5, 6, 7]).every(function () {
                             var column = this;
                             var select = $('<select class="form-control select2"><option value="">All</option></select>')
                                 .appendTo($(column.header()).find('span').empty())
@@ -466,6 +474,6 @@
                     }
                 }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
             });
-        })
+        });
     </script>
 @endpush
