@@ -298,16 +298,16 @@
                                             <label for="text">Trainer name:</label>
                                             <input type="text" class="form-control" name="trainer_name" required>
                                         </div>
+                                    </div>   
+                                    <div class="col-md-12 mb-1" id="displayHoldReason" style="display: none">
+                                        <div class="form-group">
+                                            <label for="text">Hold Reason:</label>
+                                            <input type="text" class="form-control" name="hold_reason" required>
+                                        </div>
                                     </div>
                                     <div class="col-md-12 mb-1" id="displayCancelReason" style="display: none">
                                         <div class="form-group">
                                             <label for="text">Cancel Reason:</label>
-                                            <input type="text" class="form-control" name="cancel_reason" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 mb-1" id="displayHoldReason" style="display: none">
-                                        <div class="form-group">
-                                            <label for="text">Hold Reason:</label>
                                             <input type="text" class="form-control" name="cancel_reason" required>
                                         </div>
                                     </div>

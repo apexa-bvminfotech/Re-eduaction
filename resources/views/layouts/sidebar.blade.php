@@ -192,7 +192,7 @@
                                 <li class="nav-item">
                                     <a href="{{ route('report.pending-counselling-student-list') }}" class="nav-link @if(Route::currentRouteName() == 'report.pending-counselling-student-list')active  @endif">
                                         <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
-                                        <p>Pending Counselling Student List</p>
+                                        <p>Pending Counselling/Report/Key point Student List</p>
                                     </a>
                                 </li>
                             @endcan
@@ -212,6 +212,18 @@
                                     </a>
                                 </li>
                             @endcan
+                            <li class="nav-item">
+                                <a href="{{ route('report.weekly-student-list-with-trainer') }}" class="nav-link @if(Route::currentRouteName() == 'report.weekly-student-list-with-trainer')active  @endif">
+                                    <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
+                                    <p>Weekely Student List with Trainer</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('report.transfer-student-transfer-trainer-list') }}" class="nav-link @if(Route::currentRouteName() == 'report.transfer-student-transfer-trainer-list')active  @endif">
+                                    <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
+                                    <p>Transfer Student / Transfer Trainer List</p>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 @endif

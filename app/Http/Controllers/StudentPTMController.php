@@ -29,7 +29,7 @@ class StudentPTMController extends Controller
      */
     public function index()
     {
-        $ptmData = Student::join('student_ptm_report', 'student_ptm_report.student_id', 'students.id')->orderBy('student_ptm_report.id','DESC')->get();
+        $ptmData = Student::join('student_ptm_report', 'student_ptm_report.student_id', 'students.id')->orderBy('student_ptm_report.id','DESC')->groupby('students.id')->get();
         if(Auth::user()->type == 1) {
             $ptmData = Student::
             select('students.id','students.surname', 'students.name')
@@ -37,7 +37,7 @@ class StudentPTMController extends Controller
                 ->join('trainers','trainers.id', 'student_staff_assigns.trainer_id')
                 ->join('student_ptm_report', 'student_ptm_report.student_id', 'students.id')
                 ->where(['trainers.user_id' => Auth::user()->id,'student_staff_assigns.is_active' => 0])
-                ->orderBy('students.id', 'DESC')->get();
+                ->orderBy('students.id', 'DESC')->groupby('students.id')->get();
         }
         return view('student_ptm.index', compact('ptmData'))->with('i');
     }
@@ -108,11 +108,12 @@ class StudentPTMController extends Controller
      */
     public function show($id)
     {
-        $data = StudentPtm::select('student_ptm_report.*', 'students.name as studentName','trainers.name as trainerName')
-                ->join('trainers', 'trainers.id', 'student_ptm_report.trainer_id')
-                ->join('students', 'students.id', 'student_ptm_report.student_id')
-                ->where('student_ptm_report.id', $id)->first();
-        return view('student_ptm.show', compact('data'));
+        $studentPtm = Student::where('id',$id)->with('studentptm')->first();
+        // $studentPtm = StudentPtm::select('student_ptm_report.*', 'students.name as studentName','trainers.name as trainerName')
+        //         ->join('trainers', 'trainers.id', 'student_ptm_report.trainer_id')
+        //         ->join('students', 'students.id', 'student_ptm_report.student_id')
+        //         ->where('student_ptm_report.student_id', $id)->get();
+        return view('student_ptm.show', compact('studentPtm'));
     }
 
     /**

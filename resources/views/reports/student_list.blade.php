@@ -44,6 +44,8 @@
                                         <th><span></span></th>
                                         <th>Registration Date</th>
                                         <th><span></span></th>
+                                        <th>Reason</th>
+                                        <th>Trainer name</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -56,6 +58,8 @@
                                                 <td>{{ !empty($student->studentTrainer->trainer->name) ? $student->studentTrainer->trainer->name : ''}}</td>
                                                 <td>{{date('Y-m-d', strtotime($student->registration_date))}}</td>
                                                 <td>{{ $student->statusStudent->status }}</td>
+                                                <td>{{ $student->statusStudent->cancel_reason ? $student->statusStudent->cancel_reason : $student->statusStudent->hold_reason}}</td>
+                                                <td>{{ $student->statusStudent->trainer_name }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

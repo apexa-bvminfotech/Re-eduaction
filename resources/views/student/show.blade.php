@@ -763,8 +763,8 @@
                                     <div class="row">
                                         <div class="col-md-8">
                                             <h5 class=""><b>Attendance</b></h5>
-                                            <h6><b>Total Present Students :- </b>{{ $totalPresentStudent }}</h3>
-                                            <h6><b>Total Absent Students :- </b>{{ $totalAbsentStudent }}</h3>
+                                            <h6><b>Total Present Students :- </b>{{ !empty($fromDate) ? $allPresentStudent : null}}</h3>
+                                            <h6><b>Total Absent Students :- </b>{{ !empty($toDate) ? $allAbsentStudent : null  }}</h3>
                                         </div>
                                         <div class="col-md-4 text-right">
                                             <form class="form-inline" action="">
@@ -784,6 +784,9 @@
                                     </div>
                                 </div>
                                 <hr>
+                                @php
+                                    $leaves = $totalLeave;
+                                @endphp
                                 <div class="card-body">
                                     <table class="table table-bordered table-striped">
                                         @php
@@ -828,20 +831,23 @@
                                                                     $attendanceDate = \Carbon\Carbon::parse($atd->attendance_date);
                                                                 @endphp
                                                                 @if ($attendanceDate->format('Y-m-d') == $sDate->format('Y-m-d'))
-                                                                    @if ($atd->attendance_type == '1')
-                                                                        1
-                                                                    @else
+                                                                    @if ($atd->attendance_type == '0')
                                                                         0
+                                                                    @else
+                                                                        1
                                                                     @endif
                                                                 @endif
                                                             @endforeach
+                                                            @if (in_array($sDate->format('Y-m-d'), $allLeaveDates))
+                                                                0
+                                                            @endif
                                                         </td>
                                                         @php
                                                             $sDate->addDay();
                                                         @endphp
                                                     @endfor
                                                 </tr>
-                                            @endforeach
+                                            @endforeach  
                                         </tbody>     
                                     </table>
                                 </div>    

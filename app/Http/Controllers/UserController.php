@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
@@ -49,6 +50,7 @@ class UserController extends Controller
             'surname' => 'required|max:255',
             'father_name' => 'required|max:255',
             'email' => 'nullable',
+            'password' => 'required|string',
             'contact' => 'required|digits:10|numeric',
             'role' => 'required',
             'is_active' => 'required',
@@ -68,7 +70,7 @@ class UserController extends Controller
             'surname' => $request->surname,
             'father_name' => $request->father_name,
             'email' => $request->email,
-            'password' => bcrypt(strtolower($request->name) . '@2121'),
+            'password' => Hash::make($request->password),
             'user_profile' => $user_profile,
             'contact' => $request->contact,
             'branch_id' => $request->branch_id ? $request->branch_id : 0,
@@ -115,6 +117,7 @@ class UserController extends Controller
         $request->validate([
             'surname' => 'required|max:255',
             'name' => 'required|max:255',
+            'password' => 'required|string',
             'father_name' => 'required|max:255',
             'user_profile' => 'nullable|mimes:jpeg,png,jpg|max:2048',
             'contact' => 'required|digits:10|numeric',
@@ -142,6 +145,7 @@ class UserController extends Controller
             'name' => $request->name,
             'father_name' => $request->father_name,
             'email' => $request->email,
+            'password' => Hash::make($request->password),
             'user_profile' => $user_profile,
             'contact' => $request->contact,
             'branch_id' => $request->branch_id ? $request->branch_id : 0,

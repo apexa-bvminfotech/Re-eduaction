@@ -25,7 +25,6 @@
                                     <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Date</th>
                                         <th>Student Name</th>
                                         <th>Action</th>
                                     </tr>
@@ -34,17 +33,11 @@
                                     @foreach ($ptmData as $key => $ptm)
                                         <tr>
                                             <td>{{ $ptm->id }}</td>
-                                            <td>{{ $ptm->date }}</td>
                                             <td>{{ $ptm->surname }} {{ $ptm->name }}</td>
                                             <td>
-                                                <a href="{{ route('student_ptm.show',$ptm->id) }}"
+                                                <a href="{{ route('student_ptm.show',$ptm->student_id) }}"
                                                    class="btn btn-primary btn-sm" title="Edit"><i
                                                         class="fa fa-eye"></i> View</a>
-                                                @can('student-PTM-edit')
-                                                    <a href="{{ route('student_ptm.edit',$ptm->id) }}"
-                                                           class="btn btn-success btn-sm" title="Edit"><i
-                                                                class="fa fa-edit"></i> Edit</a>
-                                                @endcan
                                             </td>
                                         </tr>
                                     @endforeach
