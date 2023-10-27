@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 @section('content')
     <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-12">
@@ -8,62 +9,78 @@
                         <h1>Trainer Wise Student-Rtc-Proxy-Slot Detail</h1>
                     </div>
                 </div>
-            </div>
+            </div><!-- /.container-fluid -->
         </section>
         <section class="content">
             <div class="container-fluid">
-                @foreach ($trainerWiseData as $branch)
-                    <div class="container-fluid">
-                        <div class="card bg-light card-info">
-                            <div class="card-header" style="display: flex;justify-content: space-between;">
-                                <h3 class="card-title"><b>Branch Name :</b> {{ $branch->name }}</h3>
-                                <h3 class="card-title"><b>Total Trainer :</b> {{ count($branch->trainer) }}</h3>
-                            </div> 
-                            @foreach($branch->trainer as $key => $trainerName)
-                                <div class="card-body">
-                                    <div class="card-header">
-                                        <h3 class="card-title"><strong>Trainer Name : </strong> {{ $trainerName->surname }} {{ $trainerName->name }} </h3><br>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Trainer Wise Student-Rtc-Slot list</h3>
+                    </div>
+                    <div class="card-body">
+                        @foreach ($trainerWiseData as $branch)
+                            <div class="col-12 d-flex align-items-stretch flex-column pb-4" >
+                                <div class="card bg-light d-flex flex-fill border">
+                                    <div class="card-header border-bottom-0">
+                                        <b> Branch Name : </b> {{ $branch->name }}<br>
+                                        <b>Total Trainer : </b> {{ count($branch->trainer) }}
                                         <hr>
-                                        @foreach ($trainerName->slots as $key => $slotTime)
-                                            <div class="">
-                                                <h3 class="card-title"><strong>Slot Time : </strong> {{ $slotTime->slot_time }} </h3><br>
-                                                <h3 class="card-title"><strong>RTC Name : </strong> {{ $slotTime->rtc->rtc_name }} </h3><br>
-                                                @if($slotTime->proxySlotlist->isEmpty())
-                                                    <hr>  
-                                                @endif
-                                            </div>
-                                            <div class="pt-2">
-                                                @if($slotTime->proxySlotlist->isNotEmpty())
-                                                    <table id="example1" class="table table-bordered table-striped">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Student</th>
-                                                                <th>Meduim</th>
-                                                                <th>Standard</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                @foreach ($slotTime->proxySlotlist as $student)
-                                                                    <tr>
-                                                                        <td>{{ $student->student->name }} {{ $student->student->surname }}</td>
-                                                                        <td> {{ $student->student->standard }}</td>
-                                                                        <td> {{ $student->student->medium }}</td>
-                                                                    </tr>              
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                @foreach($branch->trainer as $key => $trainerName)
+                                                    <div class="pb-3">
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th colspan="5" style="background-color:lightgray"><b>Trainer Name : </b> {{ $trainerName->name }}</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>RTC</th>
+                                                                    <th>Slot Time</th>
+                                                                    <th>Student Name</th>
+                                                                    <th>Medium</th>
+                                                                    <th>Standard</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach ($trainerName->slots as $slotTime)
+                                                                    @php $firstRow = true; @endphp
+                                                                    @foreach ($slotTime->proxySlotlist as $student)
+                                                                        <tr>
+                                                                            @if ($firstRow)
+                                                                                <td rowspan="{{ count($slotTime->proxySlotlist) }}">{{ $slotTime->rtc->rtc_name }}</td>
+                                                                                <td rowspan="{{ count($slotTime->proxySlotlist) }}">{{ $slotTime->slot_time }}</td>
+                                                                                @php $firstRow = false; @endphp
+                                                                            @endif
+                                                                            <td>{{ $student->student->name }} {{ $student->student->surname }}</td>
+                                                                            <td>{{ $student->student->medium }}</td>
+                                                                            <td>{{ $student->student->standard }}</td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                    @if ($firstRow)
+                                                                        <tr>
+                                                                            <td>{{ $slotTime->rtc->rtc_name }}</td>
+                                                                            <td>{{ $slotTime->slot_time }}</td>
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                        </tr>
+                                                                    @endif
                                                                 @endforeach
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                    <hr>       
-                                                @endif     
-                                            </div> 
-                                        @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>       
+                                                @endforeach
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            @endforeach
-                        </div>
-                    </div>
-                @endforeach
+                            </div>   
+                        @endforeach 
+                    </div>      
+                </div>
             </div>
         </section>
     </div>

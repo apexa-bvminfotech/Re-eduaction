@@ -63,7 +63,6 @@ Route::group(['middleware'=>['auth']],function (){
         Route::get('/trainer-regular-slot/{id}','StudentsController@trainerRegularSlot');
         Route::post('/assign-staff', 'StudentsController@assignStaff')->name('student.assignStaff');
         //proxy-staff-route
-        Route::get('/proxy-slot/{id}','StudentsController@proxySlot');
         Route::get('/get-leave-data/{id}','StudentsController@getLeaveData')->name('student.getLeaveData');
         Route::post('/get-course-material-data','StudentsController@getCourseMaterialData')->name('student.getCourseMaterialData');
 
@@ -97,6 +96,9 @@ Route::group(['middleware'=>['auth']],function (){
     Route::get('changeTrainerStatus','TrainerController@changeTrainerStatus');
     Route::get('changeBranchStatus','BranchController@changeBranchStatus');
 
+    Route::get('/shift-regular-slot/{id}','SlotController@slot');
+    Route::post('/submit-shift-regular-slot', 'SlotController@shiftRegularSlot')->name('slot.shift-regular-slot');
+    Route::get('/shift-proxy-slot/{id}','SlotController@proxySlot');
     Route::get('get-trainer-data','SlotController@gettrainerdata')->name('get-trainer-data');
     Route::get('assign-proxy-slot','SlotController@assignProxySlot')->name('slot.assign-proxy-slot');
     Route::post('submit-proxy-slot','SlotController@submitProxySlot')->name('slot.submit-proxy-slot');
@@ -113,6 +115,8 @@ Route::group(['middleware'=>['auth']],function (){
     Route::get('/pending-counselling-student-list','ReportController@getPendingCounselllingStudentList')->name('report.pending-counselling-student-list');
     Route::get('/pending-material-list-student-list','ReportController@getPendingMaterialListStudentList')->name('report.pending-material-list-student-list');
     Route::get('/student-status-list','ReportController@getStudentStatusList')->name('report.student-status-list');
+    Route::get('/weekly-student-list-with-trainer','ReportController@getWeeklyStudentListWithTrainer')->name('report.weekly-student-list-with-trainer');
+    Route::get('/transfer-student-transfer-trainer-list','ReportController@getTransferStudentTransferTrainerList')->name('report.transfer-student-transfer-trainer-list');
 
     Route::group(['prefix' => 'trainer-dashboard'], function(){
         Route::get('/','TrainerDashboardController@index')->name('trainerdashboard.index');

@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Student;
 use App\Models\StudentCourse;
 use App\Models\StudentDMIT;
+use App\Models\StudentStaffAssign;
 use App\Models\StudentStatus;
 use Illuminate\Http\Request;
 
@@ -50,7 +51,6 @@ class ReportController extends Controller
         }
         $data['studentList'] = $qurey->get();
         $data['studentList'] = $qurey->with('statusStudent','studentTrainer.trainer')->get();
-        // dd($data['studentList']);
 
         return view('reports.student_list', $data);
     }
@@ -75,8 +75,10 @@ class ReportController extends Controller
 
     public function getPendingCounselllingStudentList()
     {
-        $studentDmit = StudentDMIT::where('counselling_by','0')->with('student')->get();
-        return view('reports.pending_counselling_student_list',compact('studentDmit'));
+        $pendingCounselling = StudentDMIT::where('counselling_by','0')->with('student')->get();
+        $pendingReport = StudentDMIT::where('report','0')->with('student')->get();
+        $pendingKeyPoint = StudentDMIT::where('key_point',0)->with('student')->get();
+        return view('reports.pending_counselling_student_list',compact('pendingCounselling','pendingReport','pendingKeyPoint'));
     }
     
     public function getPendingMaterialListStudentList()
@@ -96,5 +98,34 @@ class ReportController extends Controller
     {
         $studentStatus = StudentStatus::whereIn('status',['Hold','Cancel'])->where('is_active','0')->with('student.activeCourses.course')->get();
         return view('reports.student_status_list',compact('studentStatus'));
+    }
+
+    public function getWeeklyStudentListWithTrainer()
+    {
+        $stuListWithTrainer = StudentStaffAssign::where('is_active','0')->with('trainer', 'student', 'slot')->get()->groupBy('trainer.name');
+        $trainerData = [];
+
+        foreach ($stuListWithTrainer as $trainerName => $trainerSlot) {
+            $trainerData[$trainerName] = [];
+
+            foreach ($trainerSlot as $slots) {
+                $slotID = $slots->slot->id;
+
+                if (!isset($trainerData[$trainerName][$slotID])) {
+                    $trainerData[$trainerName][$slotID] = [
+                        'slot_time' => $slots->slot->slot_time,
+                        'students' => [],
+                    ];
+                }
+                $trainerData[$trainerName][$slotID]['students'][] = $slots->student->name . ' ' . $slots->student->surname;
+            }
+        }
+        return view('reports.weekly_student_list_with_trainer', compact('trainerData'));
+    }
+
+
+    public function getTransferStudentTransferTrainerList()
+    {
+        return view('reports.transfer_student_transfer_trainer_list');
     }
 }

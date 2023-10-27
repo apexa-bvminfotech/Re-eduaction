@@ -17,16 +17,6 @@
                 </div>
             </div><!-- /.container-fluid -->
         </section>
-        @if (count($errors) > 0)
-            <div class="alert alert-danger">
-                <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
@@ -79,32 +69,26 @@
                                 <div class="form-group row">
                                     <label for="email" class="col-sm-3 col-form-label">Email</label>
                                     <div class="col-sm-9">
-                                        <input type="email" name="email" value="{{ old('email') }}" placeholder="Enter email address" class="form-control" >
+                                        <input type="email" name="email" value="{{ old('email') }}" placeholder="Enter email address" class="form-control" required>
                                         @error('email')
                                         <span class="text-danger">{{$message}}</span>
                                         @enderror
                                     </div>
-
+                                </div>
+                                <div class="form-group row">
+                                    <label for="email" class="col-sm-3 col-form-label">Password</label>
+                                    <div class="col-sm-9">
+                                        <input type="password" name="password" value="{{ old('password') }}" placeholder="Enter your password" class="form-control" >
+                                        @error('password')
+                                        <span class="text-danger">{{$message}}</span>
+                                        @enderror
+                                    </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="simpleinput" class="col-sm-3 col-form-label">Contact</label>
                                     <div class="col-sm-9">
                                         <input type="tel" name="contact" placeholder="1234567890" value="{{ old('contact') }}" class="form-control">
                                         @error('contact')
-                                            <span class="text-danger">{{$message}}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="role" class="col-sm-3 col-form-label">Role</label>
-                                    <div class="col-sm-9">
-                                        <select class="form-control select2" name="role">
-                                            <option value=""> Select Role </option>
-                                            @foreach($role as $key=> $r)
-                                                <option value="{{$r->id}}" {{old('role')==$r->id?'selected':''}}>{{$r->name}}</option>
-                                            @endforeach
-                                        </select>
-                                        @error("role")
                                             <span class="text-danger">{{$message}}</span>
                                         @enderror
                                     </div>

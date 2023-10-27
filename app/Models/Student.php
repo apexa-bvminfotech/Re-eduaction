@@ -22,7 +22,7 @@ class Student extends Model
         return $this->belongsTo(User::class);
     }
     public function trainer(){
-        return $this->belongsTo(Trainer::class,'analysis_trainer_id');
+        return $this->belongsTo(Trainer::class,'demo_trainer_id');
     }
     public function attendance()
     {
@@ -62,7 +62,7 @@ class Student extends Model
         return $this->hasOne(StudentStaffAssign::class)->where('is_active', 0);
     }
     public function statusStudent(){
-        return $this->hasOne(StudentStatus::class, 'student_id');
+        return $this->hasOne(StudentStatus::class, 'student_id')->where('is_active', 0);
     }
     public function studentMaterial(){
         return $this->hasMany(StudentCourseMaterial::class);

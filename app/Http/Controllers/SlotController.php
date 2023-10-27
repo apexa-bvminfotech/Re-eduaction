@@ -7,9 +7,11 @@ use App\Models\Rtc;
 use App\Models\Slot;
 use App\Models\StudentProxyStaffAssign;
 use App\Models\StudentStaffAssign;
+use App\Models\StudentStatus;
 use App\Models\Trainer;
 use App\Models\TrainerAttendance;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class SlotController extends Controller
@@ -37,15 +39,15 @@ class SlotController extends Controller
         if(Auth::user()->type == 1){
             $slot = Slot::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'DESC')->get();
         }
-        $trainerAttendances = TrainerAttendance::whereDate('date', now()->format('Y-m-d'))->where('status','A')->get();
+        // $trainerAttendances = TrainerAttendance::whereDate('date', now()->format('Y-m-d'))->where('status','A')->get();
         $studentStaffAssign = StudentStaffAssign::where('is_active','0')->get();
         $trainerId = [];
-        foreach($trainerAttendances as $trainer){
-            $trainerId[] = $trainer->trainer_id;
-        }
-        $trainers = Trainer::whereNotIn('id',$trainerId)->where('is_active', 0)->orderBy('id', 'desc')->get();
+        // foreach($trainerAttendances as $trainer){
+        //     $trainerId[] = $trainer->trainer_id;
+        // }
+        $trainers = Trainer::where('is_active', 0)->orderBy('id', 'desc')->get();
         $proxyStaff = StudentProxyStaffAssign::whereDate('starting_date', now()->format('Y-m-d'))->whereDate('ending_date', now()->format('Y-m-d'))->get();
-        return view('slot.index', compact('slot','trainerAttendances','trainers','studentStaffAssign','proxyStaff'))->with('i');
+        return view('slot.index', compact('slot','trainers','studentStaffAssign','proxyStaff'))->with('i');
     }
     /**
      * Show the form for creating a new resource.
@@ -212,25 +214,77 @@ class SlotController extends Controller
         }
     }
 
+    public function slot($id)
+    {
+        $slots = Slot::where('trainer_id', $id)
+            ->where('is_active', 0)
+            ->with('rtc')
+            ->get();
+        return response()->json(['slots' => $slots]);
+    }
+
+    public function shiftRegularSlot(Request $request)
+    {
+        $getStudents = StudentStaffAssign::where('trainer_id',$request->old_regular_trainer_id)->where('slot_id',$request->old_regular_slot_id)->where('is_active','0')->get()->toArray();
+        $updateStatus = StudentStaffAssign::where('trainer_id',$request->old_regular_trainer_id)->where('slot_id',$request->old_regular_slot_id)->update([
+            'is_active' => '1',
+        ]);
+        foreach($getStudents as $student){
+            StudentStaffAssign::create([
+                'student_id' => $student['student_id'],
+                'trainer_id' => $request->trainer_id,
+                'slot_id' => $request->slot_id,
+                'is_active' => '0',
+                'date' =>  Carbon::now()->toDateString(),
+            ]);
+        }
+        return redirect()->back()->with('success', 'Trainer shifted succesfully !!');
+    }
+
+    public function proxySlot($id)
+    {
+        $proxy_slots = Slot::where(['trainer_id' => $id, 'is_active' => 0])
+            ->with('rtc')
+            ->get();
+        return response()->json(['slots' => $proxy_slots]);
+    }
+
     public function submitProxySlot(Request $request)
     {
-        $trainerRegularSlot = StudentStaffAssign::join('slots','slots.id','student_staff_assigns.slot_id')->where('slot_time',$request->slot_time)->where('student_staff_assigns.trainer_id',$request->trainer_id)->where('student_staff_assigns.is_active','0')->first();
-        if($trainerRegularSlot){
-            return back()->with('error', 'Trainer is already assigned as regular staff');
+        // dd($request->all());
+        $existingProxySlot = StudentProxyStaffAssign::where('slot_id',$request->slot_id)->where('trainer_id',$request->trainer_id)
+            ->whereDate('starting_date', '>=',$request->starting_date)->where('student_id',$request->student_id)
+            ->whereDate('ending_date', '<=', $request->ending_date)->get();
+
+        if ($existingProxySlot->isNotEmpty()) {
+            return back()->with('error', 'Trainer is already assigned as proxy staff for the specified dates');
         }
 
-        $getTrainer = StudentStaffAssign::where('slot_id',$request->slot_id)->where('trainer_id',$request->old_trainer_id)->where('is_active','0')->get();
-    
-        $slot = Slot::where('slot_time',$request->slot_time)->where('trainer_id',$request->trainer_id)->first();
-        foreach($getTrainer as $proxyTrainer){
-            StudentProxyStaffAssign::create([
-                'student_id' => $proxyTrainer->student_id,
-                'trainer_id' => $request->trainer_id,
-                'slot_id' => $slot->id,
-                'starting_date' => $request->starting_date,
-                'ending_date' => $request->ending_date,
-            ]);
-        }    
+        $regularSlotShift = StudentStaffAssign::where('slot_id',$request->old_proxy_slot_id)->where('trainer_id',$request->old_proxy_trainer_id)->where('is_active','0')->get();
+        $proxySlotShift = StudentProxyStaffAssign::where('slot_id',$request->old_proxy_slot_id)->where('trainer_id',$request->old_proxy_trainer_id)->get();
+        if($regularSlotShift->isNotempty()){
+            foreach($regularSlotShift as $regularTrainer){
+                StudentProxyStaffAssign::create([
+                    'student_id' => $regularTrainer->student_id,
+                    'trainer_id' => $request->trainer_id,
+                    'slot_id' => $request->slot_id,
+                    'starting_date' => $request->starting_date,
+                    'ending_date' => $request->ending_date,
+                ]);
+            }  
+        }
+        else{
+            foreach($proxySlotShift as $proxyTrainer){
+                StudentProxyStaffAssign::create([
+                    'student_id' => $proxyTrainer->student_id,
+                    'trainer_id' => $request->trainer_id,
+                    'slot_id' => $request->slot_id,
+                    'starting_date' => $request->starting_date,
+                    'ending_date' => $request->ending_date,
+                ]);
+            } 
+        }
+         
         return redirect()->back()->with('success', 'Trainer shifted succesfully !!');
     }
 }

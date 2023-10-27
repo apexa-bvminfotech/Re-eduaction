@@ -8,11 +8,12 @@ use App\Models\StudentProxyStaffAssign;
 use App\Models\StudentStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class AdminDashboardController extends Controller
 {
     public function index(){
-        $students = Student::whereMonth('registration_date', Carbon::now()->month)->get();
+        $students = Student::whereMonth('registration_date', Carbon::now()->month)->where('branch_id',Auth::user()->branch_id)->get();
         $studentStatus = StudentStatus::where('is_active','0')->get();
         $absentTrainer = Branch::with('trainer.trainerAttendance')->get();
         $absentStudent = Branch::with('student.studentAttendance')->get();

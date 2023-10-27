@@ -24,17 +24,37 @@
                                     <tr>
                                         <th>No</th>
                                         <th><span></span></th>
-                                        <th>Meduim</th>
-                                        <th>Standard</th>
+                                        <th><span></span></th>
+                                        <th><span></span></th>
+                                        <th><span></span></th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($studentDmit as $key=>$student)
+                                        @foreach($pendingCounselling as $key=>$student)
                                             <tr>
                                                 <td>{{ $key+1 }}</td>
                                                 <td>{{ $student->student->name }} {{ $student->student->surname  }}</td>
                                                 <td>{{$student->student->medium}}</td>
                                                 <td>{{$student->student->standard}}</td>
+                                                <td>Pending Counselling</td>
+                                            </tr>
+                                        @endforeach
+                                        @foreach($pendingReport as $key=>$student)
+                                            <tr>
+                                                <td>{{ $key+1 }}</td>
+                                                <td>{{ $student->student->name }} {{ $student->student->surname  }}</td>
+                                                <td>{{$student->student->medium}}</td>
+                                                <td>{{$student->student->standard}}</td>
+                                                <td>Pending Report</td>
+                                            </tr>
+                                        @endforeach
+                                        @foreach($pendingKeyPoint as $key=>$student)
+                                            <tr>
+                                                <td>{{ $key+1 }}</td>
+                                                <td>{{ $student->student->name }} {{ $student->student->surname  }}</td>
+                                                <td>{{$student->student->medium}}</td>
+                                                <td>{{$student->student->standard}}</td>
+                                                <td>Pending Key point</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -55,7 +75,7 @@
                 "responsive": true, "lengthChange": false, "autoWidth": false,
                 "buttons": ["csv", "excel", "pdf", "print"],
                 initComplete: function () {
-                    this.api().columns([1]).every(function () {
+                    this.api().columns([1, 2 ,3, 4]).every(function () {
                             var column = this;
                             var select = $('<select class="form-control select2"><option value="">All</option></select>')
                                 .appendTo($(column.header()).find('span').empty())

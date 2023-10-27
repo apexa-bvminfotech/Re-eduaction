@@ -37,12 +37,12 @@
                                     <thead>
                                     <tr>
                                         <th>ID</th>
+                                        <th>Name</th>
                                         <th><span></span></th>
-                                        <th>Course</th>
                                         <th><span></span></th>
                                         <th>Phone</th>
-                                        <th>Std</th>
-                                        <th>Medium</th>
+                                        <th><span></span></th>
+                                        <th><span></span></th>
                                         <th><span></span></th>
                                         <th>Action</th>
                                     </tr>
@@ -159,7 +159,7 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Close
                                     </button>
-                                    <button type="button" class="btn mb-2 btn-primary">Submit</button>
+                                    <button type="button" class="btn mb-2 btn-primary btn-staff-assign">Submit</button>
                                 </div>
                             </div>
                         </div>
@@ -256,6 +256,7 @@
                                         <div class="form-group">
                                             <label for="text">Leave Reason:</label>
                                             <input type="text" class="form-control" name="reason" required>
+                                            <div id="custom-error-message" style="color: #dc3545;"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -297,16 +298,16 @@
                                             <label for="text">Trainer name:</label>
                                             <input type="text" class="form-control" name="trainer_name" required>
                                         </div>
+                                    </div>   
+                                    <div class="col-md-12 mb-1" id="displayHoldReason" style="display: none">
+                                        <div class="form-group">
+                                            <label for="text">Hold Reason:</label>
+                                            <input type="text" class="form-control" name="hold_reason" required>
+                                        </div>
                                     </div>
                                     <div class="col-md-12 mb-1" id="displayCancelReason" style="display: none">
                                         <div class="form-group">
                                             <label for="text">Cancel Reason:</label>
-                                            <input type="text" class="form-control" name="cancel_reason" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 mb-1" id="displayHoldReason" style="display: none">
-                                        <div class="form-group">
-                                            <label for="text">Hold Reason:</label>
                                             <input type="text" class="form-control" name="cancel_reason" required>
                                         </div>
                                     </div>
@@ -356,40 +357,40 @@
                     });
                 }
             });
-            $(document).on('click', '.btn-primary', function () {
+            $(document).on('click', '.btn-staff-assign', function () {
                 $('#assignStaffForm').submit();
             });
 
             //proxy-assign-staff
-            $(document).on('click', '.btn-proxy', function () {
-                let id = parseInt($(this).data('id'));
-                $('.student_id').val(id)
-                $('#verticalModal1').modal('toggle')
-                $('.proxy_class').val($('.proxy_class').children().eq(0).val());
-                $('.slot').html('<option value="">------Select Slot-----</option>')
-            });
+            // $(document).on('click', '.btn-proxy', function () {
+            //     let id = parseInt($(this).data('id'));
+            //     $('.student_id').val(id)
+            //     $('#verticalModal1').modal('toggle')
+            //     $('.proxy_class').val($('.proxy_class').children().eq(0).val());
+            //     $('.slot').html('<option value="">------Select Slot-----</option>')
+            // });
 
-            $(document).on('change', '.proxy_class', function () {
-                let proxy = ($(this).val());
-                if (proxy != "") {
-                    $.ajax({
-                        url: 'student/proxy-slot/' + proxy,
-                        type: 'GET',
-                        data: {
-                            "_token": "{{csrf_token()}}",
-                        },
-                        success: function (data) {
-                            console.log("Slot display done.", data);
-                            let slotOption = '<option value="">------Select Slot-----</option>';
-                            $.each(data.slots, function (index, slot) {
-                                slotOption += '<option value="' + slot.id + '">' + slot.slot_time + '  (' + slot.rtc.rtc_name + ')</option>';
-                            })
-                            $('.slot').html("")
-                            $('.slot').html(slotOption)
-                        }
-                    });
-                }
-            });
+            // $(document).on('change', '.proxy_class', function () {
+            //     let proxy = ($(this).val());
+            //     if (proxy != "") {
+            //         $.ajax({
+            //             url: 'student/proxy-slot/' + proxy,
+            //             type: 'GET',
+            //             data: {
+            //                 "_token": "{{csrf_token()}}",
+            //             },
+            //             success: function (data) {
+            //                 console.log("Slot display done.", data);
+            //                 let slotOption = '<option value="">------Select Slot-----</option>';
+            //                 $.each(data.slots, function (index, slot) {
+            //                     slotOption += '<option value="' + slot.id + '">' + slot.slot_time + '  (' + slot.rtc.rtc_name + ')</option>';
+            //                 })
+            //                 $('.slot').html("")
+            //                 $('.slot').html(slotOption)
+            //             }
+            //         });
+            //     }
+            // });
 
             $(document).on('click', '.proxy_submit', function () {
                 $('#proxyStaffForm').submit();
@@ -404,8 +405,15 @@
                 $('#verticalModal2').modal('toggle');
             });
 
-            $(document).on('click', '.leave-submit', function () {
-                $('#leaveApprovedForm').submit();
+            $('.leave-submit').on('click', function () {
+                var reason = $('input[name="reason"]').val().trim();
+                if (reason === '') {
+                    $('#custom-error-message').text('Please enter a leave reason.');
+                } else {
+                    $('#custom-error-message').text('');
+
+                    $('#leaveApprovedForm').submit();
+                }
             });
 
             $(document).on('click', '.btn-student-status', function () {
@@ -443,7 +451,7 @@
                     "responsive": true, "lengthChange": false, "autoWidth": false,
                     "buttons": ["csv", "excel", "pdf", "print"],
                     initComplete: function () {
-                        this.api().columns([1, 3, 7]).every(function () {
+                        this.api().columns([2, 3, 5, 6, 7]).every(function () {
                             var column = this;
                             var select = $('<select class="form-control select2"><option value="">All</option></select>')
                                 .appendTo($(column.header()).find('span').empty())
@@ -466,6 +474,6 @@
                     }
                 }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
             });
-        })
+        });
     </script>
 @endpush

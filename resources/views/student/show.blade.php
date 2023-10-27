@@ -37,6 +37,9 @@
                                         <b>Demo taken:</b> <a class="float-right">{{ $student->trainer->name ?? ''}}</a>
                                     </li>
                                     <li class="list-group-item">
+                                        <b>Demo Counselling:</b> <a class="float-right">{{ $student->counselling_by ?? ''}}</a>
+                                    </li>
+                                    <li class="list-group-item">
                                         <b>Email ID:</b> <a class="float-right">{{ $student->email_id ?? ''}}</a>
                                     </li>
                                     <li class="list-group-item">
@@ -760,6 +763,8 @@
                                     <div class="row">
                                         <div class="col-md-8">
                                             <h5 class=""><b>Attendance</b></h5>
+                                            <h6><b>Total Present Students :- </b>{{ !empty($fromDate) ? $allPresentStudent : null}}</h3>
+                                            <h6><b>Total Absent Students :- </b>{{ !empty($toDate) ? $allAbsentStudent : null  }}</h3>
                                         </div>
                                         <div class="col-md-4 text-right">
                                             <form class="form-inline" action="">
@@ -823,10 +828,10 @@
                                                                     $attendanceDate = \Carbon\Carbon::parse($atd->attendance_date);
                                                                 @endphp
                                                                 @if ($attendanceDate->format('Y-m-d') == $sDate->format('Y-m-d'))
-                                                                    @if ($atd->attendance_type == '1')
-                                                                        1
-                                                                    @else
+                                                                    @if ($atd->attendance_type == '0')
                                                                         0
+                                                                    @else
+                                                                        1
                                                                     @endif
                                                                 @endif
                                                             @endforeach
@@ -836,7 +841,7 @@
                                                         @endphp
                                                     @endfor
                                                 </tr>
-                                            @endforeach
+                                            @endforeach   
                                         </tbody>     
                                     </table>
                                 </div>    

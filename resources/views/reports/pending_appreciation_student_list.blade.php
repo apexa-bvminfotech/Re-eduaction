@@ -26,8 +26,8 @@
                                         <th><span></span></th>
                                         <th><span></span></th>
                                         <th><span></span></th>
-                                        <th>Meduim</th>
-                                        <th>Standard</th>
+                                        <th><span></span></th>
+                                        <th><span></span></th>
                                         <th>Course End date</th>
                                     </tr>
                                     </thead>
@@ -61,7 +61,7 @@
                 "responsive": true, "lengthChange": false, "autoWidth": false,
                 "buttons": ["csv", "excel", "pdf", "print"],
                 initComplete: function () {
-                    this.api().columns([1, 2, 3]).every(function () {
+                    this.api().columns([1, 2, 3, 4, 5]).every(function () {
                             var column = this;
                             var select = $('<select class="form-control select2"><option value="">All</option></select>')
                                 .appendTo($(column.header()).find('span').empty())

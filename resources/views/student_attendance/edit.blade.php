@@ -47,6 +47,7 @@
                                 @foreach ($trainer as $t)
                                     @php
                                         $regularSlottrainerIds = [];
+                                        $regularSlotIds = [];
                                     @endphp
                                     {{-- for regular stff --}}
                                     @if (isset($studentStaffAssign[$t->name]))
@@ -138,6 +139,7 @@
                                                         </div>
                                                         @php
                                                             $regularSlottrainerIds[] = $regularStaff->trainer_id;
+                                                            $regularSlotIds[] = $regularStaff->slot->id;
                                                         @endphp
                                                     @endforeach
                                                 @endforeach
@@ -149,6 +151,7 @@
                                         @foreach ($proxyStaff[$t->name]->groupBy('slot_id') as $slotGroup)
                                             @php
                                                 $proxyStaffTrainerIds = [];
+                                                $proxySlotIds = [];
                                             @endphp
                                             @foreach ($slotGroup as $key => $proxy)
                                                     <div class="row">
@@ -166,11 +169,13 @@
                                                             <div class="row">
                                                                 <div class="col-md-3">
                                                                     @if ($key === 0)
-                                                                        <div class="form-group">
-                                                                            <label for="simpleinput">Proxy slot-time</label>
-                                                                            <input type="text" readonly 
-                                                                                value="{{ $proxy->slot->slot_time }}" class="form-control">
-                                                                        </div>
+                                                                        @if(!in_array($proxy->slot->id,$regularSlotIds) && !in_array($proxy->slot->id,$proxySlotIds))
+                                                                            <div class="form-group">
+                                                                                <label for="simpleinput">Proxy slot-time</label>
+                                                                                <input type="text" readonly 
+                                                                                    value="{{ $proxy->slot->slot_time }}" class="form-control">
+                                                                            </div>
+                                                                        @endif
                                                                     @endif
                                                                 </div>
                                                             </div>
@@ -242,6 +247,7 @@
                                                     </div>
                                                     @php
                                                         $proxyStaffTrainerIds[] = $proxy->trainer_id;
+                                                        $proxySlotIds[] = $proxy->slot->id;
                                                     @endphp
                                                 </div>
                                             @endforeach

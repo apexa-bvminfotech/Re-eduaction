@@ -77,24 +77,19 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="simpleinput" class="col-sm-3 col-form-label">Contact:</label>
+                                    <label for="email" class="col-sm-3 col-form-label">Password</label>
                                     <div class="col-sm-9">
-                                        <input type="tel" name="contact" placeholder="1234567890" value="{{ $user->contact }}" class="form-control">
-                                        @error('contact')
-                                            <span class="text-danger">{{$message}}</span>
+                                        <input type="password" name="password"  placeholder="Enter your password" class="form-control" >
+                                        @error('password')
+                                        <span class="text-danger">{{$message}}</span>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="role" class="col-sm-3 col-form-label">Role name:</label>
+                                    <label for="simpleinput" class="col-sm-3 col-form-label">Contact:</label>
                                     <div class="col-sm-9">
-                                        <select class="form-control select2" name="role" required>
-                                            <option value="">Select Role</option>
-                                            @foreach($role as $key=> $r)
-                                                <option value="{{$r->id}}" @if($user->roles->first()->id == $r->id) selected @endif>{{$r->name}}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('role')
+                                        <input type="tel" name="contact" placeholder="1234567890" value="{{ $user->contact }}" class="form-control">
+                                        @error('contact')
                                             <span class="text-danger">{{$message}}</span>
                                         @enderror
                                     </div>

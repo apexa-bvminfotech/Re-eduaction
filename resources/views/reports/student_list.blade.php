@@ -38,12 +38,14 @@
                                     <thead>
                                     <tr>
                                         <th>No</th>
+                                        <th>Name</th>
                                         <th><span></span></th>
                                         <th><span></span></th>
-                                        <th>Standard</th>
                                         <th><span></span></th>
                                         <th>Registration Date</th>
                                         <th><span></span></th>
+                                        <th>Reason</th>
+                                        <th>Trainer name</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -56,6 +58,8 @@
                                                 <td>{{ !empty($student->studentTrainer->trainer->name) ? $student->studentTrainer->trainer->name : ''}}</td>
                                                 <td>{{date('Y-m-d', strtotime($student->registration_date))}}</td>
                                                 <td>{{ $student->statusStudent->status }}</td>
+                                                <td>{{ $student->statusStudent->cancel_reason ? $student->statusStudent->cancel_reason : $student->statusStudent->hold_reason}}</td>
+                                                <td>{{ $student->statusStudent->trainer_name }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -76,7 +80,7 @@
                 "responsive": true, "lengthChange": false, "autoWidth": false,
                 "buttons": ["csv", "excel", "pdf", "print"],
                 initComplete: function () {
-                    this.api().columns([1, 2, 4, 6]).every(function () {
+                    this.api().columns([2, 3, 4, 6]).every(function () {
                             var column = this;
                             var select = $('<select class="form-control select2"><option value="">All</option></select>')
                                 .appendTo($(column.header()).find('span').empty())
