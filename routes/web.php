@@ -24,11 +24,20 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-Route::get('/migrate', function() {
+Route::get('migrate', function() {
     Artisan::call('migrate');
     echo "Migration run success<br>";
 });
-
+Route::get('/clear-cache', function() {
+    Artisan::call('cache:clear');
+    echo "Cache is cleared<br>";
+    Artisan::call('route:clear');
+    echo "route cache is cleared<br>";
+    Artisan::call('config:clear');
+    echo "config is cleared<br>";
+    Artisan::call('view:clear');
+    echo "view is cleared<br>";
+});
 Route::get('/dashboard', function () {
     $user =  Auth::user()->type;
     if ($user == 0) {
@@ -76,7 +85,7 @@ Route::group(['middleware'=>['auth']],function (){
     Route::resource('trainer_attendance', 'TrainerAttendanceController');
     Route::resource('student_attendance','StudentAttendanceController');
     Route::resource('course', 'CourseController');
-    Route::resource('appreciation', 'appreciationController');
+    Route::resource('appreciation', 'AppreciationController');
     Route::resource('point', 'PointController')->only(['destroy']);
     Route::resource('subCourse', 'SubCourseController')->only(['destroy']);
     Route::resource('user','UserController');
@@ -124,16 +133,7 @@ Route::group(['middleware'=>['auth']],function (){
         Route::get('/','AdminDashboardController@index')->name('admindashboard.index');
     });
 
-    Route::get('/clear-cache', function() {
-        Artisan::call('cache:clear');
-        echo "Cache is cleared<br>";
-        Artisan::call('route:clear');
-        echo "route cache is cleared<br>";
-        Artisan::call('config:clear');
-        echo "config is cleared<br>";
-        Artisan::call('view:clear');
-        echo "view is cleared<br>";
-    });
+
 
 
 });
