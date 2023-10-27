@@ -32,7 +32,7 @@
                                     <tbody>
                                     @foreach ($ptmData as $key => $ptm)
                                         <tr>
-                                            <td>{{ $ptm->id }}</td>
+                                            <td>{{ ++$key }}</td>
                                             <td>{{ $ptm->surname }} {{ $ptm->name }}</td>
                                             <td>
                                                 <a href="{{ route('student_ptm.show',$ptm->student_id) }}"

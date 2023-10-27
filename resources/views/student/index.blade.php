@@ -362,35 +362,35 @@
             });
 
             //proxy-assign-staff
-            $(document).on('click', '.btn-proxy', function () {
-                let id = parseInt($(this).data('id'));
-                $('.student_id').val(id)
-                $('#verticalModal1').modal('toggle')
-                $('.proxy_class').val($('.proxy_class').children().eq(0).val());
-                $('.slot').html('<option value="">------Select Slot-----</option>')
-            });
+            // $(document).on('click', '.btn-proxy', function () {
+            //     let id = parseInt($(this).data('id'));
+            //     $('.student_id').val(id)
+            //     $('#verticalModal1').modal('toggle')
+            //     $('.proxy_class').val($('.proxy_class').children().eq(0).val());
+            //     $('.slot').html('<option value="">------Select Slot-----</option>')
+            // });
 
-            $(document).on('change', '.proxy_class', function () {
-                let proxy = ($(this).val());
-                if (proxy != "") {
-                    $.ajax({
-                        url: 'student/proxy-slot/' + proxy,
-                        type: 'GET',
-                        data: {
-                            "_token": "{{csrf_token()}}",
-                        },
-                        success: function (data) {
-                            console.log("Slot display done.", data);
-                            let slotOption = '<option value="">------Select Slot-----</option>';
-                            $.each(data.slots, function (index, slot) {
-                                slotOption += '<option value="' + slot.id + '">' + slot.slot_time + '  (' + slot.rtc.rtc_name + ')</option>';
-                            })
-                            $('.slot').html("")
-                            $('.slot').html(slotOption)
-                        }
-                    });
-                }
-            });
+            // $(document).on('change', '.proxy_class', function () {
+            //     let proxy = ($(this).val());
+            //     if (proxy != "") {
+            //         $.ajax({
+            //             url: 'student/proxy-slot/' + proxy,
+            //             type: 'GET',
+            //             data: {
+            //                 "_token": "{{csrf_token()}}",
+            //             },
+            //             success: function (data) {
+            //                 console.log("Slot display done.", data);
+            //                 let slotOption = '<option value="">------Select Slot-----</option>';
+            //                 $.each(data.slots, function (index, slot) {
+            //                     slotOption += '<option value="' + slot.id + '">' + slot.slot_time + '  (' + slot.rtc.rtc_name + ')</option>';
+            //                 })
+            //                 $('.slot').html("")
+            //                 $('.slot').html(slotOption)
+            //             }
+            //         });
+            //     }
+            // });
 
             $(document).on('click', '.proxy_submit', function () {
                 $('#proxyStaffForm').submit();

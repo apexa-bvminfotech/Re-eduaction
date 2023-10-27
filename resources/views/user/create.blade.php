@@ -94,20 +94,6 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="role" class="col-sm-3 col-form-label">Role</label>
-                                    <div class="col-sm-9">
-                                        <select class="form-control select2" name="role">
-                                            <option value=""> Select Role </option>
-                                            @foreach($role as $key=> $r)
-                                                <option value="{{$r->id}}" {{old('role')==$r->id?'selected':''}}>{{$r->name}}</option>
-                                            @endforeach
-                                        </select>
-                                        @error("role")
-                                            <span class="text-danger">{{$message}}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="form-group row">
                                     <label for="role" class="col-sm-3 col-form-label">Branch </label>
                                     <div class="col-sm-9">
                                         <select class="form-control select2" name="branch_id">

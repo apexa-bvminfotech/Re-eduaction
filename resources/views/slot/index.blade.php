@@ -74,29 +74,14 @@
                                                     </td>
                                                     <td>
                                                         <a href="{{ route('slot.edit',$s->id) }}" class="btn btn-success btn-sm" title="Edit"><i class="fa fa-edit"></i> Edit</a>
-                                                        @php
-                                                            $studentIds = [];
-                                                        @endphp
-                                                        @foreach ($proxyStaff as $staff)          
-                                                            @php
-                                                                $studentIds[] = $staff->student_id;
-                                                            @endphp 
-                                                        @endforeach
-                                                        @foreach($trainerAttendances as $key => $attendance)
-                                                            @foreach($studentStaffAssign as $key => $studentStaff)
-                                                                @if($attendance->trainer_id == $s->trainer_id && $attendance->slot_id == $s->id)
-                                                                    @if($studentStaff->trainer_id == $s->trainer_id && $studentStaff->slot_id == $s->id && $studentStaff->is_active == '0')
-                                                                        @if(!in_array($studentStaff->student_id,$studentIds))
-                                                                            <button class="btn btn-secondary btn-proxy btn-sm mb-1 mt-1" data-slot-time="{{ $s->slot_time }}" value="{{ $s->id }}"
-                                                                                data-rtc-id="{{ $s->rtc->id }}" data-branch-id="{{ $s->branch->id }}" data-whtsapp-grp="{{ $s->whatsapp_group_name }}"
-                                                                                data-slot-id="{{ $s->id }}" data-old-trainer-id="{{ $s->trainer->id }}" data-trainer-id="{{ $s->trainer->id }}"> 
-                                                                                Assign Proxy Trainer
-                                                                            </button>
-                                                                        @endif     
-                                                                    @endif      
-                                                                @endif
-                                                            @endforeach   
-                                                        @endforeach
+                                                        <button class="btn btn-secondary btn-shift-regular-slot btn-sm mb-1 mt-1"
+                                                            data-old-regular-slot-id="{{ $s->id }}" data-old-regular-trainer-id="{{ $s->trainer->id }}">
+                                                            Shift As Regular Slot
+                                                        </button>
+                                                        <button class="btn btn-secondary btn-shift-proxy-slot btn-sm mb-1 mt-1"
+                                                            data-old-proxy-slot-id="{{ $s->id }}" data-old-proxy-trainer-id="{{ $s->trainer->id }}">
+                                                            Shift As Proxy Slot
+                                                        </button>
                                                     </td>  
                                                 @endcan
                                             </tr>
@@ -104,7 +89,54 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <form id="assignProxySlotForm" action="{{ route('slot.submit-proxy-slot') }}" method="POST">
+                            {{-- form for shift slot --}}
+                            <form id="shiftRegularSlotForm" action="{{ route('slot.shift-regular-slot') }}" method="POST">
+                                @csrf
+                                <div class="modal fade" id="verticalModal" tabindex="-1" role="dialog"
+                                     aria-labelledby="verticalModalTitle"
+                                     style="display: none;" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="verticalModalTitle">Shift As Regular Slot</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <input type="hidden" name="old_regular_trainer_id" class="form-control old_regular_trainer_id" value="">
+                                                <input type="hidden" name="old_regular_slot_id" class="form-control old_regular_slot_id" value="">
+                                                <div class="col-md-12 mb-1">
+                                                    <label for="name">Trainer Name: </label>
+                                                    <select name="trainer_id" class="form-control staff_id select2" required>
+                                                        <option value="0">------Select Trainer-----</option>
+                                                        @foreach($trainers as $key =>$trainer)
+                                                            @if($trainer->is_active == 0)
+                                                                <option
+                                                                    value="{{$trainer->id}}" {{old('name')==$trainer->id}}>{{$trainer->name}}</option>
+                                                            @endif
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-12 mb-1">
+                                                    <label for="name">Slot: </label>
+                                                    <select name="slot_id" class="form-control slot select2" required>
+                                                        <option value="">------Select Slot-----</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Close
+                                                </button>
+                                                <button type="button" class="btn mb-2 btn-primary btn-submit-regular-slot">Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            
+                            {{-- form for shift proxy slot --}}
+                            <form id="shiftProxySlotForm" action="{{ route('slot.submit-proxy-slot') }}" method="POST">
                                 @csrf
                                 <div class="modal fade" id="verticalModal1" tabindex="-1" role="dialog"
                                      aria-labelledby="verticalModalTitle"
@@ -112,23 +144,14 @@
                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="verticalModalTitle">Assign ProxyTrainer</h5>
+                                                <h5 class="modal-title" id="verticalModalTitle">Shift As Proxy Slot</h5>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">×</span>
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                <input type="hidden" name="slot_time" class="form-control slot_time" value="">
-                                                <input type="hidden" name="rtc_id" class="form-control rtc_id" value="">
-                                                <input type="hidden" name="branch_id" class="form-control branch_id" value="">
-                                                <input type="hidden" name="whatsapp_group_name" class="form-control whatsapp_group_name" value="">
-                                                <input type="hidden" name="old_trainer_id" class="form-control old_trainer_id" value="">
-                                                <input type="hidden" name="slot_id" class="form-control slot_id" value="">
-
-                                                @php
-                                                    $trainerId = [];
-                                                @endphp
-
+                                                <input type="hidden" name="old_proxy_trainer_id" class="form-control old_proxy_trainer_id" value="">
+                                                <input type="hidden" name="old_proxy_slot_id" class="form-control old_proxy_slot_id" value="">
                                                 <div class="col-md-12 mb-1">
                                                     <label for="name">Trainer Name(Proxy): </label>
                                                     <select class="form-control proxy_class select2 trainer_id" name="trainer_id" required>
@@ -141,33 +164,39 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                <div id="slotContainer" style="display: none;">
+                                                {{-- <div id="slotContainer" style="display: none;">
                                                     <div class="col-md-12 mb-1">
                                                         <div class="form-group">
                                                             <label for="slot_time">Slot:</label>
                                                             <input type="text" class="form-control" name="slot_time" class="slot_time" id="slot_time" value="">
                                                         </div>
                                                     </div>
+                                                </div> --}}
+                                                <div class="col-md-12 mb-1">
+                                                    <label for="name">Slot: </label>
+                                                    <select class="form-control slot select2" name="slot_id" required>
+                                                        <option value="">------Select Slot-----</option>
+                                                    </select>
                                                 </div>
                                                 <div class="col-md-12 mb-1">
                                                     <div class="form-group">
                                                         <label for="start_date">Starting Date:</label>
                                                         <input type="date" class="form-control" name="starting_date"
-                                                               value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}" max="{{date('Y-m-d')}}">
+                                                               value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12 mb-1">
                                                     <div class="form-group">
                                                         <label for="end_date">Ending Date:</label>
                                                         <input type="date" class="form-control" name="ending_date"
-                                                               value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}" max="{{date('Y-m-d')}}">
+                                                               value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Close
                                                 </button>
-                                                <button type="button" class="btn mb-2 btn-primary proxy_submit">Submit</button>
+                                                <button type="button" class="btn mb-2 btn-primary btn-submit-proxy-slot">Submit</button>
                                             </div>
                                         </div>
                                     </div>
@@ -248,51 +277,82 @@
             });
         });
 
+        //shift regular slot
+        $(document).on('click', '.btn-shift-regular-slot', function () {
+            let id = parseInt($(this).data('id'));
+            $('.student_id').val(id)
+            $('#verticalModal').modal('toggle')
+            $('.staff_id').val($('.staff_id').children().eq(0).val());
+            $('.slot').html('<option value="">------Select Slot-----</option>')
+            let oldRegularSlotId = $(this).data('old-regular-slot-id');
+            let oldRegularTrainerId = $(this).data('old-regular-trainer-id');
+            $('.old_regular_slot_id').val(oldRegularSlotId);
+            $('.old_regular_trainer_id').val(oldRegularTrainerId);
+        });
+
+        $(document).on('change', '.staff_id', function () {
+            let staff = ($(this).val());
+            if (staff != "") {
+                $.ajax({
+                    url: '/shift-regular-slot/' + staff,
+                    type: 'GET',
+                    data: {
+                        "_token": "{{csrf_token()}}",
+                    },
+                    success: function (data) {
+                        let slotOption = '<option value="">------Select Slot-----</option>'
+                        $.each(data.slots, function (index, slot) {
+                            slotOption += '<option value="' + slot.id + '">' + slot.slot_time + '  (' + slot.rtc.rtc_name + ')</option>'
+                        })
+                        $('.slot').html("")
+                        $('.slot').html(slotOption)
+                    }
+                });
+            }
+        });
+
+        $(document).on('click', '.btn-submit-regular-slot', function () {
+            $('#shiftRegularSlotForm').submit();
+        });
+
         //assign proxy staff 
-        $(document).on('click', '.btn-proxy', function () {
+        $(document).on('click', '.btn-shift-proxy-slot', function () {
             $('#verticalModal1').modal('toggle');
-            let slottime = $(this).data('slot-time');
-            let rtcId = $(this).data('rtc-id');
-            let branchId = $(this).data('branch-id');
-            let whtsappGrp = $(this).data('whtsapp-grp');
-            let slotId = $(this).data('slot-id');
-            let oldTrainerId = $(this).data('old-trainer-id');
-            
-            $('.slot_time').val(slottime);
-            $('.rtc_id').val(rtcId);
-            $('.branch_id').val(branchId);
-            $('.whatsapp_group_name').val(whtsappGrp);
-            $('.slot_id').val(slotId);
-            $('.old_trainer_id').val(oldTrainerId);
+            $('.proxy_class').val($('.proxy_class').children().eq(0).val());
+            $('.slot').html('<option value="">------Select Slot-----</option>')
+
+            let oldProxySlotId = $(this).data('old-proxy-slot-id');
+            let oldProxyTrainerId = $(this).data('old-proxy-trainer-id');
+        
+            $('.old_proxy_slot_id').val(oldProxySlotId);
+            $('.old_proxy_trainer_id').val(oldProxyTrainerId);
 
         });
 
-        $(document).on('change', '.trainer_id', function(){
-            let trainerId = $(this).val();
-            let slotTime = $('.slot_time').val();
-            let rtcId = $('.rtc_id').val();
-            let branchId = $('.branch_id').val();
-            let whtsappGrp = $('.whatsapp_group_name').val();
-
-            $.ajax({
-                url: "{{ route('slot.assign-proxy-slot') }}",
-                type: 'GET',
-                data: {
-                    'slot_time': slotTime,
-                    'trainer_id': trainerId,
-                    'rtc_id': rtcId,
-                    'branch_id': branchId,
-                    'whatsapp_group_name': whtsappGrp,
-                },
-                success: function (data) {
-                    $('#slotContainer').show();
-                    $('#slot_time').val(slotTime);
-                },
-            })
+        $(document).on('change', '.proxy_class', function () {
+            let proxy = ($(this).val());
+            if (proxy != "") {
+                $.ajax({
+                    url: '/shift-proxy-slot/' + proxy,
+                    type: 'GET',
+                    data: {
+                        "_token": "{{csrf_token()}}",
+                    },
+                    success: function (data) {
+                        console.log("Slot display done.", data);
+                        let slotOption = '<option value="">------Select Slot-----</option>';
+                        $.each(data.slots, function (index, slot) {
+                            slotOption += '<option value="' + slot.id + '">' + slot.slot_time + '  (' + slot.rtc.rtc_name + ')</option>';
+                        })
+                        $('.slot').html("")
+                        $('.slot').html(slotOption)
+                    }
+                });
+            }
         });
         
-        $(document).on('click', '.proxy_submit', function () {
-            $('#assignProxySlotForm').submit();
+        $(document).on('click', '.btn-submit-proxy-slot', function () {
+            $('#shiftProxySlotForm').submit();
         });
     </script>
 @endpush

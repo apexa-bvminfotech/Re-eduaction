@@ -784,9 +784,6 @@
                                     </div>
                                 </div>
                                 <hr>
-                                @php
-                                    $leaves = $totalLeave;
-                                @endphp
                                 <div class="card-body">
                                     <table class="table table-bordered table-striped">
                                         @php
@@ -838,16 +835,13 @@
                                                                     @endif
                                                                 @endif
                                                             @endforeach
-                                                            @if (in_array($sDate->format('Y-m-d'), $allLeaveDates))
-                                                                0
-                                                            @endif
                                                         </td>
                                                         @php
                                                             $sDate->addDay();
                                                         @endphp
                                                     @endfor
                                                 </tr>
-                                            @endforeach  
+                                            @endforeach   
                                         </tbody>     
                                     </table>
                                 </div>    

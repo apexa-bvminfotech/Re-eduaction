@@ -52,7 +52,6 @@ class UserController extends Controller
             'email' => 'nullable',
             'password' => 'required|string',
             'contact' => 'required|digits:10|numeric',
-            'role' => 'required',
             'is_active' => 'required',
             'user_profile' => 'nullable|mimes:jpeg,png,jpg|max:2048',
             'is_active' => 'required',
@@ -121,7 +120,6 @@ class UserController extends Controller
             'father_name' => 'required|max:255',
             'user_profile' => 'nullable|mimes:jpeg,png,jpg|max:2048',
             'contact' => 'required|digits:10|numeric',
-            'role' => 'required',
             'is_active' => 'required',
         ]);
 

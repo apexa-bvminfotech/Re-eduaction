@@ -58,7 +58,6 @@ class StudentsController extends Controller
         $user = Auth::user();
         $slots = Slot::where('is_active', 0)->orderBy('id', 'desc')->get();
         $trainers = Trainer::where('is_active', 0)->orderBy('id', 'desc')->get();
-        // $studentTrainer = StudentStaffAssign::where('is_active','0')->with('trainer')->get();
         $students = Student::select('students.id','students.surname','students.name','students.mother_contact_no',
                         'students.standard','students.medium','students.course_id','branches.name as branch_name')
                     ->join('branches', 'branches.id', 'students.branch_id')
@@ -237,20 +236,7 @@ class StudentsController extends Controller
         $trainer = StudentStaffAssign::where(['student_id' => $id, 'is_active' => 0])->first();
         $studentAttendance = StudentAttendance::orderBy('id')->where('student_id', $student->id)->with('slot','trainer')->get();
         $student_leave_show =  StudentApproveLeave::orderBy('id')->where('student_id', $student->id)->get();
-        $allLeaveDates = [];
-        foreach ($student_leave_show as $leave) {
-            $startDate = Carbon::parse($leave->start_date);
-            $endDate = Carbon::parse($leave->end_date);
-
-            $datesInBetween = [];
-            while ($startDate <= $endDate) {
-                $datesInBetween[] = $startDate->format('Y-m-d');
-                $startDate->addDay();
-            }
-            $allLeaveDates = array_merge($allLeaveDates, $datesInBetween);
-        }
-
-        $totalLeave = count($allLeaveDates);
+      
 
         $currentMonthName = Carbon::now()->format('F');
         $numberOfDaysInCurrentMonth = Carbon::now()->daysInMonth;
@@ -303,7 +289,7 @@ class StudentsController extends Controller
 
         return view('student.show', compact('student', 'assignStaff', 'studentAttendance', 'proxy_staff_details','studentCompleteCourses','approvedCourse',
             'student_leave_show','student_appreciation','fromDate','toDate', 'trainer','studentAttendances','currentMonthName','numberOfDaysInCurrentMonth','totalAbsentStudent',
-            'totalPresentStudent','allAbsentStudent','allPresentStudent','allLeaveDates','totalLeave'));
+            'totalPresentStudent','allAbsentStudent','allPresentStudent'));
     }
 
     public function edit($id)
@@ -532,14 +518,6 @@ class StudentsController extends Controller
         }
 
         return redirect()->back()->with('success', 'Trainer assigned successfully');
-    }
-
-    public function proxySlot($id)
-    {
-        $proxy_slots = Slot::where(['trainer_id' => $id, 'is_active' => 0])
-            ->with('rtc')
-            ->get();
-        return response()->json(['slots' => $proxy_slots]);
     }
 
     public function proxyStaff(Request $request)
@@ -826,6 +804,28 @@ class StudentsController extends Controller
             $approve->reason = $request->reason;
             $approve->save();
 
+        $startDate = Carbon::parse($request->start_date);
+        $endDate = Carbon::parse($request->end_date);
+
+        $datesInBetween = [];
+        while ($startDate <= $endDate) {
+            $datesInBetween[] = $startDate->format('Y-m-d');
+            $startDate->addDay();
+        }
+
+        $studentStaffAssign = StudentStaffAssign::where('student_id',$request->student_id)->where('is_active','0')->first();
+
+        foreach($datesInBetween as $adate){
+            $studentAttendance = new StudentAttendance();
+            $studentAttendance->student_id = $request->student_id;
+            $studentAttendance->attendance_type = 0;
+            $studentAttendance->user_id = $user_id;
+            $studentAttendance->trainer_id = $studentStaffAssign->trainer_id;
+            $studentAttendance->slot_id = $studentStaffAssign->slot_id;
+            $studentAttendance->slot_type = 'Regular';
+            $studentAttendance->attendance_date = $adate;
+            $studentAttendance->save();
+        }   
         return redirect()->route('student.index')->with('success', 'Leave Approved');
     }
 
