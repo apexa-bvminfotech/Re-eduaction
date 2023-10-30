@@ -251,7 +251,6 @@ class SlotController extends Controller
 
     public function submitProxySlot(Request $request)
     {
-        // dd($request->all());
         $existingProxySlot = StudentProxyStaffAssign::where('slot_id',$request->slot_id)->where('trainer_id',$request->trainer_id)
             ->whereDate('starting_date', '>=',$request->starting_date)->where('student_id',$request->student_id)
             ->whereDate('ending_date', '<=', $request->ending_date)->get();

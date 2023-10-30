@@ -173,6 +173,8 @@ class StudentsController extends Controller
             'upload_analysis' => $upload_analysis,
             'upload_student_image' => $upload_student_image,
             'user_id' => $user->id,
+            'not_aaplicable_for_dmit' => $request->not_aaplicable_for_dmit ? '1' : '0',
+            'not_aaplicable_for_course_material' => $request->not_aaplicable_for_course_material ? '1' : '0',
         ]);
 
         StudentStatus::create([
@@ -414,6 +416,8 @@ class StudentsController extends Controller
             'analysis_trainer_id' => $request->analysis_trainer_id ? $request->analysis_trainer_id : 0,
             'upload_analysis' => $upload_analysis,
             'upload_student_image' => $upload_student_image,
+            'not_aaplicable_for_dmit' => $request->not_aaplicable_for_dmit ? '1' : '0',
+            'not_aaplicable_for_course_material' => $request->not_aaplicable_for_course_material ? '1' : '0',
         ]);
 
         if($request->course_id) {

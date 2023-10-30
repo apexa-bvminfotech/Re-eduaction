@@ -81,10 +81,10 @@
                                                                         <label for="simpleinput">Student Name</label>     
                                                                         <input type="text" readonly 
                                                                             value="{{ $regularStaff->student->name }}" class="form-control">
-                                                                        <input type="hidden" readonly name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{ $regularStaff->slot->id }}][slot_type]" 
+                                                                        <input type="hidden" readonly name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{ $regularStaff->slot->id }}][student_details_regular][{{ $key }}][slot_type]" 
                                                                             value="Regular" class="form-control">
                                                                         <input type="hidden" readonly name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{ $regularStaff->slot->id }}][slot_id]"  value="{{ $regularStaff->slot->id }}" class="form-control">
-                                                                        <input type="hidden" readonly name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{ $regularStaff->slot->id }}][student_details][{{ $key }}][student_id]"  value="{{ $regularStaff->student->id }}" class="form-control">
+                                                                        <input type="hidden" readonly name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{ $regularStaff->slot->id }}][student_details_regular][{{ $key }}][student_id]"  value="{{ $regularStaff->student->id }}" class="form-control">
                                                                         {{-- <input type="hidden" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $regularStaff->slot->id }}][student_details][{{ $key }}][attendance_type]" value="null"> --}}
                                                                     </div>
                                                                 </div>
@@ -93,12 +93,12 @@
                                                                         <label for="simpleinput">Attendance</label>
                                                                         <br>
                                                                         <div class="form-check form-check-inline">
-                                                                            <input class="form-check-input" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $regularStaff->slot->id }}][student_details][{{ $key }}][attendance_type]" 
+                                                                            <input class="form-check-input" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $regularStaff->slot->id }}][student_details_regular][{{ $key }}][attendance_type]" 
                                                                                 value="1">
                                                                             <label class="form-check-label" for="inlineRadio1">Present</label>
                                                                         </div>
                                                                         <div class="form-check form-check-inline">
-                                                                            <input class="form-check-input" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $regularStaff->slot->id }}][student_details][{{ $key }}][attendance_type]" 
+                                                                            <input class="form-check-input" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $regularStaff->slot->id }}][student_details_regular][{{ $key }}][attendance_type]" 
                                                                                 value="0">
                                                                             <label class="form-check-label" for="inlineRadio2">Absent</label>
                                                                         </div>
@@ -107,7 +107,7 @@
                                                                 <div class="col-md-3">
                                                                     <div class="form-group">
                                                                         <label for="simpleinput">Absent reason</label>
-                                                                        <input type="text" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $regularStaff->slot->id }}][student_details][{{ $key }}][absent_reason]" 
+                                                                        <input type="text" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $regularStaff->slot->id }}][student_details_regular][{{ $key }}][absent_reason]" 
                                                                             class="form-control">
                                                                     </div>
                                                                 </div>    
@@ -171,18 +171,18 @@
                                                                         <div class="form-group">
                                                                             <label for="simpleinput">Attendance</label>
                                                                             <br>
-                                                                            <input type="hidden" readonly name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{ $proxy->slot->id }}][slot_type]" 
+                                                                            <input type="hidden" readonly name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{ $proxy->slot->id }}][student_details_proxy][{{ $key }}][slot_type]" 
                                                                             value="Proxy" class="form-control">
                                                                             <input type="hidden" readonly name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][slot_id]"  value="{{  $proxy->slot->id }}" class="form-control">
-                                                                            <input type="hidden" readonly name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details][{{ $key }}][student_id]"  value="{{ $proxy->student->id }}" class="form-control">
+                                                                            <input type="hidden" readonly name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details_proxy][{{ $key }}][student_id]"  value="{{ $proxy->student->id }}" class="form-control">
                                                                             {{-- <input type="hidden" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details][{{ $key }}][attendance_type]" value="null"> --}}
                                                                             <div class="form-check form-check-inline">
-                                                                                <input class="form-check-input" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details][{{ $key }}][attendance_type]" 
+                                                                                <input class="form-check-input" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details_proxy][{{ $key }}][attendance_type]" 
                                                                                     value="1">
                                                                                 <label class="form-check-label" for="inlineRadio1">Present</label>
                                                                             </div>
                                                                             <div class="form-check form-check-inline">
-                                                                                <input class="form-check-input" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details][{{ $key }}][attendance_type]" 
+                                                                                <input class="form-check-input" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details_proxy][{{ $key }}][attendance_type]" 
                                                                                     value="0">
                                                                                 <label class="form-check-label" for="inlineRadio2">Absent</label>
                                                                             </div>
@@ -191,7 +191,7 @@
                                                                     <div class="col-md-3">
                                                                         <div class="form-group">
                                                                             <label for="simpleinput">Absent reason</label>
-                                                                            <input type="text" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details][{{ $key }}][absent_reason]" 
+                                                                            <input type="text" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details_proxy][{{ $key }}][absent_reason]" 
                                                                             class="form-control">
                                                                         </div>
                                                                     </div>    

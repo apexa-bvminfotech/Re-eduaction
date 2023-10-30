@@ -10,6 +10,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class UserController extends Controller
 {
@@ -70,6 +71,7 @@ class UserController extends Controller
             'father_name' => $request->father_name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            // 'password' => md5($data['password']),
             'user_profile' => $user_profile,
             'contact' => $request->contact,
             'branch_id' => $request->branch_id ? $request->branch_id : 0,

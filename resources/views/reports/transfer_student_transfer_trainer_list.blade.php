@@ -16,10 +16,42 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
-                      
+                        <div class="card">
+                            <div class="card-body">
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <td>Student Name</td>
+                                            <td>From Trainer</td>
+                                            <td>To Trainer</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($studentList as $student)
+                                            @foreach($transferStudent as $key => $tStudent)
+                                            <tr>
+                                                @if($student->student_id == $tStudent->student_id)
+                                                    <td>{{ $tStudent->student->name }} {{ $tStudent->student->surname}}</td>
+                                                    <td>
+                                                        {{ $tStudent->trainer->name }}<br>
+                                                        {{ $tStudent->slot->slot_time }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $student->trainer->name }}<br>
+                                                        {{ $student->slot->slot_time }}
+                                                    </td>
+                                                @endif
+                                            </tr>         
+                                            @endforeach
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
     </div>
 @endsection
+

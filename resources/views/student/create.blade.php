@@ -253,13 +253,24 @@
                                                             @enderror
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-12 mb-2">
+                                                    <div class="col-md-6 mb-2">
                                                         <div class="form-group">
                                                             <label for="school name">School Name:</label>
                                                             <input type="text" class="form-control"
                                                                    name="school_name"
                                                                    placeholder="enter school name"
                                                                    value="{{ old('school_name') }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 mb-2">
+                                                        <div class="form-group">
+                                                            <label for="dob">Date Of Birth:</label>
+                                                            <input type="date" class="form-control" name="dob"
+                                                                   placeholder="enter birthdate"
+                                                                    id="dob" value="{{ !empty(old('dob')) ? old('dob', date('Y-m-d')) : null }}">
+                                                            @error('dob')
+                                                            <span class="text-danger">{{$message}}</span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="form-group  col-md-6">
@@ -360,17 +371,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6 mb-2">
-                                                        <div class="form-group">
-                                                            <label for="dob">Date Of Birth:</label>
-                                                            <input type="date" class="form-control" name="dob"
-                                                                   placeholder="enter birthdate"
-                                                                    id="dob" value="{{ !empty(old('dob')) ? old('dob', date('Y-m-d')) : null }}">
-                                                            @error('dob')
-                                                            <span class="text-danger">{{$message}}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
                                                     <div class="col-md-6 mb-1">
                                                         <div class="form-group">
                                                             <label for="age">Age:</label>
@@ -399,7 +399,15 @@
                                                             @enderror
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6 mb-1">
+                                                    <div  class="col-md-12 mb-2">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="1" id="notApplicable" name="not_aaplicable_for_course_material">
+                                                            <label class="form-check-label" for="flexCheckDefault">
+                                                                <b>Not Applicable for Course Material</b>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 mb-1" id="notApplicableContainer">
                                                         <div class="form-group">
                                                             <label for="course_material">Course Material: </label><br>
                                                             <div id="course_material">
@@ -522,8 +530,15 @@
                                                             @enderror
                                                         </div>
                                                     </div>
-
-                                                    <div class="col-md-12 mb-1">
+                                                    <div  class="col-md-12 mb-2">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="1" id="notApplicableDmit" name="not_aaplicable_for_dmit">
+                                                            <label class="form-check-label" for="flexCheckDefault">
+                                                                <b>Not Applicable for DMIT</b>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 mb-1" id="dmitContainer">
                                                         <div class="form-group">
                                                             <label for="fees">DMIT</label>
                                                             <br>
@@ -972,6 +987,22 @@
 
             $('.medium-list').on('change', function(){
                 $('#course_id').prop("disabled", false);
+            });
+
+            $("#notApplicable").change(function() {
+                if (this.checked) {
+                $("#notApplicableContainer").hide();
+                } else {
+                $("#notApplicableContainer").show();
+                }
+            });
+
+            $("#notApplicableDmit").change(function() {
+                if (this.checked) {
+                $("#dmitContainer").hide();
+                } else {
+                $("#dmitContainer").show();
+                }
             });
 
             //append course_material according to change meduim and course

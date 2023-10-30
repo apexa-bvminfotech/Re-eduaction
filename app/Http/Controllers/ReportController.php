@@ -126,6 +126,10 @@ class ReportController extends Controller
 
     public function getTransferStudentTransferTrainerList()
     {
-        return view('reports.transfer_student_transfer_trainer_list');
+        $studentList = StudentStaffAssign::where('is_active','0')->with(['student','trainer','slot'])->get();
+        $transferStudent = StudentStaffAssign::where('is_active','1')->with(['student','trainer','slot'])->get();
+        return view('reports.transfer_student_transfer_trainer_list',compact('studentList','transferStudent'));
     }
+
+
 }
