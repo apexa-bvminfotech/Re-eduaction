@@ -558,24 +558,29 @@
                                     {{-- @dd($student_course->start_date) --}}
                                         <span class="h4 p-2">{{$student_course->course->course_name}}</span>
                                         @if($student_course->start_date == null)
-                                            <a class="btn btn-success btn-start" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="start_task" id="btn-start_{{ $student_course->course_id }}">Start Course</a>
-                                            <span class="h6 border p-2" style="display: none;" id="display_start_date_{{ $student_course->course_id }}"> Start Date :- {{ date('d-m-Y', $student_course->start_date)}}</span>
+                                            <a class="btn btn-success btn-start btn-start_{{ $student_course->course_id }}" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="start_task" id="">Start Course</a>
+                                            <span class="h6 border p-2 display_start_date_{{ $student_course->course_id }}" style="display: none;" id=""> Start Date :- {{ date('d-m-Y', $student_course->start_date)}}</span>
                                         @else
                                             <span class="h6 border p-2 mr-2"> Start Date :- {{ date('d-m-Y', strtotime($student_course->start_date))}} </span>
                                         @endif
                                         @if($student_course->end_date == null)
-                                            <a class="btn btn-primary btn-end" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="end_task" id="btn-end_{{ $student_course->course_id  }}">End Course</a>
-                                            <span class="h6 border p-2" style="display: none;" id="display_end_date_{{ $student_course->course_id }}"> End Date :- {{ date('d-m-Y', $student_course->end_date) }}</span>
+                                            <a class="btn btn-primary btn-end btn-end_{{ $student_course->course_id  }}" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="end_task" id="">End Course</a>
+                                            <span class="h6 border p-2 display_end_date_{{ $student_course->course_id }}" style="display: none;" id=""> End Date :- {{ date('d-m-Y', $student_course->end_date) }}</span>
                                         @else
                                             <span class="h6 border p-2"> End Date :- {{ date('d-m-Y', strtotime($student_course->end_date))}}</span>
                                             <button class="btn btn-success" disabled>Course Completed</button>
                                         @endif
-                                        <button class="btn btn-success" style="display: none;" id="course-complete_{{ $student_course->course_id }}" disabled>Course Completed</button>
+                                        <button class="btn btn-success course-complete_{{ $student_course->course_id }}" style="display: none;" id="" disabled>Course Completed</button>
+                                        <a class="btn btn-secondary btn-restart-course restart_course_{{ $student_course->course_id }}" data-student-id="{{ $student->id }}" 
+                                            data-course-id="{{ $student_course->course_id }}" style="display: none;">Restart Course</a>
+                                        @if($student_course->end_date !== null)
+                                            <span><a class="btn btn-secondary btn-restart-course" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}">Restart Course</a></span>
+                                        @endif
                                         <br><br>
-                                        <table class="table table-bordered table-striped" id="courseTable" >
+                                        <table class="table table-bordered table-striped" id="courseTable" style="width: 180%">
                                             <input type="hidden" name="student_id" class="form-control student_id" value="{{$student->id}}">
                                             <input type="hidden" name="course_id" class="form-control course_id" value="{{$student_course->course_id}}">
-                                            {{-- <input type="hidden" name="trainer_id" class="form-control trainer" value="{{$trainer->trainer_id}}"> --}}
+                                            <input type="hidden" name="trainer_id" class="form-control trainer" value="{{ $trainer ? $trainer->trainer_id : ''}}">
                                             @if($student_course->course->subcourses->isNotEmpty())
                                                 <tr>
                                                     <td class="text-center">Before</td>
@@ -666,15 +671,16 @@
                                                 </tr>
                                                 <tr>
                                                     @if($sc->points->count() > 0)
-                                                        <td class="text-center">
+                                                        <td class="text-center" id="countBeforeSubCourse_{{ $sc->id }}">
                                                         </td>
                                                         <td class="text-center">
                                                             <b>Points</b>
                                                         </td>
-                                                        <td class="text-center">
+                                                        <td class="text-center" id="countAfterSubCourse_{{ $sc->id }}">
                                                         </td>
                                                         <td></td>
-                                                        <td></td>
+                                                        <td class="text-center" id="approvedSubCourse_{{ $sc->id }}">
+                                                        </td>
                                                     @endif
                                                 </tr>
     {{--                                              //Points before after--}}
@@ -686,11 +692,11 @@
                                                                 <div class="form-check checkbox-xl custom-checkbox text-center">
                                                                     @can('student-course-start')
                                                                         <input @if($sub_course = \App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'before'=>1])->first()) checked disabled @endif
-                                                                        class="form-check-input point-checkbox subcourse_before_{{ $sc->id }}" type="checkbox" data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}"
+                                                                        class="form-check-input point-checkbox subcourse_before_{{ $sc->id }} beforSubCourse" type="checkbox" data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}"
                                                                                name="subCourse_point_before[{{$student_course->id}}][{{$sp->id}}]">
                                                                     @else
                                                                         <input @if($sub_course=\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'before'=>1])->first()) checked disabled @endif
-                                                                        @if(auth()->user()->type == 1) disabled @endif  class="form-check-input point-checkbox subcourse_before_{{ $sc->id }}" name="subCourse_point_before[{{$student_course->id}}][{{$sp->id}}]" type="checkbox" data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}">
+                                                                        @if(auth()->user()->type == 1) disabled @endif  class="form-check-input point-checkbox subcourse_before_{{ $sc->id }} beforSubCourse" name="subCourse_point_before[{{$student_course->id}}][{{$sp->id}}]" type="checkbox" data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}">
                                                                     @endcan
                                                                 </div>
                                                             @endif
@@ -701,11 +707,11 @@
                                                             <div class="form-check checkbox-xl custom-checkbox text-center">
                                                                 @can('student-course-start')
                                                                     <input @if($sub_course1 = App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'after'=>1])->first()) checked disabled @endif
-                                                                    class="form-check-input point-checkbox subcourse_{{ $sc->id }}" name="subCourse_point_after[{{$student_course->id}}][{{$sp->id}}]" type="checkbox" data-subCourseId="{{ $sc->id }}"
+                                                                    class="form-check-input point-checkbox subcourse_{{ $sc->id }} afterSubCourse" name="subCourse_point_after[{{$student_course->id}}][{{$sp->id}}]" type="checkbox" data-subCourseId="{{ $sc->id }}"
                                                                            data-pointId="{{ $sp->id }}" >
                                                                 @else
                                                                     <input @if($sub_course1 = \App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'after'=>1])->first()) checked disabled @endif
-                                                                    class="form-check-input point-checkbox subcourse_{{ $sc->id }}" type="checkbox" name="subCourse_point_after[{{$student_course->id}}][{{$sp->id}}]" data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}">
+                                                                    class="form-check-input point-checkbox subcourse_{{ $sc->id }} afterSubCourse" type="checkbox" name="subCourse_point_after[{{$student_course->id}}][{{$sp->id}}]" data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}">
                                                                 @endcan
                                                             </div>
                                                         </td>
@@ -720,12 +726,11 @@
                                                                     $status= isset($sub_course)? $sub_course->status :(isset($sub_course1)?$sub_course1->status:0);
                                                                     @endphp
                                                                     @if(in_array($id,$studentCompleteCourses))
-                                                                        <input class="form-check-input point-checkbox" type="checkbox"  name="subCourse_point_approve[{{$student_course->id}}][{{$id}}]">
+                                                                        <input class="form-check-input point-checkbox subCourse_point_approve_{{ $sc->id }} approvedSubCourse" type="checkbox"  name="subCourse_point_approve[{{$student_course->id}}][{{$id}}]" data-subCourseId="{{ $sc->id }}">
                                                                     @elseif($status ==2)
-                                                                        <input class="form-check-input point-checkbox" checked  type="checkbox"  name="subCourse_point_approve[{{$student_course->id}}][{{$id}}]">
+                                                                        <input class="form-check-input point-checkbox subCourse_point_approve_{{ $sc->id }} approvedSubCourse" checked  type="checkbox"  name="subCourse_point_approve[{{$student_course->id}}][{{$id}}]" data-subCourseId="{{ $sc->id }}">
                                                                     @else
-                                                                        <input class="form-check-input point-checkbox" type="checkbox"  name="subCourse_point_approve[{{$student_course->id}}][{{$id}}]">
-
+                                                                        <input class="form-check-input point-checkbox subCourse_point_approve_{{ $sc->id }} approvedSubCourse" type="checkbox"  name="subCourse_point_approve[{{$student_course->id}}][{{$id}}]" data-subCourseId="{{ $sc->id }}">
                                                                     @endif
                                                                 </div>
                                                             </td>
@@ -747,7 +752,6 @@
                                             @endforeach
                                         </table>
                                     @endforeach
-
                                     <button type="submit" class="btn btn-primary float-right mt-2 saveChanges">Save Changes</button>
                                 </form>
                             </div>
@@ -979,18 +983,34 @@
                     if(data.success == true)
                     {
                         course_id = data.course_id;
-                        $('#btn-start_' + course_id).remove();
-                        $('#display_start_date_' + course_id).show();
+                        $('.btn-start_' + course_id).remove();
+                        $('.display_start_date_' + course_id).show();
                     }
                     else
                     {
                         course_id = data.course_id;
-                        $('#btn-end_' + course_id).remove();
-                        $('#display_end_date_' + course_id).show();
-                        $('#course-complete_' + course_id).show();
+                        $('.btn-end_' + course_id).remove();
+                        $('.display_end_date_' + course_id).show();
+                        $('.course-complete_' + course_id).show();
+                        $('.restart_course_' + course_id).show();
                     }
                 }
             });
+        });
+
+        $(document).on('click','.btn-restart-course',function(){
+            let student_id = $(this).data('student-id');
+            let course_id = $(this).data('course-id');
+            let url =  "restart-course/" + student_id + "/" + course_id;
+
+            $.ajax({
+                url : url,
+                type: 'GET',
+                success: function (data) {
+                   location.reload();
+                }
+            });
+           
         });
 
         $('body').on('click', '.search-btn',  function(){
@@ -1059,6 +1079,26 @@
 
         $(document).on('click', '.edit_regular_slot_submit', function () {
             $('#editRegularSlot').submit();
+        });
+
+        $(document).ready(function () {
+            $(".beforSubCourse").each(function() {
+                var subCourseBeforId = $(this).attr('data-subCourseId');
+                var totalCheckedBefore = $('.subcourse_before_' + subCourseBeforId + ':checked').length;
+                $('#countBeforeSubCourse_' + subCourseBeforId).text(totalCheckedBefore);
+            });
+
+            $(".afterSubCourse").each(function() {
+                var subCourseAfterId = $(this).attr('data-subCourseId');
+                var totalCheckedAfter = $('.subcourse_' + subCourseAfterId + ':checked').length;
+                $('#countAfterSubCourse_' + subCourseAfterId).text(totalCheckedAfter);
+            });
+          
+            $(".approvedSubCourse").each(function() {
+                var subCourseApproveId = $(this).attr('data-subCourseId');
+                var totalApproved = $('.subCourse_point_approve_' + subCourseApproveId + ':checked').length;
+                $('#approvedSubCourse_' + subCourseApproveId).text(totalApproved);
+            });
         });
 
     </script>

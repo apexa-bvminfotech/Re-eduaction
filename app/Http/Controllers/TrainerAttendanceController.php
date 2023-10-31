@@ -53,15 +53,29 @@ class TrainerAttendanceController extends Controller
         $user = Auth::user();
         if(Auth::user()->type == 1){
             $trainer = Trainer::where('user_id',$user->id)->orderBy('id', 'DESC')->get();
-            $studentStaffAssign = StudentStaffAssign::orderBy('id', 'DESC')->where('is_active','0')->with('trainer')->get()->groupBy('trainer.name');
-            $proxyStaff = StudentProxyStaffAssign::orderBy('id', 'DESC')->whereDate('starting_date', now()->format('Y-m-d'))->whereDate('ending_date', now()->format('Y-m-d'))->with('trainer')
+            $existingProxyStaff = StudentProxyStaffAssign::whereDate('starting_date', '<=', today())
+                ->whereDate('ending_date', '>=', today())
+                ->get();
+            $studentId = [];
+            foreach($existingProxyStaff as $slot){
+                $studentId[] = $slot->student_id;
+            }
+            $studentStaffAssign = StudentStaffAssign::orderBy('id', 'DESC')->whereNotIn('student_id',$studentId)->where('is_active','0')->with('trainer')->get()->groupBy('trainer.name');
+            $proxyStaff = StudentProxyStaffAssign::orderBy('id', 'DESC')->whereDate('starting_date', now()->format('Y-m-d'))->with('trainer')
                 ->get()->groupBy('trainer.name');
             return view('trainer_attendance.create', compact('trainer', 'proxyStaff', 'studentStaffAssign'));
         }
         else{
             $trainer = Trainer::orderBy('id', 'DESC')->get();
-            $studentStaffAssign = StudentStaffAssign::orderBy('id', 'DESC')->where('is_active','0')->with('trainer')->get()->groupBy('trainer.name');
-            $proxyStaff = StudentProxyStaffAssign::orderBy('id', 'DESC')->whereDate('starting_date', now()->format('Y-m-d'))->whereDate('ending_date', now()->format('Y-m-d'))->with('trainer')
+            $existingProxyStaff = StudentProxyStaffAssign::whereDate('starting_date', '<=', today())
+                ->whereDate('ending_date', '>=', today())
+                ->get();
+            $studentId = [];
+            foreach($existingProxyStaff as $slot){
+                $studentId[] = $slot->student_id;
+            }
+            $studentStaffAssign = StudentStaffAssign::orderBy('id', 'DESC')->whereNotIn('student_id',$studentId)->where('is_active','0')->with('trainer')->get()->groupBy('trainer.name');
+            $proxyStaff = StudentProxyStaffAssign::orderBy('id', 'DESC')->whereDate('starting_date', now()->format('Y-m-d'))->with('trainer')
                 ->get()->groupBy('trainer.name');
             return view('trainer_attendance.create', compact('trainer', 'proxyStaff', 'studentStaffAssign'));
         }      
@@ -141,9 +155,16 @@ class TrainerAttendanceController extends Controller
             $absentTrainerId[] = $atd->trainer_id;
             $absentSlotId[] = $atd->slot_id;
         }
+        $existingProxyStaff = StudentProxyStaffAssign::whereDate('starting_date', '<=', today())
+        ->whereDate('ending_date', '>=', today())
+        ->get();
 
-        $studentStaffAssign = StudentStaffAssign::orderBy('id', 'DESC')->where('is_active','0')->with('trainer')->get()->groupBy('trainer.name');
-        $proxyStaff = StudentProxyStaffAssign::orderBy('id', 'DESC')->whereDate('starting_date', now()->format('Y-m-d'))->whereDate('ending_date', now()->format('Y-m-d'))->with('trainer')
+        $studentId = [];
+        foreach($existingProxyStaff as $slot){
+            $studentId[] = $slot->student_id;
+        }
+        $studentStaffAssign = StudentStaffAssign::orderBy('id', 'DESC')->whereNotIn('student_id',$studentId)->where('is_active','0')->with('trainer')->get()->groupBy('trainer.name');
+        $proxyStaff = StudentProxyStaffAssign::orderBy('id', 'DESC')->whereDate('starting_date', now()->format('Y-m-d'))->with('trainer')
             ->get()->groupBy('trainer.name');
         return view('trainer_attendance.edit', compact('trainer', 'proxyStaff', 'studentStaffAssign','trainerAttendance','EditDate','presentTrainerId','presentSlotId','absentTrainerId','absentSlotId'));
     }

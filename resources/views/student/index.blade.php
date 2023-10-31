@@ -74,6 +74,12 @@
                                                             <i class="fa fa-edit"></i>
                                                         </a>
                                                     @endcan
+                                                    @if(Auth::user()->type == '0')
+                                                        <button type="button"
+                                                                class="btn btn-secondary btn-stu-pwd btn-sm mb-1"
+                                                                data-id="{{$s->id}}"> Change Password
+                                                        </button>
+                                                    @endif
                                                     <br>
 {{--                                                    @can('student-delete')--}}
 {{--                                                        {!! Form::open(['method' => 'DELETE','route' => ['student.destroy', $s->id],'style'=>'display:inline']) !!}--}}
@@ -320,6 +326,39 @@
                         </div>
                     </div>
                 </div>
+                <div class="modal fade" id="changeStudentPwd" tabindex="-1" role="dialog"
+                    aria-labelledby="verticalModalTitle"
+                    style="display: none;" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="verticalModalTitle">Change Student Password</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <form action="{{ route('change.student.pwd') }}" method="POST" id="submitStudentPwd">
+                                @csrf
+                                <div class="modal-body">
+                                    <div class="col-md-12 mb-1">
+                                        <div class="form-group">
+                                            <input type="hidden" name="student_id" id="student_id" class="student_id" value="">
+                                            <label for="password">Password:</label>
+                                            <input type="text" name="password" class="form-control old-t-pwd" value=""  placeholder="Enter your password">
+                                            @error('password')
+                                                <span class="text-danger">{{$message}}</span>
+                                            @enderror
+                                        </div>
+                                    </div>   
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn mb-2 btn-primary">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     </div>
@@ -443,6 +482,15 @@
                     }
                 });
             });
+
+            $(document).on('click', '.btn-stu-pwd', function () {
+                let studentId = parseInt($(this).data('id'));
+                $('.student_id').val(studentId);
+                let pwd = $(this).data('s-password');
+                $('.old-s-pwd').val(pwd);
+                $('#changeStudentPwd').modal('toggle')
+            });
+
             $(document).on('click', '.students-status', function () {
                 $('#studentStatusForm').submit();
             });

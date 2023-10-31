@@ -77,9 +77,9 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="email" class="col-sm-3 col-form-label">Password</label>
+                                    <label for="password" class="col-sm-3 col-form-label">Password</label>
                                     <div class="col-sm-9">
-                                        <input type="password" name="password"  placeholder="Enter your password" class="form-control" >
+                                        <input type="text" name="password" value="{{ $password }}"  placeholder="Enter your password" class="form-control" >
                                         @error('password')
                                         <span class="text-danger">{{$message}}</span>
                                         @enderror

@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 
 class StudentsController extends Controller
 {
@@ -61,8 +62,9 @@ class StudentsController extends Controller
         $students = Student::select('students.id','students.surname','students.name','students.mother_contact_no',
                         'students.standard','students.medium','students.course_id','branches.name as branch_name')
                     ->join('branches', 'branches.id', 'students.branch_id')
-                    ->with('courses','studentTrainer.trainer')
+                    ->with('courses','studentTrainer.trainer','user')
                     ->orderBy('students.id')->get();
+        dd($students);
 
         if(Auth::user()->type == 1) {
             $slots = Slot::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'desc')->get();
@@ -127,7 +129,7 @@ class StudentsController extends Controller
             'email' => $request->email_id,
             'user_profile' => $upload_student_image,
             'contact' => $request->father_contact_no,
-            'password' => Hash::make(strtolower($request->name) . '@123'),
+            'password' => Crypt::encrypt(strtolower($request->name) . '@123'),
             'branch_id' => $request->input('branch_id'),
             'type' => 2,
         ]);
@@ -173,6 +175,8 @@ class StudentsController extends Controller
             'upload_analysis' => $upload_analysis,
             'upload_student_image' => $upload_student_image,
             'user_id' => $user->id,
+            'not_aaplicable_for_dmit' => $request->not_aaplicable_for_dmit ? '1' : '0',
+            'not_aaplicable_for_course_material' => $request->not_aaplicable_for_course_material ? '1' : '0',
         ]);
 
         StudentStatus::create([
@@ -414,6 +418,8 @@ class StudentsController extends Controller
             'analysis_trainer_id' => $request->analysis_trainer_id ? $request->analysis_trainer_id : 0,
             'upload_analysis' => $upload_analysis,
             'upload_student_image' => $upload_student_image,
+            'not_aaplicable_for_dmit' => $request->not_aaplicable_for_dmit ? '1' : '0',
+            'not_aaplicable_for_course_material' => $request->not_aaplicable_for_course_material ? '1' : '0',
         ]);
 
         if($request->course_id) {
@@ -578,21 +584,19 @@ class StudentsController extends Controller
             'subCourse_point_before' => 'nullable|array',
         ]);
 
-        if($request->subCourse_point_approve){
-//            print_r("if sub course dsfsf point before"); die();
-            foreach ($request->subCourse_point_approve as $items){
-                foreach ($items as $key=>$item){
-                    $studentCompleteCourse = StudentCourseComplete::find($key);
-                    if(isset($studentCompleteCourse)){
-                        $studentCompleteCourse->status = 2;
-                        $studentCompleteCourse->admin_confirm_date = Carbon::now()->toDateString();
-                        $studentCompleteCourse->save();
+            if($request->subCourse_point_approve){
+                foreach ($request->subCourse_point_approve as $items){
+                    foreach ($items as $key=>$item){
+                        $studentCompleteCourse = StudentCourseComplete::find($key);
+                        if(isset($studentCompleteCourse)){
+                            $studentCompleteCourse->status = 2;
+                            $studentCompleteCourse->admin_confirm_date = Carbon::now()->toDateString();
+                            $studentCompleteCourse->save();
+                        }
                     }
                 }
             }
-        }
-//        else{
-            // Handle 'before' checkboxes for subCourses
+
             if (!empty($request->subCourse_before) && is_array($request->subCourse_before)) {
                 foreach ($request->subCourse_before as $subCourse_before) {
                     foreach($subCourse_before as $subCourseBefore_key => $subCourseBefore_value){
@@ -647,7 +651,6 @@ class StudentsController extends Controller
                 foreach ($request->subCourse_point_before as $subCourse_point_before) {
                     foreach ($subCourse_point_before as $key1 => $value1) {
                         $point_before = SubCoursePoint::find($key1);
-
                         if ($point_before) {
                             StudentCourseComplete::updateOrCreate(
                                 [
@@ -707,9 +710,6 @@ class StudentsController extends Controller
                 }
 
             }
-
-//        }
-        //  Handle 'before' checkboxes for subCourses
 
         return redirect()->route('student.show', $validatedData['student_id'])->with('success', 'notification sent to admin.');
     }
@@ -872,6 +872,15 @@ class StudentsController extends Controller
         return redirect()->route('student.index')->with('success', 'Student status change');
     }
 
+    public function changeStudentPwd(Request $request)
+    {
+        $student = Student::where('id',$request->student_id)->with('user')->first();
+        $student->user->password = Crypt::encrypt(strtolower($request->password));
+        $student->user->save();
+
+        return redirect()->back()->with('success', 'Student password updated successfully !!');
+    }
+
     public function studentAppreciation(Request $request)
     {
         $request->validate([
@@ -929,6 +938,14 @@ class StudentsController extends Controller
                 ]);
             return response()->json(['success' => false, 'course_id' => $course_id]);
         }
+    }
+
+    public function restartCourse($student_id, $course_id)
+    {
+        StudentCourse::where('student_id',$student_id)->where('course_id',$course_id)->update([
+                'end_date' =>  null,
+            ]);
+        return response()->json(['success' => true, 'course_id' => $course_id]);
     }
 }
 

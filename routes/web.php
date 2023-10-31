@@ -56,6 +56,7 @@ Route::post('reset-password', 'Auth\ResetPasswordController@submitResetPasswordF
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::group(['middleware'=>['auth']],function (){
     Route::resource('student', 'StudentsController');
+    Route::post('change-student-pwd','StudentController@changeStudentPwd')->name('change.student.pwd');
     Route::resource('student_ptm', 'StudentPTMController');
     Route::group(['prefix'=>'student'],function (){
         Route::get('/staff-slot/{id}','StudentsController@slot');
@@ -76,9 +77,12 @@ Route::group(['middleware'=>['auth']],function (){
         Route::post('/change-student-status','StudentsController@ChangeStudentStatus')->name('student.ChangeStudentStatus');
         Route::post('/student-appreciation','StudentsController@studentAppreciation')->name('student.studentAppreciation');
         Route::get('/update-course-start-end-date/{student_id}/{course_id}/{task}','StudentsController@updateCourseStartEndDate')->name('student.updateCourseStartEndDate');
+        Route::get('/restart-course/{student_id}/{course_id}','StudentsController@restartCourse')->name('student.restartCourse');
+
     });
     Route::resource('roles', 'RoleController');
     Route::resource('trainer', 'TrainerController');
+    Route::post('change-trainer-pwd','TrainerController@changeTrainerPwd')->name('change.trainer.pwd');
     Route::resource('rtc', 'RtcController');
     Route::resource('slot', 'SlotController');
     Route::resource('trainer_attendance', 'TrainerAttendanceController');

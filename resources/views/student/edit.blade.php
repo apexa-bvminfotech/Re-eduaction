@@ -259,7 +259,18 @@
                                                             @enderror
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-12 mb-2">
+                                                    <div class="col-md-6 mb-2">
+                                                        <div class="form-group">
+                                                            <label for="dob">Date Of Birth:</label>
+                                                            <input type="date" class="form-control" name="dob"
+                                                                   placeholder="enter birthdate" id="dob"
+                                                                   value="{{Carbon\Carbon::parse($student->dob)->format('Y-m-d')}}">
+                                                            @error('dob')
+                                                            <span class="text-danger">{{$message}}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 mb-2">
                                                         <div class="form-group">
                                                             <label for="school name">School Name:</label>
                                                             <input type="text" class="form-control"
@@ -366,17 +377,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6 mb-2">
-                                                        <div class="form-group">
-                                                            <label for="dob">Date Of Birth:</label>
-                                                            <input type="date" class="form-control" name="dob"
-                                                                   placeholder="enter birthdate" id="dob"
-                                                                   value="{{Carbon\Carbon::parse($student->dob)->format('Y-m-d')}}">
-                                                            @error('dob')
-                                                            <span class="text-danger">{{$message}}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
                                                     <div class="col-md-6 mb-1">
                                                         <div class="form-group">
                                                             <label for="age">Age:</label>
@@ -406,7 +406,15 @@
                                                         </div>
                                                     </div>
                                                     <input type="hidden" name="course_material_string" id="course_material_string" class="form-control" value="{{implode(",",$courseMaterialIds)}}">
-                                                    <div class="col-md-6 mb-1">
+                                                    <div  class="col-md-12 mb-2">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="1"  {{ $student->not_aaplicable_for_course_material == '1' ? 'checked' :'' }} id="notApplicable" name="not_aaplicable_for_course_material">
+                                                            <label class="form-check-label" for="flexCheckDefault">
+                                                                <b>Not Applicable for Course Material</b>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 mb-1" id="notApplicableContainer">
                                                         <label for="course_material">Course Material:</label>
                                                         <div id="empty_course_material">
                                                             <div class="form-check">                                                            
@@ -544,7 +552,15 @@
                                                             <span class="text-danger">{{$message}}</span>
                                                         @enderror
                                                     </div>
-                                                    <div class="col-md-12 mb-1">
+                                                    <div  class="col-md-12 mb-2">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="1"  {{ $student->not_aaplicable_for_dmit == '1' ? 'checked' :'' }} id="notApplicableDmit" name="not_aaplicable_for_dmit">
+                                                            <label class="form-check-label" for="flexCheckDefault">
+                                                                <b>Not Applicable for DMIT</b>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 mb-1" id="dmitContainer">
                                                         <div class="form-group">
                                                             <label for="fees">DMIT</label>
                                                             <br>
@@ -1028,11 +1044,35 @@
                     }
                 });
             });
+
+            if ($('#notApplicable').is(':checked')) {
+                $('#notApplicableContainer').hide();
+            }
+
+            if ($('#notApplicableDmit').is(':checked')) {
+                $('#dmitContainer').hide();
+            }
+
+            $("#notApplicable").change(function() {
+                if (this.checked) {
+                $("#notApplicableContainer").hide();
+                } else {
+                $("#notApplicableContainer").show();
+                }
+            });
+
+            $("#notApplicableDmit").change(function() {
+                if (this.checked) {
+                $("#dmitContainer").hide();
+                } else {
+                $("#dmitContainer").show();
+                }
+            });
         });
 
         document.addEventListener('DOMContentLoaded', function () {
             window.stepper = new Stepper(document.querySelector('.bs-stepper'))
         });
-
+        
     </script>
 @endpush
