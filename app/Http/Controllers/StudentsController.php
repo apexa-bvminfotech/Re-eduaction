@@ -64,7 +64,6 @@ class StudentsController extends Controller
                     ->join('branches', 'branches.id', 'students.branch_id')
                     ->with('courses','studentTrainer.trainer','user')
                     ->orderBy('students.id')->get();
-        dd($students);
 
         if(Auth::user()->type == 1) {
             $slots = Slot::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'desc')->get();
@@ -240,7 +239,6 @@ class StudentsController extends Controller
         $trainer = StudentStaffAssign::where(['student_id' => $id, 'is_active' => 0])->first();
         $studentAttendance = StudentAttendance::orderBy('id')->where('student_id', $student->id)->with('slot','trainer')->get();
         $student_leave_show =  StudentApproveLeave::orderBy('id')->where('student_id', $student->id)->get();
-      
 
         $currentMonthName = Carbon::now()->format('F');
         $numberOfDaysInCurrentMonth = Carbon::now()->daysInMonth;
@@ -268,7 +266,7 @@ class StudentsController extends Controller
         $totalAbsentPresentStudents = $qurey->get();
         $allAbsentStudent = 0;
         $allPresentStudent = 0;
-        foreach($totalAbsentPresentStudents as $key => $atd){   
+        foreach($totalAbsentPresentStudents as $key => $atd){
             if($atd->attendance_type == '0'){
                 $allAbsentStudent++;
             }
@@ -280,7 +278,7 @@ class StudentsController extends Controller
         $studentAttendances = $qurey->whereMonth('students_attendance.attendance_date', Carbon::now()->month)->get()->groupby('slot_time');
         $totalAbsentStudent = 0;
         $totalPresentStudent = 0;
-        foreach($studentAttendances as $key => $attendance){   
+        foreach($studentAttendances as $key => $attendance){
             foreach($attendance as $atd){
                 if($atd->attendance_type == '0'){
                     $totalAbsentStudent++;
@@ -369,7 +367,6 @@ class StudentsController extends Controller
             'contact' => $request->father_contact_no,
             'type' => 2,
         ]);
-
 
         $upload_analysis = $student->upload_analysis;
         if ($request->hasFile('upload_analysis')) {
@@ -825,7 +822,7 @@ class StudentsController extends Controller
             $studentAttendance->slot_type = 'Regular';
             $studentAttendance->attendance_date = $adate;
             $studentAttendance->save();
-        }   
+        }
         return redirect()->route('student.index')->with('success', 'Leave Approved');
     }
 
