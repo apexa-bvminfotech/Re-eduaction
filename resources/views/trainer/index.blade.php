@@ -69,6 +69,12 @@
                                                     <a href="{{ route('trainer.edit',$t->id) }}"
                                                     class="btn btn-success btn-sm" title="Edit"><i class="fa fa-edit"></i> Edit</a>
                                                 @endcan
+                                                @if(Auth::user()->type == '0')
+                                                    <button type="button"
+                                                            class="btn btn-secondary btn-trainer-pwd btn-sm"
+                                                            data-id="{{$t->id}}" data-t-password="{{ Crypt::decrypt($t->user->password) }}"> Change Password
+                                                    </button>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
@@ -81,6 +87,39 @@
                 </div>
             </div>
         </section>
+    </div>
+    <div class="modal fade" id="changeTrainerPwd" tabindex="-1" role="dialog"
+        aria-labelledby="verticalModalTitle"
+        style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="verticalModalTitle">Change Trainer Password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <form action="{{ route('change.trainer.pwd') }}" method="POST" id="submitTrainerPwd">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="col-md-12 mb-1">
+                            <div class="form-group">
+                                <input type="hidden" name="trainer_id" id="trainer_id" class="trainer_id" value="">
+                                <label for="password">Password:</label>
+                                <input type="text" name="password" class="form-control old-t-pwd" value=""  placeholder="Enter your password">
+                                @error('password')
+                                    <span class="text-danger">{{$message}}</span>
+                                @enderror
+                            </div>
+                        </div>   
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn mb-2 btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 @endsection
 @push('scripts')
@@ -147,6 +186,14 @@
                     }
                 });
             });
-        })
+        });
+
+        $(document).on('click', '.btn-trainer-pwd', function () {
+            let trainerId = parseInt($(this).data('id'));
+            $('.trainer_id').val(trainerId);
+            let pwd = $(this).data('t-password');
+            $('.old-t-pwd').val(pwd);
+            $('#changeTrainerPwd').modal('toggle')
+        });
     </script>
 @endpush

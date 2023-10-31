@@ -211,8 +211,8 @@
                             </h5>
                         </div>
 
-                        @if($trainerProxySlot->isNotEmpty())
-                            <div class="card-body">
+                        <div class="card-body">
+                            @if($trainerProxySlot->isNotEmpty())
                                 <div class="row">
                                     @foreach($proxyTrainer as $key => $branch)
                                         <div class="col-md-3">
@@ -244,8 +244,8 @@
                                         </div>        
                                     @endforeach
                                 </div>
-                            </div>
-                        @endif
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
