@@ -43,7 +43,7 @@ Route::post('reset-password', 'Auth\ResetPasswordController@submitResetPasswordF
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::group(['middleware'=>['auth']],function (){
     Route::resource('student', 'StudentsController');
-    Route::post('change-student-pwd','StudentController@changeStudentPwd')->name('change.student.pwd');
+    Route::post('change-student-pwd','StudentsController@changeStudentPwd')->name('change.student.pwd');
     Route::resource('student_ptm', 'StudentPTMController');
     Route::group(['prefix'=>'student'],function (){
         Route::get('/staff-slot/{id}','StudentsController@slot');

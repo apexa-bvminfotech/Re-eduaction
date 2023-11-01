@@ -215,7 +215,7 @@
                             @if($trainerProxySlot->isNotEmpty())
                                 <div class="row">
                                     @foreach($proxyTrainer as $key => $branch)
-                                        <div class="col-md-3">
+                                        <div class="">
                                             @php
                                                 $trainerSlot = [];
                                             @endphp

@@ -344,7 +344,7 @@
                                         <div class="form-group">
                                             <input type="hidden" name="student_id" id="student_id" class="student_id" value="">
                                             <label for="password">Password:</label>
-                                            <input type="text" name="password" class="form-control old-t-pwd" value=""  placeholder="Enter your password">
+                                            <input type="text" name="password" class="form-control old-s-pwd" value=""  placeholder="Enter your password">
                                             @error('password')
                                                 <span class="text-danger">{{$message}}</span>
                                             @enderror
@@ -486,8 +486,6 @@
             $(document).on('click', '.btn-stu-pwd', function () {
                 let studentId = parseInt($(this).data('id'));
                 $('.student_id').val(studentId);
-                let pwd = $(this).data('s-password');
-                $('.old-s-pwd').val(pwd);
                 $('#changeStudentPwd').modal('toggle')
             });
 

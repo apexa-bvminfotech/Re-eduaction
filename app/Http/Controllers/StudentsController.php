@@ -27,7 +27,6 @@ use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Crypt;
 
 class StudentsController extends Controller
 {
@@ -60,11 +59,10 @@ class StudentsController extends Controller
         $slots = Slot::where('is_active', 0)->orderBy('id', 'desc')->get();
         $trainers = Trainer::where('is_active', 0)->orderBy('id', 'desc')->get();
         $students = Student::select('students.id','students.surname','students.name','students.mother_contact_no',
-                        'students.standard','students.medium','students.course_id','branches.name as branch_name')
+                        'students.standard','students.medium','students.course_id','students.user_id','branches.name as branch_name')
                     ->join('branches', 'branches.id', 'students.branch_id')
                     ->with('courses','studentTrainer.trainer','user')
                     ->orderBy('students.id')->get();
-        dd($students);
 
         if(Auth::user()->type == 1) {
             $slots = Slot::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'desc')->get();
@@ -129,7 +127,7 @@ class StudentsController extends Controller
             'email' => $request->email_id,
             'user_profile' => $upload_student_image,
             'contact' => $request->father_contact_no,
-            'password' => Crypt::encrypt(strtolower($request->name) . '@123'),
+            'password' => Hash::make(strtolower($request->name) . '@123'),
             'branch_id' => $request->input('branch_id'),
             'type' => 2,
         ]);
@@ -761,10 +759,10 @@ class StudentsController extends Controller
             'date' => 'required',
         ]);
 
-        $checkIsregularTrainer = StudentStaffAssign::where(['trainer_id' => $request->trainer_id, 'slot_id' => $request->slot_id , 'is_active' => 0])->first();
-        if($checkIsregularTrainer) {
-            return back()->with('error', 'Trainer is already assigned as regular staff');
-        }
+        // $checkIsregularTrainer = StudentStaffAssign::where(['trainer_id' => $request->trainer_id, 'slot_id' => $request->slot_id , 'is_active' => 0])->first();
+        // if($checkIsregularTrainer) {
+        //     return back()->with('error', 'Trainer is already assigned as regular staff');
+        // }
 
         $studentStaffAssign = StudentStaffAssign::where(['trainer_id' => $request->trainer_id, 'slot_id' => $request->old_slot_id , 'student_id' => $request->student_id, 'is_active' => 0])->first();
         StudentStaffAssign::where('id',$studentStaffAssign->id)->update([
@@ -875,7 +873,7 @@ class StudentsController extends Controller
     public function changeStudentPwd(Request $request)
     {
         $student = Student::where('id',$request->student_id)->with('user')->first();
-        $student->user->password = Crypt::encrypt(strtolower($request->password));
+        $student->user->password = Hash::make(strtolower($request->password));
         $student->user->save();
 
         return redirect()->back()->with('success', 'Student password updated successfully !!');

@@ -28,6 +28,7 @@
                             {!! Form::open(array('route' => 'user.store','method'=>'POST', 'enctype' => 'multipart/form-data')) !!}
                             <div class="card-body">
                                 <div class="form-group row">
+                                    <input type="hidden" name="role" id="role" value="1">
                                     <label for="customFile" class="col-sm-3 col-form-label">Profile Photo</label>
                                     <div class="col-sm-9">
                                         <div class="custom-file">
