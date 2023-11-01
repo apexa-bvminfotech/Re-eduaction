@@ -18,6 +18,9 @@
                 </div>
             </div><!-- /.container-fluid -->
         </section>
+        @php
+            $tempStartDate = $startDate;
+        @endphp
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
@@ -696,7 +699,7 @@
                                                                                name="subCourse_point_before[{{$student_course->id}}][{{$sp->id}}]">
                                                                     @else
                                                                         <input @if($sub_course=\App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'before'=>1])->first()) checked @endif
-                                                                        @if(auth()->user()->type == 1) disabled @endif  class="form-check-input point-checkbox subcourse_before_{{ $sc->id }} beforSubCourse" name="subCourse_point_before[{{$student_course->id}}][{{$sp->id}}]" type="checkbox" data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}">
+                                                                        @if(auth()->user()->type == 1) disabled @endif class="form-check-input point-checkbox subcourse_before_{{ $sc->id }} beforSubCourse" name="subCourse_point_before[{{$student_course->id}}][{{$sp->id}}]" type="checkbox" data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}">
                                                                     @endcan
                                                                 </div>
                                                             @endif
@@ -706,13 +709,11 @@
                                                             <!--After-->
                                                             <div class="form-check checkbox-xl custom-checkbox text-center">
                                                                 @can('student-course-start')
-                                                                    <input @if($sub_course1 = App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'after'=>1])->first()) checked @endif
-                                                                    @if(auth()->user()->type == 1) disabled @endif
+                                                                    <input @if($sub_course1 = App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'after'=>1])->first()) checked disabled @endif            
                                                                     class="form-check-input point-checkbox subcourse_{{ $sc->id }} afterSubCourse" name="subCourse_point_after[{{$student_course->id}}][{{$sp->id}}]" type="checkbox" data-subCourseId="{{ $sc->id }}"
                                                                            data-pointId="{{ $sp->id }}" >
                                                                 @else
-                                                                    <input @if($sub_course1 = \App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'after'=>1])->first()) checked @endif
-                                                                    @if(auth()->user()->type == 1) disabled @endif
+                                                                    <input @if($sub_course1 = \App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'after'=>1])->first()) checked disabled @endif
                                                                     class="form-check-input point-checkbox subcourse_{{ $sc->id }} afterSubCourse" type="checkbox" name="subCourse_point_after[{{$student_course->id}}][{{$sp->id}}]" data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}">
                                                                 @endcan
                                                             </div>
@@ -792,20 +793,21 @@
                                 <hr>
                                 <div class="card-body">
                                     <table class="table table-bordered table-striped">
-                                        @php
-                                            $startDate = now()->startOfMonth();
-                                            $endDate = now()->endOfMonth();
-                                            $numberOfDays = $startDate->daysInMonth;
-                                        @endphp
                                         <thead>
                                             <tr>
                                                 <th colspan="3"></th>
-                                                <th colspan="{{ $numberOfDaysInCurrentMonth }}" class="text-center">{{ $currentMonthName }}</th>
+                                                <th colspan="{{ $numberOfDaysInCurrentMonth }}" class="text-center">
+                                                    {{  $currentMonthName }}
+                                                </th>
                                             </tr>
                                             <tr>
                                                 <th style="width: 6rem" class="text-center">Slot Time</th>
                                                 <th style="width: 4rem" class="text-center">Total A :-</th>
                                                 <th style="width: 4rem" class="text-center">Total P :-</th>
+                                                @php
+                                                    $startdate = $startDate;
+                                                    $numberOfDays = $startDate->daysInMonth;
+                                                @endphp
                                                 @for ($day = 1; $day <= $numberOfDays; $day++)
                                                     <th class="text-center">
                                                         {{ $startDate->format('d') }}<br>
@@ -819,8 +821,7 @@
                                         <tbody>
                                             @foreach ($studentAttendances as $key => $attendance)
                                                 @php
-                                                    $sDate = now()->startOfMonth();
-                                                    $eDate = now()->endOfMonth();
+                                                    $sDate = $startDate;
                                                     $numberOfDays = $sDate->daysInMonth;
                                                 @endphp
                                                 <tr>
@@ -833,7 +834,7 @@
                                                                 @php
                                                                     $attendanceDate = \Carbon\Carbon::parse($atd->attendance_date);
                                                                 @endphp
-                                                                @if ($attendanceDate->format('Y-m-d') == $sDate->format('Y-m-d'))
+                                                                @if ($attendanceDate->format('Y-m-d') == $tempStartDate->format('Y-m-d'))
                                                                     @if ($atd->attendance_type == '0')
                                                                         0
                                                                     @else
@@ -843,7 +844,7 @@
                                                             @endforeach
                                                         </td>
                                                         @php
-                                                            $sDate->addDay();
+                                                            $tempStartDate->addDay();
                                                         @endphp
                                                     @endfor
                                                 </tr>

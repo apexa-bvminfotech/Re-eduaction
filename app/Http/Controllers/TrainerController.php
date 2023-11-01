@@ -189,7 +189,32 @@ class TrainerController extends Controller
             return view('trainer.show', compact('trainer', 'courseNames','tarinerSlot','trainerAttendance','fromDate','toDate'));
         }
         else{
-            return view('trainer.show', compact('trainer'));
+            $trainerId = $trainer->id;
+            $tarinerSlot = Slot::where('trainer_id',$trainerId)->with('rtc','slotList.student')->get();
+
+            $fromDate = '';
+            $toDate = '';
+
+            if(isset($_GET['fromDate'])){
+                $fromDate = $_GET['fromDate'];
+            }
+            if(isset($_GET['toDate'])){
+                $toDate = $_GET['toDate'];
+            }
+
+            $qurey = TrainerAttendance::from('trainer_attendances')->where('trainer_id',$trainerId);
+
+            if($fromDate != '' && $fromDate != null){
+                $qurey->whereDate('date', '>=', date('Y-m-d', strtotime($fromDate)));
+            }
+
+            if($toDate != '' && $toDate != null){
+                $qurey->whereDate('date', '<=',  date('Y-m-d', strtotime($toDate)));
+            }
+
+            $trainerAttendance = $qurey->with('slots')->get();
+
+            return view('trainer.show', compact('trainer','tarinerSlot','trainerAttendance','fromDate','toDate'));
         }
     }
 

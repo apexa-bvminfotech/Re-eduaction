@@ -68,8 +68,9 @@ class StudentsController extends Controller
             $slots = Slot::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'desc')->get();
             $trainers = Trainer::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'desc')->get();
             $students = Student::
-                select('students.surname', 'students.name','students.standard','students.medium','students.course_id','students.id','students.father_contact_no')
+                select('students.surname', 'students.name','students.standard','students.medium','students.course_id','students.id','students.mother_contact_no','branches.name as branch_name')
                 ->with('courses')
+                ->join('branches', 'branches.id', 'students.branch_id')
                 ->join('student_staff_assigns', 'student_staff_assigns.student_id', 'students.id')
                 ->join('trainers','trainers.id', 'student_staff_assigns.trainer_id')
                 ->where(['trainers.user_id' => Auth::user()->id,'student_staff_assigns.is_active' => 0])
@@ -239,9 +240,8 @@ class StudentsController extends Controller
         $studentAttendance = StudentAttendance::orderBy('id')->where('student_id', $student->id)->with('slot','trainer')->get();
         $student_leave_show =  StudentApproveLeave::orderBy('id')->where('student_id', $student->id)->get();
       
-
-        $currentMonthName = Carbon::now()->format('F');
         $numberOfDaysInCurrentMonth = Carbon::now()->daysInMonth;
+        $startDate = Carbon::now()->startOfMonth();
 
         $fromDate = '';
         $toDate = '';
@@ -275,7 +275,15 @@ class StudentsController extends Controller
             }
         }
 
-        $studentAttendances = $qurey->whereMonth('students_attendance.attendance_date', Carbon::now()->month)->get()->groupby('slot_time');
+        if($fromDate){
+            $studentAttendances = $qurey->get()->groupby('slot_time');
+            $startDate = Carbon::parse($fromDate)->startOfMonth();
+            $numberOfDaysInCurrentMonth = $startDate->daysInMonth;
+        }
+        else{
+            $studentAttendances = $qurey->whereMonth('students_attendance.attendance_date', Carbon::now()->month)->get()->groupby('slot_time');
+        }
+
         $totalAbsentStudent = 0;
         $totalPresentStudent = 0;
         foreach($studentAttendances as $key => $attendance){   
@@ -289,9 +297,11 @@ class StudentsController extends Controller
             }
         }
 
+        $currentMonthName = !empty($fromDate) ? Carbon::parse($fromDate)->format('F') : Carbon::now()->format('F');
+
         return view('student.show', compact('student', 'assignStaff', 'studentAttendance', 'proxy_staff_details','studentCompleteCourses','approvedCourse',
             'student_leave_show','student_appreciation','fromDate','toDate', 'trainer','studentAttendances','currentMonthName','numberOfDaysInCurrentMonth','totalAbsentStudent',
-            'totalPresentStudent','allAbsentStudent','allPresentStudent'));
+            'totalPresentStudent','allAbsentStudent','allPresentStudent','startDate'));
     }
 
     public function edit($id)

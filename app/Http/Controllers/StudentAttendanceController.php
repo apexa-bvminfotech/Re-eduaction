@@ -113,40 +113,42 @@ class StudentAttendanceController extends Controller
         }
 
         $date = date('Y-m-d', strtotime($request->attendance_date));
-        foreach ($request->trainer_id as $key => $trainerId) {
-            foreach ($request->input("attendance_details_$trainerId") as $atten_key => $atten_value) {
-                if (isset($atten_value['student_details_regular']) || isset($atten_value['student_details_proxy'])) {
-                    foreach (['student_details_regular', 'student_details_proxy'] as $studentDetailKey) {
-                        if (isset($atten_value[$studentDetailKey])) {
-                            foreach ($atten_value[$studentDetailKey] as $stu_detail) {
-                                if (Auth::user()->type == 1) {
-                                    $studentAttendance = StudentAttendance::where('attendance_date', $date)
-                                        ->where('trainer_id', $trainerId)
-                                        ->where('student_id', $stu_detail['student_id'])
-                                        ->first();
-        
-                                    if ($studentAttendance) {
-                                        return back()->with('error', 'Date is already taken !!');
+        if(isset($request->trainer_id)){
+            foreach ($request->trainer_id as $key => $trainerId) {
+                foreach ($request->input("attendance_details_$trainerId") as $atten_key => $atten_value) {
+                    if (isset($atten_value['student_details_regular']) || isset($atten_value['student_details_proxy'])) {
+                        foreach (['student_details_regular', 'student_details_proxy'] as $studentDetailKey) {
+                            if (isset($atten_value[$studentDetailKey])) {
+                                foreach ($atten_value[$studentDetailKey] as $stu_detail) {
+                                    if (Auth::user()->type == 1) {
+                                        $studentAttendance = StudentAttendance::where('attendance_date', $date)
+                                            ->where('trainer_id', $trainerId)
+                                            ->where('student_id', $stu_detail['student_id'])
+                                            ->first();
+            
+                                        if ($studentAttendance) {
+                                            return back()->with('error', 'Date is already taken !!');
+                                        }
                                     }
-                                }
-                                if (isset($stu_detail['attendance_type'])) {
-                                    $studentAlreadyAbsent = StudentAttendance::where('student_id', $stu_detail['student_id'])
-                                        ->where('attendance_date', $date)
-                                        ->where('trainer_id', $trainerId)
-                                        ->where('slot_id', $atten_value['slot_id'])
-                                        ->first();
-        
-                                    if (!$studentAlreadyAbsent) {
-                                        StudentAttendance::create([
-                                            'student_id' => $stu_detail['student_id'],
-                                            'attendance_type' => $stu_detail['attendance_type'],
-                                            'user_id' => Auth::user()->id,
-                                            'attendance_date' => $date,
-                                            'absent_reason' => $stu_detail['absent_reason'],
-                                            'trainer_id' => $trainerId,
-                                            'slot_id' => $atten_value['slot_id'],
-                                            'slot_type' => $stu_detail['slot_type']
-                                        ]);
+                                    if (isset($stu_detail['attendance_type'])) {
+                                        $studentAlreadyAbsent = StudentAttendance::where('student_id', $stu_detail['student_id'])
+                                            ->where('attendance_date', $date)
+                                            ->where('trainer_id', $trainerId)
+                                            ->where('slot_id', $atten_value['slot_id'])
+                                            ->first();
+            
+                                        if (!$studentAlreadyAbsent) {
+                                            StudentAttendance::create([
+                                                'student_id' => $stu_detail['student_id'],
+                                                'attendance_type' => $stu_detail['attendance_type'],
+                                                'user_id' => Auth::user()->id,
+                                                'attendance_date' => $date,
+                                                'absent_reason' => $stu_detail['absent_reason'],
+                                                'trainer_id' => $trainerId,
+                                                'slot_id' => $atten_value['slot_id'],
+                                                'slot_type' => $stu_detail['slot_type']
+                                            ]);
+                                        }
                                     }
                                 }
                             }
@@ -155,7 +157,9 @@ class StudentAttendanceController extends Controller
                 }
             }
         }
-         
+        else{
+            return redirect()->route('student_attendance.index')->with('error', 'Please fill your attendance with valid trainer and students !!');
+        }     
         return redirect()->route('student_attendance.index')->with('success', 'Student Attendence Created successfully');
     }
 
@@ -292,43 +296,48 @@ class StudentAttendanceController extends Controller
     public function update(UpdateStudentAttendanceRequest $request, $date)
     {
         $date = date('Y-m-d', strtotime($request->attendance_date));
-        foreach($request->trainer_id as $key => $tarinerId){
-            foreach($request->input("attendance_details_".$tarinerId) as $atten_key => $atten_value){
-                if(isset($atten_value['student_details_regular']) || isset($atten_value['student_details_proxy'])){
-                    foreach(['student_details_regular', 'student_details_proxy'] as $studentDetailKey){
-                        if(isset($atten_value[$studentDetailKey])){
-                            foreach($atten_value[$studentDetailKey] as $stu_detail){
-                                if(isset($stu_detail['attendance_type'])){
-                                    if(!isset($stu_detail['student_attendance_id'])){
-                                        StudentAttendance::create([
-                                            'student_id' => $stu_detail['student_id'],
-                                            'attendance_type' =>   $stu_detail['attendance_type'],
-                                            'user_id' => Auth::user()->id,
-                                            'attendance_date' =>  $date,
-                                            'absent_reason' => isset($stu_detail['absent_reason']) ? $stu_detail['absent_reason'] : null,
-                                            'trainer_id' =>  $tarinerId,
-                                            'slot_id' =>  $atten_value['slot_id'],
-                                            'slot_type' =>  $stu_detail['slot_type']
-                                        ]);
-                                    }else{
-                                        StudentAttendance::where('attendance_date',$date)->where('id',$stu_detail['student_attendance_id'])->update([
-                                            'student_id' => $stu_detail['student_id'],
-                                            'attendance_type' =>   $stu_detail['attendance_type'],
-                                            'user_id' => Auth::user()->id,
-                                            'attendance_date' =>  $date,
-                                            'absent_reason' => $stu_detail['absent_reason'],
-                                            'trainer_id' =>  $tarinerId,
-                                            'slot_id' =>  $atten_value['slot_id'],
-                                            'slot_type' =>  $stu_detail['slot_type']
-                                        ]);
+        if(isset($request->trainer_id)){
+            foreach($request->trainer_id as $key => $tarinerId){
+                foreach($request->input("attendance_details_".$tarinerId) as $atten_key => $atten_value){
+                    if(isset($atten_value['student_details_regular']) || isset($atten_value['student_details_proxy'])){
+                        foreach(['student_details_regular', 'student_details_proxy'] as $studentDetailKey){
+                            if(isset($atten_value[$studentDetailKey])){
+                                foreach($atten_value[$studentDetailKey] as $stu_detail){
+                                    if(isset($stu_detail['attendance_type'])){
+                                        if(!isset($stu_detail['student_attendance_id'])){
+                                            StudentAttendance::create([
+                                                'student_id' => $stu_detail['student_id'],
+                                                'attendance_type' =>   $stu_detail['attendance_type'],
+                                                'user_id' => Auth::user()->id,
+                                                'attendance_date' =>  $date,
+                                                'absent_reason' => isset($stu_detail['absent_reason']) ? $stu_detail['absent_reason'] : null,
+                                                'trainer_id' =>  $tarinerId,
+                                                'slot_id' =>  $atten_value['slot_id'],
+                                                'slot_type' =>  $stu_detail['slot_type']
+                                            ]);
+                                        }else{
+                                            StudentAttendance::where('attendance_date',$date)->where('id',$stu_detail['student_attendance_id'])->update([
+                                                'student_id' => $stu_detail['student_id'],
+                                                'attendance_type' =>   $stu_detail['attendance_type'],
+                                                'user_id' => Auth::user()->id,
+                                                'attendance_date' =>  $date,
+                                                'absent_reason' => $stu_detail['absent_reason'],
+                                                'trainer_id' =>  $tarinerId,
+                                                'slot_id' =>  $atten_value['slot_id'],
+                                                'slot_type' =>  $stu_detail['slot_type']
+                                            ]);
+                                        }
                                     }
-                                }
-                            }      
-                        }   
-                    }
-                }  
-            }
-        }  
+                                }      
+                            }   
+                        }
+                    }  
+                }
+            }  
+        }
+        else{
+            return redirect()->route('student_attendance.index')->with('error', 'Please fill your attendance with valid trainer and students !!');
+        } 
         return redirect()->route('student_attendance.index')->with('success', 'Student Attendence Updated successfully');
     }
 

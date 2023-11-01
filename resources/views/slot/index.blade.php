@@ -292,6 +292,7 @@
 
         $(document).on('change', '.staff_id', function () {
             let staff = ($(this).val());
+            console.log(staff);
             if (staff != "") {
                 $.ajax({
                     url: '/shift-regular-slot/' + staff,

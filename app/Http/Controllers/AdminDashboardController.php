@@ -18,6 +18,7 @@ class AdminDashboardController extends Controller
         $studentStatus = StudentStatus::select('student_status.id','student_status.status','students.branch_id')
             ->join('students', 'students.id', 'student_status.student_id')
             ->join('branches', 'branches.id', 'students.branch_id')
+            ->where('students.registration_date', Carbon::now()->month)
             ->where('student_status.is_active','0')->where('students.branch_id',Auth::user()->branch_id)->get();
         $absentTrainer = Branch::with('trainer.trainerAttendance')->where('id',Auth::user()->branch_id)->get();
         $absentStudent = Branch::with('student.studentAttendance')->where('id',Auth::user()->branch_id)->get();
