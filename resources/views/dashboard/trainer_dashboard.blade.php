@@ -252,29 +252,29 @@
                                         <th>Joining Date</th>
                                         <td>{{ $str = str_replace(',', ' to ', $trainers->joining_date) }}</td>
                                         <th>I-Card</th>
-                                        <td>{{ date('d-m-Y', strtotime($trainers->i_card_date)) }}</td>
+                                        <td>{{ $trainers->i_card_date ?  date('d-m-Y', strtotime($trainers->i_card_date)) : '' }}</td>
                                     </tr>
                                     <tr>
                                         <th>I-Card Return Date</th>
-                                        <td>{{ date('d-m-Y', strtotime($trainers->i_card_return_date)) }}</td>
+                                        <td>{{ $trainers->i_card_return_date ? date('d-m-Y', strtotime($trainers->i_card_return_date)) : '' }}</td>
                                         <th>I-Card Note</th>
                                         <td>{{ $trainers->i_card_note }}</td>
                                     </tr>
                                     <tr>
                                         <th>Uniform</th>
-                                        <td>{{ date('d-m-Y', strtotime($trainers->uniform_date)) }}</td>
+                                        <td>{{ $trainers->uniform_date ? date('d-m-Y', strtotime($trainers->uniform_date)) : '' }}</td>
                                         <th>Uniform Return Date</th>
-                                        <td>{{ date('d-m-Y', strtotime($trainers->uniform_return_date)) }}</td>
+                                        <td>{{ $trainers->uniform_return_date ? date('d-m-Y', strtotime($trainers->uniform_return_date)) : ''}}</td>
                                     </tr>
                                     <tr>
                                         <th>Uniform Note</th>
                                         <td>{{ $trainers->uniform_note }}</td>
                                         <th>Material</th>
-                                        <td>{{ date('d-m-Y', strtotime($trainers->material_date)) }}</td>
+                                        <td>{{ $trainers->material_date ? date('d-m-Y', strtotime($trainers->material_date)) : '' }}</td>
                                     </tr>
                                     <tr>
                                         <th>Material Return Date</th>
-                                        <td>{{ date('d-m-Y', strtotime($trainers->material_return_date)) }}</td>
+                                        <td>{{ $trainers->material_return_date ? date('d-m-Y', strtotime($trainers->material_return_date)) : ''}}</td>
                                         <th></th>
                                         <td></td>
                                     </tr>

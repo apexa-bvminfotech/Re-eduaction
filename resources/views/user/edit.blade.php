@@ -25,7 +25,8 @@
                         <div class="card card-primary">
                             {!! Form::model($user, ['method' => 'PATCH','route' => ['user.update', $user->id], 'enctype' => 'multipart/form-data']) !!}
                             <div class="card-body">
-                                <div class="form-group row">
+                                <div class="form-group row">~
+                                    <input type="hidden" name="role" id="role" value="1">
                                     <label for="customFile" class="col-sm-3 col-form-label">Profile Photo</label>
                                     <div class="col-sm-9">
                                         <div class="custom-file">
@@ -79,10 +80,7 @@
                                 <div class="form-group row">
                                     <label for="password" class="col-sm-3 col-form-label">Password</label>
                                     <div class="col-sm-9">
-                                        <input type="text" name="password" value="{{ $password }}"  placeholder="Enter your password" class="form-control" >
-                                        @error('password')
-                                        <span class="text-danger">{{$message}}</span>
-                                        @enderror
+                                        <input type="text" name="password"  placeholder="Enter your password" class="form-control" >
                                     </div>
                                 </div>
                                 <div class="form-group row">

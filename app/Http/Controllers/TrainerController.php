@@ -13,7 +13,6 @@ use App\Models\TrainerAttendance;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Crypt;
 
 use Illuminate\Http\Request;
 
@@ -79,7 +78,7 @@ class TrainerController extends Controller
             'father_name' => $request->father_name,
             'email' => $request->email_id,
             'contact' => $request->phone,
-            'password' => Crypt::encrypt(strtolower($request->name) . '@2121'),
+            'password' => Hash::make(strtolower($request->name) . '@2121'),
             'type' => 1,
             'branch_id' => $request->input('branch_id'),
             'user_profile' => $photo,
@@ -377,7 +376,7 @@ class TrainerController extends Controller
     public function changeTrainerPwd(Request $request)
     {
         $trainer = Trainer::where('id',$request->trainer_id)->with('user')->first();
-        $trainer->user->password = Crypt::encrypt(strtolower($request->password));
+        $trainer->user->password = Hash::make(strtolower($request->password));
         $trainer->user->save();
 
         return redirect()->back()->with('success', 'Trainer password updated successfully !!');

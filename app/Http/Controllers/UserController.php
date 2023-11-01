@@ -10,7 +10,6 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Crypt;
 
 class UserController extends Controller
 {
@@ -71,7 +70,7 @@ class UserController extends Controller
             'father_name' => $request->father_name,
             'email' => $request->email,
             // 'password' => Hash::make($request->password),
-            'password' => Crypt::encrypt($request->password),
+            'password' => Hash::make($request->password),
             'user_profile' => $user_profile,
             'contact' => $request->contact,
             'branch_id' => $request->branch_id ? $request->branch_id : 0,
@@ -103,7 +102,7 @@ class UserController extends Controller
     {
         $branches = Branch::orderBy('id')->get();
         $role = Role::orderBy('id')->get();
-        $password = Crypt::decrypt($user->password);
+        $password = Hash::make($user->password);
         return view('user.edit', compact('user', 'role', 'branches','password'));
     }
 
@@ -119,7 +118,6 @@ class UserController extends Controller
         $request->validate([
             'surname' => 'required|max:255',
             'name' => 'required|max:255',
-            'password' => 'required|string',
             'father_name' => 'required|max:255',
             'user_profile' => 'nullable|mimes:jpeg,png,jpg|max:2048',
             'contact' => 'required|digits:10|numeric',
@@ -146,7 +144,7 @@ class UserController extends Controller
             'name' => $request->name,
             'father_name' => $request->father_name,
             'email' => $request->email,
-            'password' => Crypt::encrypt($request->password),
+            'password' => Hash::make($request->password),
             'user_profile' => $user_profile,
             'contact' => $request->contact,
             'branch_id' => $request->branch_id ? $request->branch_id : 0,

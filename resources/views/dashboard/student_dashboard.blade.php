@@ -430,7 +430,7 @@
                                                             -
                                                         @endif
                                                     </td>   
-                                                    <td>{{ $course->appreciation->appreciation_name }}</td>
+                                                    <td>{{ !empty($course->appreciation->appreciation_name) ? $course->appreciation->appreciation_name : '' }}</td>
                                                     <td>
                                                         @if($course->appreciation_given_date !== null)
                                                             {{ date('d-m-Y', strtotime($course->appreciation_given_date)) }}

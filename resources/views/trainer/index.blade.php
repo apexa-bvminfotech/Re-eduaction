@@ -72,7 +72,7 @@
                                                 @if(Auth::user()->type == '0')
                                                     <button type="button"
                                                             class="btn btn-secondary btn-trainer-pwd btn-sm"
-                                                            data-id="{{$t->id}}" data-t-password="{{ Crypt::decrypt($t->user->password) }}"> Change Password
+                                                            data-id="{{$t->id}}"> Change Password
                                                     </button>
                                                 @endif
                                             </td>
@@ -191,8 +191,6 @@
         $(document).on('click', '.btn-trainer-pwd', function () {
             let trainerId = parseInt($(this).data('id'));
             $('.trainer_id').val(trainerId);
-            let pwd = $(this).data('t-password');
-            $('.old-t-pwd').val(pwd);
             $('#changeTrainerPwd').modal('toggle')
         });
     </script>
