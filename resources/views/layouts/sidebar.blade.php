@@ -204,7 +204,7 @@
                                     </a>
                                 </li>
                             @endcan
-                            @can('tudent-status-list-report')
+                            @can('student-status-list-report')
                                 <li class="nav-item">
                                     <a href="{{ route('report.student-status-list') }}" class="nav-link @if(Route::currentRouteName() == 'report.student-status-list')active  @endif">
                                         <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
