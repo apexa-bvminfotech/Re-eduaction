@@ -9,7 +9,9 @@ use App\Models\StudentCourse;
 use App\Models\StudentDMIT;
 use App\Models\StudentStaffAssign;
 use App\Models\StudentStatus;
+use App\Models\Trainer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
 {
@@ -56,37 +58,87 @@ class ReportController extends Controller
 
     public function getPendingAppreciationStudentList()
     {
-        $pendingApprecitionStu = StudentCourse::with('student','course','appreciation')->where('end_date','!=',null)->where('appreciation_given_date',null)->get();
+        if(Auth::user()->type == 1){
+            $user = Auth::user();
+            $trainers = Trainer::where('user_id',$user->id)->first();
+            $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
+            $pendingApprecitionStu = StudentCourse::whereIn('student_id',$studentTrainer)->with('student','course','appreciation')->where('end_date','!=',null)->where('appreciation_given_date',null)->get();
+        }
+        else{
+            $pendingApprecitionStu = StudentCourse::with('student','course','appreciation')->where('end_date','!=',null)->where('appreciation_given_date',null)->get();
+        }
+        
         return view('reports.pending_appreciation_student_list',compact('pendingApprecitionStu'));
     }
 
     public function getPendingCourseStudentList()
     {
-        $pendingCourseStu = StudentCourse::with('student','course')->where('start_date',null)->get();
+        if(Auth::user()->type == 1){
+            $user = Auth::user();
+            $trainers = Trainer::where('user_id',$user->id)->first();
+            $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
+            $pendingCourseStu = StudentCourse::whereIn('student_id',$studentTrainer)->with('student','course')->where('start_date',null)->get();
+        }
+        else{
+            $pendingCourseStu = StudentCourse::with('student','course')->where('start_date',null)->get();
+        }
         return view('reports.pending_course_student_list',compact('pendingCourseStu'));
     }
 
     public function getStudentListWithCourseDetail()
     {
-        $studentCourse = StudentCourse::with('student','course')->get();
+        if(Auth::user()->type == 1){
+            $user = Auth::user();
+            $trainers = Trainer::where('user_id',$user->id)->first();
+            $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
+            $studentCourse = StudentCourse::whereIn('student_id',$studentTrainer)->with('student','course')->get();
+        }
+        else{
+            $studentCourse = StudentCourse::with('student','course')->get();
+        }
         return view('reports.student_list_with_course_detail',compact('studentCourse'));
     }
 
     public function getPendingCounselllingStudentList()
     {
-        $pendingCounselling = StudentDMIT::where('counselling_by','0')->with('student')->get();
-        $pendingReport = StudentDMIT::where('report','0')->with('student')->get();
-        $pendingKeyPoint = StudentDMIT::where('key_point',0)->with('student')->get();
+        if(Auth::user()->type == 1){
+            $user = Auth::user();
+            $trainers = Trainer::where('user_id',$user->id)->first();
+            $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
+            $pendingCounselling = StudentDMIT::whereIn('student_id',$studentTrainer)->where('counselling_by','0')->with('student')->get();
+            $pendingReport = StudentDMIT::whereIn('student_id',$studentTrainer)->where('report','0')->with('student')->get();
+            $pendingKeyPoint = StudentDMIT::whereIn('student_id',$studentTrainer)->where('key_point',0)->with('student')->get();
+        }
+        else{
+            $pendingCounselling = StudentDMIT::where('counselling_by','0')->with('student')->get();
+            $pendingReport = StudentDMIT::where('report','0')->with('student')->get();
+            $pendingKeyPoint = StudentDMIT::where('key_point',0)->with('student')->get();
+        }
+      
         return view('reports.pending_counselling_student_list',compact('pendingCounselling','pendingReport','pendingKeyPoint'));
     }
     
     public function getPendingMaterialListStudentList()
     {
-        $students = Student::with('studentMaterial', 'courses.course')->get();    
-        $studentList = [];
-        foreach ($students as $student) {
-            if ($student->studentMaterial->isEmpty()) {
-                $studentList[] = $student;
+        if(Auth::user()->type == 1){
+            $user = Auth::user();
+            $trainers = Trainer::where('user_id',$user->id)->first();
+            $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
+            $students = Student::whereIn('id',$studentTrainer)->with('studentMaterial', 'courses.course')->get();    
+            $studentList = [];
+            foreach ($students as $student) {
+                if ($student->studentMaterial->isEmpty()) {
+                    $studentList[] = $student;
+                }
+            }
+        }
+        else{
+            $students = Student::with('studentMaterial', 'courses.course')->get();    
+            $studentList = [];
+            foreach ($students as $student) {
+                if ($student->studentMaterial->isEmpty()) {
+                    $studentList[] = $student;
+                }
             }
         }
 
@@ -95,13 +147,30 @@ class ReportController extends Controller
 
     public function getStudentStatusList()
     {
-        $studentStatus = StudentStatus::whereIn('status',['Hold','Cancel'])->where('is_active','0')->with('student.activeCourses.course')->get();
+        if(Auth::user()->type == 1){
+            $user = Auth::user();
+            $trainers = Trainer::where('user_id',$user->id)->first();
+            $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
+            $studentStatus = StudentStatus::whereIn('student_id',$studentTrainer)->whereIn('status',['Hold','Cancel'])->where('is_active','0')->with('student.activeCourses.course')->get();
+        }
+        else{
+            $studentStatus = StudentStatus::whereIn('status',['Hold','Cancel'])->where('is_active','0')->with('student.activeCourses.course')->get();
+        }
         return view('reports.student_status_list',compact('studentStatus'));
     }
 
     public function getWeeklyStudentListWithTrainer()
     {
-        $stuListWithTrainer = StudentStaffAssign::where('is_active','0')->with('trainer', 'student', 'slot')->get()->groupBy('trainer.name');
+        if(Auth::user()->type == 1){
+            $user = Auth::user();
+            $trainers = Trainer::where('user_id',$user->id)->first();
+            $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
+            $stuListWithTrainer = StudentStaffAssign::whereIn('student_id',$studentTrainer)->where('is_active','0')->with('trainer', 'student', 'slot')->get()->groupBy('trainer.name');
+        }
+        else{
+            $stuListWithTrainer = StudentStaffAssign::where('is_active','0')->with('trainer', 'student', 'slot')->get()->groupBy('trainer.name');
+        }
+
         $trainerData = [];
 
         foreach ($stuListWithTrainer as $trainerName => $trainerSlot) {
@@ -125,10 +194,16 @@ class ReportController extends Controller
 
     public function getTransferStudentTransferTrainerList()
     {
-        $studentList = StudentStaffAssign::where('is_active','0')->with(['student','trainer','slot'])->get();
-        $transferStudent = StudentStaffAssign::where('is_active','1')->with(['student','trainer','slot'])->get();
+        if(Auth::user()->type == 1){
+            $user = Auth::user();
+            $trainers = Trainer::where('user_id',$user->id)->first();
+            $studentList = StudentStaffAssign::where('is_active','0')->where('trainer_id',$trainers->id)->with(['student','trainer','slot'])->get();
+            $transferStudent = StudentStaffAssign::where('is_active','1')->with(['student','trainer','slot'])->get();
+        }
+        else{
+            $studentList = StudentStaffAssign::where('is_active','0')->with(['student','trainer','slot'])->get();
+            $transferStudent = StudentStaffAssign::where('is_active','1')->with(['student','trainer','slot'])->get();
+        }
         return view('reports.transfer_student_transfer_trainer_list',compact('studentList','transferStudent'));
     }
-
-
 }
