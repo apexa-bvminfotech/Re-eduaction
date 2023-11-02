@@ -28,7 +28,15 @@
                                         <li class="list-group-item">
                                             <b>Standard : </b> <a class="float-right">{{ $student->standard }}</a>
                                         </li>
-
+                                        <li class="list-group-item">
+                                            <b>Demo taken:</b> <a class="float-right">{{ $student->trainer->name ?? ''}}</a>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <b>Demo Counselling:</b> <a class="float-right">{{ $student->counselling_by ?? ''}}</a>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <b>Trainer Name :</b> <a class="float-right">{{ $student->studentTrainer->trainer->name ?? ''}}</a>
+                                        </li>
                                         <li class="list-group-item">
                                             <b>Courses : </b> 
                                             @foreach ($studentCourse as $course)
@@ -90,7 +98,7 @@
                                             </tr>
                                             <tr>
                                                 <th><b>Date Of Birth:</b></th>
-                                                <td>{{$student->dob}}</td>
+                                                <td>{{date('Y-m-d', strtotime($student->dob))}}</td>
                                             </tr>
                                             <tr>   
                                                 <th><b>Fees:</b></th>
@@ -100,17 +108,20 @@
                                                 <th><b>Extra Note:</b></th>
                                                 <td>{{$student->extra_note}}</td>
                                             </tr>
-                                            <tr>   
+                                            <tr>      
                                                 <th><b>Courses:</b></th>
                                                 <td>
-                                                    @foreach($studentCourse as $key => $course)
+                                                    @foreach($student->courses as $key => $course)
                                                         <b>{{ $key+1 }}:</b> {{ $course->course->course_name }}
                                                         <br>
-                                                        @foreach ($course->course->courseMaterial as $material)
-                                                            @if($material->studentCourseMaterial !== null)
-                                                                <b>Course Material :- </b> {{ $material->material_name }}
-                                                            @endif
-                                                        @endforeach    
+                                                    @endforeach
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Course Material :</th>
+                                                <td>
+                                                    @foreach ($student->studentMaterial as $key => $material)
+                                                        <b>{{ $key+1 }}:</b> {{ $material->material->material_name }}
                                                         <br>
                                                     @endforeach
                                                 </td>
@@ -179,12 +190,28 @@
                                                     <td>{{ $student->studentDmit->report_date ?? '' }}</td>
                                                 </tr>
                                                 <tr>
+                                                    <th><b>Key Point</b></th>
+                                                    <td>{!! $student->studentDmit->key_point ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th><b>Key Point Date</b></th>
+                                                    <td>{{ $student->studentDmit->key_point_date ?? '' }}</td>
+                                                </tr>
+                                                <tr>
                                                     <th><b>Counselling By</b></th>
                                                     <td>{!! $student->studentDmit->counselling_by ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
                                                 </tr>
                                                 <tr>
                                                     <th><b>Counselling by Date</b></th>
                                                     <td>{{ $student->studentDmit->counselling_date ?? '' }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th><b>Counselling By Trainer</b></th>
+                                                    <td>{!! $student->studentDmit->counselling_by_trainer ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th><b>Counselling By Trainer Name</b></th>
+                                                    <td>{{ $student->studentDmit->trainer->name ?? '' }}</td>
                                                 </tr>
                                             @endif
                                         </table>

@@ -18,7 +18,7 @@ class StudentDashboardController extends Controller
     public function index(){
         $user = Auth::user();
         $studentId = Student::where('user_id',$user->id)->first();
-        $students = Student::where('user_id',$user->id)->orderBy('id','DESC')->with('branch','trainer')->get();
+        $students = Student::where('user_id',$user->id)->orderBy('id','DESC')->with('branch','trainer','courses','studentTrainer.trainer')->get();
         $studentPtm = StudentPtm::where('student_id',$studentId->id)->with('trainer');
         $studentStaffAssign = StudentStaffAssign::orderBy('id','DESC')->where('student_id',$studentId->id)->with('slot','trainer');
         $studentProxyStaffAssign = StudentProxyStaffAssign::orderBy('id','DESC')->where('student_id',$studentId->id)->with('slot','trainer');

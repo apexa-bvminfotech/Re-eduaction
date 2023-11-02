@@ -47,6 +47,8 @@ Route::group(['middleware'=>['auth']],function (){
     Route::resource('student_ptm', 'StudentPTMController');
     Route::group(['prefix'=>'student'],function (){
         Route::get('/staff-slot/{id}','StudentsController@slot');
+        Route::get('/shift-regular-slot/{id}','SlotController@slot');
+        Route::get('/shift-proxy-slot/{id}','SlotController@proxySlot');
         Route::get('/trainer-proxy-slot/{id}','StudentsController@trainerProxySlot');
         Route::get('/trainer-regular-slot/{id}','StudentsController@trainerRegularSlot');
         Route::post('/assign-staff', 'StudentsController@assignStaff')->name('student.assignStaff');
@@ -87,9 +89,7 @@ Route::group(['middleware'=>['auth']],function (){
     Route::get('changeTrainerStatus','TrainerController@changeTrainerStatus');
     Route::get('changeBranchStatus','BranchController@changeBranchStatus');
 
-    Route::get('/shift-regular-slot/{id}','SlotController@slot');
     Route::post('/submit-shift-regular-slot', 'SlotController@shiftRegularSlot')->name('slot.shift-regular-slot');
-    Route::get('/shift-proxy-slot/{id}','SlotController@proxySlot');
     Route::get('get-trainer-data','SlotController@gettrainerdata')->name('get-trainer-data');
     Route::get('assign-proxy-slot','SlotController@assignProxySlot')->name('slot.assign-proxy-slot');
     Route::post('submit-proxy-slot','SlotController@submitProxySlot')->name('slot.submit-proxy-slot');

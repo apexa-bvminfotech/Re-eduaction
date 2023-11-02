@@ -129,27 +129,19 @@
                                 $regularSlot = [];
                             @endphp
                             @foreach($tarinerRegularLecture as $key=>$trainerLecture)
-                                @if(!in_array($trainerLecture->trainer_id,$regularSlot))
-                                    <tr>
-                                        <td>{{$trainerLecture->slot->slot_time}}</td>
-                                        <td>Regular</td>
-                                        @php
-                                            $regularSlot[] = $trainerLecture->trainer_id;
-                                        @endphp
-                                    </tr>
-                                @endif    
+                                <tr>
+                                    <td>{{$trainerLecture->slot->slot_time}}</td>
+                                    <td>Regular</td>
+                                    @php
+                                        $regularSlot[] = $trainerLecture->slot_id;
+                                    @endphp
+                                </tr>
                             @endforeach
-                            @php
-                                $proxySlot = [];
-                            @endphp
                             @foreach($tarinerProxyLecture as $key=>$trainerLecture)
-                                @if(!in_array($trainerLecture->trainer_id,$proxySlot))
+                                @if(!in_array($trainerLecture->slot_id,$regularSlot))
                                     <tr>
                                         <td>{{$trainerLecture->slot->slot_time}}</td>
                                         <td>Proxy</td>
-                                        @php
-                                            $proxySlot[] = $trainerLecture->trainer_id;
-                                        @endphp
                                     </tr>
                                 @endif   
                             @endforeach

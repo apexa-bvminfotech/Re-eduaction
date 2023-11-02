@@ -134,7 +134,7 @@
                         <ul class="nav nav-treeview">
                             @can('trainer-wise-student-Rtc-slot-report')
                                 <li class="nav-item">
-                                        <a href="{{ route('report.trainer-wise-student-rtc-regular-slot') }}" class="nav-link @if(Route::currentRouteName() == 'report.trainer-wise-student-rtc-slot')active  @endif">
+                                        <a href="{{ route('report.trainer-wise-student-rtc-regular-slot') }}" class="nav-link @if(Route::currentRouteName() == 'report.trainer-wise-student-rtc-regular-slot')active  @endif">
                                             <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
                                             <p>Trainer wise student/RTC/Regular slot</p>
                                         </a>
@@ -158,7 +158,7 @@
                             @endcan
                             @can('student-list-report')
                                 <li class="nav-item">
-                                    <a href="{{ route('report.student-list') }}" class="nav-link @if(Route::currentRouteName() == 'report.reports-student-list')active  @endif">
+                                    <a href="{{ route('report.student-list') }}" class="nav-link @if(Route::currentRouteName() == 'report.student-list')active  @endif">
                                         <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
                                         <p>Student List</p>
                                     </a>

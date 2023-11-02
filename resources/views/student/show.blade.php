@@ -18,9 +18,6 @@
                 </div>
             </div><!-- /.container-fluid -->
         </section>
-        @php
-            $tempStartDate = $startDate;
-        @endphp
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
@@ -758,7 +755,7 @@
                                     <button type="submit" class="btn btn-primary float-right mt-2 saveChanges">Save Changes</button>
                                 </form>
                             </div>
-                        </div>
+                        </div>  
                     </div>
                     <div id="result"></div>
                 </div>
@@ -805,7 +802,7 @@
                                                 <th style="width: 4rem" class="text-center">Total A :-</th>
                                                 <th style="width: 4rem" class="text-center">Total P :-</th>
                                                 @php
-                                                    $startdate = $startDate;
+                                                    $startDate = $currentMonthInHead;
                                                     $numberOfDays = $startDate->daysInMonth;
                                                 @endphp
                                                 @for ($day = 1; $day <= $numberOfDays; $day++)
@@ -821,12 +818,29 @@
                                         <tbody>
                                             @foreach ($studentAttendances as $key => $attendance)
                                                 @php
-                                                    $sDate = $startDate;
-                                                    $numberOfDays = $sDate->daysInMonth;
+                                                    $currentMDate = $currentMonthInBody;
+                                                    $numberOfDays = $currentMDate->daysInMonth;
                                                 @endphp
+                                                @php
+                                                    $totalPresentStudent = 0;
+                                                @endphp
+                                                @php
+                                                    $totalAbsentStudent = 0;
+                                                @endphp
+                                                @foreach($attendance as $atd)
+                                                    @if($atd->attendance_type == '0')
+                                                        @php
+                                                            $totalAbsentStudent++;
+                                                        @endphp
+                                                    @else
+                                                        @php
+                                                            $totalPresentStudent++;
+                                                        @endphp
+                                                    @endif
+                                                @endforeach
                                                 <tr>
                                                     <td style="width: 6rem" class="text-center">{{ $key }}</td>
-                                                    <td style="width: 4rem" class="text-center"> {{ $totalAbsentStudent }}</td>
+                                                    <td style="width: 4rem" class="text-center">{{ $totalAbsentStudent }}</td>
                                                     <td style="width: 4rem" class="text-center"> {{ $totalPresentStudent }}</td>
                                                     @for ($day = 1; $day <= $numberOfDays; $day++)
                                                         <td class="text-center">
@@ -834,7 +848,7 @@
                                                                 @php
                                                                     $attendanceDate = \Carbon\Carbon::parse($atd->attendance_date);
                                                                 @endphp
-                                                                @if ($attendanceDate->format('Y-m-d') == $tempStartDate->format('Y-m-d'))
+                                                                @if ($attendanceDate->format('Y-m-d') == $currentMDate->format('Y-m-d'))
                                                                     @if ($atd->attendance_type == '0')
                                                                         0
                                                                     @else
@@ -844,7 +858,7 @@
                                                             @endforeach
                                                         </td>
                                                         @php
-                                                            $tempStartDate->addDay();
+                                                            $currentMDate->addDay();
                                                         @endphp
                                                     @endfor
                                                 </tr>
