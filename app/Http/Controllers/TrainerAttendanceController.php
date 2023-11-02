@@ -95,19 +95,25 @@ class TrainerAttendanceController extends Controller
 
         $date = date('Y-m-d', strtotime($request->date));
 
-        foreach ($request->data as $key => $r) {
-            if(isset($r['status'])){
-                $data = [
-                    'trainer_id' => $r['trainer_id'],
-                    'slot_id' =>  $r['slot_id'],
-                    'status' => $r['status'],
-                    'absent_reason' => $r['absent_reason'],
-                    'slot_type' => $r['slot_type'],
-                    'date' =>  $date,
-                ];
-                TrainerAttendance::Create($data);
+        if(isset($request->data)){
+            foreach ($request->data as $key => $r) {
+                if(isset($r['status'])){
+                    $data = [
+                        'trainer_id' => $r['trainer_id'],
+                        'slot_id' =>  $r['slot_id'],
+                        'status' => $r['status'],
+                        'absent_reason' => $r['absent_reason'],
+                        'slot_type' => $r['slot_type'],
+                        'date' =>  $date,
+                    ];
+                    TrainerAttendance::Create($data);
+                }
             }
         }
+        else{
+            return redirect()->route('trainer_attendance.index')->with('error', 'Please fill your attendance with valid trainer !!');
+        }
+       
         return redirect()->route('trainer_attendance.index')
         ->with('success', 'trainer attendance add successfully');
     }
@@ -197,27 +203,31 @@ class TrainerAttendanceController extends Controller
             'date' => 'required',
         ]);
 
-        foreach($request->data as $key => $r){
-            if(isset($r['status'])){
-                if(!isset($r['trainer_attendance_id'])){
-                    TrainerAttendance::create([
-                        'trainer_id' => $r['trainer_id'],
-                        'slot_id' =>  $r['slot_id'],
-                        'status' => $r['status'],
-                        'slot_type' => $r['slot_type'],
-                        'date' =>  $date,
-                        'absent_reason' => isset($r['absent_reason']) ? $r['absent_reason'] : null,
-                    ]);
-                }
-                else{
-                    TrainerAttendance::where('id',$r['trainer_attendance_id'])->update([
-                        'absent_reason' => isset($r['absent_reason']) ? $r['absent_reason'] : null,
-                        'status' => $r['status'],
-                    ]);
+        if(isset($request->data)){
+            foreach($request->data as $key => $r){
+                if(isset($r['status'])){
+                    if(!isset($r['trainer_attendance_id'])){
+                        TrainerAttendance::create([
+                            'trainer_id' => $r['trainer_id'],
+                            'slot_id' =>  $r['slot_id'],
+                            'status' => $r['status'],
+                            'slot_type' => $r['slot_type'],
+                            'date' =>  $date,
+                            'absent_reason' => isset($r['absent_reason']) ? $r['absent_reason'] : null,
+                        ]);
+                    }
+                    else{
+                        TrainerAttendance::where('id',$r['trainer_attendance_id'])->update([
+                            'absent_reason' => isset($r['absent_reason']) ? $r['absent_reason'] : null,
+                            'status' => $r['status'],
+                        ]);
+                    }
                 }
             }
         }
-
+        else{
+            return redirect()->route('trainer_attendance.index')->with('error', 'Please fill your attendance with valid trainer !!');
+        }
         return redirect()->route('trainer_attendance.index')
             ->with('success', 'Updated successfully');
 

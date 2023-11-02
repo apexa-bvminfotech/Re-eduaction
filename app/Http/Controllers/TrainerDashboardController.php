@@ -15,11 +15,12 @@ class TrainerDashboardController extends Controller
     public function index(){
         $user = Auth::user();
         $trainers = Trainer::where('user_id',$user->id)->with('branch')->first();
-        $trainerStudent = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->whereDate('date', now()->format('Y-m-d'))->with('student.courses.course','slot','trainer')->get();
-        $tarinerRegularLecture = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->whereDate('date', now()->format('Y-m-d'))->with('slot')->get();
+        $trainerStudent = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->with('student.courses.course','slot','trainer')->get();
+        $tarinerRegularLecture = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->with('slot')->get();
         $tarinerProxyLecture = StudentProxyStaffAssign::where('trainer_id',$trainers->id)->whereDate('starting_date', now()->format('Y-m-d'))->whereDate('ending_date', now()->format('Y-m-d'))->with('slot')->get();
         $totalStudent = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->get();
-        $absentPresentStudent = StudentAttendance::where('trainer_id',$trainers->id)->whereDate('attendance_date', now()->format('Y-m-d'))->where('slot_type','Regular')->get();
+        $tStudent = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
+        $absentPresentStudent = StudentAttendance::where('trainer_id',$trainers->id)->whereIn('student_id',$tStudent)->whereDate('attendance_date', now()->format('Y-m-d'))->where('slot_type','Regular')->get();
         $fromDate = '';
         $toDate = '';
 

@@ -212,6 +212,7 @@
 @endsection
 @push('scripts')
     <script>
+    $(document).ready(function () {
         $(function () {
             dataTable =  $("#example1").DataTable({
                 "responsive": true, "lengthChange": false, "autoWidth": false,
@@ -292,23 +293,21 @@
 
         $(document).on('change', '.staff_id', function () {
             let staff = ($(this).val());
-            if (staff != "") {
-                $.ajax({
-                    url: '/shift-regular-slot/' + staff,
-                    type: 'GET',
-                    data: {
-                        "_token": "{{csrf_token()}}",
-                    },
-                    success: function (data) {
-                        let slotOption = '<option value="">------Select Slot-----</option>'
-                        $.each(data.slots, function (index, slot) {
-                            slotOption += '<option value="' + slot.id + '">' + slot.slot_time + '  (' + slot.rtc.rtc_name + ')</option>'
-                        })
-                        $('.slot').html("")
-                        $('.slot').html(slotOption)
-                    }
-                });
-            }
+            $.ajax({
+                url: 'student/shift-regular-slot/' + staff,
+                type: 'GET',
+                data: {
+                    "_token": "{{csrf_token()}}",
+                },
+                success: function (data) {
+                    let slotOption = '<option value="">------Select Slot-----</option>'
+                    $.each(data.slots, function (index, slot) {
+                        slotOption += '<option value="' + slot.id + '">' + slot.slot_time + '  (' + slot.rtc.rtc_name + ')</option>'
+                    })
+                    $('.slot').html("")
+                    $('.slot').html(slotOption)
+                }
+            });
         });
 
         $(document).on('click', '.btn-submit-regular-slot', function () {
@@ -331,28 +330,27 @@
 
         $(document).on('change', '.proxy_class', function () {
             let proxy = ($(this).val());
-            if (proxy != "") {
-                $.ajax({
-                    url: '/shift-proxy-slot/' + proxy,
-                    type: 'GET',
-                    data: {
-                        "_token": "{{csrf_token()}}",
-                    },
-                    success: function (data) {
-                        console.log("Slot display done.", data);
-                        let slotOption = '<option value="">------Select Slot-----</option>';
-                        $.each(data.slots, function (index, slot) {
-                            slotOption += '<option value="' + slot.id + '">' + slot.slot_time + '  (' + slot.rtc.rtc_name + ')</option>';
-                        })
-                        $('.slot').html("")
-                        $('.slot').html(slotOption)
-                    }
-                });
-            }
+            $.ajax({
+                url: 'student/shift-proxy-slot/' + proxy,
+                type: 'GET',
+                data: {
+                    "_token": "{{csrf_token()}}",
+                },
+                success: function (data) {
+                    console.log("Slot display done.", data);
+                    let slotOption = '<option value="">------Select Slot-----</option>';
+                    $.each(data.slots, function (index, slot) {
+                        slotOption += '<option value="' + slot.id + '">' + slot.slot_time + '  (' + slot.rtc.rtc_name + ')</option>';
+                    })
+                    $('.slot').html("")
+                    $('.slot').html(slotOption)
+                }
+            });
         });
         
         $(document).on('click', '.btn-submit-proxy-slot', function () {
             $('#shiftProxySlotForm').submit();
         });
+    });
     </script>
 @endpush

@@ -20,33 +20,46 @@
                         <div class="card">
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <table id="example1" class="table table-bordered table-striped">
+                                <table id="example1" class="table table-bordered">
                                     <thead>
                                     <tr>
                                         <th>Course Name</th>
                                         <th>Student Name</th>
-                                        <th>Meduim</th>
+                                        <th>Medium</th>
                                         <th>Standard</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($courseWiseStudentData as $courseName)
-                                            <tr>
-                                                <td rowspan="{{ count($courseName->studentCourse) }}">{{ $courseName->course_name }}</td>
+                                            @if ($courseName->studentCourse->isEmpty())
+                                                <tr>
+                                                    <td>{{ $courseName->course_name }}</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                </tr>
+                                            @else
                                                 @foreach ($courseName->studentCourse as $key => $student)
-                                                    @if ($key > 0)
-                                                        </tr><tr>
-                                                    @endif
-                                                    <td>{{ $student->student->name }} {{  $student->student->surname }}</td>
-                                                    <td>{{ $student->student->medium }}</td>
-                                                    <td>{{ $student->student->standard }}</td>
+                                                    <tr>
+                                                        @if ($key === 0)
+                                                            <td rowspan="{{ count($courseName->studentCourse) }}">{{ $courseName->course_name }}</td>
+                                                        @endif
+                                                        <td>
+                                                            {{ $student->student->name }} {{  $student->student->surname }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $student->student->medium }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $student->student->standard }}
+                                                        </td>
+                                                    </tr>
                                                 @endforeach
-                                            </tr>
+                                            @endif
                                         @endforeach
                                     </tbody>
                                 </table>
                             </div>
-                            <!-- /.card-body -->
                         </div>
                     </div>
                 </div>

@@ -24,6 +24,7 @@
                                             <td>Student Name</td>
                                             <td>From Trainer</td>
                                             <td>To Trainer</td>
+                                            <td>Date</td>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -40,6 +41,7 @@
                                                         {{ $student->trainer->name }}<br>
                                                         {{ $student->slot->slot_time }}
                                                     </td>
+                                                    <td>{{ date('Y-m-d',strtotime($student->date)) }}</td>
                                                 @endif
                                             </tr>         
                                             @endforeach

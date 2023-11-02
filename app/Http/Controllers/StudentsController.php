@@ -68,8 +68,9 @@ class StudentsController extends Controller
             $slots = Slot::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'desc')->get();
             $trainers = Trainer::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'desc')->get();
             $students = Student::
-                select('students.surname', 'students.name','students.standard','students.medium','students.course_id','students.id','students.father_contact_no')
+                select('students.surname', 'students.name','students.standard','students.medium','students.course_id','students.id','students.mother_contact_no','branches.name as branch_name')
                 ->with('courses')
+                ->join('branches', 'branches.id', 'students.branch_id')
                 ->join('student_staff_assigns', 'student_staff_assigns.student_id', 'students.id')
                 ->join('trainers','trainers.id', 'student_staff_assigns.trainer_id')
                 ->where(['trainers.user_id' => Auth::user()->id,'student_staff_assigns.is_active' => 0])
@@ -239,9 +240,9 @@ class StudentsController extends Controller
         $studentAttendance = StudentAttendance::orderBy('id')->where('student_id', $student->id)->with('slot','trainer')->get();
         $student_leave_show =  StudentApproveLeave::orderBy('id')->where('student_id', $student->id)->get();
 
-        $currentMonthName = Carbon::now()->format('F');
         $numberOfDaysInCurrentMonth = Carbon::now()->daysInMonth;
-
+        $currentMonthInHead = Carbon::now()->startOfMonth();
+        $currentMonthInBody = Carbon::now()->startOfMonth();
         $fromDate = '';
         $toDate = '';
 
@@ -252,17 +253,20 @@ class StudentsController extends Controller
             $toDate = $_GET['toDate'];
         }
 
-        $qurey = StudentAttendance::join('slots','students_attendance.slot_id','slots.id')->where('student_id', $student->id);
+        $query = StudentAttendance::join('student_staff_assigns','students_attendance.student_id','student_staff_assigns.student_id')
+                    ->join('slots', 'student_staff_assigns.slot_id', 'slots.id')
+                    ->where('students_attendance.student_id', $student->id)
+                    ->where('student_staff_assigns.is_active', 0);
 
         if($fromDate != '' && $fromDate != null){
-            $qurey->whereDate('attendance_date', '>=', date('Y-m-d', strtotime($fromDate)));
+            $query->whereDate('attendance_date', '>=', date('Y-m-d', strtotime($fromDate)));
         }
 
         if($toDate != '' && $toDate != null){
-            $qurey->whereDate('attendance_date', '<=',  date('Y-m-d', strtotime($toDate)));
+            $query->whereDate('attendance_date', '<=',  date('Y-m-d', strtotime($toDate)));
         }
 
-        $totalAbsentPresentStudents = $qurey->get();
+        $totalAbsentPresentStudents = $query->get();
         $allAbsentStudent = 0;
         $allPresentStudent = 0;
         foreach($totalAbsentPresentStudents as $key => $atd){
@@ -274,23 +278,23 @@ class StudentsController extends Controller
             }
         }
 
-        $studentAttendances = $qurey->whereMonth('students_attendance.attendance_date', Carbon::now()->month)->get()->groupby('slot_time');
-        $totalAbsentStudent = 0;
-        $totalPresentStudent = 0;
-        foreach($studentAttendances as $key => $attendance){
-            foreach($attendance as $atd){
-                if($atd->attendance_type == '0'){
-                    $totalAbsentStudent++;
-                }
-                else{
-                    $totalPresentStudent++;
-                }
-            }
+        if($fromDate){
+            $currentMonthInHead = Carbon::parse($fromDate)->startOfMonth();
+            $currentMonthInBody = Carbon::parse($fromDate)->startOfMonth();
+            $numberOfDaysInCurrentMonth = $currentMonthInBody->daysInMonth;
+            $studentAttendances = $query->whereMonth('students_attendance.attendance_date', $currentMonthInHead->month)
+                ->get()
+                ->groupBy('slot_time');
+        }
+        else{
+            $studentAttendances = $query->whereMonth('students_attendance.attendance_date', Carbon::now()->month)->get()->groupby('slot_time');
         }
 
+        $currentMonthName = !empty($fromDate) ? Carbon::parse($fromDate)->format('F') : Carbon::now()->format('F');
+
         return view('student.show', compact('student', 'assignStaff', 'studentAttendance', 'proxy_staff_details','studentCompleteCourses','approvedCourse',
-            'student_leave_show','student_appreciation','fromDate','toDate', 'trainer','studentAttendances','currentMonthName','numberOfDaysInCurrentMonth','totalAbsentStudent',
-            'totalPresentStudent','allAbsentStudent','allPresentStudent'));
+            'student_leave_show','student_appreciation','fromDate','toDate', 'trainer','studentAttendances','currentMonthName','numberOfDaysInCurrentMonth',
+            'allAbsentStudent','allPresentStudent','currentMonthInHead','currentMonthInBody'));
     }
 
     public function edit($id)
@@ -367,6 +371,7 @@ class StudentsController extends Controller
             'type' => 2,
         ]);
 
+
         $upload_analysis = $student->upload_analysis;
         if ($request->hasFile('upload_analysis')) {
             if ($upload_analysis) {
@@ -431,14 +436,18 @@ class StudentsController extends Controller
             }
         }
 
+        $courseMaterial = StudentCourseMaterial::where('student_id', $student->id)->delete();
         if($request->course_material){
-            $courseMaterial = StudentCourseMaterial::where('student_id', $student->id)->delete();
             foreach($request->course_material as $material_id){
                 StudentCourseMaterial::create([
                     'student_id' => $student->id,
                     'course_material_id' => $material_id,
                 ]);
             }
+        }
+
+        if($request->not_aaplicable_for_course_material){
+            $courseMaterial = StudentCourseMaterial::where('student_id', $student->id)->delete();
         }
 
         $getDmit = $student->studentDmit;
@@ -461,6 +470,23 @@ class StudentsController extends Controller
             'stf_self_development' => $request->stf_self_development,
             'stf_others' => $request->stf_others,
         ]);
+
+        if($request->not_aaplicable_for_dmit){
+            $getDmit = $student->studentDmit;
+            $getDmit->update([
+                'student_id' => $student->id,
+                'fp' =>  0,
+                'fp_date' => null,
+                'report' => 0,
+                'report_date' => null,
+                'key_point' =>  0,
+                'key_point_date' => null,
+                'counselling_by' => 0,
+                'counselling_date' => null,
+                'counselling_by_trainer' =>  0,
+                'counselling_by_trainer_name' => 0,
+            ]);
+        }
 
         return redirect()->route('student.index')->with('success', 'Student updated successfully');
     }
