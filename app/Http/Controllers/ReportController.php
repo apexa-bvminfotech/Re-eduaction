@@ -41,9 +41,17 @@ class ReportController extends Controller
         if(isset($_GET['endDate'])){
             $data['endDate'] = $_GET['endDate'];
         }
-        
-        $qurey = Student::from('students');
 
+        if(Auth::user()->type == 1){
+            $user = Auth::user();
+            $trainers = Trainer::where('user_id',$user->id)->first();
+            $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
+            $qurey = Student::whereIn('id',$studentTrainer)->from('students');
+        }
+        else{
+            $qurey = Student::from('students');
+        }
+        
         if($data['startDate'] != '' && $data['startDate'] != null){
             $qurey->whereDate('registration_date', '>=', date('Y-m-d', strtotime($data['startDate'])));
         }
