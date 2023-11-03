@@ -137,7 +137,7 @@
                 $.ajax({
                     type: "GET",
                     dataType: "json",
-                    url: '/changeRtcStatus',
+                    url: 'change-status/changeRtcStatus',
                     data: {'status': status, 'rtc_id': rtc_id},
                     success: function (data) {
                         toastr.options =

@@ -35,9 +35,9 @@ class SlotController extends Controller
      */
     public function index()
     {
-        $slot = Slot::orderBy('id', 'DESC')->get();
+        $slot = Slot::orderBy('id', 'DESC')->where('is_active','0')->get();
         if(Auth::user()->type == 1){
-            $slot = Slot::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'DESC')->get();
+            $slot = Slot::where('branch_id', Auth::user()->branch_id)->where('is_active','0')->orderBy('id', 'DESC')->get();
         }
         // $trainerAttendances = TrainerAttendance::whereDate('date', now()->format('Y-m-d'))->where('status','A')->get();
         $studentStaffAssign = StudentStaffAssign::where('is_active','0')->get();
@@ -127,8 +127,8 @@ class SlotController extends Controller
         if(Auth::user()->type == 1){
             $branch = Branch::where('id', Auth::user()->branch_id)->orderBy('id', 'DESC')->get();
         }
-        $trainer = Trainer::where('branch_id', $slot->branch_id)->orderBy('id', 'DESC')->get();
-        $rtc = Rtc::where('branch_id', $slot->branch_id)->orderBy('id', 'DESC')->get();
+        $trainer = Trainer::where('branch_id', $slot->branch_id)->where('is_active',0)->orderBy('id', 'DESC')->get();
+        $rtc = Rtc::where('branch_id', $slot->branch_id)->where('is_active',0)->orderBy('id', 'DESC')->get();
         return view('slot.edit', compact('slot', 'trainer', 'rtc', 'branch'));
     }
 
@@ -214,9 +214,9 @@ class SlotController extends Controller
         }
     }
 
-    public function slot($id)
+    public function slot($id, $oldSlotId)
     {
-        $slots = Slot::where('trainer_id', $id)
+        $slots = Slot::where('trainer_id', $id)->where('id','!=',$oldSlotId)
             ->where('is_active', 0)
             ->with('rtc')
             ->get();

@@ -26,7 +26,7 @@ class Trainer extends Model
         return $this->hasMany(StudentProxyStaffAssign::class);
     }
     public function slots(){
-        return $this->hasMany(Slot::class);
+        return $this->hasMany(Slot::class)->where('is_active', 0);
     }
     public function trainerAttendance(){
         return $this->hasMany(TrainerAttendance::class)->whereDate('date', now()->format('Y-m-d'));

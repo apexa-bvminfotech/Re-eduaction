@@ -29,9 +29,9 @@ class RtcController extends Controller
      */
     public function index()
     {
-        $rtc = Rtc::orderBy('id','DESC')->get();
+        $rtc = Rtc::orderBy('id','DESC')->where('is_active',0)->get();
         if(Auth::user()->type == 1){
-            $rtc = Rtc::where('branch_id', Auth::user()->branch_id)->orderBy('id','DESC')->get();
+            $rtc = Rtc::where('branch_id', Auth::user()->branch_id)->where('is_active',0)->orderBy('id','DESC')->get();
         }
         return view('rtc.index',compact('rtc'))->with('i');
     }

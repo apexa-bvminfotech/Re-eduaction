@@ -139,7 +139,7 @@
                 var user_id = $(this).data('id');
                 $.ajax({
                     type: "GET",
-                    url: '/changeUserStatus',
+                    url: 'change-status/changeUserStatus',
                     data: {'status': status, 'user_id': user_id},
                     success: function (data) {
                         toastr.options =

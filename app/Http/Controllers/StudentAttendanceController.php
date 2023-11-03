@@ -35,7 +35,7 @@ class StudentAttendanceController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $trainerId = Trainer::where('user_id',Auth::user()->id)->pluck('id');
+        $trainerId = Trainer::where('user_id',Auth::user()->id)->where('is_active',0)->pluck('id');
         if(Auth::user()->type == 0) {
             $studenAttendance = DB::table("students_attendance")
                 ->select('students_attendance.attendance_date', DB::raw('count(IF(attendance_type = 1, 1, NULL)) as present'),
@@ -67,7 +67,7 @@ class StudentAttendanceController extends Controller
     {
         $user = Auth::user();
         if(Auth::user()->type == 1){
-            $trainer = Trainer::where('user_id',$user->id)->orderBy('id', 'DESC')->get();
+            $trainer = Trainer::where('user_id',$user->id)->where('is_active',0)->orderBy('id', 'DESC')->get();
             $existingProxyStaff = StudentProxyStaffAssign::whereDate('starting_date', '<=', today())
                 ->whereDate('ending_date', '>=', today())
                 ->get();
@@ -81,7 +81,7 @@ class StudentAttendanceController extends Controller
                 ->get()->groupBy('trainer.name');
         }
         else{
-            $trainer = Trainer::orderBy('id', 'DESC')->get();
+            $trainer = Trainer::orderBy('id', 'DESC')->where('is_active',0)->get();
             $existingProxyStaff = StudentProxyStaffAssign::whereDate('starting_date', '<=', today())
                 ->whereDate('ending_date', '>=', today())
                 ->get();

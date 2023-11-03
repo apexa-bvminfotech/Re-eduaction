@@ -15,7 +15,7 @@ class Branch extends Model
     ];
 
     public function trainer(){
-        return $this->hasMany(Trainer::class);
+        return $this->hasMany(Trainer::class)->where('is_active',0);
     }
     public function student(){
         return $this->hasMany(Student::class);

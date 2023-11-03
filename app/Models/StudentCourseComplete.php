@@ -12,7 +12,7 @@ class StudentCourseComplete extends Model
     protected $guarded = ['id'];
 
     public function trainer(){
-        return $this->belongsTo(Trainer::class);
+        return $this->belongsTo(Trainer::class)->where('is_active',0);
     }
     public function student(){
         return $this->belongsTo(Student::class);

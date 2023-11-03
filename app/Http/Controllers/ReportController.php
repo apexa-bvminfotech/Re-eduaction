@@ -26,7 +26,14 @@ class ReportController extends Controller
     }
 
     public function getCourseWiseStudentList(){
-        $courseWiseStudentData = Course::with('studentCourse.student')->get();
+        if(Auth::user()->type == 1){
+            $user = Auth::user();
+            $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
+            $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
+            $courseWiseStudentData = StudentCourse::whereIn('student_id',$studentTrainer)->with('student','course')->get()->groupBy('course.course_name');
+        }else{
+            $courseWiseStudentData = StudentCourse::with('student','course')->get()->groupBy('course.course_name');
+        }
         return view('reports.course_wise_student_list',compact('courseWiseStudentData'));
     }
 
@@ -44,7 +51,7 @@ class ReportController extends Controller
 
         if(Auth::user()->type == 1){
             $user = Auth::user();
-            $trainers = Trainer::where('user_id',$user->id)->first();
+            $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
             $qurey = Student::whereIn('id',$studentTrainer)->from('students');
         }
@@ -68,7 +75,7 @@ class ReportController extends Controller
     {
         if(Auth::user()->type == 1){
             $user = Auth::user();
-            $trainers = Trainer::where('user_id',$user->id)->first();
+            $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
             $pendingApprecitionStu = StudentCourse::whereIn('student_id',$studentTrainer)->with('student','course','appreciation')->where('end_date','!=',null)->where('appreciation_given_date',null)->get();
         }
@@ -83,7 +90,7 @@ class ReportController extends Controller
     {
         if(Auth::user()->type == 1){
             $user = Auth::user();
-            $trainers = Trainer::where('user_id',$user->id)->first();
+            $trainers = Trainer::where('user_id',$user->id)->where('is_active','0')->first();
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
             $pendingCourseStu = StudentCourse::whereIn('student_id',$studentTrainer)->with('student','course')->where('start_date',null)->get();
         }
@@ -97,7 +104,7 @@ class ReportController extends Controller
     {
         if(Auth::user()->type == 1){
             $user = Auth::user();
-            $trainers = Trainer::where('user_id',$user->id)->first();
+            $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
             $studentCourse = StudentCourse::whereIn('student_id',$studentTrainer)->with('student','course')->get();
         }
@@ -111,7 +118,7 @@ class ReportController extends Controller
     {
         if(Auth::user()->type == 1){
             $user = Auth::user();
-            $trainers = Trainer::where('user_id',$user->id)->first();
+            $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
             $pendingCounselling = StudentDMIT::whereIn('student_id',$studentTrainer)->where('counselling_by','0')->with('student')->get();
             $pendingReport = StudentDMIT::whereIn('student_id',$studentTrainer)->where('report','0')->with('student')->get();
@@ -130,7 +137,7 @@ class ReportController extends Controller
     {
         if(Auth::user()->type == 1){
             $user = Auth::user();
-            $trainers = Trainer::where('user_id',$user->id)->first();
+            $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
             $students = Student::whereIn('id',$studentTrainer)->with('studentMaterial', 'courses.course')->get();    
             $studentList = [];
@@ -157,7 +164,7 @@ class ReportController extends Controller
     {
         if(Auth::user()->type == 1){
             $user = Auth::user();
-            $trainers = Trainer::where('user_id',$user->id)->first();
+            $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
             $studentStatus = StudentStatus::whereIn('student_id',$studentTrainer)->whereIn('status',['Hold','Cancel'])->where('is_active','0')->with('student.activeCourses.course')->get();
         }
@@ -171,7 +178,7 @@ class ReportController extends Controller
     {
         if(Auth::user()->type == 1){
             $user = Auth::user();
-            $trainers = Trainer::where('user_id',$user->id)->first();
+            $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
             $stuListWithTrainer = StudentStaffAssign::whereIn('student_id',$studentTrainer)->where('is_active','0')->with('trainer', 'student', 'slot')->get()->groupBy('trainer.name');
         }
@@ -204,7 +211,7 @@ class ReportController extends Controller
     {
         if(Auth::user()->type == 1){
             $user = Auth::user();
-            $trainers = Trainer::where('user_id',$user->id)->first();
+            $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
             $studentList = StudentStaffAssign::where('is_active','0')->where('trainer_id',$trainers->id)->with(['student','trainer','slot'])->get();
             $transferStudent = StudentStaffAssign::where('is_active','1')->with(['student','trainer','slot'])->get();
         }

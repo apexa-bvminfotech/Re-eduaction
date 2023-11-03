@@ -12,12 +12,12 @@ class TrainerAttendance extends Model
     
     public function trainer()
     {
-        return $this->belongsTo(Trainer::class);
+        return $this->belongsTo(Trainer::class)->where('is_active',0);
     }
 
     public function slots()
     {
-        return $this->belongsTo(Slot::class,'slot_id','id');
+        return $this->belongsTo(Slot::class,'slot_id','id')->where('is_active', 0);
     }
 }
 

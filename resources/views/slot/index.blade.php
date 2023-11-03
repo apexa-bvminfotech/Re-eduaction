@@ -54,8 +54,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{-- {{ dd( $slot) }} --}}
-
                                         @foreach ($slot as $key => $s)
                                             <tr>
                                                 <td>{{ $s->id }}</td>
@@ -158,20 +156,11 @@
                                                         <option value="0">------Select Trainer-----</option>
                                                         @foreach($trainers as $key =>$trainer)
                                                             @if($trainer->is_active == 0)
-                                                                <option
-                                                                    value="{{$trainer->id}}">{{$trainer->name}}</option>
+                                                            <option value="{{$trainer->id}}" data-trainer-id="{{$trainer->id}}">{{$trainer->name}}</option>
                                                             @endif
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                {{-- <div id="slotContainer" style="display: none;">
-                                                    <div class="col-md-12 mb-1">
-                                                        <div class="form-group">
-                                                            <label for="slot_time">Slot:</label>
-                                                            <input type="text" class="form-control" name="slot_time" class="slot_time" id="slot_time" value="">
-                                                        </div>
-                                                    </div>
-                                                </div> --}}
                                                 <div class="col-md-12 mb-1">
                                                     <label for="name">Slot: </label>
                                                     <select class="form-control slot select2" name="slot_id" required>
@@ -212,7 +201,9 @@
 @endsection
 @push('scripts')
     <script>
+    var allTrainers = [];
     $(document).ready(function () {
+        allTrainers = $('.proxy_class.select2.trainer_id option').clone();
         $(function () {
             dataTable =  $("#example1").DataTable({
                 "responsive": true, "lengthChange": false, "autoWidth": false,
@@ -260,7 +251,7 @@
                 var slot_id = $(this).data('id');
                 $.ajax({
                     type: "GET",
-                    url: '/changeSlotStatus',
+                    url: 'change-status/changeSlotStatus',
                     data: {'status': status, 'slot_id': slot_id},
                     success: function (data) {
                         toastr.options =
@@ -293,8 +284,9 @@
 
         $(document).on('change', '.staff_id', function () {
             let staff = ($(this).val());
+            let oldSlotId = $('.old_regular_slot_id').val();
             $.ajax({
-                url: 'student/shift-regular-slot/' + staff,
+                url: 'student/shift-regular-slot/' + staff + '/' + oldSlotId,
                 type: 'GET',
                 data: {
                     "_token": "{{csrf_token()}}",
@@ -316,16 +308,15 @@
 
         //assign proxy staff 
         $(document).on('click', '.btn-shift-proxy-slot', function () {
+            let oldProxySlotId = $(this).data('old-proxy-slot-id');
+            let oldProxyTrainerId = $(this).data('old-proxy-trainer-id');
+            $('.old_proxy_slot_id').val(oldProxySlotId);
+            $('.old_proxy_trainer_id').val(oldProxyTrainerId);
+            $('.proxy_class.select2.trainer_id').html(allTrainers);
+            $('.proxy_class.select2.trainer_id option[data-trainer-id="' + oldProxyTrainerId + '"]').remove();
             $('#verticalModal1').modal('toggle');
             $('.proxy_class').val($('.proxy_class').children().eq(0).val());
             $('.slot').html('<option value="">------Select Slot-----</option>')
-
-            let oldProxySlotId = $(this).data('old-proxy-slot-id');
-            let oldProxyTrainerId = $(this).data('old-proxy-trainer-id');
-        
-            $('.old_proxy_slot_id').val(oldProxySlotId);
-            $('.old_proxy_trainer_id').val(oldProxyTrainerId);
-
         });
 
         $(document).on('change', '.proxy_class', function () {

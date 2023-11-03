@@ -21,9 +21,9 @@ class StudentAttendance extends Model
         return $this->belongsTo(StudentStaffAssign::class);
     }
     public function trainer(){
-        return $this->belongsTo(Trainer::class);
+        return $this->belongsTo(Trainer::class)->where('is_active',0);
     }
     public function slot(){
-        return $this->belongsTo(Slot::class,'slot_id','id');
+        return $this->belongsTo(Slot::class,'slot_id','id')->where('is_active', 0);
     }
 }

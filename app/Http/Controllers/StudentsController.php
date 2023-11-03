@@ -65,8 +65,8 @@ class StudentsController extends Controller
                     ->orderBy('students.id')->get();
 
         if(Auth::user()->type == 1) {
-            $slots = Slot::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'desc')->get();
-            $trainers = Trainer::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'desc')->get();
+            $slots = Slot::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'desc')->where('is_active','0')->get();
+            $trainers = Trainer::where('branch_id', Auth::user()->branch_id)->where('is_active',0)->orderBy('id', 'desc')->get();
             $students = Student::
                 select('students.surname', 'students.name','students.standard','students.medium','students.course_id','students.id','students.mother_contact_no','branches.name as branch_name')
                 ->with('courses')
@@ -253,20 +253,17 @@ class StudentsController extends Controller
             $toDate = $_GET['toDate'];
         }
 
-        $query = StudentAttendance::join('student_staff_assigns','students_attendance.student_id','student_staff_assigns.student_id')
-                    ->join('slots', 'student_staff_assigns.slot_id', 'slots.id')
-                    ->where('students_attendance.student_id', $student->id)
-                    ->where('student_staff_assigns.is_active', 0);
+        $qurey = StudentAttendance::join('slots','students_attendance.slot_id','slots.id')->where('student_id', $student->id);
 
         if($fromDate != '' && $fromDate != null){
-            $query->whereDate('attendance_date', '>=', date('Y-m-d', strtotime($fromDate)));
+            $qurey->whereDate('attendance_date', '>=', date('Y-m-d', strtotime($fromDate)));
         }
 
         if($toDate != '' && $toDate != null){
-            $query->whereDate('attendance_date', '<=',  date('Y-m-d', strtotime($toDate)));
+            $qurey->whereDate('attendance_date', '<=',  date('Y-m-d', strtotime($toDate)));
         }
 
-        $totalAbsentPresentStudents = $query->get();
+        $totalAbsentPresentStudents = $qurey->get();
         $allAbsentStudent = 0;
         $allPresentStudent = 0;
         foreach($totalAbsentPresentStudents as $key => $atd){
@@ -282,12 +279,12 @@ class StudentsController extends Controller
             $currentMonthInHead = Carbon::parse($fromDate)->startOfMonth();
             $currentMonthInBody = Carbon::parse($fromDate)->startOfMonth();
             $numberOfDaysInCurrentMonth = $currentMonthInBody->daysInMonth;
-            $studentAttendances = $query->whereMonth('students_attendance.attendance_date', $currentMonthInHead->month)
+            $studentAttendances = $qurey->whereMonth('students_attendance.attendance_date', $currentMonthInHead->month)
                 ->get()
                 ->groupBy('slot_time');
         }
         else{
-            $studentAttendances = $query->whereMonth('students_attendance.attendance_date', Carbon::now()->month)->get()->groupby('slot_time');
+            $studentAttendances = $qurey->whereMonth('students_attendance.attendance_date', Carbon::now()->month)->get()->groupby('slot_time');
         }
 
         $currentMonthName = !empty($fromDate) ? Carbon::parse($fromDate)->format('F') : Carbon::now()->format('F');
