@@ -170,7 +170,7 @@
                 var trainer_id = $(this).data('id');
                 $.ajax({
                     type: "GET",
-                    url: '/changeTrainerStatus',
+                    url: 'change-status/changeTrainerStatus',
                     data: {'status': status, 'trainer_id': trainer_id},
                     success: function (data) {
                         toastr.options =

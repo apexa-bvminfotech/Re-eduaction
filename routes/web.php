@@ -83,11 +83,14 @@ Route::group(['middleware'=>['auth']],function (){
     Route::resource('user','UserController');
     Route::resource('branch','BranchController');
     Route::resource('course_material','CourseWiseMaterialController');
-    Route::get('changeRtcStatus', 'RtcController@changeRtcStatus');
-    Route::get('changeSlotStatus', 'SlotController@changeSlotStatus');
-    Route::get('changeUserStatus','UserController@changeUserStatus');
-    Route::get('changeTrainerStatus','TrainerController@changeTrainerStatus');
-    Route::get('changeBranchStatus','BranchController@changeBranchStatus');
+
+    Route::group(['prefix' => 'change-status'], function(){
+        Route::get('/changeRtcStatus', 'RtcController@changeRtcStatus');
+        Route::get('/changeSlotStatus', 'SlotController@changeSlotStatus');
+        Route::get('/changeUserStatus','UserController@changeUserStatus');
+        Route::get('/changeTrainerStatus','TrainerController@changeTrainerStatus');
+        Route::get('/changeBranchStatus','BranchController@changeBranchStatus');
+    });
 
     Route::post('/submit-shift-regular-slot', 'SlotController@shiftRegularSlot')->name('slot.shift-regular-slot');
     Route::get('get-trainer-data','SlotController@gettrainerdata')->name('get-trainer-data');

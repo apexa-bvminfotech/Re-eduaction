@@ -17,11 +17,11 @@ class StudentStaffAssign extends Model
     }
     public function trainer()
     {
-        return $this->belongsTo(Trainer::class);
+        return $this->belongsTo(Trainer::class)->where('is_active',0);
     }
     public function slot()
     {
-        return $this->belongsTo(Slot::class);
+        return $this->belongsTo(Slot::class)->where('is_active', 0);
     }
     public function studentStaff()
     {

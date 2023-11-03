@@ -18,7 +18,7 @@ class AdminDashboardController extends Controller
         $studentStatus = StudentStatus::select('student_status.id','student_status.status','students.branch_id','students.registration_date')
             ->join('students', 'students.id', 'student_status.student_id')
             ->join('branches', 'branches.id', 'students.branch_id')
-            ->whereMonth('students.registration_date', '=', now()->month)
+            ->whereMonth('students.registration_date', '=', Carbon::now()->month)
             ->where('student_status.is_active','0')
             ->where('students.branch_id',Auth::user()->branch_id)
             ->get();

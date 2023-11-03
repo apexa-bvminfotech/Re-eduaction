@@ -65,8 +65,8 @@ class StudentsController extends Controller
                     ->orderBy('students.id')->get();
 
         if(Auth::user()->type == 1) {
-            $slots = Slot::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'desc')->get();
-            $trainers = Trainer::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'desc')->get();
+            $slots = Slot::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'desc')->where('is_active','0')->get();
+            $trainers = Trainer::where('branch_id', Auth::user()->branch_id)->where('is_active',0)->orderBy('id', 'desc')->get();
             $students = Student::
                 select('students.surname', 'students.name','students.standard','students.medium','students.course_id','students.id','students.mother_contact_no','branches.name as branch_name')
                 ->with('courses')

@@ -260,7 +260,7 @@
                 var slot_id = $(this).data('id');
                 $.ajax({
                     type: "GET",
-                    url: '/changeSlotStatus',
+                    url: 'change-status/changeSlotStatus',
                     data: {'status': status, 'slot_id': slot_id},
                     success: function (data) {
                         toastr.options =

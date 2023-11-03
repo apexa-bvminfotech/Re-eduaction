@@ -22,6 +22,6 @@ class Rtc extends Model
         return $this->belongsTo(Branch::class,'branch_id','id');
     }
     public function slot(){
-        return $this->hasMany(Slot::class);
+        return $this->hasMany(Slot::class)->where('is_active', 0);
     }
 }

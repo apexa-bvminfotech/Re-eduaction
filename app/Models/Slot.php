@@ -21,10 +21,10 @@ class Slot extends Model
     ];
 
     public function rtc(){
-        return $this->belongsTo(Rtc::class);
+        return $this->belongsTo(Rtc::class)->where('is_active',0);
     }
     public function trainer(){
-        return $this->belongsTo(Trainer::class);
+        return $this->belongsTo(Trainer::class)->where('is_active',0);
     }
     public function branch(){
         return $this->belongsTo(Branch::class);

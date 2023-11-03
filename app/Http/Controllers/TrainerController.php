@@ -160,7 +160,7 @@ class TrainerController extends Controller
     {
         if (json_decode($trainer->course_id) != null){
             $trainerId = $trainer->id;
-            $tarinerSlot = Slot::where('trainer_id',$trainerId)->with('rtc','slotList.student')->get();
+            $tarinerSlot = Slot::where('trainer_id',$trainerId)->where('is_active', 0)->with('rtc','slotList.student')->get();
             $courseIds = json_decode($trainer->course_id);
             $courseNames = Course::whereIn('id', $courseIds)->pluck('course_name');
 
@@ -190,7 +190,7 @@ class TrainerController extends Controller
         }
         else{
             $trainerId = $trainer->id;
-            $tarinerSlot = Slot::where('trainer_id',$trainerId)->with('rtc','slotList.student')->get();
+            $tarinerSlot = Slot::where('trainer_id',$trainerId)->where('is_active', 0)->with('rtc','slotList.student')->get();
 
             $fromDate = '';
             $toDate = '';

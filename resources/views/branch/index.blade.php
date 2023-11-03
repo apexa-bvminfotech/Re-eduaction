@@ -135,7 +135,7 @@
                 $.ajax({
                     type: "GET",
 
-                    url: '/changeBranchStatus',
+                    url: 'change-status/changeBranchStatus',
                     data: {'status': status, 'branch_id': branch_id},
                     success: function (data) {
                         toastr.options =

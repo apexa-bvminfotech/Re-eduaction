@@ -30,7 +30,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($courseWiseStudentData as $courseName)
+                                        @foreach ($courseWiseStudentData as $key => $courseName)
                                             @if ($courseName->studentCourse->isEmpty())
                                                 <tr>
                                                     <td>{{ $courseName->course_name }}</td>

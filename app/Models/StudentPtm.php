@@ -12,6 +12,6 @@ class StudentPtm extends Model
     protected $table = 'student_ptm_report';
 
     public function trainer(){
-        return $this->belongsTo(Trainer::class);
+        return $this->belongsTo(Trainer::class)->where('is_active',0);
     }
 }

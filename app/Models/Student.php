@@ -22,7 +22,7 @@ class Student extends Model
         return $this->belongsTo(User::class);
     }
     public function trainer(){
-        return $this->belongsTo(Trainer::class,'demo_trainer_id');
+        return $this->belongsTo(Trainer::class,'demo_trainer_id')->where('is_active',0);
     }
     public function attendance()
     {
