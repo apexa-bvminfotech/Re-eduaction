@@ -47,7 +47,7 @@ Route::group(['middleware'=>['auth']],function (){
     Route::resource('student_ptm', 'StudentPTMController');
     Route::group(['prefix'=>'student'],function (){
         Route::get('/staff-slot/{id}','StudentsController@slot');
-        Route::get('/shift-regular-slot/{id}','SlotController@slot');
+        Route::get('/shift-regular-slot/{id}/{oldSlotId}','SlotController@slot');
         Route::get('/shift-proxy-slot/{id}','SlotController@proxySlot');
         Route::get('/trainer-proxy-slot/{id}','StudentsController@trainerProxySlot');
         Route::get('/trainer-regular-slot/{id}','StudentsController@trainerRegularSlot');

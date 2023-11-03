@@ -818,7 +818,7 @@
                                         <tbody>
                                             @foreach ($studentAttendances as $key => $attendance)
                                                 @php
-                                                    $currentMDate = $currentMonthInBody;
+                                                    $currentMDate = $currentMonthInBody->copy();
                                                     $numberOfDays = $currentMDate->daysInMonth;
                                                 @endphp
                                                 @php

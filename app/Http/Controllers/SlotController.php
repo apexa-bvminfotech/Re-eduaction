@@ -214,9 +214,9 @@ class SlotController extends Controller
         }
     }
 
-    public function slot($id)
+    public function slot($id, $oldSlotId)
     {
-        $slots = Slot::where('trainer_id', $id)
+        $slots = Slot::where('trainer_id', $id)->where('id','!=',$oldSlotId)
             ->where('is_active', 0)
             ->with('rtc')
             ->get();

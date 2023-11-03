@@ -26,7 +26,14 @@ class ReportController extends Controller
     }
 
     public function getCourseWiseStudentList(){
-        $courseWiseStudentData = Course::with('studentCourse.student')->get();
+        if(Auth::user()->type == 1){
+            $user = Auth::user();
+            $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
+            $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
+            $courseWiseStudentData = StudentCourse::whereIn('student_id',$studentTrainer)->with('student','course')->get()->groupBy('course.course_name');
+        }else{
+            $courseWiseStudentData = StudentCourse::with('student','course')->get()->groupBy('course.course_name');
+        }
         return view('reports.course_wise_student_list',compact('courseWiseStudentData'));
     }
 
@@ -83,7 +90,7 @@ class ReportController extends Controller
     {
         if(Auth::user()->type == 1){
             $user = Auth::user();
-            $trainers = Trainer::where('user_id',$user->id->where('is_active',0))->first();
+            $trainers = Trainer::where('user_id',$user->id)->where('is_active','0')->first();
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
             $pendingCourseStu = StudentCourse::whereIn('student_id',$studentTrainer)->with('student','course')->where('start_date',null)->get();
         }

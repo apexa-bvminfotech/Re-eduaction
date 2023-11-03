@@ -11,7 +11,6 @@
             </div><!-- /.container-fluid -->
         </section>
         <section>
-
         </section>
         <section class="content">
             <div class="container-fluid">
@@ -30,32 +29,17 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($courseWiseStudentData as $key => $courseName)
-                                            @if ($courseName->studentCourse->isEmpty())
+                                        @foreach ($courseWiseStudentData as $courseName => $students)
+                                            @foreach ($students as $index => $student)
                                                 <tr>
-                                                    <td>{{ $courseName->course_name }}</td>
-                                                    <td>-</td>
-                                                    <td>-</td>
-                                                    <td>-</td>
+                                                    @if ($index === 0)
+                                                        <td rowspan="{{ count($students) }}">{{ $courseName }}</td>
+                                                    @endif
+                                                    <td>{{ $student->student->name }} {{ $student->student->surname }}</td>
+                                                    <td>{{ $student->student->medium }}</td>
+                                                    <td>{{ $student->student->standard }}</td>
                                                 </tr>
-                                            @else
-                                                @foreach ($courseName->studentCourse as $key => $student)
-                                                    <tr>
-                                                        @if ($key === 0)
-                                                            <td rowspan="{{ count($courseName->studentCourse) }}">{{ $courseName->course_name }}</td>
-                                                        @endif
-                                                        <td>
-                                                            {{ $student->student->name }} {{  $student->student->surname }}
-                                                        </td>
-                                                        <td>
-                                                            {{ $student->student->medium }}
-                                                        </td>
-                                                        <td>
-                                                            {{ $student->student->standard }}
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            @endif
+                                            @endforeach
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -74,7 +58,6 @@
                 "responsive": true, "lengthChange": false, "autoWidth": false,
                 "buttons": ["csv", "excel", "pdf", "print"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
         });
     </script>
 @endpush

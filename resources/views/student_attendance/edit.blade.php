@@ -40,7 +40,7 @@
                                         <div class="form-group mb-3">
                                             <label for="example-date">Date</label>
                                             <input class="form-control" type="date" value="{{ $EditDate }}" max="{{now()->format('Y-m-d')}}"
-                                                   name="attendance_date" required>
+                                                   name="attendance_date" required readonly>
                                         </div>
                                     </div>
                                 </div>
