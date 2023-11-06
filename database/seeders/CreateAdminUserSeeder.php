@@ -22,7 +22,7 @@ class CreateAdminUserSeeder extends Seeder
             'surname' => 'Jodhani',
             'name' => 'Apexa',
             'father_name' => 'Dhirubhai',
-            'contact' => '75729 01278',
+            'contact' => '7572901278',
             'user_profile' => 'assets/img/pngImage.png',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('z'),
