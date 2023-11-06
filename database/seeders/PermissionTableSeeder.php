@@ -89,6 +89,8 @@ class PermissionTableSeeder extends Seeder
             'pending-counselling-student-list-report',
             'pending-material-list-student-list-report',
             'student-status-list-report',
+
+            'student-Dashboard'
         ];
 
         foreach ($permissions as $permission) {

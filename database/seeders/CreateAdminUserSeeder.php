@@ -24,8 +24,8 @@ class CreateAdminUserSeeder extends Seeder
             'father_name' => 'Dhirubhai',
             'contact' => '75729 01278',
             'user_profile' => 'assets/img/pngImage.png',
-            'email' => 'admin029@gmail.com',
-            'password' => Hash::make('k'),
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make('z'),
             'type' => 0,
             'branch_id' => 0
         ]);
