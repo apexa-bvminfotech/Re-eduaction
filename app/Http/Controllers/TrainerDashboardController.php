@@ -44,4 +44,29 @@ class TrainerDashboardController extends Controller
         $trainerAttendance = $qurey->with('slots')->get();
         return view('dashboard.trainer_dashboard',compact('trainers','trainerAttendance','fromDate','toDate','trainerStudent','tarinerRegularLecture','tarinerProxyLecture','totalStudent','absentPresentStudent'));
     }
+
+    public function traineWeeklySchedule(){
+        $user = Auth::user();
+        $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
+        $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
+        $stuListWithTrainer = StudentStaffAssign::whereIn('student_id',$studentTrainer)->where('is_active','0')->with('trainer', 'student', 'slot')->get()->groupBy('trainer.name');
+        $trainerData = [];
+
+        foreach ($stuListWithTrainer as $trainerName => $trainerSlot) {
+            $trainerData[$trainerName] = [];
+
+            foreach ($trainerSlot as $slots) {
+                $slotID = $slots->slot->id;
+
+                if (!isset($trainerData[$trainerName][$slotID])) {
+                    $trainerData[$trainerName][$slotID] = [
+                        'slot_time' => $slots->slot->slot_time,
+                        'students' => [],
+                    ];
+                }
+                $trainerData[$trainerName][$slotID]['students'][] = $slots->student->name . ' ' . $slots->student->surname;
+            }
+        }
+        return view('dashboard.trainer_weekly_schedule', compact('trainerData'));
+    }
 }

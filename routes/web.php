@@ -127,6 +127,7 @@ Route::group(['middleware'=>['auth']],function (){
 
     Route::group(['prefix' => 'trainer-dashboard'], function(){
         Route::get('/','TrainerDashboardController@index')->name('trainerdashboard.index');
+        Route::get('/trainer-schedule','TrainerDashboardController@traineWeeklySchedule')->name('trainer.weekly.schedule');
     });
 
     Route::group(['prefix'=>'student-dashboard'],function (){
