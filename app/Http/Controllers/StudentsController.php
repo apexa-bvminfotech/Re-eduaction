@@ -327,7 +327,6 @@ class StudentsController extends Controller
 
     public function update(Request $request, Student $student)
     {
-        // dd($request->all());
         $request->validate([
             'surname' => 'required|max:255',
             'name' => 'required|max:255',
@@ -620,7 +619,6 @@ class StudentsController extends Controller
                 foreach ($request->subCourse_before as $subCourse_before) {
                     foreach($subCourse_before as $subCourseBefore_key => $subCourseBefore_value){
                         $subCourseBefore = SubCourse::find($subCourseBefore_key);
-
                         if ($subCourseBefore) {
                             StudentCourseComplete::updateOrCreate(
                                 [
@@ -670,6 +668,7 @@ class StudentsController extends Controller
                 foreach ($request->subCourse_point_before as $subCourse_point_before) {
                     foreach ($subCourse_point_before as $key1 => $value1) {
                         $point_before = SubCoursePoint::find($key1);
+                        dd($point_before);
                         if ($point_before) {
                             StudentCourseComplete::updateOrCreate(
                                 [
