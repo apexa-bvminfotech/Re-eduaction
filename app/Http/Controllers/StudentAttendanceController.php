@@ -95,7 +95,9 @@ class StudentAttendanceController extends Controller
                 ->get()->groupBy('trainer.name');
         }
 
-        return view('student_attendance.create', compact('trainer', 'proxyStaff', 'studentStaffAssign'));
+        $studentAttendance = StudentAttendance::whereDate('attendance_date',now()->format('Y-m-d'))->get();
+
+        return view('student_attendance.create', compact('trainer', 'proxyStaff', 'studentStaffAssign','studentAttendance'));
     }
 
     /**
@@ -105,7 +107,7 @@ class StudentAttendanceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(StudentAttendanceRequest $request)
-    {  
+    {
         if(Auth::user()->type == 0){
             $request->validate([
                 'attendance_date' => 'required|unique:students_attendance,attendance_date',
@@ -125,7 +127,7 @@ class StudentAttendanceController extends Controller
                                             ->where('trainer_id', $trainerId)
                                             ->where('student_id', $stu_detail['student_id'])
                                             ->first();
-            
+
                                         if ($studentAttendance) {
                                             return back()->with('error', 'Date is already taken !!');
                                         }
@@ -136,7 +138,7 @@ class StudentAttendanceController extends Controller
                                             ->where('trainer_id', $trainerId)
                                             ->where('slot_id', $atten_value['slot_id'])
                                             ->first();
-            
+
                                         if (!$studentAlreadyAbsent) {
                                             StudentAttendance::create([
                                                 'student_id' => $stu_detail['student_id'],
@@ -159,7 +161,7 @@ class StudentAttendanceController extends Controller
         }
         else{
             return redirect()->route('student_attendance.index')->with('error', 'Please fill your attendance with valid trainer and students !!');
-        }     
+        }
         return redirect()->route('student_attendance.index')->with('success', 'Student Attendence Created successfully');
     }
 
@@ -187,7 +189,7 @@ class StudentAttendanceController extends Controller
             ->join('students','students.id','students_attendance.student_id')
             ->with('slot')->get()->groupby('trainer.name');
         }
-       
+
         return view('student_attendance.show',compact('studentAttendance'));
     }
 
@@ -237,8 +239,8 @@ class StudentAttendanceController extends Controller
                 ->get()->groupBy('trainer.name');
         }
         else{
-            $trainer = Trainer::orderBy('id', 'DESC')->get(); 
-            $studentAttendance = StudentAttendance::where('attendance_date',$EditDate)->get();   
+            $trainer = Trainer::orderBy('id', 'DESC')->get();
+            $studentAttendance = StudentAttendance::where('attendance_date',$EditDate)->get();
             $presentStudent = StudentAttendance::where('attendance_date',$EditDate)->where('attendance_type','1')->get();
             $presentStudentId = [];
             $presentTrainerId = [];
@@ -328,16 +330,16 @@ class StudentAttendanceController extends Controller
                                             ]);
                                         }
                                     }
-                                }      
-                            }   
+                                }
+                            }
                         }
-                    }  
+                    }
                 }
-            }  
+            }
         }
         else{
             return redirect()->route('student_attendance.index')->with('error', 'Please fill your attendance with valid trainer and students !!');
-        } 
+        }
         return redirect()->route('student_attendance.index')->with('success', 'Student Attendence Updated successfully');
     }
 

@@ -41,9 +41,16 @@
                         <div class="card card-primary card-outline">
                             <div class="card-body box-profile">
                                 <div class="text-center">
+                                    @if($trainer->photo)
                                     <img class="profile-user-img img-fluid img-circle"
                                          src="{{asset('assets/trainer/' . $trainer->photo)}}"
                                          alt="User profile picture" style="width: 150px;height: 150px;">
+                                    @else
+                                        <img class="profile-user-img img-fluid img-circle"
+                                             src="{{asset('assets/student/images/dummy-profile.jpeg')}}"
+                                             alt="User profile picture" style="width: 150px;height: 150px;">
+
+                                    @endif
                                 </div>
 
                                 <h3 class="profile-username text-center">{{ $trainer->name }}
@@ -333,7 +340,7 @@
                                     </div>
                                 </div>
                                 <!-- /.card-body -->
-                            </div>    
+                            </div>
                             <!-- /.card -->
                         </div>
                     </div>
@@ -342,7 +349,7 @@
                     <div class="col-md-12">
                         @php
                             $rtcId = [];
-                        @endphp 
+                        @endphp
                         <div class="card">
                             @foreach($tarinerSlot as $key => $slot)
                             @if(!in_array($slot->rtc_id,$rtcId))
@@ -357,7 +364,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>Student Name</th>
-                                                    <th>Meduim</th> 
+                                                    <th>Meduim</th>
                                                     <th>Standard</th>
                                                 </tr>
                                             </thead>
@@ -367,20 +374,20 @@
                                                         <td>{{ $student->student->name }} {{ $student->student->surname }}</td>
                                                         <td>{{ $student->student->medium }}</td>
                                                         <td>{{ $student->student->standard }}</td>
-                                                    </tr> 
+                                                    </tr>
                                                 @endforeach
                                             </tbody>
                                         </table>
-                                    @endif     
+                                    @endif
                                 </div>
                                     @php
                                         $rtcId[] = $slot->rtc_id;
                                     @endphp
                                     <!-- /.card-header -->
                                 @endforeach
-                             <!-- /.card-body -->       
+                             <!-- /.card-body -->
                         </div>
-                    </div>  
+                    </div>
                 </div>
                 @if($trainerAttendance->isNotEmpty())
                     <div class="row">
@@ -407,15 +414,15 @@
                                             </form>
                                         </div>
                                     </div>
-                                </div> 
-                                <hr>       
+                                </div>
+                                <hr>
                                 <div class="card-body">
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
                                                 <th>Slot Time</th>
                                                 <th>Date</th>
-                                                <th>Status</th> 
+                                                <th>Status</th>
                                                 <th>Slot Type</th>
                                                 <th>Absent Reason</th>
                                             </tr>
@@ -440,15 +447,15 @@
                                                         -
                                                         @endif
                                                     </td>
-                                                </tr> 
+                                                </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                        </div>  
+                        </div>
                     </div>
-                @endif  
+                @endif
             </div>
         </section>
     </div>
@@ -462,7 +469,7 @@
             var trainer_id = $('#trainer_id').val();
             console.log(trainer_id);
             var url = baseurl + "trainer/" + trainer_id + "?fromDate=" + fromDate + "&toDate=" + toDate;
-            window.location = url;            
+            window.location = url;
         });
     </script>
 @endpush

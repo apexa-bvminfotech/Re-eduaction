@@ -38,7 +38,7 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Name</th>
-                                        <th><span></span></th>
+                                        <th>Course</th>
                                         <th><span></span></th>
                                         <th>Phone</th>
                                         <th><span></span></th>
@@ -304,7 +304,7 @@
                                             <label for="text">Trainer name:</label>
                                             <input type="text" class="form-control" name="trainer_name" required>
                                         </div>
-                                    </div>   
+                                    </div>
                                     <div class="col-md-12 mb-1" id="displayHoldReason" style="display: none">
                                         <div class="form-group">
                                             <label for="text">Hold Reason:</label>
@@ -349,7 +349,7 @@
                                                 <span class="text-danger">{{$message}}</span>
                                             @enderror
                                         </div>
-                                    </div>   
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Close</button>
@@ -497,7 +497,7 @@
                     "responsive": true, "lengthChange": false, "autoWidth": false,
                     "buttons": ["csv", "excel", "pdf", "print"],
                     initComplete: function () {
-                        this.api().columns([2, 3, 5, 6, 7]).every(function () {
+                        this.api().columns([ 3, 5, 6, 7]).every(function () {
                             var column = this;
                             var select = $('<select class="form-control select2"><option value="">All</option></select>')
                                 .appendTo($(column.header()).find('span').empty())

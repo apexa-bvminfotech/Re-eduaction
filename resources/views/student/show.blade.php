@@ -1,6 +1,16 @@
 @extends('layouts.admin')
 @section('content')
     <div class="content-wrapper">
+        @if($student->isActiveStatus() != null && $student->isActiveStatus()->status  != 'Start' && auth()->user()->type == 1)
+
+            <style>
+                .inactiveLink {
+                    pointer-events: none;
+                    cursor: default;
+                }
+
+            </style>
+        @endif
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <div class="container-fluid">
@@ -26,12 +36,16 @@
                         <div class="card card-primary card-outline">
                             <div class="card-body">
                                 <div class="text-center">
-                                    <img class="profile-user-img img-fluid img-circle" style="height: 100px;"
+                                    @if($student->upload_student_image)
+                                        <img class="profile-user-img img-fluid img-circle" style="height: 100px;"
                                          src="{{asset('assets/student/images/'. $student->upload_student_image )}}" alt="Student Profile Photo">
+                                    @else
+                                        <img class="profile-user-img img-fluid img-circle" style="height: 100px;"
+                                             src="{{asset('assets/student/images/dummy-profile.jpeg' )}}" alt="Student Profile Photo">
+                                    @endif
                                 </div>
                                 <input type="hidden" name="student_id" id="student_id" value="{{ $student->id }}">
                                 <h3 class="profile-username text-center">{{ $student->surname }} {{ $student->name }}</h3>
-                                <p class="text-muted text-center">Student</p>
                                 <ul class="list-group  mb-3">
                                     <li class="list-group-item">
                                         <b>Demo taken:</b> <a class="float-right">{{ $student->trainer->name ?? ''}}</a>
@@ -543,8 +557,7 @@
                         </div>
                     </div>
                 </div>
-                @if($student->isActiveStatus() != null && $student->isActiveStatus()->status  == 'Start')
-                    <div class="card">
+                <div class="card">
                         <div class="card-header">
                             <h4 class="text-dark"><b><i>Courses</i></b></h4></div>
                         <div class="row">
@@ -559,13 +572,13 @@
                                             {{-- @dd($student_course->start_date) --}}
                                             <span class="h4 p-2">{{$student_course->course->course_name}}</span>
                                             @if($student_course->start_date == null)
-                                                <a class="btn btn-success btn-start btn-start_{{ $student_course->course_id }}" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="start_task" id="">Start Course</a>
+                                                <a class="btn btn-success btn-start btn-start_{{ $student_course->course_id }} inactiveLink" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="start_task" id="">Start Course</a>
                                                 <span class="h6 border p-2 display_start_date_{{ $student_course->course_id }}" style="display: none;" id=""> Start Date :- {{ date('d-m-Y', $student_course->start_date)}}</span>
                                             @else
                                                 <span class="h6 border p-2 mr-2"> Start Date :- {{ date('d-m-Y', strtotime($student_course->start_date))}} </span>
                                             @endif
                                             @if($student_course->end_date == null)
-                                                <a class="btn btn-primary btn-end btn-end_{{ $student_course->course_id  }}" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="end_task" id="">End Course</a>
+                                                <a class="btn btn-primary btn-end btn-end_{{ $student_course->course_id  }} inactiveLink" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="end_task" id="">End Course</a>
                                                 <span class="h6 border p-2 display_end_date_{{ $student_course->course_id }}" style="display: none;" id=""> End Date :- {{ date('d-m-Y', $student_course->end_date) }}</span>
                                             @else
                                                 <span class="h6 border p-2"> End Date :- {{ date('d-m-Y', strtotime($student_course->end_date))}}</span>
@@ -753,16 +766,15 @@
                                                 @endforeach
                                             </table>
                                         @endforeach
-                                        <button type="submit" class="btn btn-primary float-right mt-2 saveChanges">Save Changes</button>
+                                        <button type="submit" class="btn btn-primary float-right mt-2 saveChanges inactiveLink">Save Changes</button>
                                     </form>
                                 </div>
                             </div>
                         </div>
                         <div id="result"></div>
                     </div>
-                @endif
                 {{-- @if($trainerAttendance->isNotEmpty()) --}}
-                    <div class="row">
+                <div class="row">
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header" style="background-color:lightgray">
