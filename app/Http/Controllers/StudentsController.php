@@ -669,7 +669,6 @@ class StudentsController extends Controller
                 foreach ($request->subCourse_point_before as $subCourse_point_before) {
                     foreach ($subCourse_point_before as $key1 => $value1) {
                         $point_before = SubCoursePoint::find($key1);
-                        dd($point_before);
                         if ($point_before) {
                             StudentCourseComplete::updateOrCreate(
                                 [
@@ -727,7 +726,6 @@ class StudentsController extends Controller
                 foreach($users as $u){
                     $u->notify(new SendNotificationForStudentCourse());
                 }
-
             }
 
         return redirect()->route('student.show', $validatedData['student_id'])->with('success', 'notification sent to admin.');
