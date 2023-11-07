@@ -604,6 +604,7 @@ class StudentsController extends Controller
         ]);
 
             if($request->subCourse_point_approve){
+                StudentCourseComplete::where('student_id',$request->student_id)->where('trainer_id',$request->trainer_id)->where('course_id',$request->course_id)->update(['status'=>1]);
                 foreach ($request->subCourse_point_approve as $items){
                     foreach ($items as $key=>$item){
                         $studentCompleteCourse = StudentCourseComplete::find($key);
