@@ -38,7 +38,7 @@
                                 <p>Admin Dashboard</p>
                             </a>
                         </li>
-                    @endif    
+                    @endif
                     <li class="nav-item">
                         <a href="{{route('student.index')}}" class="nav-link @if(Route::currentRouteName() == 'student.index')active  @endif">
                             <i class="nav-icon fas fa-graduation-cap"></i>
@@ -130,6 +130,12 @@
                         <a href="{{route('course_material.index')}}" class="nav-link @if(Route::currentRouteName() == 'course_material.index')active  @endif">
                             <i class="nav-icon fas fa-book-open"></i>
                             <p>Course Material</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{route('report.report-list')}}" class="nav-link @if(Route::currentRouteName() == 'report.report-list')active  @endif">
+                            <i class="nav-icon fas fa-book-open"></i>
+                            <p>Reports list</p>
                         </a>
                     </li>
                     <li class="nav-item">

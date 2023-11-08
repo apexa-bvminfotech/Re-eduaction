@@ -112,6 +112,7 @@ Route::group(['middleware'=>['auth']],function (){
     Route::get('myprofile', 'UserController@profile')->name('profile');
     Route::post('user/{user}/update-profile-image', 'UserController@updateProfileImage')->name('user.update-profile-image');
 
+    Route::get('/report-list','ReportController@index')->name('report.report-list');
     Route::get('/reports-trainer-wise-student-rtc-regular-slot','ReportController@getTrainerWiseStudentRtcRegularSlot')->name('report.trainer-wise-student-rtc-regular-slot');
     Route::get('/reports-trainer-wise-student-rtc-proxy-slot','ReportController@getTrainerWiseStudentRtcProxySlot')->name('report.trainer-wise-student-rtc-proxy-slot');
     Route::get('/reports-course-wise-student','ReportController@getCourseWiseStudentList')->name('report.course-wise-student-list');

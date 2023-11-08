@@ -15,11 +15,16 @@ use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
 {
+
+    public function index() {
+        return view('reports.report_list');
+    }
+
     public function getTrainerWiseStudentRtcRegularSlot(){
         $trainerWiseData = Branch::with(['trainer.slots.rtc','trainer.slots.slotList.student'])->get();
         return view('reports.trainer_wise_student_rtc_regular_slot',compact('trainerWiseData'));
-    }  
-    
+    }
+
     public function getTrainerWiseStudentRtcProxySlot(){
         $trainerWiseData = Branch::with(['trainer.slots.rtc','trainer.slots.proxySlotlist.student'])->get();
         return view('reports.trainer_wise_student_rtc_proxy_slot',compact('trainerWiseData'));
@@ -58,7 +63,7 @@ class ReportController extends Controller
         else{
             $qurey = Student::from('students');
         }
-        
+
         if($data['startDate'] != '' && $data['startDate'] != null){
             $qurey->whereDate('registration_date', '>=', date('Y-m-d', strtotime($data['startDate'])));
         }
@@ -82,7 +87,7 @@ class ReportController extends Controller
         else{
             $pendingApprecitionStu = StudentCourse::with('student','course','appreciation')->where('end_date','!=',null)->where('appreciation_given_date',null)->get();
         }
-        
+
         return view('reports.pending_appreciation_student_list',compact('pendingApprecitionStu'));
     }
 
@@ -129,17 +134,17 @@ class ReportController extends Controller
             $pendingReport = StudentDMIT::where('report','0')->with('student')->get();
             $pendingKeyPoint = StudentDMIT::where('key_point',0)->with('student')->get();
         }
-      
+
         return view('reports.pending_counselling_student_list',compact('pendingCounselling','pendingReport','pendingKeyPoint'));
     }
-    
+
     public function getPendingMaterialListStudentList()
     {
         if(Auth::user()->type == 1){
             $user = Auth::user();
             $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
-            $students = Student::whereIn('id',$studentTrainer)->with('studentMaterial', 'courses.course')->get();    
+            $students = Student::whereIn('id',$studentTrainer)->with('studentMaterial', 'courses.course')->get();
             $studentList = [];
             foreach ($students as $student) {
                 if ($student->studentMaterial->isEmpty()) {
@@ -148,7 +153,7 @@ class ReportController extends Controller
             }
         }
         else{
-            $students = Student::with('studentMaterial', 'courses.course')->get();    
+            $students = Student::with('studentMaterial', 'courses.course')->get();
             $studentList = [];
             foreach ($students as $student) {
                 if ($student->studentMaterial->isEmpty()) {
