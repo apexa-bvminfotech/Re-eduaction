@@ -146,22 +146,22 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                            @can('trainer-wise-student-Rtc-slot-report')
-                                <li class="nav-item">
-                                        <a href="{{ route('report.trainer-wise-student-rtc-regular-slot') }}" class="nav-link @if(Route::currentRouteName() == 'report.trainer-wise-student-rtc-regular-slot')active  @endif">
-                                            <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
-                                            <p>Trainer wise student/RTC/Regular slot</p>
-                                        </a>
-                                </li>
-                            @endcan
-                            @can('trainer-wise-student-Rtc-slot-report')
-                                <li class="nav-item">
-                                        <a href="{{ route('report.trainer-wise-student-rtc-proxy-slot') }}" class="nav-link @if(Route::currentRouteName() == 'report.trainer-wise-student-rtc-proxy-slot')active  @endif">
-                                            <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
-                                            <p>Trainer wise student/RTC/Proxy slot</p>
-                                        </a>
-                                </li>
-                            @endcan
+{{--                            @can('trainer-wise-student-Rtc-slot-report')--}}
+{{--                                <li class="nav-item">--}}
+{{--                                        <a href="{{ route('report.trainer-wise-student-rtc-regular-slot') }}" class="nav-link @if(Route::currentRouteName() == 'report.trainer-wise-student-rtc-regular-slot')active  @endif">--}}
+{{--                                            <i class="nav-icon fas fa-circle" style="font-size:12px"></i>--}}
+{{--                                            <p>Trainer wise student/RTC/Regular slot</p>--}}
+{{--                                        </a>--}}
+{{--                                </li>--}}
+{{--                            @endcan--}}
+{{--                            @can('trainer-wise-student-Rtc-slot-report')--}}
+{{--                                <li class="nav-item">--}}
+{{--                                        <a href="{{ route('report.trainer-wise-student-rtc-proxy-slot') }}" class="nav-link @if(Route::currentRouteName() == 'report.trainer-wise-student-rtc-proxy-slot')active  @endif">--}}
+{{--                                            <i class="nav-icon fas fa-circle" style="font-size:12px"></i>--}}
+{{--                                            <p>Trainer wise student/RTC/Proxy slot</p>--}}
+{{--                                        </a>--}}
+{{--                                </li>--}}
+{{--                            @endcan--}}
                             @can('course-wise-student-report')
                                 <li class="nav-item">
                                     <a href="{{ route('report.course-wise-student-list') }}" class="nav-link @if(Route::currentRouteName() == 'report.course-wise-student-list')active  @endif">

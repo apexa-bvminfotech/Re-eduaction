@@ -152,6 +152,7 @@
                         } else {
                             toastr.success(data.success);
                         }
+                        window.location.reload();
                     }
                 });
             });

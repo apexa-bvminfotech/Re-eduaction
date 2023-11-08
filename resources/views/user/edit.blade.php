@@ -25,7 +25,7 @@
                         <div class="card card-primary">
                             {!! Form::model($user, ['method' => 'PATCH','route' => ['user.update', $user->id], 'enctype' => 'multipart/form-data']) !!}
                             <div class="card-body">
-                                <div class="form-group row">~
+                                <div class="form-group row">
                                     <input type="hidden" name="role" id="role" value="1">
                                     <label for="customFile" class="col-sm-3 col-form-label">Profile Photo</label>
                                     <div class="col-sm-9">
@@ -34,7 +34,11 @@
                                             <label class="custom-file-label" for="customFile">Choose Profile Photo</label>
                                         </div>
                                         <div id="editImageContainer">
-                                            <img src="{{asset('assets/user/' . $user->user_profile)}}" width="100" height="100">
+                                            @if(file_exists(asset('assets/user/' . $user->user_profile)))
+                                                <img src="{{asset('assets/user/' . $user->user_profile)}}" width="100" height="100">
+                                            @else
+                                                <img src="{{asset('assets/student/images/dummy-profile.jpeg' )}}" width="100" height="100">
+                                            @endif
                                         </div>
                                         <div style="display: none;" id="imageContainer">
                                             <img id="previewHolder" alt="Uploaded Image Preview Holder" width="100px" height="100px"/>
