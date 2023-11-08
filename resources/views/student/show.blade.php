@@ -649,7 +649,7 @@
                                                             @endif
                                                         </th>
 
-                                                        <th  class="text-center bg-info">@if($sc->points->count() == 0) {{isset($sub_course->trainer_confirm_date)? $sub_course->trainer_confirm_date:''}} @endif</th>
+                                                        <th  class="text-center bg-info">@if($sc->points->count() == 0) {{isset($sub_course->trainer_confirm_date)? $sub_course->trainer_confirm_date:(isset($sub_course1->trainer_confirm_date)?$sub_course1->trainer_confirm_date:'')}} @endif</th>
                                                         @if(auth()->user()->type == 0)
                                                             <td>
                                                                 @if($sc->points->count() == 0)
@@ -749,7 +749,7 @@
                                                                 </div>
                                                             </td>
                                                             <td>
-                                                                {{isset($sub_course->trainer_confirm_date)? $sub_course->trainer_confirm_date:''}}
+                                                                {{isset($sub_course->trainer_confirm_date)? $sub_course->trainer_confirm_date:(isset($sub_course1->trainer_confirm_date)?$sub_course1->trainer_confirm_date:'')}}
                                                             </td>
                                                             @if(auth()->user()->type == 0)
                                                                 <td>
