@@ -125,6 +125,7 @@ Route::group(['middleware'=>['auth']],function (){
     Route::get('/student-status-list','ReportController@getStudentStatusList')->name('report.student-status-list');
     Route::get('/weekly-student-list-with-trainer','ReportController@getWeeklyStudentListWithTrainer')->name('report.weekly-student-list-with-trainer');
     Route::get('/transfer-student-transfer-trainer-list','ReportController@getTransferStudentTransferTrainerList')->name('report.transfer-student-transfer-trainer-list');
+    Route::get('/reports-student-data','ReportController@getStudentData')->name('report.student-data');
 
     Route::group(['prefix' => 'trainer-dashboard'], function(){
         Route::get('/','TrainerDashboardController@index')->name('trainerdashboard.index');

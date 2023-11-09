@@ -238,6 +238,12 @@
                                     <p>Transfer Student / Transfer Trainer List</p>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ route('report.student-data') }}" class="nav-link @if(Route::currentRouteName() == 'report.transfer-student-transfer-trainer-list')active  @endif">
+                                    <i class="nav-icon fas fa-circle" style="font-size:12px"></i>
+                                    <p>Student </p>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 @endif

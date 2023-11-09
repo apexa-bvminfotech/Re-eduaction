@@ -226,4 +226,9 @@ class ReportController extends Controller
         }
         return view('reports.transfer_student_transfer_trainer_list',compact('studentList','transferStudent'));
     }
+
+    public function getStudentData(){
+        $students = Student::where('status',1)->with(['course','trainer'])->get();
+        return view('reports.student_report',compact('students'));
+    }
 }
