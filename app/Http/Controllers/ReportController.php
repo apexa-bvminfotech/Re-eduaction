@@ -228,7 +228,7 @@ class ReportController extends Controller
     }
 
     public function getStudentData(){
-        $students = Student::where('status',1)->with(['course','trainer'])->get();
+        $students = Student::where('status',1)->with('courses','trainer')->get();
         return view('reports.student_report',compact('students'));
     }
 }
