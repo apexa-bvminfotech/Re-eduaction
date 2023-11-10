@@ -861,6 +861,15 @@ class StudentsController extends Controller
         }
         $updateData = StudentApproveLeave::find($request->leave_id);
 
+        $startDate = Carbon::parse($updateData->start_date);
+        $endDate = Carbon::parse($updateData->end_date);
+
+        $datesInBetween = [];
+        while ($startDate <= $endDate) {
+            $datesInBetween[] = $startDate->format('Y-m-d');
+            $startDate->addDay();
+        }
+
         $updateData->update([
             'student_id' => $request->student_id,
             'start_date' => $request->start_date,
@@ -868,6 +877,38 @@ class StudentsController extends Controller
             'reason' => $request->reason,
             'user_id' => Auth::id(),
         ]);
+        $user_id = Auth::id();
+
+        $studentStaffAssign = StudentStaffAssign::where('student_id',$request->student_id)->where('is_active','0')->first();
+        $studentAttendances=  StudentAttendance::where('student_id', $request->student_id)->where('user_id',$user_id)
+//            ->where('trainer_id',$request->trainer_id)
+            ->whereIn('attendance_date',$datesInBetween)->get();
+        foreach($studentAttendances as $attendance){
+            $attendance->delete();
+        }
+
+
+        $startDate = Carbon::parse($request->start_date);
+        $endDate = Carbon::parse($request->end_date);
+
+        $datesInBetween = [];
+        while ($startDate <= $endDate) {
+            $datesInBetween[] = $startDate->format('Y-m-d');
+            $startDate->addDay();
+        }
+
+        foreach($datesInBetween as $adate){
+            $studentAttendance = new StudentAttendance();
+            $studentAttendance->student_id = $request->student_id;
+            $studentAttendance->attendance_type = 0;
+            $studentAttendance->user_id = $user_id;
+            $studentAttendance->trainer_id = $studentStaffAssign->trainer_id;
+            $studentAttendance->slot_id = $studentStaffAssign->slot_id;
+            $studentAttendance->slot_type = 'Regular';
+            $studentAttendance->attendance_date = $adate;
+            $studentAttendance->save();
+        }
+
         return redirect()->route('student.index')->with('success', 'Edit student leave data');
     }
 
