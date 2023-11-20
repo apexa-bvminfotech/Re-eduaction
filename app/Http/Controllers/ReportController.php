@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Branch;
 use App\Models\Course;
+use App\Models\Slot;
 use App\Models\Student;
 use App\Models\StudentCourse;
 use App\Models\StudentDMIT;
@@ -229,6 +230,7 @@ class ReportController extends Controller
 
     public function getStudentData(){
         $students = Student::where('status',1)->with('courses','trainer')->get();
-        return view('reports.student_report',compact('students'));
+        $slots= Slot::where('is_active',0)->with('slotList','trainer','rtc')->get();
+        return view('reports.student_report',compact('students','slots'));
     }
 }
