@@ -136,7 +136,7 @@ class TrainerDashboardController extends Controller
                     $userListWithTrinerData[$trainerName][$slotID] = [
                         //'slot_time' => $slotsUsertriner->slot->slot_time,
                         'user_id' =>$slotsUsertriner->user_id,
-                        'user_name'=> $userName,
+                        'user_name'=> $userName ?? '',
                         'date'=> $slotsUsertriner->date,
                         'note'=>$slotsUsertriner->note,
                         'students' => [],

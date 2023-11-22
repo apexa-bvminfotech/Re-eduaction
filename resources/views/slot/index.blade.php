@@ -59,7 +59,7 @@
                                                 <td>{{ $s->id }}</td>
                                                 <td>{{$s->branch->name}}</td>
                                                 <td>{{ $s->trainer->name }}</td>
-                                                <td>{{$s->rtc->rtc_name}}</td>
+                                                <td>{{$s->rtc->rtc_name ?? ''}}</td>
                                                 <td>{{ $s->slot_time }}</td>
                                                 <td>{{$s->whatsapp_group_name}}</td>
                                                 @can('slot-edit')
@@ -80,7 +80,7 @@
                                                             data-old-proxy-slot-id="{{ $s->id }}" data-old-proxy-trainer-id="{{ $s->trainer->id }}">
                                                             Shift As Proxy Slot
                                                         </button>
-                                                    </td>  
+                                                    </td>
                                                 @endcan
                                             </tr>
                                         @endforeach
@@ -132,7 +132,7 @@
                                     </div>
                                 </div>
                             </form>
-                            
+
                             {{-- form for shift proxy slot --}}
                             <form id="shiftProxySlotForm" action="{{ route('slot.submit-proxy-slot') }}" method="POST">
                                 @csrf
@@ -306,7 +306,7 @@
             $('#shiftRegularSlotForm').submit();
         });
 
-        //assign proxy staff 
+        //assign proxy staff
         $(document).on('click', '.btn-shift-proxy-slot', function () {
             let oldProxySlotId = $(this).data('old-proxy-slot-id');
             let oldProxyTrainerId = $(this).data('old-proxy-trainer-id');
@@ -338,7 +338,7 @@
                 }
             });
         });
-        
+
         $(document).on('click', '.btn-submit-proxy-slot', function () {
             $('#shiftProxySlotForm').submit();
         });
