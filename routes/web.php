@@ -130,6 +130,8 @@ Route::group(['middleware'=>['auth']],function (){
     Route::group(['prefix' => 'trainer-dashboard'], function(){
         Route::get('/','TrainerDashboardController@index')->name('trainerdashboard.index');
         Route::get('/trainer-schedule','TrainerDashboardController@traineWeeklySchedule')->name('trainer.weekly.schedule');
+        Route::post('/trinerweeklyadd', 'TrainerDashboardController@trinerweeklyadd')->name('get-slot-times');
+        Route::get('shift-triner-slot/{id}','TrainerDashboardController@TrinerSlot');
     });
 
     Route::group(['prefix'=>'student-dashboard'],function (){

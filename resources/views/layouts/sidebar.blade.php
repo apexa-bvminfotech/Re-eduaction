@@ -23,14 +23,14 @@
                             </a>
                         </li>
                     @endif
-                    @if(\Illuminate\Support\Facades\Auth::user()->type == 1)
+                    {{-- @if(\Illuminate\Support\Facades\Auth::user()->type == 1) --}}
                         <li class="nav-item">
                             <a href="{{route('trainer.weekly.schedule')}}" class="nav-link @if(Route::currentRouteName() == 'trainer.weekly.schedule')active  @endif">
                                 <i class="nav-icon fas fa-calendar"></i>
                                 <p> Trainer Weekly Schedule</p>
                             </a>
                         </li>
-                    @endif
+                    {{-- @endif --}}
                     @if(\Illuminate\Support\Facades\Auth::user()->type == 0)
                         <li class="nav-item">
                             <a href="{{route('admindashboard.index')}}" class="nav-link @if(Route::currentRouteName() == 'admindashboard.index')active  @endif">

@@ -54,12 +54,13 @@
                                                     </td>
                                                     <td>{{ $s->student->standard }}</td>
                                                     <td>{{ $s->student->medium }}</td>
+
                                                     @if($i == 0)
                                                     <td rowspan="2" style="vertical-align:middle">{{$slot->id}}</td>
                                                     <td rowspan="2" style="vertical-align:middle">{{$slot->slot_time}}</td>
                                                     <td rowspan="2" style="vertical-align:middle">{{$slot->trainer->name}}</td>
                                                     <td rowspan="2" style="vertical-align:middle">{{$slot->whatsapp_group_name}}</td>
-                                                    <td rowspan="2" style="vertical-align:middle">{{$slot->rtc->rtc_name}}</td>
+                                                    <td rowspan="2" style="vertical-align:middle">{{$slot->rtc->rtc_name ?? ''}}</td>
                                                     @endif
                                                 </tr>
                                                 @php $i++; @endphp
