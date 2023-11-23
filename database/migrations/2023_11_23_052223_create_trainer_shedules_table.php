@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('trainer_shedules', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('trainer_id')->nullable();
-            $table->unsignedBigInteger('slot_id')->nullable();
+            $table->unsignedBigInteger('trainer_id');
+            $table->unsignedBigInteger('slot_id');
             $table->date('date');
             $table->string('note');
             $table->timestamps();
