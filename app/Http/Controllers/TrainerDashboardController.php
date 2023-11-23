@@ -72,6 +72,7 @@ class TrainerDashboardController extends Controller
             $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot')->get()->groupBy('trainer.name');
 
             $trainerSchedule = TrainerShedule::with('trainer','student','slot')->where('user_id', '=', 0)->get()->groupBy('trainer.name');
+
             $userSchedule = TrainerShedule::with('user')->where('user_id', '!=', 0)->get()->groupBy('user.name');
         }
         $trainerData = [];
@@ -116,7 +117,6 @@ class TrainerDashboardController extends Controller
 
         foreach ($userSchedule as $userName => $user) {
             foreach($user as $u){
-
                     $userScheduleList[$userName][] = [
                         'startDate' => $u->date,
                         'note' => $u->note,
@@ -126,25 +126,15 @@ class TrainerDashboardController extends Controller
         }
 
         foreach ($trainerSchedule as $trainerName => $UsertrainerSlot) {
-            $userListWithTrinerData[$trainerName] = [];
-            foreach ($UsertrainerSlot as $slotsUsertriner) {
-                if ($slotsUsertriner->user) {
-                    $UserID = $slotsUsertriner->user->id;
-                    $userName = $slotsUsertriner->user->name;
-                }
-                if (!isset($userListWithTrinerData[$trainerName][$slotID] )) {
-                    $userListWithTrinerData[$trainerName][$slotID] = [
-                        //'slot_time' => $slotsUsertriner->slot->slot_time,
-                        'user_id' =>$slotsUsertriner->user_id,
-                        'user_name'=> $userName ?? '',
-                        'date'=> $slotsUsertriner->date,
-                        'note'=>$slotsUsertriner->note,
-                        'students' => [],
+            foreach($UsertrainerSlot as $Usertrainer){
+                    $userListWithTrinerData[$trainerName][] = [
+                        'date' => $Usertrainer->date,
+                        'note' => $Usertrainer->note,
+                        'userName' => $trainerName ?? '',
                     ];
-                }
             }
-        }
 
+        }
 
         return view('dashboard.trainer_weekly_schedule', compact('userScheduleList','userListWithTrinerData','trainerData','trainerDataProxy','trainershedule','slotstime','users'));
     }

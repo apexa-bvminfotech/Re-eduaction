@@ -69,7 +69,6 @@
                                                 @endforeach
                                             </tr>
                                             <tr>
-
                                                 @foreach($trainerDataProxy as $trainerNames => $slots)
                                                 @if($trainerName == $trainerNames)
                                                 @foreach ($slots as $slot)
@@ -101,32 +100,46 @@
                                             </tr>
                                             <tr>
                                             @foreach($userListWithTrinerData as $trainerNames => $slots)
-                                            @foreach ($slots as $slot)
-                                             @if($trainerName == $trainerNames)
-                                                @php
-                                                $checkStartDate = now()->startOfWeek();
-                                                $checkEndDate = now()->endOfWeek();
-                                                $numberOfDays = 6;
-                                               @endphp
-                                                    @for ($day = 1; $day <= $numberOfDays; $day++)
-                                                        @if($checkStartDate->format('Y-m-d') == $slot['date'])
-                                                            <td class="text-center p-5"  style="background-color: yellow ;font-weight: bold">
-                                                              Note :- {{ $slot['note'] }}<br><br>
-
-                                                            </td>
-                                                        @else
-                                                            <td class="text-center p-5" >
-
-                                                            </td>
-                                                        @endif
-                                                        @php
-                                                            $checkStartDate->addDay();
-                                                        @endphp
-                                                    @endfor
-                                                </tr>
+                                            @if($trainerName == $trainerNames)
+                                            @php
+                                            $checkStartDate = now()->startOfWeek();
+                                            $checkEndDate = now()->endOfWeek();
+                                            $numberOfDays = 6;
+                                            $noteNumber = 1;
+                                           @endphp
+                                           @for ($day = 1; $day <= $numberOfDays; $day++)
+                                            @php
+                                                $applyStyle = false;
+                                            @endphp
+                                                @foreach ($slots as $s)
+                                                @if ($checkStartDate->format('Y-m-d') == $s['date'])
+                                                    @php
+                                                        $applyStyle = true;
+                                                    @endphp
                                                 @endif
                                                 @endforeach
+
+                                            <td class="text-center p-5" @if ($applyStyle) style="background-color: yellow; font-weight: bold;" @endif>
+                                                @foreach ($slots as $s)
+                                                @if ($checkStartDate->format('Y-m-d') == $s['date'])
+                                                    {{ $noteNumber }} {{ $s['note'] }}<br><br>
+                                                    @php
+                                                        $noteNumber++;
+                                                    @endphp
+                                                @endif
                                                 @endforeach
+                                                @php
+                                                    // Reset noteNumber for each date
+                                                    $noteNumber = 1;
+                                                @endphp
+                                            </td>
+                                           @php
+                                               $checkStartDate->addDay();
+                                           @endphp
+                                       @endfor
+                                       @endif
+                                                @endforeach
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -161,36 +174,41 @@
                                     <tbody>
                                         <tr>
                                             @php
-                                                $checkStartDate = now()->startOfWeek();
-                                                $checkEndDate = now()->endOfWeek();
-                                                $numberOfDays = 6;
-                                                $noteNumber = 1;
+                                            $checkStartDate = now()->startOfWeek();
+                                            $checkEndDate = now()->endOfWeek();
+                                            $numberOfDays = 6;
+                                            $noteNumber = 1;
+                                           @endphp
+                                           @for ($day = 1; $day <= $numberOfDays; $day++)
+                                            @php
+                                                $applyStyle = false;
                                             @endphp
-                                            @for ($day = 1; $day <= $numberOfDays; $day++)
-                                                @php
-                                                    $matchingSlot = null;
-                                                    foreach ($slots as $s) {
-                                                        if ($checkStartDate->format('Y-m-d') == $s['startDate']) {
-                                                            $matchingSlot = $s;
-                                                            break;
-                                                        }
-                                                    }
-                                                @endphp
-                                                @if ($matchingSlot)
-                                                    <td class="text-center p-5" style="background-color: yellow; font-weight: bold">
-                                                        {{ $noteNumber }} {{ $matchingSlot['note'] }}<br><br>
-                                                        @php $noteNumber++; @endphp
-                                                    </td>
-                                                @else
-                                                    <td class="text-center p-5">
-
-                                                    </td>
+                                                @foreach ($slots as $s)
+                                                @if ($checkStartDate->format('Y-m-d') == $s['startDate'])
+                                                    @php
+                                                        $applyStyle = true;
+                                                    @endphp
                                                 @endif
+                                                @endforeach
+
+                                            <td class="text-center p-5" @if ($applyStyle) style="background-color: yellow; font-weight: bold;" @endif>
+                                                @foreach ($slots as $s)
+                                                @if ($checkStartDate->format('Y-m-d') == $s['startDate'])
+                                                    {{ $noteNumber }} {{ $s['note'] }}<br><br>
+                                                    @php
+                                                        $noteNumber++;
+                                                    @endphp
+                                                @endif
+                                                @endforeach
                                                 @php
-                                                     $noteNumber = 1;
-                                                     $checkStartDate->addDay();
+                                                    // Reset noteNumber for each date
+                                                    $noteNumber = 1;
                                                 @endphp
-                                            @endfor
+                                            </td>
+                                           @php
+                                               $checkStartDate->addDay();
+                                           @endphp
+                                       @endfor
                                         </tr>
 
                                     </tbody>
@@ -202,7 +220,6 @@
             </div>
         </section>
     </div>
-
 
 
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
