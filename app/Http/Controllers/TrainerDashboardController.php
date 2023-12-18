@@ -148,7 +148,7 @@ class TrainerDashboardController extends Controller
             'trainer_id' => $request->trainer_id,
             'slot_id' => $request->slot_id,
             'date' => $request->date,
-            'note' => $request->note,
+            'note' => $request->note ? $request->note : '',
         ]);
 
 

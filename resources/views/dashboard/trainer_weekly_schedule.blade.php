@@ -114,7 +114,11 @@
                                                 @foreach ($slots as $s)
                                                 @if ($checkStartDate->format('Y-m-d') == $s['date'])
                                                     @php
+                                                    if($s['note'] != null)
+                                                    {
                                                         $applyStyle = true;
+
+                                                    }
                                                     @endphp
                                                 @endif
                                                 @endforeach
@@ -122,10 +126,12 @@
                                             <td class="text-center p-5" @if ($applyStyle) style="background-color: yellow; font-weight: bold;" @endif>
                                                 @foreach ($slots as $s)
                                                 @if ($checkStartDate->format('Y-m-d') == $s['date'])
+                                                 @if($s['note'] != null)
                                                     {{ $noteNumber }} {{ $s['note'] }}<br><br>
                                                     @php
                                                         $noteNumber++;
                                                     @endphp
+                                                @endif
                                                 @endif
                                                 @endforeach
                                                 @php
@@ -186,7 +192,10 @@
                                                 @foreach ($slots as $s)
                                                 @if ($checkStartDate->format('Y-m-d') == $s['startDate'])
                                                     @php
-                                                        $applyStyle = true;
+                                                    if($s['note'] != null)
+                                                        {
+                                                            $applyStyle = true;
+                                                        }
                                                     @endphp
                                                 @endif
                                                 @endforeach
@@ -194,10 +203,12 @@
                                             <td class="text-center p-5" @if ($applyStyle) style="background-color: yellow; font-weight: bold;" @endif>
                                                 @foreach ($slots as $s)
                                                 @if ($checkStartDate->format('Y-m-d') == $s['startDate'])
+                                                @if($s['note'] != null)
                                                     {{ $noteNumber }} {{ $s['note'] }}<br><br>
                                                     @php
                                                         $noteNumber++;
                                                     @endphp
+                                                    @endif
                                                 @endif
                                                 @endforeach
                                                 @php
