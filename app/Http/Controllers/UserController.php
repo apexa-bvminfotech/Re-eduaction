@@ -54,7 +54,6 @@ class UserController extends Controller
             'contact' => 'required|digits:10|numeric',
             'is_active' => 'required',
             'user_profile' => 'nullable|mimes:jpeg,png,jpg|max:2048',
-            'is_active' => 'required',
         ]);
 
         $user_profile = null;

@@ -28,6 +28,10 @@ Route::get('migrate', function() {
     Artisan::call('migrate');
     echo "Migration run success<br>";
 });
+Route::get('seeder', function() {
+    Artisan::call('db:seed --class=CreateAdminUserSeeder');
+    echo "Migration run seeder<br>";
+});
 Route::get('/clear-cache', function() {
     Artisan::call('cache:clear');
     echo "Cache is cleared<br>";
