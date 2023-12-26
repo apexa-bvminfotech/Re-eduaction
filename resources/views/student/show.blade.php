@@ -277,10 +277,10 @@
                                                 <tbody>
                                                 @foreach($proxy_staff_details as $psd)
                                                     <tr>
-                                                        <td>{{$psd->trainer->name}}</td>
-                                                        <td>{{$psd->slot->slot_time}}</td>
-                                                        <td>{{$psd->starting_date}}</td>
-                                                        <td>{{$psd->ending_date}}</td>
+                                                        <td>{{$psd->trainer->name ?? ''}}</td>
+                                                        <td>{{$psd->slot->slot_time ?? ''}}</td>
+                                                        <td>{{$psd->starting_date ?? ''}}</td>
+                                                        <td>{{$psd->ending_date ?? ''}}</td>
                                                         @if($loop->first)
                                                             <td>
                                                                 @can('student-proxy-staff-edit')
@@ -361,9 +361,9 @@
                                                 <tbody>
                                                 @foreach($assignStaff as $key => $as)
                                                     <tr>
-                                                        <td>{{$as->trainer->name}}</td>
-                                                        <td>{{$as->slot->slot_time}}</td>
-                                                        <td>{{$as->date}}</td>
+                                                        <td>{{$as->trainer->name ?? ''}}</td>
+                                                        <td>{{$as->slot->slot_time ?? ''}}</td>
+                                                        <td>{{$as->date ?? ''}}</td>
                                                         <td>
                                                             @if($loop->first)
                                                                 @can('student-regular-staff-edit')

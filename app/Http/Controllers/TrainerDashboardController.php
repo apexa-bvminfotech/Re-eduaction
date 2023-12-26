@@ -100,7 +100,7 @@ class TrainerDashboardController extends Controller
             $trainerDataProxy[$trainerName] = [];
 
             foreach ($trainerSlotProxy as $slotsProxy) {
-                $slotID = $slotsProxy->slot->id;
+                $slotID = $slotsProxy->slot->id ?? '';
 
                 if (!isset($trainerDataProxy[$trainerName][$slotID])) {
                     $trainerDataProxy[$trainerName][$slotID] = [
