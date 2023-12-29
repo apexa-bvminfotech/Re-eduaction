@@ -11,6 +11,7 @@
 
             </style>
         @endif
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <div class="container-fluid">
@@ -507,7 +508,12 @@
                                                                             class="btn btn-success btn-sm btn-student-appreciation"
                                                                             data-id="{{$appreciation->id}}" data-student-id="{{ $appreciation->student_id }}"> Appreciation
                                                                     </button>
+                                                                    <button type="button"
+                                                                    class="btn btn-danger btn-sm btn-student-appreciation-delete"
+                                                                    data-id="{{$appreciation->id}}" data-student-id="{{ $appreciation->student_id }}"> Delete
+                                                            </button>
                                                                 @endif
+
                                                             @endcan
                                                         </td>
                                                     </tr>
@@ -586,11 +592,19 @@
                                             @endif
                                             <button class="btn btn-success course-complete_{{ $student_course->course_id }}" style="display: none;" id="" disabled>Course Completed</button>
                                             <a class="btn btn-secondary btn-restart-course restart_course_{{ $student_course->course_id }}" data-student-id="{{ $student->id }}"
-                                               data-course-id="{{ $student_course->course_id }}" style="display: none;">Restart Course</a>
+                                               data-course-id="{{ $student_course->course_id }}" data-btn="Restart_task" style="display: none;">Restart Course</a>
                                             @if($student_course->end_date !== null)
                                                 <span><a class="btn btn-secondary btn-restart-course" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}">Restart Course</a></span>
                                             @endif
                                             <br><br>
+                                            <table class="table table-bordered table-striped" id="courseTable" style="width: 180%">
+                                                <td class="text-center"><b>Course Start Date:</b>  {{$student_course->start_date}}</td>
+                                                @if($student_course->end_date !== null)
+                                                <td class="text-center"><b>Course End Date:</b>  {{$student_course->end_date}}</td>
+                                                @endif
+                                                <td class="text-center"><b>Course Restart Date:</b>  {{$student_course->restart_date}}</td>
+                                            </table>
+
                                             <table class="table table-bordered table-striped" id="courseTable" style="width: 180%">
                                                 <input type="hidden" name="student_id" class="form-control student_id" value="{{$student->id}}">
                                                 <input type="hidden" name="course_id" class="form-control course_id" value="{{$student_course->course_id}}">
@@ -1021,6 +1035,30 @@
             $('#student_course_appreciation_id').val(id);
             $('#verticalModal4').modal('toggle');
         });
+
+        $(document).ready(function () {
+        $('.btn-student-appreciation-delete').click(function () {
+            var appreciationId = $(this).data('id');
+
+            var studentId = $(this).data('student-id');
+
+            if (confirm('Are you sure you want to delete this record?')) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: '/delete/' + appreciationId,
+                    headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (response) {
+                        console.log(response.message);
+                    },
+                    error: function (error) {
+                        console.error('Error deleting record:', error);
+                    }
+                });
+            }
+        });
+    });
 
         $(document).on('click', '.appreciation-form-submit', function () {
             $('#appreciationForm').submit();

@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\TrainerShedule;
 use App\Models\TrainerAttendance;
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Auth;
 
 class TrainerDashboardController extends Controller
@@ -60,18 +61,35 @@ class TrainerDashboardController extends Controller
             $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
 
-            $stuListWithTrainer = StudentStaffAssign::whereIn('student_id',$studentTrainer)->where('is_active','0')->with('trainer', 'student', 'slot')->get()->groupBy('trainer.name');
-            $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot')->get()->groupBy('trainer.name');
+            $stuListWithTrainer = StudentStaffAssign::whereIn('student_id',$studentTrainer)->where('student_staff_assigns.is_active', 0)
+            ->join('students', 'students.id', 'student_staff_assigns.student_id')
+            ->join('branches', 'branches.id', 'students.id')
+            ->with('trainer', 'student', 'slot')->get()->groupBy('trainer.name');
+            $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot')
+            ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
+            ->join('branches', 'branches.id', 'students.id')
+            ->get()->groupBy('trainer.name');
 
             $trainerSchedule = TrainerShedule::with('trainer','student','slot')->where('user_id', '=', 0)->get()->groupBy('trainer.name');
             $userSchedule = TrainerShedule::with('user')->where('user_id', '!=', 0)->get()->groupBy('user.name');
         }
         else{
-            $stuListWithTrainer = StudentStaffAssign::where('is_active','0')->with('trainer', 'student', 'slot')->get()->groupBy('trainer.name');
+            $stuListWithTrainer = StudentStaffAssign::
+            with('trainer', 'student', 'slot', 'branch')
+            ->where('student_staff_assigns.is_active', 0)
+            ->join('students', 'students.id', 'student_staff_assigns.student_id')
+            ->join('branches', 'branches.id', 'students.id')
+            ->with('trainer', 'student', 'slot')
+            ->get()
+            ->groupBy('trainer.name');
 
-            $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot')->get()->groupBy('trainer.name');
+            $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot','branch')
+            ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
+            ->join('branches', 'branches.id', 'students.id')
+            ->get()->groupBy('trainer.name');
 
-            $trainerSchedule = TrainerShedule::with('trainer','student','slot')->where('user_id', '=', 0)->get()->groupBy('trainer.name');
+            $trainerSchedule = TrainerShedule::with('trainer','student','slot')->where('user_id', '=', 0)
+            ->get()->groupBy('trainer.name');
 
             $userSchedule = TrainerShedule::with('user')->where('user_id', '!=', 0)->get()->groupBy('user.name');
         }
@@ -84,13 +102,16 @@ class TrainerDashboardController extends Controller
             $trainerData[$trainerName] = [];
 
             foreach ($trainerSlot as $slots) {
-                $slotID = $slots->slot->id;
+
+                $slotID = $slots->slot->id ?? '';
                 if (!isset($trainerData[$trainerName][$slotID])) {
                     $trainerData[$trainerName][$slotID] = [
-                        'slot_time' => $slots->slot->slot_time,
+                        'slot_time' => $slots->slot->slot_time ?? '',
                         'students' => [],
+                        'rtc' => $slots->branch->name ?? '',
                     ];
                 }
+
                 $trainerData[$trainerName][$slotID]['students'][] = $slots->student->name . ' ' . $slots->student->surname;
             }
         }
@@ -104,9 +125,10 @@ class TrainerDashboardController extends Controller
 
                 if (!isset($trainerDataProxy[$trainerName][$slotID])) {
                     $trainerDataProxy[$trainerName][$slotID] = [
-                        'slot_time' => $slotsProxy->slot->slot_time,
-                        'startDate'=> $slotsProxy->starting_date,
-                        'endDate'=> $slotsProxy->ending_date,
+                        'slot_time' => $slotsProxy->slot->slot_time ?? '',
+                        'startDate'=> $slotsProxy->starting_date ?? '',
+                        'endDate'=> $slotsProxy->ending_date ?? '',
+                        'rtc' => $slotsProxy->branch->name ?? '',
                         'students' => [],
                     ];
                 }
@@ -118,23 +140,33 @@ class TrainerDashboardController extends Controller
         foreach ($userSchedule as $userName => $user) {
             foreach($user as $u){
                     $userScheduleList[$userName][] = [
-                        'startDate' => $u->date,
-                        'note' => $u->note,
-                        'userName' => $userName
+                        'startDate' => $u->date ?? '',
+                        'note' => $u->note ?? '',
+                        'userName' => $userName ?? '',
+                        'day' => $u->day ?? '',
+                        'id' => $u->id ?? '',
                     ];
             }
         }
 
         foreach ($trainerSchedule as $trainerName => $UsertrainerSlot) {
             foreach($UsertrainerSlot as $Usertrainer){
+
                     $userListWithTrinerData[$trainerName][] = [
-                        'date' => $Usertrainer->date,
-                        'note' => $Usertrainer->note,
+                        'date' => $Usertrainer->date ?? '',
+                        'note' => $Usertrainer->note ?? '',
+                        'day' => $Usertrainer->day ?? '',
                         'userName' => $trainerName ?? '',
+                        'slot_time'=>$Usertrainer->slot->slot_time ?? '',
+                        'id'=> $Usertrainer->id ?? '',
                     ];
+
             }
 
         }
+
+
+
 
         return view('dashboard.trainer_weekly_schedule', compact('userScheduleList','userListWithTrinerData','trainerData','trainerDataProxy','trainershedule','slotstime','users'));
     }
@@ -148,6 +180,7 @@ class TrainerDashboardController extends Controller
             'trainer_id' => $request->trainer_id,
             'slot_id' => $request->slot_id,
             'date' => $request->date,
+            'day' => $request->day,
             'note' => $request->note ? $request->note : '',
         ]);
 
@@ -162,6 +195,26 @@ class TrainerDashboardController extends Controller
             ->get();
         return response()->json(['slots' => $proxy_slots]);
     }
+
+
+
+    public function slotupdate(Request $request, $slotId)
+    {
+
+        $slot = TrainerShedule::findOrFail($slotId);
+
+        $slot->note = $request->input('note');
+        $slot->trainer_id = $request->input('trainer_id');
+        $slot->slot_id = $request->input('slot_id');
+        $slot->day = $request->input('day');
+        // dd($slot);
+
+        $slot->save();
+
+        return redirect()->back()->with('success', 'Slot updated successfully');
+    }
+
+
 }
 
 

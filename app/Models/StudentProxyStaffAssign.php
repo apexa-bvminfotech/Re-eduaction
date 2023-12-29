@@ -24,4 +24,9 @@ class StudentProxyStaffAssign extends Model
         return $this->belongsTo(Slot::class)->where('is_active', 0);
     }
 
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class)->where('is_active', 0);
+    }
+
 }

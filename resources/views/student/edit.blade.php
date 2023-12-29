@@ -380,7 +380,7 @@
                                                     <div class="col-md-6 mb-1">
                                                         <div class="form-group">
                                                             <label for="age">Age:</label>
-                                                            <input type="number" name="age" id="age" min="1" max="20"
+                                                            <input type="number" name="age" id="age"
                                                                    onkeyup="ageValidation()"
                                                                    class="form-control"
                                                                    placeholder="enter age" value="{{$student->age}}">
@@ -417,7 +417,7 @@
                                                     <div class="col-md-6 mb-1" id="notApplicableContainer">
                                                         <label for="course_material">Course Material:</label>
                                                         <div id="empty_course_material">
-                                                            <div class="form-check">                                                            
+                                                            <div class="form-check">
                                                                 @foreach ($courseWiseMaterial as $courseMaterial)
                                                                     <input class="form-check-input course_material" type="checkbox" id="course_material"
                                                                         data-course-id="{{ $courseMaterial->course_id }}" name="course_material[]"  value="{{ $courseMaterial->id }}"
@@ -428,9 +428,9 @@
                                                                     <br>
                                                                 @endforeach
                                                             </div>
-                                                        </div>   
+                                                        </div>
                                                         <div id="append_course_material">
-                                                                
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -490,8 +490,8 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                   
-                                                    
+
+
                                                     <div class="col-md-6 mb-1">
                                                         <div class="form-group">
                                                             <label for="payment">Payment Condition:</label>
@@ -768,7 +768,7 @@
                                                                 <div id="editImageContainer">
                                                                     <img src="{{asset('assets/student/images/'. $student->upload_student_image )}}"
                                                                     width="100" height="100">
-                                                                </div>   
+                                                                </div>
                                                                 <div style="display: none;" id="imageContainer">
                                                                     <img id="previewHolder" alt="Uploaded Image Preview Holder" width="100px" height="100px"/>
                                                                 </div>
@@ -1015,7 +1015,7 @@
                     }
                 });
             });
-        
+
             //append course_material according to change meduim and course
             $('body').on("change", ".medium-list, #course_id", function(){
                 $('#empty_course_material').empty();
@@ -1073,6 +1073,6 @@
         document.addEventListener('DOMContentLoaded', function () {
             window.stepper = new Stepper(document.querySelector('.bs-stepper'))
         });
-        
+
     </script>
 @endpush

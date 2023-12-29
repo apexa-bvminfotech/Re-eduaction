@@ -9,7 +9,7 @@ class StudentCourse extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['student_id','user_id','course_id','start_date','end_date','appreciation_id','appreciation_given_date'];
+    protected $fillable = ['student_id','user_id','course_id','start_date','end_date','restart_date','appreciation_id','appreciation_given_date'];
 
     public function course(){
         return $this->belongsTo(Course::class);
@@ -25,5 +25,8 @@ class StudentCourse extends Model
     }
     public function studentCourseMaterial(){
         return $this->belongsTo(StudentCourseMaterial::class,'student_id','student_id');
+    }
+    public function branch(){
+        return $this->belongsTo(Branch::class);
     }
 }

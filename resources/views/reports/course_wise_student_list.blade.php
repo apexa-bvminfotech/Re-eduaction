@@ -33,7 +33,7 @@
                                             @foreach ($students as $index => $student)
                                                 <tr>
                                                     @if ($index === 0)
-                                                        <td rowspan="{{ count($students) }}">{{ $courseName }}</td>
+                                                    <td rowspan="{{ count($students) }}">{{ $courseName . ' ' . count($students) }}</td>
                                                     @endif
                                                     <td>{{ $student->student->name }} {{ $student->student->surname }}</td>
                                                     <td>{{ $student->student->medium }}</td>

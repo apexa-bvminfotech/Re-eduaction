@@ -43,23 +43,23 @@
                                             @endphp
                                             @foreach($slot->slotList as $s)
                                                 <tr>
-                                                    <td>{{ $s->student->id }}</td>
-                                                    <td>{{$s->student->registration_date}}</td>
-                                                    <td>{{ $s->student->name }} {{ $s->student->surname }}</td>
-                                                    <td>{{ $s->student->father_contact_no }}</td>
+                                                    <td>{{ $s->student->id ?? ''}}</td>
+                                                    <td>{{$s->student->registration_date ?? ''}}</td>
+                                                    <td>{{ $s->student->name  ?? ''}} {{ $s->student->surname ??''}}</td>
+                                                    <td>{{ $s->student->father_contact_no ?? ''}}</td>
                                                     <td>
                                                         @foreach($s->student->courses as $course)
-                                                            {{$course->course->course_name }}<br>
+                                                            {{$course->course->course_name ?? '' }}<br>
                                                         @endforeach
                                                     </td>
-                                                    <td>{{ $s->student->standard }}</td>
-                                                    <td>{{ $s->student->medium }}</td>
+                                                    <td>{{ $s->student->standard ?? ''}}</td>
+                                                    <td>{{ $s->student->medium   ?? ''}}</td>
 
                                                     @if($i == 0)
-                                                    <td rowspan="2" style="vertical-align:middle">{{$slot->id}}</td>
-                                                    <td rowspan="2" style="vertical-align:middle">{{$slot->slot_time}}</td>
-                                                    <td rowspan="2" style="vertical-align:middle">{{$slot->trainer->name}}</td>
-                                                    <td rowspan="2" style="vertical-align:middle">{{$slot->whatsapp_group_name}}</td>
+                                                    <td rowspan="2" style="vertical-align:middle">{{$slot->id ?? ''}}</td>
+                                                    <td rowspan="2" style="vertical-align:middle">{{$slot->slot_time ?? ''}}</td>
+                                                    <td rowspan="2" style="vertical-align:middle">{{$slot->trainer->name ?? ''}}</td>
+                                                    <td rowspan="2" style="vertical-align:middle">{{$slot->whatsapp_group_name ?? ''}}</td>
                                                     <td rowspan="2" style="vertical-align:middle">{{$slot->rtc->rtc_name ?? ''}}</td>
                                                     @endif
                                                 </tr>

@@ -56,12 +56,12 @@
                                     <tbody>
                                         @foreach ($slot as $key => $s)
                                             <tr>
-                                                <td>{{ $s->id }}</td>
-                                                <td>{{$s->branch->name}}</td>
-                                                <td>{{ $s->trainer->name }}</td>
+                                                <td>{{ $s->id ?? '' }}</td>
+                                                <td>{{$s->branch->name ?? ''}}</td>
+                                                <td>{{ $s->trainer->name ?? '' }}</td>
                                                 <td>{{$s->rtc->rtc_name ?? ''}}</td>
-                                                <td>{{ $s->slot_time }}</td>
-                                                <td>{{$s->whatsapp_group_name}}</td>
+                                                <td>{{ $s->slot_time ?? '' }}</td>
+                                                <td>{{$s->whatsapp_group_name ?? ''}}</td>
                                                 @can('slot-edit')
                                                     <td>
                                                         <span style="display: none">{{ $s->is_active }}</span>
@@ -204,70 +204,147 @@
     var allTrainers = [];
     $(document).ready(function () {
         allTrainers = $('.proxy_class.select2.trainer_id option').clone();
+        // $(function () {
+        //     dataTable =  $("#example1").DataTable({
+        //         "responsive": true, "lengthChange": false, "autoWidth": false,
+        //         "buttons": ["csv", "excel", "pdf", "print"],
+        //         initComplete: function () {
+        //             this.api().columns([1]).every( function () {
+        //                 var column = this;
+        //                 var select = $('<select class="form-control select2"><option value="">All</option></select>')
+        //                     .appendTo( $(column.header()).find('span').empty() )
+        //                     .on({ 'change': function () {
+        //                             var val = $.fn.dataTable.util.escapeRegex(
+        //                                 $(this).val()
+        //                             );
+        //                             column
+        //                                 .search( val ? '^'+val+'$' : '', true, false ).draw();
+
+        //                         },
+        //                         'click': function(e) {
+        //                             e.stopPropagation();
+        //                         }
+        //                     });
+        //                 column.data().unique().sort().each( function ( d, j ) {
+        //                     select.append( '<option value="'+d+'">'+d+'</option>' )
+        //                 });
+        //             },
+        //             this.api().columns([6]).every( function () {
+        //                     var column = this;
+        //                     var val = 0;
+        //                     $('.status-dropdown').on({ 'change': function () {
+        //                             var val = $.fn.dataTable.util.escapeRegex(
+        //                                 $(this).val()
+        //                             );
+        //                             column.column(6).search(val).draw();
+        //                         },
+        //                     });
+        //                     column.column(6).search(val).draw();
+        //                 })
+        //             );
+        //         }
+        //     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+
+        //     $(document).on('change', '.checkStatus', function() {
+        //         var status = $(this).prop('checked') == true ? 0 : 1;
+        //         var slot_id = $(this).data('id');
+        //         $.ajax({
+        //             type: "GET",
+        //             url: 'change-status/changeSlotStatus',
+        //             data: {'status': status, 'slot_id': slot_id},
+        //             success: function (data) {
+        //                 toastr.options =
+        //                     {
+        //                         "closeButton" : true,
+        //                         "progressBar" : true
+        //                     }
+        //                 if(status){
+        //                     toastr.error(data.success);
+        //                 } else {
+        //                     toastr.success(data.success);
+        //                 }
+        //             }
+        //         });
+        //     });
+        // });
+
+
         $(function () {
-            dataTable =  $("#example1").DataTable({
-                "responsive": true, "lengthChange": false, "autoWidth": false,
-                "buttons": ["csv", "excel", "pdf", "print"],
-                initComplete: function () {
-                    this.api().columns([1]).every( function () {
-                        var column = this;
-                        var select = $('<select class="form-control select2"><option value="">All</option></select>')
-                            .appendTo( $(column.header()).find('span').empty() )
-                            .on({ 'change': function () {
-                                    var val = $.fn.dataTable.util.escapeRegex(
-                                        $(this).val()
-                                    );
-                                    column
-                                        .search( val ? '^'+val+'$' : '', true, false ).draw();
+    var dataTable = $("#example1").DataTable({
+        "responsive": true,
+        "lengthChange": false,
+        "autoWidth": false,
+        "buttons": ["csv", "excel", "pdf", "print"],
+        initComplete: function () {
+            var api = this.api();
 
-                                },
-                                'click': function(e) {
-                                    e.stopPropagation();
-                                }
-                            });
-                        column.data().unique().sort().each( function ( d, j ) {
-                            select.append( '<option value="'+d+'">'+d+'</option>' )
-                        });
-                    },
-                    this.api().columns([6]).every( function () {
-                            var column = this;
-                            var val = 0;
-                            $('.status-dropdown').on({ 'change': function () {
-                                    var val = $.fn.dataTable.util.escapeRegex(
-                                        $(this).val()
-                                    );
-                                    column.column(6).search(val).draw();
-                                },
-                            });
-                            column.column(6).search(val).draw();
-                        })
-                    );
-                }
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
-
-            $(document).on('change', '.checkStatus', function() {
-                var status = $(this).prop('checked') == true ? 0 : 1;
-                var slot_id = $(this).data('id');
-                $.ajax({
-                    type: "GET",
-                    url: 'change-status/changeSlotStatus',
-                    data: {'status': status, 'slot_id': slot_id},
-                    success: function (data) {
-                        toastr.options =
-                            {
-                                "closeButton" : true,
-                                "progressBar" : true
-                            }
-                        if(status){
-                            toastr.error(data.success);
-                        } else {
-                            toastr.success(data.success);
+            // Column 1 filtering
+            api.columns([1]).every(function () {
+                var column = this;
+                var select = $('<select class="form-control select2"><option value="">All</option></select>')
+                    .appendTo($(column.header()).find('span').empty())
+                    .on({
+                        'change': function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        },
+                        'click': function (e) {
+                            e.stopPropagation();
                         }
-                    }
+                    });
+
+                column.data().unique().sort().each(function (d, j) {
+                    select.append('<option value="' + d + '">' + d + '</option>');
                 });
             });
+
+            // Column 6 (Status) filtering
+            api.columns([6]).every(function () {
+                var column = this;
+                var statusDropdown = $('.status-dropdown');
+
+                statusDropdown.on('change', function () {
+                    var val = $(this).val();
+
+                    if (val === '0') {
+                        column.search(val).draw();
+                    } else if (val === '1') {
+                        column.search(val).draw();
+                    } else {
+                        column.search('').draw();
+                    }
+                });
+
+                var defaultVal = statusDropdown.val();
+                column.search(defaultVal).draw();
+            });
+        }
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+    $(document).on('change', '.checkStatus', function () {
+        var status = $(this).prop('checked') ? 0 : 1;
+        var slot_id = $(this).data('id');
+        $.ajax({
+            type: "GET",
+            url: 'change-status/changeSlotStatus',
+            data: {'status': status, 'slot_id': slot_id},
+            success: function (data) {
+                toastr.options = {
+                    "closeButton": true,
+                    "progressBar": true
+                };
+                if (status) {
+                    toastr.error(data.success);
+                } else {
+                    toastr.success(data.success);
+                }
+                // You might want to redraw the DataTable after changing the status
+                dataTable.ajax.reload();
+            }
         });
+    });
+});
 
         //shift regular slot
         $(document).on('click', '.btn-shift-regular-slot', function () {

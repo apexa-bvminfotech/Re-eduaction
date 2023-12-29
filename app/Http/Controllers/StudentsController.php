@@ -231,6 +231,7 @@ class StudentsController extends Controller
     public function show($id)
     {
         $student = Student::with('courses','studentDmit.trainer','studentStatus','branch','studentMaterial.material','studentTrainer.trainer')->find($id);
+
         $assignStaff = StudentStaffAssign::orderBy('id','DESC')->where('student_id', $student->id)->with('Trainer', 'Slot')->get();
         $studentCompleteCourses = StudentCourseComplete::where('status',1)->where('student_id',$id)->pluck('id')->toArray();
         $approvedCourse= StudentCourseComplete::where('status',2)->where('student_id',$id)->pluck('id')->toArray();
@@ -289,10 +290,20 @@ class StudentsController extends Controller
 
         $currentMonthName = !empty($fromDate) ? Carbon::parse($fromDate)->format('F') : Carbon::now()->format('F');
 
-        return view('student.show', compact('student', 'assignStaff', 'studentAttendance', 'proxy_staff_details','studentCompleteCourses','approvedCourse',
+        return view('student.show', compact('student','assignStaff', 'studentAttendance', 'proxy_staff_details','studentCompleteCourses','approvedCourse',
             'student_leave_show','student_appreciation','fromDate','toDate', 'trainer','studentAttendances','currentMonthName','numberOfDaysInCurrentMonth',
             'allAbsentStudent','allPresentStudent','currentMonthInHead','currentMonthInBody'));
     }
+
+    public function delete($id)
+    {
+        $appreciation = StudentCourse::findOrFail($id);
+
+        $appreciation->delete();
+
+        return response()->json(['message' => 'Record deleted successfully']);
+    }
+
 
     public function edit($id)
     {
@@ -589,6 +600,8 @@ class StudentsController extends Controller
 
         return redirect()->back()->with('success', 'Proxy-Trainer assigned successfully');
     }
+
+
 
     public function sendNotification(Request $request)
     {
@@ -925,7 +938,8 @@ class StudentsController extends Controller
            'trainer_name' => $request->trainer_name,
            'cancel_reason' => $request->cancel_reason,
            'hold_reason' => $request->hold_reason,
-           'date' => date('Y-m-d'),
+        //    'date' => date('Y-m-d'),
+           'date'=> $request->date,
            'student_id' => $request->student_id,
            'user_id' => Auth::id(),
         ]);
@@ -984,6 +998,7 @@ class StudentsController extends Controller
 
     public function updateCourseStartEndDate($student_id, $course_id, $task)
     {
+
         if($task == "start_task"){
              StudentCourse::where('student_id',$student_id)
             ->where('course_id',$course_id)->update([
@@ -1003,11 +1018,15 @@ class StudentsController extends Controller
     public function restartCourse($student_id, $course_id)
     {
         StudentCourse::where('student_id',$student_id)->where('course_id',$course_id)->update([
-                'end_date' =>  null,
+            'end_date' =>  null,
+                'restart_date' =>  date('Y-m-d'),
             ]);
         return response()->json(['success' => true, 'course_id' => $course_id]);
     }
+
+
 }
+
 
 
 

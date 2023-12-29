@@ -9,8 +9,8 @@
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
-        </section>    
-        
+        </section>
+
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
@@ -23,16 +23,16 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th><span></span></th>
-                                            <th><span></span></th>
-                                            <th><span></span></th>
-                                            <th><span></span></th>
+                                            <th><span>Student Name</span></th>
+                                            <th><span>Course</span></th>
+                                            <th><span>Medium</span></th>
+                                            <th><span>Standred</span></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($studentList as $key=>$student)
                                             @foreach ($student->courses as $course)
-                                            <tr>    
+                                            <tr>
                                                 <td>{{ $key+1 }}</td>
                                                 <td>{{ $student->name }} {{ $student->surname  }}</td>
                                                 <td>{{ $course->course->course_name  }}</td>
@@ -55,31 +55,30 @@
 @push('scripts')
     <script>
         $(function () {
-            dataTable = $("#example1").DataTable({
+            $("#example1").DataTable({
                 "responsive": true, "lengthChange": false, "autoWidth": false,
                 "buttons": ["csv", "excel", "pdf", "print"],
                 initComplete: function () {
                     this.api().columns([1, 2, 3, 4]).every(function () {
-                            var column = this;
-                            var select = $('<select class="form-control select2"><option value="">All</option></select>')
-                                .appendTo($(column.header()).find('span').empty())
-                                .on({
-                                    'change': function () {
-                                        var val = $.fn.dataTable.util.escapeRegex(
-                                            $(this).val()
-                                        );
-                                        column
-                                            .search(val ? '^' + val + '$' : '', true, false).draw();
-                                    },
-                                    'click': function (e) {
-                                        e.stopPropagation();
-                                    }
-                                });
-                            column.data().unique().sort().each(function (d, j) {
-                                select.append('<option value="' + d + '">' + d + '</option>')
+                        var column = this;
+                        var columnName = column.header().innerText;
+
+                        var select = $('<select class="form-control select2"><option value="">' + columnName + '</option></select>')
+                            .appendTo($(column.header()).find('span').empty())
+                            .on({
+                                'change': function () {
+                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                                    column.search(val ? '^' + val + '$' : '', true, false).draw();
+                                },
+                                'click': function (e) {
+                                    e.stopPropagation();
+                                }
                             });
-                        },
-                    );
+
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                    });
                 }
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });

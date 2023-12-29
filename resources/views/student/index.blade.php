@@ -39,11 +39,11 @@
                                         <th>ID</th>
                                         <th>Name</th>
                                         <th>Course</th>
-                                        <th><span></span></th>
+                                        <th><span>Branch</span></th>
                                         <th>Phone</th>
-                                        <th><span></span></th>
-                                        <th><span></span></th>
-                                        <th><span></span></th>
+                                        <th><span>Standard</span></th>
+                                        <th><span>Medium</span></th>
+                                        <th><span>Status</span></th>
                                         <th>Action</th>
                                     </tr>
                                     </thead>
@@ -61,7 +61,15 @@
                                             <td>{{ $s->mother_contact_no }}</td>
                                             <td>{{ $s->standard }}</td>
                                             <td>{{ $s->medium }}</td>
+
+                                             @if($s->isActiveStatus()->status == 'Hold' || $s->isActiveStatus()->status == 'Cancel')
+                                            <td style="color: #dc3545;font-weight: bold;">{{ $s->isActiveStatus() != null ? $s->isActiveStatus()->status : 'Pending' }}</td>
+                                            @elseif($s->isActiveStatus()->status == 'Start' || $s->isActiveStatus()->status == 'Complete')
                                             <td>{{ $s->isActiveStatus() != null ? $s->isActiveStatus()->status : 'Pending' }}</td>
+                                            @else
+                                             <td>{{ $s->isActiveStatus() != null ? $s->isActiveStatus()->status : 'Pending' }}</td>
+
+                                            @endif
                                             <td>
                                                 <div class="flex justify-between">
                                                     <a href="{{ route('student.show',$s->id) }}"
@@ -299,6 +307,13 @@
                                             <option value="Complete">Complete</option>
                                         </select>
                                     </div>
+                                    {{-- <div class="col-md-12 mb-1">
+                                    <div class="form-group">
+                                        <label for="dob">Status Date:</label>
+                                        <input type="date" class="form-control" name="date"
+                                                value="{{ old('date',date('Y-m-d')) }}" id="date">
+                                    </div>
+                                    </div> --}}
                                     <div class="col-md-12 mb-1" id="displayTrainerBox" style="display: none">
                                         <div class="form-group">
                                             <label for="text">Trainer name:</label>
@@ -493,33 +508,33 @@
                 $('#studentStatusForm').submit();
             });
             $(function () {
-                $("#example1").DataTable({
-                    "responsive": true, "lengthChange": false, "autoWidth": false,
-                    "buttons": ["csv", "excel", "pdf", "print"],
-                    initComplete: function () {
-                        this.api().columns([ 3, 5, 6, 7]).every(function () {
-                            var column = this;
-                            var select = $('<select class="form-control select2"><option value="">All</option></select>')
-                                .appendTo($(column.header()).find('span').empty())
-                                .on({
-                                    'change': function () {
-                                        var val = $.fn.dataTable.util.escapeRegex(
-                                            $(this).val()
-                                        );
-                                        column
-                                            .search(val ? '^' + val + '$' : '', true, false).draw();
-                                    },
-                                    'click': function (e) {
-                                        e.stopPropagation();
-                                    }
-                                });
-                            column.data().unique().sort().each(function (d, j) {
-                                select.append('<option value="' + d + '">' + d + '</option>')
+            $("#example1").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["csv", "excel", "pdf", "print"],
+                initComplete: function () {
+                    this.api().columns([3, 5, 6, 7]).every(function () {
+                        var column = this;
+                        var columnName = column.header().innerText;
+
+                        var select = $('<select class="form-control select2"><option value="">' + columnName + '</option></select>')
+                            .appendTo($(column.header()).find('span').empty())
+                            .on({
+                                'change': function () {
+                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                                    column.search(val ? '^' + val + '$' : '', true, false).draw();
+                                },
+                                'click': function (e) {
+                                    e.stopPropagation();
+                                }
                             });
+
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>');
                         });
-                    }
-                }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-            });
+                    });
+                }
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        });
         });
     </script>
 @endpush

@@ -27,4 +27,9 @@ class StudentStaffAssign extends Model
     {
         return $this->belongsTo(Student::class, 'student_id');
     }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class)->where('is_active', 0);
+    }
 }

@@ -9,8 +9,8 @@
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
-        </section>    
-        
+        </section>
+
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
@@ -32,18 +32,18 @@
                                             @foreach($transferStudent as $key => $tStudent)
                                             <tr>
                                                 @if($student->student_id == $tStudent->student_id)
-                                                    <td>{{ $tStudent->student->name }} {{ $tStudent->student->surname}}</td>
+                                                    <td>{{ $tStudent->student->name ?? '' }} {{ $tStudent->student->surname ?? ''}}</td>
                                                     <td>
-                                                        {{ $tStudent->trainer->name }}<br>
-                                                        {{ $tStudent->slot->slot_time }}
+                                                        {{ $tStudent->trainer->name ?? ''}}<br>
+                                                        {{ $tStudent->slot->slot_time ?? '' }}
                                                     </td>
                                                     <td>
-                                                        {{ $student->trainer->name }}<br>
-                                                        {{ $student->slot->slot_time }}
+                                                        {{ $student->trainer->name ?? '' }}<br>
+                                                        {{ $student->slot->slot_time ?? '' }}
                                                     </td>
-                                                    <td>{{ date('Y-m-d',strtotime($student->date)) }}</td>
+                                                    <td>{{ date('Y-m-d',strtotime($student->date)) ??''}}</td>
                                                 @endif
-                                            </tr>         
+                                            </tr>
                                             @endforeach
                                         @endforeach
                                     </tbody>

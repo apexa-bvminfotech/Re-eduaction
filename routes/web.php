@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 
@@ -61,6 +62,10 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::group(['middleware'=>['auth']],function (){
     Route::resource('student', 'StudentsController');
     Route::post('change-student-pwd','StudentsController@changeStudentPwd')->name('change.student.pwd');
+    Route::delete('/delete/{id}','StudentsController@delete')->name('delete');
+   // Route::get('/showStartdate', 'StudentsController@showStartdate')->name('showStartdate');
+    Route::post('/storeStartdate//{student_id}/{course_id}', 'StudentsController@storeStartdate')->name('storeStartdate');
+
     Route::resource('student_ptm', 'StudentPTMController');
     Route::group(['prefix'=>'student'],function (){
         Route::get('/staff-slot/{id}','StudentsController@slot');
@@ -73,6 +78,7 @@ Route::group(['middleware'=>['auth']],function (){
         Route::get('/get-leave-data/{id}','StudentsController@getLeaveData')->name('student.getLeaveData');
         Route::post('/get-course-material-data','StudentsController@getCourseMaterialData')->name('student.getCourseMaterialData');
 
+        // Route::delete('delete/{id}', [StudentsController::class, 'delete'])->name('student.delete');
         Route::get('/edit-student-approve-leave/{id}','StudentsController@proxySlot');
         Route::post('/proxy-staff', 'StudentsController@proxyStaff')->name('student.proxyStaff');
         Route::post('/send-notification', 'StudentsController@sendNotification')->name('student.sendNotification');
@@ -110,6 +116,8 @@ Route::group(['middleware'=>['auth']],function (){
     });
 
     Route::post('/submit-shift-regular-slot', 'SlotController@shiftRegularSlot')->name('slot.shift-regular-slot');
+
+    // Route::put('slots/{slotId}', [SlotController::class, 'update'])->name('update.slot');
     Route::get('get-trainer-data','SlotController@gettrainerdata')->name('get-trainer-data');
     Route::get('assign-proxy-slot','SlotController@assignProxySlot')->name('slot.assign-proxy-slot');
     Route::post('submit-proxy-slot','SlotController@submitProxySlot')->name('slot.submit-proxy-slot');
@@ -130,12 +138,16 @@ Route::group(['middleware'=>['auth']],function (){
     Route::get('/weekly-student-list-with-trainer','ReportController@getWeeklyStudentListWithTrainer')->name('report.weekly-student-list-with-trainer');
     Route::get('/transfer-student-transfer-trainer-list','ReportController@getTransferStudentTransferTrainerList')->name('report.transfer-student-transfer-trainer-list');
     Route::get('/reports-student-data','ReportController@getStudentData')->name('report.student-data');
+    Route::get('/sloat-wise-student','ReportController@sloatwisestudent')->name('report.sloatwisestudent');
+    Route::get('/proxy-sloat-wise-student','ReportController@Proxysloatwisestudent')->name('report.Proxysloatwisestudent');
 
     Route::group(['prefix' => 'trainer-dashboard'], function(){
         Route::get('/','TrainerDashboardController@index')->name('trainerdashboard.index');
         Route::get('/trainer-schedule','TrainerDashboardController@traineWeeklySchedule')->name('trainer.weekly.schedule');
         Route::post('/trinerweeklyadd', 'TrainerDashboardController@trinerweeklyadd')->name('get-slot-times');
         Route::get('shift-triner-slot/{id}','TrainerDashboardController@TrinerSlot');
+        Route::post('/slots/{slotId}', 'TrainerDashboardController@slotupdate')->name('sloatupdate');
+        
     });
 
     Route::group(['prefix'=>'student-dashboard'],function (){

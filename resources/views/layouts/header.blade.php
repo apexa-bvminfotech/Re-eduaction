@@ -3,7 +3,9 @@
         <li class="nav-item">
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
+
         <li class="nav-item d-none d-sm-inline-block">
+            <h4 style="margin-top: 6px ; font-weight: bold;">Welcome {{auth()->user()->name, auth()->user()->surname}}</h4>
         </li>
         <li class="nav-item d-none d-sm-inline-block"></li>
     </ul>
@@ -40,8 +42,8 @@
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                 <a class="dropdown-item" href="{{route('profile')}}">Profile</a>
-                <a class="dropdown-item" href="#">Settings</a>
-                <a class="dropdown-item" href="#">Activities</a>
+                {{-- <a class="dropdown-item" href="#">Settings</a>
+                <a class="dropdown-item" href="#">Activities</a> --}}
                 <a class="dropdown-item" href="{{ route('logout') }}"
                    onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

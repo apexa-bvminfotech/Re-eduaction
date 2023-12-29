@@ -35,7 +35,7 @@ class SlotController extends Controller
      */
     public function index()
     {
-        $slot = Slot::orderBy('id', 'DESC')->where('is_active','0')->get();
+        $slot = Slot::orderBy('id', 'DESC')->get();
         if(Auth::user()->type == 1){
             $slot = Slot::where('branch_id', Auth::user()->branch_id)->where('is_active','0')->orderBy('id', 'DESC')->get();
         }
@@ -225,7 +225,9 @@ class SlotController extends Controller
 
     public function shiftRegularSlot(Request $request)
     {
+
         $getStudents = StudentStaffAssign::where('trainer_id',$request->old_regular_trainer_id)->where('slot_id',$request->old_regular_slot_id)->where('is_active','0')->get()->toArray();
+
         $updateStatus = StudentStaffAssign::where('trainer_id',$request->old_regular_trainer_id)->where('slot_id',$request->old_regular_slot_id)->update([
             'is_active' => '1',
         ]);
@@ -270,7 +272,7 @@ class SlotController extends Controller
                     'starting_date' => $request->starting_date,
                     'ending_date' => $request->ending_date,
                 ]);
-            }  
+            }
         }
         else{
             foreach($proxySlotShift as $proxyTrainer){
@@ -281,9 +283,9 @@ class SlotController extends Controller
                     'starting_date' => $request->starting_date,
                     'ending_date' => $request->ending_date,
                 ]);
-            } 
+            }
         }
-         
+
         return redirect()->back()->with('success', 'Trainer shifted succesfully !!');
     }
 }

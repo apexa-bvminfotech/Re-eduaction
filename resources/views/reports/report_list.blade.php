@@ -95,6 +95,18 @@
                                                 <td>10.</td>
                                                 <td><a href="{{ route('report.transfer-student-transfer-trainer-list') }}">Transfer Student / Transfer Trainer List</a></td>
                                             </tr>
+                                            <tr>
+                                                <td>11.</td>
+                                                <td><a href="{{ route('report.sloatwisestudent') }}">Regular Sloat Wise Student List</a></td>
+                                            </tr>
+                                            <tr>
+                                                <td>12.</td>
+                                                <td><a href="{{ route('report.Proxysloatwisestudent') }}">Proxy Sloat Wise Student List</a></td>
+                                            </tr>
+                                            <tr>
+                                                <td>13.</td>
+                                                <td><a href="{{ route('report.student-data') }}">Student</a></td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>

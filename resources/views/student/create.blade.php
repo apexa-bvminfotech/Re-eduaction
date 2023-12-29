@@ -80,7 +80,7 @@
                                                         <div class="form-group">
                                                             <label for="dob">Registration Date:</label>
                                                             <input type="date" class="form-control" name="registration_date"
-                                                                   min="{{ date('Y-m-d') }}" value="{{ old('registration_date',date('Y-m-d')) }}" id="registration_date">
+                                                                    value="{{ old('registration_date',date('Y-m-d')) }}" id="registration_date">
                                                             @error('registration_date')
                                                                 <span class="text-danger">{{$message}}</span>
                                                             @enderror
@@ -204,7 +204,7 @@
                                                             <label for="medium">Medium:</label>
                                                             <br>
                                                             <div class="form-check form-check-inline">
-                                                                <input type="checkbox" value="gujarati" 
+                                                                <input type="checkbox" value="gujarati"
                                                                        {{ old("medium") === 'gujarati' ? 'checked' : '' }}
                                                                        name="medium"
                                                                        class="form-check medium-list" id="medium-list">
@@ -374,7 +374,7 @@
                                                     <div class="col-md-6 mb-1">
                                                         <div class="form-group">
                                                             <label for="age">Age:</label>
-                                                            <input type="number" name="age" id="age" min="1" max="20"
+                                                            <input type="number" name="age" id="age"
                                                                    class="form-control"
                                                                    placeholder="enter age" value="{{ old('age') }}">
                                                             @error('age')
@@ -411,7 +411,7 @@
                                                         <div class="form-group">
                                                             <label for="course_material">Course Material: </label><br>
                                                             <div id="course_material">
-                                                                
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1007,7 +1007,7 @@
 
             //append course_material according to change meduim and course
             $('body').on("change", ".medium-list, #course_id", function(){
-                $('#course_material').empty(); 
+                $('#course_material').empty();
                 var medium_id = $('input[name="medium"]:checked').val();
                 var course_id = $('.course_id option:selected').map(function () {
                     return $(this).val();

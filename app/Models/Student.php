@@ -15,6 +15,9 @@ class Student extends Model
     public function course(){
         return $this->belongsTo(Course::class);
     }
+    public function status(){
+        return $this->belongsTo(StudentStatus::class);
+    }
     public function branch(){
         return $this->belongsTo(Branch::class);
     }

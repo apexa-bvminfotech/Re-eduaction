@@ -9,6 +9,7 @@ use App\Models\Student;
 use App\Models\StudentCourse;
 use App\Models\StudentDMIT;
 use App\Models\StudentStaffAssign;
+use App\Models\StudentProxyStaffAssign;
 use App\Models\StudentStatus;
 use App\Models\Trainer;
 use Illuminate\Http\Request;
@@ -58,11 +59,14 @@ class ReportController extends Controller
         if(Auth::user()->type == 1){
             $user = Auth::user();
             $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
+            $branch = Branch::where('user_id',$user->id)->where('is_active',0)->first();
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
+
             $qurey = Student::whereIn('id',$studentTrainer)->from('students');
         }
         else{
             $qurey = Student::from('students');
+
         }
 
         if($data['startDate'] != '' && $data['startDate'] != null){
@@ -73,7 +77,7 @@ class ReportController extends Controller
             $qurey->whereDate('registration_date', '<=',  date('Y-m-d', strtotime($data['endDate'])));
         }
         $data['studentList'] = $qurey->get();
-        $data['studentList'] = $qurey->with('statusStudent','studentTrainer.trainer')->get();
+        $data['studentList'] = $qurey->with('statusStudent','studentTrainer.trainer','branch')->get();
         return view('reports.student_list', $data);
     }
 
@@ -176,8 +180,47 @@ class ReportController extends Controller
         }
         else{
             $studentStatus = StudentStatus::whereIn('status',['Hold','Cancel'])->where('is_active','0')->with('student.activeCourses.course')->get();
+
         }
         return view('reports.student_status_list',compact('studentStatus'));
+    }
+
+    public function sloatwisestudent()
+    {
+        if(Auth::user()->type == 1){
+            $user = Auth::user();
+            $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
+            $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
+            $stuListWithTrainer = StudentStaffAssign::
+            with('trainer', 'student', 'slot', 'branch')
+            ->whereIn('student_id',$studentTrainer)
+            ->where('student_staff_assigns.is_active', 0)
+            ->join('students', 'students.id', 'student_staff_assigns.student_id')
+            ->join('branches', 'branches.id', 'students.id')
+            ->with('trainer', 'student', 'slot')
+            ->get()
+            ->groupBy('branch.slot_time');
+        }else{
+            $stuListWithTrainer = StudentStaffAssign::
+            with('trainer', 'student', 'slot', 'branch')
+            ->where('student_staff_assigns.is_active', 0)
+            ->join('students', 'students.id', 'student_staff_assigns.student_id')
+            ->join('branches', 'branches.id', 'students.id')
+            ->with('trainer', 'student', 'slot')
+            ->get()
+            ->groupBy('branch.slot_time');
+        }
+        return view('reports.sloat_wise_student_list',compact('stuListWithTrainer'));
+    }
+
+    public function Proxysloatwisestudent()
+    {
+        $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot','branch')
+        ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
+        ->join('branches', 'branches.id', 'students.id')
+        ->get()->groupBy('trainer.name');
+
+        return view('reports.proxy_sloat_wise_student_list',compact('stuListWithTrainerProxy'));
     }
 
     public function getWeeklyStudentListWithTrainer()

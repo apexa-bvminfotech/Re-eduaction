@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class TrainerShedule extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id','trainer_id','slot_id','date','note'];
+    protected $fillable = ['user_id','trainer_id','slot_id','date','note','day'];
 
     public function user()
     {
@@ -25,5 +25,10 @@ class TrainerShedule extends Model
     public function student()
     {
         return $this->belongsTo(Student::class, 'student_id');
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class)->where('is_active', 0);
     }
 }

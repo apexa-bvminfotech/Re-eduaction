@@ -9,8 +9,8 @@
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
-        </section>    
-        
+        </section>
+
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
@@ -23,11 +23,11 @@
                                     <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th><span></span></th>
-                                        <th><span></span></th>
-                                        <th><span></span></th>
-                                        <th><span></span></th>
-                                        <th><span></span></th>
+                                        <th><span>Sudent</span></th>
+                                        <th><span>Course Name</span></th>
+                                        <th><span>Appreciation</span></th>
+                                        <th><span>Medium</span></th>
+                                        <th><span>Standard</span></th>
                                         <th>Course End date</th>
                                     </tr>
                                     </thead>
@@ -57,32 +57,30 @@
 @push('scripts')
     <script>
         $(function () {
-            dataTable = $("#example1").DataTable({
+            $("#example1").DataTable({
                 "responsive": true, "lengthChange": false, "autoWidth": false,
                 "buttons": ["csv", "excel", "pdf", "print"],
                 initComplete: function () {
                     this.api().columns([1, 2, 3, 4, 5]).every(function () {
-                            var column = this;
-                            var select = $('<select class="form-control select2"><option value="">All</option></select>')
-                                .appendTo($(column.header()).find('span').empty())
-                                .on({
-                                    'change': function () {
-                                        var val = $.fn.dataTable.util.escapeRegex(
-                                            $(this).val()
-                                        );
-                                        column
-                                            .search(val ? '^' + val + '$' : '', true, false).draw();
-                                    },
-                                    'click': function (e) {
-                                        e.stopPropagation();
-                                    }
-                                });
-                            column.data().unique().sort().each(function (d, j) {
-                                select.append('<option value="' + d + '">' + d + '</option>')
+                        var column = this;
+                        var columnName = column.header().innerText;
+
+                        var select = $('<select class="form-control select2"><option value="">' + columnName + '</option></select>')
+                            .appendTo($(column.header()).find('span').empty())
+                            .on({
+                                'change': function () {
+                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                                    column.search(val ? '^' + val + '$' : '', true, false).draw();
+                                },
+                                'click': function (e) {
+                                    e.stopPropagation();
+                                }
                             });
-                        },
-                        
-                    );
+
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                    });
                 }
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
