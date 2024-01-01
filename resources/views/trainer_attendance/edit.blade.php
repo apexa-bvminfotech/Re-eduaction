@@ -54,7 +54,7 @@
                                                     <div class="row">
                                                         <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <label for="simpleinput">Trainer name</label> 
+                                                                <label for="simpleinput">Trainer name</label>
                                                                 <input type="text" readonly
                                                                     value="{{ $t->name }}" class="form-control">
                                                             </div>
@@ -88,12 +88,12 @@
                                                                                         <input type="hidden" readonly
                                                                                             name="data[{{ $regularStaff->slot->id }}][slot_type]"
                                                                                             value="Regular"
-                                                                                            class="form-control"> 
+                                                                                            class="form-control">
                                                                                             @foreach ($trainerAttendance as $ta)
                                                                                                 @if($t->id == $ta->trainer_id && $regularStaff->slot->id == $ta->slot_id)
                                                                                                     <input type="hidden" readonly name="data[{{ $regularStaff->slot->id }}][trainer_attendance_id]"  value="{{ $ta->id }}" class="form-control">
                                                                                                 @endif
-                                                                                            @endforeach   
+                                                                                            @endforeach
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-md-3">
@@ -104,7 +104,7 @@
                                                                                         @if (in_array($t->id,$presentTrainerId) && in_array($regularStaff->slot->id,$presentSlotId))
                                                                                             <div
                                                                                                 class="form-check form-check-inline">
-                                                                                                <input class="form-check-input"
+                                                                                                <input class="form-check-input attendance-checkbox-present trainer-{{ $t->id }}"
                                                                                                     type="radio"
                                                                                                     name="data[{{ $regularStaff->slot->id }}][status]"
                                                                                                     value="P" checked>
@@ -114,7 +114,7 @@
                                                                                         @else
                                                                                             <div
                                                                                                 class="form-check form-check-inline">
-                                                                                                <input class="form-check-input"
+                                                                                                <input class="form-check-input attendance-checkbox-present trainer-{{ $t->id }}"
                                                                                                     type="radio"
                                                                                                     name="data[{{ $regularStaff->slot->id }}][status]"
                                                                                                     value="P">
@@ -125,7 +125,7 @@
                                                                                         @if (in_array($t->id,$absentTrainerId) && in_array($regularStaff->slot->id,$absentSlotId))
                                                                                             <div
                                                                                                 class="form-check form-check-inline">
-                                                                                                <input class="form-check-input"
+                                                                                                <input class="form-check-input attendance-checkbox-absent trainer-{{ $t->id }}"
                                                                                                     type="radio"
                                                                                                     name="data[{{ $regularStaff->slot->id }}][status]"
                                                                                                     value="A" checked>
@@ -135,7 +135,7 @@
                                                                                         @else
                                                                                             <div
                                                                                                 class="form-check form-check-inline">
-                                                                                                <input class="form-check-input"
+                                                                                                <input class="form-check-input attendance-checkbox-absent trainer-{{ $t->id }}"
                                                                                                     type="radio"
                                                                                                     name="data[{{ $regularStaff->slot->id }}][status]"
                                                                                                     value="A">
@@ -143,6 +143,14 @@
                                                                                                     for="inlineRadio2">Absent</label>
                                                                                             </div>
                                                                                         @endif
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-3">
+                                                                                    <div class="form-group">
+                                                                                        <label for="all_present">All Present</label>
+                                                                                        <input type="radio" name="all_present_{{ $t->id }}" value="1" onclick="toggleAttendancepresent(this, {{ $t->id }}, '1')">
+                                                                                        <label for="all_absent">All Absent</label>
+                                                                                        <input type="radio" name="all_absent_{{ $t->id }}" value="1" onclick="toggleAttendanceabsent(this, {{ $t->id }}, '0')">
                                                                                     </div>
                                                                                 </div>
                                                                                 @php
@@ -154,9 +162,9 @@
                                                                                         <label for="simpleinput">Absent reason</label>
                                                                                         <input type="text"  name="data[{{  $regularStaff->slot->id }}][absent_reason]"
                                                                                             class="form-control" value="{{ $absentReason }}">
-                                                                                    </div> 
-                                                                                </div> 
-                                                                            @endif           
+                                                                                    </div>
+                                                                                </div>
+                                                                            @endif
                                                                         </div>
                                                                     </div>
                                                                     @php
@@ -182,14 +190,14 @@
                                                             if ($proxyAttendance) {
                                                                 $absentReason = $proxyAttendance->absent_reason;
                                                             } else {
-                                                                $absentReason = null; 
+                                                                $absentReason = null;
                                                             }
                                                         @endphp
                                                             <div class="row">
                                                                 <div class="col-md-3">
                                                                     @if(!in_array($t->id,$regularSlottrainerIds) && !in_array($t->id,$proxyStaffTrainerIds))
                                                                         <div class="form-group">
-                                                                            <label for="simpleinput">Trainer name</label> 
+                                                                            <label for="simpleinput">Trainer name</label>
                                                                             <input type="text" readonly
                                                                                 value="{{ $t->name }}" class="form-control">
                                                                         </div>
@@ -243,7 +251,7 @@
                                                                                         <div
                                                                                                 class="form-check form-check-inline">
                                                                                                 <input
-                                                                                                    class="form-check-input"
+                                                                                                    class="form-check-input attendance-checkbox-present-proxy trainer-{{ $t->id }}"
                                                                                                     type="radio"
                                                                                                     name="data[{{ $proxy->slot->id }}][status]"
                                                                                                     value="P" checked>
@@ -255,7 +263,7 @@
                                                                                             <div
                                                                                                 class="form-check form-check-inline">
                                                                                                 <input
-                                                                                                    class="form-check-input"
+                                                                                                    class="form-check-input attendance-checkbox-present-proxy trainer-{{ $t->id }}"
                                                                                                     type="radio"
                                                                                                     name="data[{{ $proxy->slot->id }}][status]"
                                                                                                     value="P">
@@ -268,7 +276,7 @@
                                                                                         <div
                                                                                                 class="form-check form-check-inline">
                                                                                                 <input
-                                                                                                    class="form-check-input"
+                                                                                                    class="form-check-input attendance-checkbox-absent-proxy trainer-{{ $t->id }}"
                                                                                                     type="radio"
                                                                                                     name="data[{{  $proxy->slot->id }}][status]"
                                                                                                     value="A" checked>
@@ -280,7 +288,7 @@
                                                                                             <div
                                                                                                 class="form-check form-check-inline">
                                                                                                 <input
-                                                                                                    class="form-check-input"
+                                                                                                    class="form-check-input attendance-checkbox-absent-proxy trainer-{{ $t->id }}"
                                                                                                     type="radio"
                                                                                                     name="data[{{  $proxy->slot->id }}][status]"
                                                                                                     value="A">
@@ -288,9 +296,17 @@
                                                                                                     class="form-check-label"
                                                                                                     for="inlineRadio2">Absent</label>
                                                                                             </div>
-                                                                                        @endif  
+                                                                                        @endif
                                                                                     </div>
-                                                                                </div> 
+                                                                                </div>
+                                                                                <div class="col-md-3">
+                                                                                    <div class="form-group">
+                                                                                        <label for="all_present">All Present</label>
+                                                                                        <input type="radio" name="all_present_proxy{{ $t->id }}" value="1" onclick="toggleAttendancepresentproxy(this, {{ $t->id }}, '1')">
+                                                                                        <label for="all_absent">All Absent</label>
+                                                                                        <input type="radio" name="all_absent_proxy{{ $t->id }}" value="1" onclick="toggleAttendanceabsentproxy(this, {{ $t->id }}, '0')">
+                                                                                    </div>
+                                                                                </div>
                                                                                 @php
                                                                                     $trainerAttendanceController = new App\Http\Controllers\TrainerAttendanceController();
                                                                                     $absentReason = $trainerAttendanceController->getAbsentReason($t->id,$proxy->slot->id,$EditDate);
@@ -300,11 +316,11 @@
                                                                                         <label for="simpleinput">Absent reason</label>
                                                                                         <input type="text"  name="data[{{  $proxy->slot->id }}][absent_reason]"
                                                                                             class="form-control" value="{{ $absentReason }}">
-                                                                                    </div> 
-                                                                                </div>  
-                                                                            </div>  
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
                                                                         @endif
-                                                                       
+
                                                                     </div>
                                                                 </div>
                                                                 @php
@@ -334,3 +350,64 @@
     </div>
 @endsection
 
+<script>
+       function toggleAttendancepresent(checkbox, trainerId, attendanceType) {
+    var checkboxesAbsent = document.querySelectorAll('.attendance-checkbox-absent.trainer-' + trainerId);
+    checkboxesAbsent.forEach(function (cb) {
+        cb.checked = false;
+    });
+
+    var checkboxesPresent = document.querySelectorAll('.attendance-checkbox-present.trainer-' + trainerId);
+    checkboxesPresent.forEach(function (cb) {
+        cb.checked = attendanceType === '1';
+    });
+
+    document.querySelector('input[name="all_absent_' + trainerId + '"]').checked = false;
+    document.querySelector('input[name="all_present_' + trainerId + '"]').checked = attendanceType === '1';
+}
+
+function toggleAttendanceabsent(checkbox, trainerId, attendanceType) {
+    var checkboxesPresent = document.querySelectorAll('.attendance-checkbox-present.trainer-' + trainerId);
+    checkboxesPresent.forEach(function (cb) {
+        cb.checked = false;
+    });
+
+    var checkboxesAbsent = document.querySelectorAll('.attendance-checkbox-absent.trainer-' + trainerId);
+    checkboxesAbsent.forEach(function (cb) {
+        cb.checked = attendanceType === '0';
+    });
+
+    document.querySelector('input[name="all_present_' + trainerId + '"]').checked = false;
+    document.querySelector('input[name="all_absent_' + trainerId + '"]').checked = attendanceType === '0';
+}
+
+function toggleAttendancepresentproxy(checkbox, trainerId, attendanceType) {
+    var checkboxesAbsent = document.querySelectorAll('.attendance-checkbox-absent-proxy.trainer-' + trainerId);
+    checkboxesAbsent.forEach(function (cb) {
+        cb.checked = false;
+    });
+
+    var checkboxesPresent = document.querySelectorAll('.attendance-checkbox-present-proxy.trainer-' + trainerId);
+    checkboxesPresent.forEach(function (cb) {
+        cb.checked = attendanceType === '1';
+    });
+
+    document.querySelector('input[name="all_absent_proxy' + trainerId + '"]').checked = false;
+    document.querySelector('input[name="all_present_proxy' + trainerId + '"]').checked = attendanceType === '1';
+}
+
+function toggleAttendanceabsentproxy(checkbox, trainerId, attendanceType) {
+    var checkboxesPresent = document.querySelectorAll('.attendance-checkbox-present-proxy.trainer-' + trainerId);
+    checkboxesPresent.forEach(function (cb) {
+        cb.checked = false;
+    });
+
+    var checkboxesAbsent = document.querySelectorAll('.attendance-checkbox-absent-proxy.trainer-' + trainerId);
+    checkboxesAbsent.forEach(function (cb) {
+        cb.checked = attendanceType === '0';
+    });
+
+    document.querySelector('input[name="all_present_proxy' + trainerId + '"]').checked = false;
+    document.querySelector('input[name="all_absent_proxy' + trainerId + '"]').checked = attendanceType === '0';
+}
+</script>

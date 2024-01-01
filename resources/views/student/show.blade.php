@@ -131,15 +131,7 @@
                                                     <th><b>Fees:</b></th>
                                                     <td>{{$student->fees}}</td>
                                                 </tr>
-                                                <tr class="border-bottom">
-                                                    <th><b>Extra Note:</b></th>
-                                                    <td>{{$student->extra_note}}</td>
-                                                    <th><b>Student Analysis PDF:</b></th>
-                                                    <td><a href="{{asset('assets/student/pdf/'. $student->upload_analysis )}}" download="">
-                                                            <button class="btn btn-success">Download  <i class="fa fa-file-pdf"></i></button>
-                                                        </a>
-                                                    </td>
-                                                </tr>
+
                                                 <tr>
                                                     <th><b>Courses:</b></th>
                                                     <td>
@@ -156,7 +148,23 @@
                                                         @endforeach
                                                     </td>
                                                 </tr>
+                                                <tr class="border-bottom">
+
+                                                    <th><b>Student Analysis PDF:</b></th>
+                                                    <td><a href="{{asset('assets/student/pdf/'. $student->upload_analysis )}}" download="">
+                                                            <button class="btn btn-success">Download  <i class="fa fa-file-pdf"></i></button>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                {{-- <tr>
+                                                    <th><b>Extra Note:</b></th>
+                                                    <td>{{$student->extra_note}}</td>
+                                                </tr> --}}
                                             </table>
+                                            <tr>
+                                                <th><b>Extra Note:</b></th>
+                                                <td>{{$student->extra_note}}</td>
+                                            </tr>
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="timeline">

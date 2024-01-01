@@ -66,6 +66,7 @@
                                                     <input type="hidden" readonly name="trainer_id[]"  value="{{ $t->id }}" class="form-control">
                                                 </div>
                                             </div>
+
                                             {{-- for Regular staff  --}}
                                             <div class="col-md-9">
                                                 @foreach ($studentStaffAssign[$t->name]->groupBy('slot_id') as $slotGroup)
@@ -97,7 +98,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-3">
-                                                                    <div class="form-group">
+                                                                    {{-- <div class="form-group">
                                                                         <label for="simpleinput">Attendance</label>
                                                                         <br>
                                                                         <div class="form-check form-check-inline">
@@ -110,6 +111,28 @@
                                                                                 value="0">
                                                                             <label class="form-check-label" for="inlineRadio2">Absent</label>
                                                                         </div>
+                                                                    </div> --}}
+
+
+                                                                    <div class="form-group">
+                                                                        <label for="simpleinput">Attendance</label>
+                                                                        <br>
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input class="form-check-input attendance-checkbox-present trainer-{{ $t->id }}" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $regularStaff->slot->id }}][student_details_regular][{{ $key }}][attendance_type]" value="1">
+                                                                            <label class="form-check-label" for="inlineCheckbox1">Present</label>
+                                                                        </div>
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input class="form-check-input attendance-checkbox-absent trainer-{{ $t->id }}" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $regularStaff->slot->id }}][student_details_regular][{{ $key }}][attendance_type]" value="0">
+                                                                            <label class="form-check-label" for="inlineCheckbox2">Absent</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <div class="form-group">
+                                                                        <label for="all_present">All Present</label>
+                                                                        <input type="radio" name="all_present_{{ $t->id }}" value="1" onclick="toggleAttendancepresent(this, {{ $t->id }}, '1')">
+                                                                        <label for="all_absent">All Absent</label>
+                                                                        <input type="radio" name="all_absent_{{ $t->id }}" value="0" onclick="toggleAttendanceabsent(this, {{ $t->id }}, '0')">
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-3">
@@ -185,17 +208,26 @@
                                                                             <input type="hidden" readonly name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details_proxy][{{ $key }}][student_id]"  value="{{ $proxy->student->id }}" class="form-control">
                                                                             {{-- <input type="hidden" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details][{{ $key }}][attendance_type]" value="null"> --}}
                                                                             <div class="form-check form-check-inline">
-                                                                                <input class="form-check-input" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details_proxy][{{ $key }}][attendance_type]"
+                                                                                <input class="form-check-input attendance-checkbox-present-proxy trainer-{{ $t->id }}" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details_proxy][{{ $key }}][attendance_type]"
                                                                                     value="1">
                                                                                 <label class="form-check-label" for="inlineRadio1">Present</label>
                                                                             </div>
                                                                             <div class="form-check form-check-inline">
-                                                                                <input class="form-check-input" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details_proxy][{{ $key }}][attendance_type]"
+                                                                                <input class="form-check-input attendance-checkbox-absent-proxy trainer-{{ $t->id }}" type="radio" name="attendance_details_{{ $t->id }}[slot_{{ $t->id }}_{{  $proxy->slot->id }}][student_details_proxy][{{ $key }}][attendance_type]"
                                                                                     value="0">
                                                                                 <label class="form-check-label" for="inlineRadio2">Absent</label>
                                                                             </div>
                                                                         </div>
                                                                     </div>
+                                                                    <div class="col-md-3">
+                                                                        <div class="form-group">
+                                                                            <label for="all_present">All Present</label>
+                                                                            <input type="radio" name="all_present_proxy{{ $t->id }}" value="1" onclick="toggleAttendancepresentproxy(this, {{ $t->id }}, '1')">
+                                                                            <label for="all_absent">All Absent</label>
+                                                                            <input type="radio" name="all_absent_proxy{{ $t->id }}" value="1" onclick="toggleAttendanceabsentproxy(this, {{ $t->id }}, '0')">
+                                                                        </div>
+                                                                    </div>
+
                                                                     <div class="col-md-3">
                                                                         <div class="form-group">
                                                                             <label for="simpleinput">Absent reason</label>
@@ -233,5 +265,66 @@
     </div>
 @endsection
 
+<script>
+function toggleAttendancepresent(checkbox, trainerId, attendanceType) {
+    var checkboxesAbsent = document.querySelectorAll('.attendance-checkbox-absent.trainer-' + trainerId);
+    checkboxesAbsent.forEach(function (cb) {
+        cb.checked = false;
+    });
 
+    var checkboxesPresent = document.querySelectorAll('.attendance-checkbox-present.trainer-' + trainerId);
+    checkboxesPresent.forEach(function (cb) {
+        cb.checked = attendanceType === '1';
+    });
+
+    document.querySelector('input[name="all_absent_' + trainerId + '"]').checked = false;
+    document.querySelector('input[name="all_present_' + trainerId + '"]').checked = attendanceType === '1';
+}
+
+function toggleAttendanceabsent(checkbox, trainerId, attendanceType) {
+    var checkboxesPresent = document.querySelectorAll('.attendance-checkbox-present.trainer-' + trainerId);
+    checkboxesPresent.forEach(function (cb) {
+        cb.checked = false;
+    });
+
+    var checkboxesAbsent = document.querySelectorAll('.attendance-checkbox-absent.trainer-' + trainerId);
+    checkboxesAbsent.forEach(function (cb) {
+        cb.checked = attendanceType === '0';
+    });
+
+    document.querySelector('input[name="all_present_' + trainerId + '"]').checked = false;
+    document.querySelector('input[name="all_absent_' + trainerId + '"]').checked = attendanceType === '0';
+}
+
+
+function toggleAttendancepresentproxy(checkbox, trainerId, attendanceType) {
+    var checkboxesAbsent = document.querySelectorAll('.attendance-checkbox-absent-proxy.trainer-' + trainerId);
+    checkboxesAbsent.forEach(function (cb) {
+        cb.checked = false;
+    });
+
+    var checkboxesPresent = document.querySelectorAll('.attendance-checkbox-present-proxy.trainer-' + trainerId);
+    checkboxesPresent.forEach(function (cb) {
+        cb.checked = attendanceType === '1';
+    });
+
+    document.querySelector('input[name="all_absent_proxy' + trainerId + '"]').checked = false;
+    document.querySelector('input[name="all_present_proxy' + trainerId + '"]').checked = attendanceType === '1';
+}
+
+function toggleAttendanceabsentproxy(checkbox, trainerId, attendanceType) {
+    var checkboxesPresent = document.querySelectorAll('.attendance-checkbox-present-proxy.trainer-' + trainerId);
+    checkboxesPresent.forEach(function (cb) {
+        cb.checked = false;
+    });
+
+    var checkboxesAbsent = document.querySelectorAll('.attendance-checkbox-absent-proxy.trainer-' + trainerId);
+    checkboxesAbsent.forEach(function (cb) {
+        cb.checked = attendanceType === '0';
+    });
+
+    document.querySelector('input[name="all_present_proxy' + trainerId + '"]').checked = false;
+    document.querySelector('input[name="all_absent_proxy' + trainerId + '"]').checked = attendanceType === '0';
+}
+</script>
 

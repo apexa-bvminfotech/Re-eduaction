@@ -33,7 +33,7 @@
                                     <div class="col-sm-9">
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input filePhoto" id="customFile" name="user_profile" accept="image/*">
-                                            <label class="custom-file-label" for="customFile">Choose Profile Photo</label>   
+                                            <label class="custom-file-label" for="customFile">Choose Profile Photo</label>
                                         </div>
                                         <div style="display: none;" id="imageContainer">
                                             <img id="previewHolder" alt="Uploaded Image Preview Holder"  width="100" height="100"/>
@@ -112,6 +112,23 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    <label for="role" class="col-sm-3 col-form-label">Role </label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control select2" name="role">
+                                            <?php $checkarray = [strtolower('admin'), strtolower('super admin')] ?>
+                                            <option value=""> Select Role </option>
+                                            @foreach($role as $key=> $roles)
+                                                @if(in_array(strtolower($roles->name), $checkarray))
+                                                    <option value="{{$roles->id}}" {{old('role')==$roles->id?'selected':''}}>{{$roles->name}}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                        @error('role')
+                                            <span class="text-danger">{{$message}}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <label for="status" class="col-sm-3 col-form-label">Status </label>
                                     <div class="col-sm-9 d-flex justify-content-evenly">
                                         <div class="custom-control custom-radio">
@@ -127,6 +144,7 @@
                                         @enderror
                                     </div>
                                 </div>
+
                             </div>
                             <!-- /.card-body -->
 

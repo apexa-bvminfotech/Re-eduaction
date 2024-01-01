@@ -8,9 +8,18 @@
                         <div class="col-md-3">
                             <div class="card card-success card-outline">
                                 <div class="card-body box-profile">
-                                    <div class="text-center">
+                                    {{-- <div class="text-center">
                                         <img class="profile-user-img img-fluid img-circle" style="height: 100px;"
                                             src="{{asset('assets/student/images/'. $student->upload_student_image )}}" alt="Student Profile Photo">
+                                    </div> --}}
+                                    <div class="text-center">
+                                        @if($student->upload_student_image)
+                                            <img class="profile-user-img img-fluid img-circle" style="height: 100px;"
+                                             src="{{asset('assets/student/images/'. $student->upload_student_image )}}" alt="Student Profile Photo">
+                                        @else
+                                            <img class="profile-user-img img-fluid img-circle" style="height: 100px;"
+                                                 src="{{asset('assets/student/images/dummy-profile.jpeg' )}}" alt="Student Profile Photo">
+                                        @endif
                                     </div>
                                     <h3 class="profile-username text-center">{{ $student->name }} {{ $student->surname }}</h3>
                                     <p class="text-muted text-center">Student</p>
@@ -104,10 +113,7 @@
                                                 <th><b>Fees:</b></th>
                                                 <td>{{$student->fees}}</td>
                                             </tr>
-                                            <tr>
-                                                <th><b>Extra Note:</b></th>
-                                                <td>{{$student->extra_note}}</td>
-                                            </tr>
+
                                             <tr>
                                                 <th><b>Courses:</b></th>
                                                 <td>
@@ -134,6 +140,10 @@
                                                 </td>
                                             </tr>
                                         </table>
+                                        <tr>
+                                            <th><b>Extra Note:</b></th>
+                                            <td>{{$student->extra_note}}</td>
+                                        </tr>
                                     </div>
                                 </div>
                             </div>
@@ -311,7 +321,7 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="card-body">
-                                            <form action="{{route('student.sendNotification')}}" method="POST">
+                                            <form action="{{route('student.sendNotification')}}" method="POST" id="disabledform">
                                                 @csrf
                                                 @foreach($student->courses as $student_course)
                                                     <span class="h4 p-2">{{$student_course->course->course_name}}</span>
@@ -335,6 +345,13 @@
                                                         <span><a class="btn btn-secondary btn-restart-course" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}">Restart Course</a></span>
                                                     @endif
                                                     <br><br>
+                                                    <table class="table table-bordered table-striped" id="courseTable" style="width: 180%">
+                                                        <td class="text-center"><b>Course Start Date:</b>  {{$student_course->start_date}}</td>
+                                                        @if($student_course->end_date !== null)
+                                                        <td class="text-center"><b>Course End Date:</b>  {{$student_course->end_date}}</td>
+                                                        @endif
+                                                        <td class="text-center"><b>Course Restart Date:</b>  {{$student_course->restart_date}}</td>
+                                                    </table>
                                                     <table class="table table-bordered table-striped" id="courseTable" style="width: 180%">
                                                         <input type="hidden" name="student_id" class="form-control student_id" value="{{$student->id}}">
                                                         <input type="hidden" name="course_id" class="form-control course_id" value="{{$student_course->course_id}}">
@@ -534,8 +551,8 @@
                                                         @endforeach
                                                     </table>
                                                 @endforeach
-                                                <button type="submit" class="btn btn-primary float-right mt-2 saveChanges inactiveLink">Save Changes</button>
-                                            </form>
+                                               </form>
+                                            <button type="submit" class="btn btn-primary float-right mt-2 saveChanges inactiveLink" onclick="disableForm()">Save Changes</button>
                                         </div>
                                     </div>
                                 </div>
@@ -582,9 +599,9 @@
                                         <tbody>
                                             @foreach ($studentStaffAssign as $regularStaff)
                                                 <tr>
-                                                    <td>{{ $regularStaff->trainer->name }}</td>
-                                                    <td>{{ $regularStaff->slot->slot_time}}</td>
-                                                    <td>{{ date('d-m-Y', strtotime($regularStaff->date)) }}</td>
+                                                    <td>{{ $regularStaff->trainer->name ?? '' }}</td>
+                                                    <td>{{ $regularStaff->slot->slot_time ?? ''}}</td>
+                                                    <td>{{ date('d-m-Y', strtotime($regularStaff->date)) ?? '' }}</td>
                                                     <td>{!! $regularStaff->is_active == 0 ? '<i class="fa fa-check-circle text-center" style="font-size:25px;color:green"></i>' : '' !!}</td>
                                                 </tr>
                                             @endforeach
@@ -686,17 +703,17 @@
                                         <tbody>
                                             @foreach ($studentCourse as $course)
                                                 <tr>
-                                                    <td>{{ $course->course->course_name }}</td>
+                                                    <td>{{ $course->course->course_name ?? '' }}</td>
                                                     <td>
                                                         @if($course->start_date !== null)
-                                                            {{ date('d-m-Y', strtotime($course->start_date)) }}
+                                                            {{ date('d-m-Y', strtotime($course->start_date)) ??'' }}
                                                         @else
                                                             -
                                                         @endif
                                                     </td>
                                                     <td>
                                                         @if($course->end_date !== null)
-                                                            {{ date('d-m-Y', strtotime($course->end_date)) }}
+                                                            {{ date('d-m-Y', strtotime($course->end_date)) ?? '' }}
                                                         @else
                                                             -
                                                         @endif
@@ -704,7 +721,7 @@
                                                     <td>{{ !empty($course->appreciation->appreciation_name) ? $course->appreciation->appreciation_name : '' }}</td>
                                                     <td>
                                                         @if($course->appreciation_given_date !== null)
-                                                            {{ date('d-m-Y', strtotime($course->appreciation_given_date)) }}
+                                                            {{ date('d-m-Y', strtotime($course->appreciation_given_date))  ?? ''}}
                                                         @else
                                                             -
                                                         @endif
@@ -756,11 +773,11 @@
                                         <tbody>
                                             @foreach ($studentLeave as $leave)
                                                 <tr>
-                                                    <td>{{ date('d-m-Y', strtotime($leave->start_date)) }}</td>
-                                                    <td>{{ date('d-m-Y', strtotime($leave->end_date)) }}</td>
+                                                    <td>{{ date('d-m-Y', strtotime($leave->start_date)) ?? '' }}</td>
+                                                    <td>{{ date('d-m-Y', strtotime($leave->end_date)) ?? ''}}</td>
                                                     <td>
                                                         @if($leave->reason !== null)
-                                                            {{ $leave->reason }}
+                                                            {{ $leave->reason ?? '' }}
                                                         @else
                                                             -
                                                         @endif
@@ -885,19 +902,19 @@
                                                     <td>{{ $status->status }}</td>
                                                     <td>
                                                         @if($status->trainer_name !== null)
-                                                            {{ $status->trainer_name }}
+                                                            {{ $status->trainer_name ?? '' }}
                                                         @else
                                                         -
                                                         @endif
                                                     </td>
                                                     <td>
                                                         @if($status->cancel_reason !== null)
-                                                            {{ $status->cancel_reason }}
+                                                            {{ $status->cancel_reason ?? '' }}
                                                         @else
                                                         -
                                                         @endif
                                                     </td>
-                                                    <td>{{ date('d-m-Y', strtotime($status->date)) }}</td>
+                                                    <td>{{ date('d-m-Y', strtotime($status->date)) ?? ''}}</td>
                                                     <td>{!! $status->is_active == 0 ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
                                                 </tr>
                                             @endforeach
@@ -1012,5 +1029,17 @@
                 }
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
+
+
+
+            function disableForm() {
+                var form = document.getElementById('disabledform');
+                var elements = form.elements;
+
+                for (var i = 0; i < elements.length; i++) {
+                    elements[i].disabled = true;
+                }
+    }
+
     </script>
 @endpush

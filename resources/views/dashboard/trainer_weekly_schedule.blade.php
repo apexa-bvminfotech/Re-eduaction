@@ -81,6 +81,7 @@
                             @endforeach
                             </tr>
                             <tr>
+
                                 @foreach ($trainerDataProxy as $trainerNames => $slots)
                                     @if ($trainerName == $trainerNames)
                                         @foreach ($slots as $slot)
@@ -266,7 +267,7 @@
                                                                 </div>
                                                             </div>
 
-                                                            
+
                                                         @endif
                                                     @endif
                                                 @endforeach
