@@ -30,6 +30,6 @@ class StudentStaffAssign extends Model
 
     public function branch()
     {
-        return $this->belongsTo(Branch::class)->where('is_active', 0);
+        return $this->belongsTo(Branch::class);
     }
 }

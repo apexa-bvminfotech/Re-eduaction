@@ -32,11 +32,11 @@
                                             $endDate = now()->endOfWeek();
                                             $checkDate = $startDate->format('Y-m-d');
                                             //dd($checkDate);
-                                            $numberOfDays = 6;
+                                            $numberOfDays = 7;
                                         @endphp
                                         <thead>
                                             <tr>
-                                                <th colspan="6" style="background-color:lightgray; font-size:25px;"
+                                                <th colspan="7" style="background-color:lightgray; font-size:25px;"
                                                     class="text-center p-3"><b>{{ $trainerName }}</b></th>
                                             </tr>
                                             <tr>
@@ -65,10 +65,11 @@
                                                         $endDate = now()->endOfWeek();
                                                         $checkDate = $startDate->format('Y-m-d');
                                                         //dd($checkDate);
-                                                        $numberOfDays = 6;
+                                                        $numberOfDays = 7;
                                                     @endphp
                                             <tr>
                                                 @for ($day = 1; $day <= $numberOfDays; $day++)
+                                                @if ($day <= 5)
                                                     <td class="text-center p-5"
                                                         style="background-color: lightgreen ;font-weight: bold">
                                                         Time :- {{ $slot['slot_time'] }}<br><br>
@@ -76,6 +77,10 @@
                                                         Students :- {{ implode(', ', $slot['students']) }}<br><br>
                                                         Rtc :- {{ $slot['rtc'] }}
                                                     </td>
+                                                    @else
+                                                    <td class="text-center p-5"
+                                                    style="background-color: lightgreen ;font-weight: bold"></td>
+                                                @endif
                                                 @endfor
                                             </tr>
                             @endforeach
@@ -88,11 +93,12 @@
                                             @php
                                                 $checkStartDate = now()->startOfWeek();
                                                 $checkEndDate = now()->endOfWeek();
-                                                $numberOfDays = 6;
+                                                $numberOfDays = 7;
                                             @endphp
 
                                             @for ($day = 1; $day <= $numberOfDays; $day++)
                                                 @if ($checkStartDate->format('Y-m-d') >= $slot['startDate'] && $checkStartDate->format('Y-m-d') <= $slot['endDate'])
+
                                                     <td class="text-center p-5"
                                                         style="background-color: red ;font-weight: bold">
                                                         Proxy Slot Time :- {{ $slot['slot_time'] }}<br><br>
@@ -120,7 +126,7 @@
                                         @php
                                             $checkStartDate = now()->startOfWeek();
                                             $checkEndDate = now()->endOfWeek();
-                                            $numberOfDays = 6;
+                                            $numberOfDays = 7;
                                             $noteNumber = 1;
                                             $checkDate = $startDate->format('Y-m-d');
                                         @endphp
@@ -296,11 +302,11 @@
                                         $startDate = now()->startOfWeek();
                                         $endDate = now()->endOfWeek();
                                         $checkDate = $startDate->format('Y-m-d');
-                                        $numberOfDays = 6;
+                                        $numberOfDays = 7;
                                     @endphp
                                     <thead>
                                         <tr>
-                                            <th colspan="6" style="background-color:lightgray; font-size:25px;"
+                                            <th colspan="7" style="background-color:lightgray; font-size:25px;"
                                                 class="text-center p-3"><b>{{ $userName }}</b></th>
                                         </tr>
                                         <tr>
@@ -321,7 +327,7 @@
                                             @php
                                                 $checkStartDate = now()->startOfWeek();
                                                 $checkEndDate = now()->endOfWeek();
-                                                $numberOfDays = 6;
+                                                $numberOfDays = 7;
                                                 $noteNumber = 1;
                                                 $checkDate = $startDate->format('Y-m-d');
                                             @endphp

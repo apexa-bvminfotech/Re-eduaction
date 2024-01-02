@@ -63,11 +63,11 @@ class TrainerDashboardController extends Controller
 
             $stuListWithTrainer = StudentStaffAssign::whereIn('student_id',$studentTrainer)->where('student_staff_assigns.is_active', 0)
             ->join('students', 'students.id', 'student_staff_assigns.student_id')
-            ->join('branches', 'branches.id', 'students.id')
+            ->join('branches', 'branches.id', 'students.branch_id')
             ->with('trainer', 'student', 'slot')->get()->groupBy('trainer.name');
             $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot')
             ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
-            ->join('branches', 'branches.id', 'students.id')
+            ->join('branches', 'branches.id', 'students.branch_id')
             ->get()->groupBy('trainer.name');
 
             $trainerSchedule = TrainerShedule::with('trainer','student','slot')->where('user_id', '=', 0)->get()->groupBy('trainer.name');
@@ -78,14 +78,14 @@ class TrainerDashboardController extends Controller
             with('trainer', 'student', 'slot', 'branch')
             ->where('student_staff_assigns.is_active', 0)
             ->join('students', 'students.id', 'student_staff_assigns.student_id')
-            ->join('branches', 'branches.id', 'students.id')
+            ->join('branches', 'branches.id', 'students.branch_id')
             ->with('trainer', 'student', 'slot')
             ->get()
-            ->groupBy('trainer.name');
+             ->groupBy('trainer.name');
 
             $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot','branch')
             ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
-            ->join('branches', 'branches.id', 'students.id')
+            ->join('branches', 'branches.id', 'students.branch_id')
             ->get()->groupBy('trainer.name');
 
             $trainerSchedule = TrainerShedule::with('trainer','student','slot')->where('user_id', '=', 0)

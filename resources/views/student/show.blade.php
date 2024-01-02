@@ -516,12 +516,14 @@
                                                                             class="btn btn-success btn-sm btn-student-appreciation"
                                                                             data-id="{{$appreciation->id}}" data-student-id="{{ $appreciation->student_id }}"> Appreciation
                                                                     </button>
-                                                                    <button type="button"
-                                                                    class="btn btn-danger btn-sm btn-student-appreciation-delete"
-                                                                    data-id="{{$appreciation->id}}" data-student-id="{{ $appreciation->student_id }}"> Delete
-                                                            </button>
-                                                                @endif
 
+                                                                @endif
+                                                                {{-- @if($appreciation->appreciation_given_date != NULL)
+                                                                <button type="button"
+                                                                class="btn btn-danger btn-sm btn-student-appreciation-delete"
+                                                                data-id="{{$appreciation->id}}" data-student-id="{{ $appreciation->student_id }}"> Delete
+                                                                </button>
+                                                                @endif --}}
                                                             @endcan
                                                         </td>
                                                     </tr>

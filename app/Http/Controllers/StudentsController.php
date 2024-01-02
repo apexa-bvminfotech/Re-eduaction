@@ -297,11 +297,18 @@ class StudentsController extends Controller
 
     public function delete($id)
     {
-        $appreciation = StudentCourse::findOrFail($id);
-
-        $appreciation->delete();
-
-        return response()->json(['message' => 'Record deleted successfully']);
+        $appreciation = StudentCourse::find($id);
+        if (!$appreciation) {
+            return response()->json(['message' => 'Record not found'], 404);
+        }
+        $appdate = $appreciation->appreciation_given_date;
+        if ($appdate) {
+            $appdate = new \DateTime($appdate);
+            $appreciation->delete();
+            return response()->json(['message' => 'Record deleted successfully']);
+        } else {
+            return response()->json(['message' => 'No date to delete']);
+        }
     }
 
 
@@ -353,20 +360,31 @@ class StudentsController extends Controller
             'age' => 'required',
         ]);
 
-        $upload_student_image = $student->upload_student_image;
-        if ($request->hasFile('upload_student_image')) {
-            if ($upload_student_image) {
-                // Delete old profile image if exists
-                $existingFilePath = public_path('assets/student/images/' . $upload_student_image);
-                if (file_exists($existingFilePath)) {
-                    unlink($existingFilePath);
-                }
-                // Upload new profile image
-                $filename = $request->upload_student_image->getClientOriginalName();
-                $request->upload_student_image->move('assets/student/images', $filename);
+        if($student->upload_student_image == null)
+        {
+            $upload_student_image = null;
+            if ($request->upload_student_image) {
+                $filename = $request->name . '_' . date_default_timezone_get() . '.' . $request->upload_student_image->getClientOriginalExtension();
+                $request->upload_student_image->move(public_path('assets/student/images'), $filename);
                 $upload_student_image = $filename;
             }
+        }else{
+            $upload_student_image = $student->upload_student_image;
+            if ($request->hasFile('upload_student_image')) {
+                if ($upload_student_image) {
+                    // Delete old profile image if exists
+                    $existingFilePath = public_path('assets/student/images/' . $upload_student_image);
+                    if (file_exists($existingFilePath)) {
+                        unlink($existingFilePath);
+                    }
+                    // Upload new profile image
+                    $filename = $request->upload_student_image->getClientOriginalName();
+                    $request->upload_student_image->move('assets/student/images', $filename);
+                    $upload_student_image = $filename;
+                }
+            }
         }
+
 
         $user = $student->user;
         $user->update([
@@ -379,21 +397,34 @@ class StudentsController extends Controller
             'type' => 2,
         ]);
 
-
-        $upload_analysis = $student->upload_analysis;
-        if ($request->hasFile('upload_analysis')) {
-            if ($upload_analysis) {
-                // Delete old pdf if exists
-                $existingFilePath = public_path('assets/student/pdf/' . $upload_analysis);
-                if (file_exists($existingFilePath)) {
-                    unlink($existingFilePath);
-                }
-                // Upload new pdf
+        if($student->upload_analysis == null)
+        {
+            $upload_analysis = null;
+            if ($request->upload_analysis) {
                 $filename = $request->name . '-' . $request->upload_analysis->getClientOriginalExtension();
                 $request->upload_analysis->move(public_path('assets/student/pdf'), $filename);
                 $upload_analysis = $filename;
             }
+        }else{
+
+            $upload_analysis = $student->upload_analysis;
+
+            if ($request->hasFile('upload_analysis')) {
+                if ($upload_analysis) {
+
+                    // Delete old pdf if exists
+                    $existingFilePath = public_path('assets/student/pdf/' . $upload_analysis);
+                    if (file_exists($existingFilePath)) {
+                        unlink($existingFilePath);
+                    }
+                    // Upload new pdf
+                    $filename = $request->name . '-' . $request->upload_analysis->getClientOriginalExtension();
+                    $request->upload_analysis->move(public_path('assets/student/pdf'), $filename);
+                    $upload_analysis = $filename;
+                }
+            }
         }
+
 
         $time = $request->input('school_time_to') . " - " . $request->input('school_time_from');
         $tuition = $request->input('extra_tuition_time_to') . "-" . $request->input('extra_tuition_time_from');
