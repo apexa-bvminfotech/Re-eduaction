@@ -430,8 +430,8 @@
                                         <tbody>
                                             @foreach ($trainerAttendance as $attendance)
                                                 <tr>
-                                                    <td>{{ $attendance->slots->slot_time }}</td>
-                                                    <td>{{ date('d-m-Y', strtotime($attendance->date)) }}</td>
+                                                    <td>{{ $attendance->slots->slot_time ?? '' }}</td>
+                                                    <td>{{ date('d-m-Y', strtotime($attendance->date))  ?? ''}}</td>
                                                     <td>
                                                         @if($attendance->status == 'A')
                                                             Absent
@@ -439,10 +439,10 @@
                                                             Present
                                                         @endif
                                                     </td>
-                                                    <td>{{ $attendance->slot_type }}</td>
+                                                    <td>{{ $attendance->slot_type ?? '' }}</td>
                                                     <td>
                                                         @if($attendance->absent_reason !== null)
-                                                            {{ $attendance->absent_reason }}
+                                                            {{ $attendance->absent_reason  ?? ''}}
                                                         @else
                                                         -
                                                         @endif
