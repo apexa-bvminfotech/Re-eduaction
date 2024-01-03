@@ -49,7 +49,7 @@
                                     @foreach ($trainer as $key => $t)
                                         <tr>
                                             <td>{{ ++$i }}</td>
-                                            <td>{{ $t->name }}</td>
+                                            <td>{{ $t->name  ?? ''}}</td>
                                             <td>{{$t->branch ? $t->branch->name : ''}}</td>
                                             <td>
                                                 <span style="display: none">{{ $t->is_active }}</span>
@@ -165,7 +165,7 @@
                      );
                 }
              }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-             
+
            $(document).on('change', '.checkStatus', function() {
                 var status = $(this).prop('checked') == true ? 0 : 1;
                  var trainer_id = $(this).data('id');
