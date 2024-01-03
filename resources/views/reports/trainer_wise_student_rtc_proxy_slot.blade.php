@@ -50,19 +50,19 @@
                                                                     @foreach ($slotTime->proxySlotlist as $student)
                                                                         <tr>
                                                                             @if ($firstRow)
-                                                                                <td rowspan="{{ count($slotTime->proxySlotlist) }}">{{ $slotTime->rtc->rtc_name }}</td>
-                                                                                <td rowspan="{{ count($slotTime->proxySlotlist) }}">{{ $slotTime->slot_time }}</td>
+                                                                                <td rowspan="{{ count($slotTime->proxySlotlist) }}">{{ $slotTime->rtc->rtc_name ?? ''}}</td>
+                                                                                <td rowspan="{{ count($slotTime->proxySlotlist) }}">{{ $slotTime->slot_time ?? ''}}</td>
                                                                                 @php $firstRow = false; @endphp
                                                                             @endif
-                                                                            <td>{{ $student->student->name }} {{ $student->student->surname }}</td>
-                                                                            <td>{{ $student->student->medium }}</td>
-                                                                            <td>{{ $student->student->standard }}</td>
+                                                                            <td>{{ $student->student->name ?? ''}} {{ $student->student->surname ?? ''}}</td>
+                                                                            <td>{{ $student->student->medium ?? ''}}</td>
+                                                                            <td>{{ $student->student->standard ?? ''}}</td>
                                                                         </tr>
                                                                     @endforeach
                                                                     @if ($firstRow)
                                                                         <tr>
-                                                                            <td>{{ $slotTime->rtc->rtc_name }}</td>
-                                                                            <td>{{ $slotTime->slot_time }}</td>
+                                                                            <td>{{ $slotTime->rtc->rtc_name ?? ''}}</td>
+                                                                            <td>{{ $slotTime->slot_time ?? ''}}</td>
                                                                             <td>-</td>
                                                                             <td>-</td>
                                                                             <td>-</td>
@@ -71,15 +71,15 @@
                                                                 @endforeach
                                                             </tbody>
                                                         </table>
-                                                    </div>       
+                                                    </div>
                                                 @endforeach
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>   
-                        @endforeach 
-                    </div>      
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </section>

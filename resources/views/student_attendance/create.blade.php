@@ -44,7 +44,7 @@
                             <div class="card-body">
                                 {!! Form::open(array('route' => 'student_attendance.store','method'=>'POST', 'id' => 'quickForm', 'class' => 'needs-validation', 'validate' => false)) !!}
                                 <div class="col-md-12">
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-3">
                                         <div class="form-group mb-3">
                                             <label for="example-date">Date</label>
                                             <input class="form-control" type="date" value="{{ date('Y-m-d') }}" max="{{now()->format('Y-m-d')}}"
@@ -66,14 +66,24 @@
                                                     <input type="hidden" readonly name="trainer_id[]"  value="{{ $t->id }}" class="form-control">
                                                 </div>
                                             </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label for="simpleinput">Attendance</label>
+                                                    <br>
+                                                    <label for="all_present">All Present</label>
+                                                    <input type="radio" name="all_present_{{ $t->id }}" value="1" onclick="toggleAttendancepresent(this, {{ $t->id }}, '1')">
+                                                    <label for="all_absent">All Absent</label>
+                                                    <input type="radio" name="all_absent_{{ $t->id }}" value="0" onclick="toggleAttendanceabsent(this, {{ $t->id }}, '0')">
+                                                </div>
+                                            </div>
 
                                             {{-- for Regular staff  --}}
-                                            <div class="col-md-9">
+                                            <div class="col-md-7">
                                                 @foreach ($studentStaffAssign[$t->name]->groupBy('slot_id') as $slotGroup)
                                                     @foreach ($slotGroup as $key => $regularStaff)
                                                         <div class="form-group">
                                                             <div class="row">
-                                                                <div class="col-md-3">
+                                                                <div class="col-md-4">
                                                                     @if ($key === 0)
                                                                         <div class="form-group">
                                                                             <label for="simpleinput">RegularStaff slot-time</label>
@@ -83,9 +93,11 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
+
                                                         <div class="form-group">
                                                             <div class="row">
-                                                                <div class="col-md-3">
+                                                                <div class="col-md-4">
                                                                     <div class="form-group">
                                                                         <label for="simpleinput">Student Name</label>
                                                                         <input type="text" readonly
@@ -127,14 +139,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-3">
-                                                                    <div class="form-group">
-                                                                        <label for="all_present">All Present</label>
-                                                                        <input type="radio" name="all_present_{{ $t->id }}" value="1" onclick="toggleAttendancepresent(this, {{ $t->id }}, '1')">
-                                                                        <label for="all_absent">All Absent</label>
-                                                                        <input type="radio" name="all_absent_{{ $t->id }}" value="0" onclick="toggleAttendanceabsent(this, {{ $t->id }}, '0')">
-                                                                    </div>
-                                                                </div>
+
                                                                 <div class="col-md-3">
                                                                     <div class="form-group">
                                                                         <label for="simpleinput">Absent reason</label>
@@ -173,10 +178,20 @@
                                                                 </div>
                                                             @endif
                                                         </div>
-                                                        <div class="col-md-9">
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <label for="simpleinput">Attendance</label>
+                                                                <br>
+                                                                <label for="all_present">All Present</label>
+                                                                <input type="radio" name="all_present_proxy{{ $t->id }}" value="1" onclick="toggleAttendancepresentproxy(this, {{ $t->id }}, '1')">
+                                                                <label for="all_absent">All Absent</label>
+                                                                <input type="radio" name="all_absent_proxy{{ $t->id }}" value="1" onclick="toggleAttendanceabsentproxy(this, {{ $t->id }}, '0')">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-7">
                                                             <div class="form-group">
                                                                 <div class="row">
-                                                                    <div class="col-md-3">
+                                                                    <div class="col-md-4">
                                                                         @if ($key === 0)
                                                                             @if(!in_array($proxy->slot->id,$regularSlotIds) && !in_array($proxy->slot->id,$proxySlotIds))
                                                                                 <div class="form-group">
@@ -191,7 +206,7 @@
                                                             </div>
                                                             <div class="form-group">
                                                                 <div class="row">
-                                                                    <div class="col-md-3">
+                                                                    <div class="col-md-4">
                                                                         <div class="form-group">
                                                                             <label for="simpleinput">Student Name</label>
                                                                             <input type="text" readonly
@@ -219,14 +234,7 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-3">
-                                                                        <div class="form-group">
-                                                                            <label for="all_present">All Present</label>
-                                                                            <input type="radio" name="all_present_proxy{{ $t->id }}" value="1" onclick="toggleAttendancepresentproxy(this, {{ $t->id }}, '1')">
-                                                                            <label for="all_absent">All Absent</label>
-                                                                            <input type="radio" name="all_absent_proxy{{ $t->id }}" value="1" onclick="toggleAttendanceabsentproxy(this, {{ $t->id }}, '0')">
-                                                                        </div>
-                                                                    </div>
+
 
                                                                     <div class="col-md-3">
                                                                         <div class="form-group">

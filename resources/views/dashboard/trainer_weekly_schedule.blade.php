@@ -25,6 +25,7 @@
                         <div class="card">
 
                             @foreach ($trainerData as $trainerName => $slots)
+
                                 <div class="card-body">
                                     <table class="table table-bordered table-striped">
                                         @php
@@ -73,18 +74,60 @@
                                                     <td class="text-center p-5"
                                                         style="background-color: lightgreen ;font-weight: bold">
                                                         Time :- {{ $slot['slot_time'] }}<br><br>
-                                                        {{-- Total Students :- {{ count($slot['students']) }} --}}
-                                                        Students :- {{ implode(', ', $slot['students']) }}<br><br>
-                                                        Rtc :- {{ $slot['rtc'] }}
+                                                        Total Students :- {{ count($slot['students']) }}
+                                                          <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg{{ $slot['student_id'] }}">Student Details</button>
+
+                                                          <div class="modal fade bd-example-modal-lg{{ $slot['student_id'] }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel{{ $slot['student_id'] }}" aria-hidden="true">
+                                                            <div class="modal-dialog modal-lg">
+
+                                                              <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">student Details</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                  </div>
+                                                                <div class="modal-body">
+                                                                    <table class="table table-striped">
+                                                              <thead>
+                                                                <tr>
+                                                                  <th>Student Name</th>
+                                                                  <th>Course</th>
+                                                                  <th>Mobile No</th>
+                                                                  <th>Course Start Date</th>
+                                                                  <th>standard</th>
+                                                                  <th>RTC</th>
+                                                                </tr>
+                                                              </thead>
+
+                                                              <tbody>
+                                                                <tr>
+                                                                  <td>{{ implode(', ', $slot['students']) }}</td>
+                                                                  <td>{{ implode(', ', $slot['courses']) }}</td>
+                                                                  <td>{{ implode(', ', $slot['mobileno']) }}</td>
+                                                                  <td>{{ implode(', ', $slot['student_courses']) }}</td>
+                                                                  <td>{{ implode(', ', $slot['standard']) }}</td>
+                                                                  <td>{{implode(', ', $slot['branches']) }}</td>
+                                                                </tr>
+                                                              </tbody>
+                                                            </table>
+                                                            </div>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+
+
+
                                                     </td>
                                                     @else
                                                     <td class="text-center p-5"
                                                     style="background-color: lightgreen ;font-weight: bold"></td>
                                                 @endif
                                                 @endfor
+
                                             </tr>
                             @endforeach
+
                             </tr>
+
                             <tr>
 
                                 @foreach ($trainerDataProxy as $trainerNames => $slots)
@@ -104,8 +147,44 @@
                                                         Proxy Slot Time :- {{ $slot['slot_time'] }}<br><br>
 
                                                         Total Students :- {{ count($slot['students']) }}
-                                                        Students :- {{ implode(', ', $slot['students']) }}<br><br>
-                                                        Rtc :- {{ $slot['rtc'] }}
+                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg{{ implode('', $slot['student_id']) }}">Student Details</button>
+
+                                                        <div class="modal fade bd-example-modal-lg{{ implode('', $slot['student_id']) }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel{{ implode('', $slot['student_id']) }}" aria-hidden="true">
+                                                          <div class="modal-dialog modal-lg">
+
+                                                            <div class="modal-content">
+                                                              <div class="modal-header">
+                                                                  <h4 class="modal-title">student Details</h4>
+                                                                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                </div>
+                                                              <div class="modal-body">
+                                                                  <table class="table table-striped">
+                                                            <thead>
+                                                              <tr>
+                                                                <th>Student Name</th>
+                                                                <th>Course</th>
+                                                                <th>Mobile No</th>
+                                                                <th>Course Start Date</th>
+                                                                <th>standard</th>
+                                                                <th>RTC</th>
+                                                              </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                              <tr>
+
+                                                                <td>{{ implode(', ', $slot['students']) }}</td>
+                                                                <td>{{ implode(', ', $slot['courses']) }}</td>
+                                                                <td>{{ implode(', ', $slot['mobileno']) }}</td>
+                                                                <td>{{ implode(', ', $slot['student_courses']) }}</td>
+                                                                <td>{{ implode(', ', $slot['standard']) }}</td>
+                                                                <td>{{implode(', ', $slot['branches']) }}</td>
+                                                              </tr>
+                                                            </tbody>
+                                                          </table>
+                                                          </div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
                                                     </td>
                                                 @else
                                                     <td class="text-center p-5">

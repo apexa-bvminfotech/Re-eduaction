@@ -33,10 +33,10 @@
                                         @foreach($pendingCourseStu as $key=>$student)
                                             <tr>
                                                 <td>{{ $key+1 }}</td>
-                                                <td>{{ $student->student->name }} {{ $student->student->surname }}</td>
-                                                <td>{{ $student->course->course_name }}</td>
-                                                <td>{{ $student->student->medium }}</td>
-                                                <td>{{ $student->student->standard }}</td>
+                                                <td>{{ $student->student->name ?? ''}} {{ $student->student->surname ?? ''}}</td>
+                                                <td>{{ $student->course->course_name ?? ''}}</td>
+                                                <td>{{ $student->student->medium ?? ''}}</td>
+                                                <td>{{ $student->student->standard ?? ''}}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

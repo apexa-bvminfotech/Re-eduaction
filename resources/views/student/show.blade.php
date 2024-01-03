@@ -551,12 +551,12 @@
                                                         <td>{{ $key+1 }}</td>
                                                         <td>{{ $status->status }}</td>
                                                         @if ($status->trainer_name !== null)
-                                                            <td>{{ $status->trainer_name }}</td>
+                                                            <td>{{ $status->trainer_name ?? '' }}</td>
                                                         @else
                                                             <td>-</td>
                                                         @endif
                                                         @if ($status->cancel_reason !== null)
-                                                            <td>{{ $status->cancel_reason }}</td>
+                                                            <td>{{ $status->cancel_reason ?? '' }}</td>
                                                         @else
                                                             <td>-</td>
                                                         @endif

@@ -124,99 +124,70 @@
 @endsection
 @push('scripts')
     <script>
-        // $(function () {
-        //     dataTable = $("#example1").DataTable({
-        //         "responsive": true, "lengthChange": false, "autoWidth": false,
-        //         "buttons": ["csv", "excel", "pdf", "print"],
-        //         initComplete: function () {
-        //             this.api().columns([2]).every(function () {
-        //                     var column = this;
-        //                     var select = $('<select class="form-control select2"><option value="">All</option></select>')
-        //                         .appendTo($(column.header()).find('span').empty())
-        //                         .on({
-        //                             'change': function () {
-        //                                 var val = $.fn.dataTable.util.escapeRegex(
-        //                                     $(this).val()
-        //                                 );
-        //                                 column
-        //                                     .search(val ? '^' + val + '$' : '', true, false).draw();
-        //                             },
-        //                             'click': function (e) {
-        //                                 e.stopPropagation();
-        //                             }
-        //                         });
-        //                     column.data().unique().sort().each(function (d, j) {
-        //                         select.append('<option value="' + d + '">' + d + '</option>')
-        //                     });
-        //                 },
-        //                 this.api().columns([3]).every(function () {
-        //                     var column = this;
-        //                     var val = 0;
-        //                     $('.status-dropdown').on({
-        //                         'change': function () {
-        //                             var val = $.fn.dataTable.util.escapeRegex(
-        //                                 $(this).val()
-        //                             );
-        //                             column.column(3).search(val).draw();
-        //                         },
-        //                     });
-        //                     column.column(3).search(val).draw();
-        //                 })
-        //             );
-        //         }
-        //     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-        //     $(document).on('change', '.checkStatus', function() {
-        //         var status = $(this).prop('checked') == true ? 0 : 1;
-        //         var trainer_id = $(this).data('id');
-        //         $.ajax({
-        //             type: "GET",
-        //             url: 'change-status/changeTrainerStatus',
-        //             data: {'status': status, 'trainer_id': trainer_id},
-        //             success: function (data) {
-        //                 toastr.options =
-        //                     {
-        //                         "closeButton": true,
-        //                         "progressBar": true
-        //                     }
-        //                 if (status) {
-        //                     toastr.error(data.success);
-        //                 } else {
-        //                     toastr.success(data.success);
-        //                 }
-        //             }
-        //         });
-        //     });
-        // });
-
-
-        $(function () {
-            $("#example1").DataTable({
-                "responsive": true, "lengthChange": false, "autoWidth": false,
-                "buttons": ["csv", "excel", "pdf", "print"],
-                initComplete: function () {
+         $(function () {
+             dataTable = $("#example1").DataTable({
+                 "responsive": true, "lengthChange": false, "autoWidth": false,
+                 "buttons": ["csv", "excel", "pdf", "print"],
+                 initComplete: function () {
                     this.api().columns([2]).every(function () {
-                        var column = this;
-                        var columnName = column.header().innerText;
-
-                        var select = $('<select class="form-control select2"><option value="">' + columnName + '</option></select>')
-                            .appendTo($(column.header()).find('span').empty())
-                            .on({
+                             var column = this;
+                             var select = $('<select class="form-control select2"><option value="">All</option></select>')
+                                 .appendTo($(column.header()).find('span').empty())
+                                 .on({
+                                     'change': function () {
+                                        var val = $.fn.dataTable.util.escapeRegex(
+                                             $(this).val()
+                                         );
+                                        column
+                                             .search(val ? '^' + val + '$' : '', true, false).draw();
+                                     },
+                                     'click': function (e) {
+                                         e.stopPropagation();
+                                     }
+                                 });
+                             column.data().unique().sort().each(function (d, j) {
+                                 select.append('<option value="' + d + '">' + d + '</option>')
+                             });
+                         },
+                         this.api().columns([3]).every(function () {
+                             var column = this;
+                             var val = 0;
+                           $('.status-dropdown').on({
                                 'change': function () {
-                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                                    column.search(val ? '^' + val + '$' : '', true, false).draw();
-                                },
-                                'click': function (e) {
-                                    e.stopPropagation();
-                                }
-                            });
-
-                        column.data().unique().sort().each(function (d, j) {
-                            select.append('<option value="' + d + '">' + d + '</option>');
-                        });
-                    });
+                                     var val = $.fn.dataTable.util.escapeRegex(
+                                         $(this).val()
+                                     );
+                                    column.column(3).search(val).draw();
+                                 },
+                             });
+                             column.column(3).search(val).draw();
+                         })
+                     );
                 }
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-        });
+             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+             
+           $(document).on('change', '.checkStatus', function() {
+                var status = $(this).prop('checked') == true ? 0 : 1;
+                 var trainer_id = $(this).data('id');
+                $.ajax({
+                    type: "GET",
+                    url: 'change-status/changeTrainerStatus',
+                    data: {'status': status, 'trainer_id': trainer_id},
+                   success: function (data) {
+                         toastr.options =
+                             {
+                                 "closeButton": true,
+                                 "progressBar": true
+                            }
+                         if (status) {
+                             toastr.error(data.success);
+                        } else {
+                             toastr.success(data.success);
+                         }
+                     }
+                 });
+           });
+         });
 
         $(document).on('click', '.btn-trainer-pwd', function () {
             let trainerId = parseInt($(this).data('id'));

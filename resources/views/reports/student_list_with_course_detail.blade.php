@@ -35,22 +35,22 @@
                                         @foreach($studentCourse as $key=>$student)
                                             <tr>
                                                 <td>{{ $key+1 }}</td>
-                                                <td>{{ $student->student->name }} {{ $student->student->surname  }}</td>
-                                                <td>{{ $student->course->course_name }}</td>
-                                                <td>{{$student->student->medium}}</td>
-                                                <td>{{$student->student->standard}}</td>
+                                                <td>{{ $student->student->name ?? ''}} {{ $student->student->surname  ?? ''}}</td>
+                                                <td>{{ $student->course->course_name ?? '' }}</td>
+                                                <td>{{$student->student->medium ?? ''}}</td>
+                                                <td>{{$student->student->standard ?? ''}}</td>
                                                 <td>
                                                     @if($student->start_date == null)
                                                         -
                                                     @else
-                                                        {{date('Y-m-d', strtotime($student->start_date))}}
+                                                        {{date('Y-m-d', strtotime($student->start_date)) ?? ''}}
                                                     @endif
                                                 </td>
                                                 <td>
                                                     @if($student->end_date == null)
                                                         -
                                                     @else
-                                                        {{date('Y-m-d', strtotime($student->end_date))}}
+                                                        {{date('Y-m-d', strtotime($student->end_date)) ?? ''}}
                                                     @endif
                                                 </td>
                                             </tr>

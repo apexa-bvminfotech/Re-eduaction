@@ -29,4 +29,13 @@ class StudentProxyStaffAssign extends Model
         return $this->belongsTo(Branch::class)->where('is_active', 0);
     }
 
+    public function studentcourses()
+    {
+        return $this->hasMany(StudentCourse::class, 'student_id', 'student_id');
+    }
+
+    public function course(){
+        return $this->belongsTo(Course::class);
+    }
+
 }

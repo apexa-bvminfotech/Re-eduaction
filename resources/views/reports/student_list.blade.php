@@ -48,18 +48,18 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        
+
                                         @foreach($studentList as $key=>$student)
 
                                             <tr>
-                                                <td>{{ $student->id }}</td>
-                                                <td>{{$student->name}} {{$student->surname}}</td>
-                                                <td>{{$student->medium}}</td>
-                                                <td>{{$student->standard}}</td>
+                                                <td>{{ $student->id ?? ''}}</td>
+                                                <td>{{$student->name ?? ''}} {{$student->surname ?? ''}}</td>
+                                                <td>{{$student->medium ?? ''}}</td>
+                                                <td>{{$student->standard ?? ''}}</td>
                                                 <td>{{ !empty($student->studentTrainer->trainer->name) ? $student->studentTrainer->trainer->name : ''}}</td>
-                                                <td>{{date('Y-m-d', strtotime($student->registration_date))}}</td>
-                                                <td>{{ $student->statusStudent->status }}</td>
-                                                <td>{{  $student->branch->name }}</td>
+                                                <td>{{date('Y-m-d', strtotime($student->registration_date)) ?? ''}}</td>
+                                                <td>{{ $student->statusStudent->status ?? ''}}</td>
+                                                <td>{{  $student->branch->name ?? ''}}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

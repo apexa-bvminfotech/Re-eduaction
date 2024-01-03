@@ -36,16 +36,16 @@
                                         @foreach($studentStatus as $key=>$status)
 
                                             @foreach($status->student->activeCourses as $key => $course)
-                                            
+
                                                 <tr>
                                                     <td>{{ $key+1 }}</td>
-                                                    <td>{{ $status->student->name }} {{ $status->student->surname }}</td>
-                                                    <td>{{ $course->course->course_name }}</td>
-                                                    <td>{{ $status->status }}</td>
-                                                    <td>{{ $status->cancel_reason }}</td>
-                                                    <td>{{ date('d-m-Y', strtotime($status->date)) }}</td>
-                                                    <td>{{ $status->student->medium }}</td>
-                                                    <td>{{ $status->student->standard }}</td>
+                                                    <td>{{ $status->student->name ?? ''}} {{ $status->student->surname ?? ''}}</td>
+                                                    <td>{{ $course->course->course_name ?? ''}}</td>
+                                                    <td>{{ $status->status ?? ''}}</td>
+                                                    <td>{{ $status->cancel_reason ?? ''}}</td>
+                                                    <td>{{ date('d-m-Y', strtotime($status->date)) ?? ''}}</td>
+                                                    <td>{{ $status->student->medium ?? ''}}</td>
+                                                    <td>{{ $status->student->standard ?? ''}}</td>
                                                 </tr>
                                             @endforeach
                                         @endforeach

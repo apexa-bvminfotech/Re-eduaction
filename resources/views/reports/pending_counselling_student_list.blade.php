@@ -33,18 +33,18 @@
                                         @foreach($pendingCounselling as $key=>$student)
                                             <tr>
                                                 <td>{{ $key+1 }}</td>
-                                                <td>{{ $student->student->name }} {{ $student->student->surname  }}</td>
-                                                <td>{{$student->student->medium}}</td>
-                                                <td>{{$student->student->standard}}</td>
+                                                <td>{{ $student->student->name ?? ''}} {{ $student->student->surname ?? '' }}</td>
+                                                <td>{{$student->student->medium ?? ''}}</td>
+                                                <td>{{$student->student->standard ?? ''}}</td>
                                                 <td>Pending Counselling</td>
                                             </tr>
                                         @endforeach
                                         @foreach($pendingReport as $key=>$student)
                                             <tr>
                                                 <td>{{ $key+1 }}</td>
-                                                <td>{{ $student->student->name }} {{ $student->student->surname  }}</td>
-                                                <td>{{$student->student->medium}}</td>
-                                                <td>{{$student->student->standard}}</td>
+                                                <td>{{ $student->student->name ?? '' }} {{ $student->student->surname ?? '' }}</td>
+                                                <td>{{$student->student->medium ?? ''}}</td>
+                                                <td>{{$student->student->standard ?? ''}}</td>
                                                 <td>Pending Report</td>
                                             </tr>
                                         @endforeach

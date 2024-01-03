@@ -32,4 +32,13 @@ class StudentStaffAssign extends Model
     {
         return $this->belongsTo(Branch::class);
     }
+
+    public function studentcourses()
+    {
+        return $this->hasMany(StudentCourse::class, 'student_id', 'student_id');
+    }
+
+    public function course(){
+        return $this->belongsTo(Course::class);
+    }
 }

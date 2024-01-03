@@ -34,10 +34,10 @@
                                             @foreach ($student->courses as $course)
                                             <tr>
                                                 <td>{{ $key+1 }}</td>
-                                                <td>{{ $student->name }} {{ $student->surname  }}</td>
-                                                <td>{{ $course->course->course_name  }}</td>
-                                                <td>{{  $student->medium }}</td>
-                                                <td>{{ $student->standard }}</td>
+                                                <td>{{ $student->name ??''}} {{ $student->surname ?? '' }}</td>
+                                                <td>{{ $course->course->course_name  ?? ''}}</td>
+                                                <td>{{  $student->medium ?? ''}}</td>
+                                                <td>{{ $student->standard ?? ''}}</td>
                                             </tr>
                                             @endforeach
                                         @endforeach
