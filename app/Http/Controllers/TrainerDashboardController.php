@@ -113,34 +113,34 @@ class TrainerDashboardController extends Controller
             $trainerData[$trainerName] = [];
 
             foreach ($trainerSlot as $slots) {
-
                 $slotID = $slots->slot->id ?? '';
+
                 if (!isset($trainerData[$trainerName][$slotID])) {
                     $trainerData[$trainerName][$slotID] = [
                         'slot_time' => $slots->slot->slot_time ?? '',
                         'students' => [],
-                        'branches' => [],
-                        'courses' => [],
-                        'standard' => [],
-                        'student_courses'=> [],
-                        'mobileno'=> [],
                         'student_id' => $slots->student_id ?? '',
-                      ];
+                        'id' => $slots->id ?? '',
+
+                    ];
                 }
-                $trainerData[$trainerName][$slotID]['students'][] = $slots->student->name . ' ' . $slots->student->surname ?? '';
-                $trainerData[$trainerName][$slotID]['branches'][] = $slots->branch->name ?? '';
-                $trainerData[$trainerName][$slotID]['courses'][] = $slots->course->course_name ?? '';
-                $trainerData[$trainerName][$slotID]['student_courses'][] = $slots->studentcourses->first()['start_date'] ?? '' ;
-                $trainerData[$trainerName][$slotID]['standard'][] = $slots->student->standard ?? '';
-                $trainerData[$trainerName][$slotID]['mobileno'][] = $slots->student->father_contact_no ?? '' ;
 
+                $trainerData[$trainerName][$slotID]['students'][] = [
+                    'name' => $slots->student->name,
+                    'surname' => $slots->student->surname ?? '',
+                    'branches' => $slots->branch->name ?? 'Null',
+                    'courses' => $slots->course->course_name ?? 'Null',
+                    'student_courses' => $slots->studentcourses->first()['start_date'] ?? 'Null',
+                    'standard' => $slots->student->standard ?? 'Null',
+                    'mobileno' => $slots->student->father_contact_no ?? 'Null',
 
+                ];
+              //  $trainerData[$trainerName][$slotID]['students'][] = $slots->student->name . ' ' . $slots->student->surname ?? '';
 
             }
         }
 
         foreach ($stuListWithTrainerProxy as $trainerName => $trainerSlotProxy) {
-
             $trainerDataProxy[$trainerName] = [];
 
             foreach ($trainerSlotProxy as $slotsProxy) {
@@ -149,27 +149,27 @@ class TrainerDashboardController extends Controller
                 if (!isset($trainerDataProxy[$trainerName][$slotID])) {
                     $trainerDataProxy[$trainerName][$slotID] = [
                         'slot_time' => $slotsProxy->slot->slot_time ?? '',
-                        'startDate'=> $slotsProxy->starting_date ?? '',
-                        'endDate'=> $slotsProxy->ending_date ?? '',
+                        'startDate' => $slotsProxy->starting_date ?? '',
+                        'endDate' => $slotsProxy->ending_date ?? '',
                         'rtc' => $slotsProxy->branch->name ?? '',
-                        'branches' => [],
-                        'courses' => [],
-                        'standard' => [],
-                        'student_courses'=> [],
-                        'mobileno'=> [],
                         'students' => [],
                         'student_id' => [],
                     ];
                 }
 
-                $trainerDataProxy[$trainerName][$slotID]['students'][] = $slotsProxy->student->name . ' ' . $slotsProxy->student->surname ?? '';
-                $trainerDataProxy[$trainerName][$slotID]['branches'][] = $slotsProxy->branch->name ?? '';
-                $trainerDataProxy[$trainerName][$slotID]['courses'][] = $slotsProxy->course->course_name ?? '';
-                $trainerDataProxy[$trainerName][$slotID]['student_courses'][] = $slotsProxy->studentcourses->first()['start_date'] ?? '';
-                $trainerDataProxy[$trainerName][$slotID]['standard'][] = $slotsProxy->student->standard ?? '';
-                $trainerDataProxy[$trainerName][$slotID]['mobileno'][] = $slotsProxy->student->father_contact_no ?? '';
-                $trainerDataProxy[$trainerName][$slotID]['student_id'][] = $slotsProxy->student_id ?? '';
+                $trainerDataProxy[$trainerName][$slotID]['students'][] = [
+                    'name' => $slotsProxy->student->name,
+                    'surname' => $slotsProxy->student->surname,
+                    'branches' => $slotsProxy->branch->name ?? 'Null',
+                    'courses' => $slotsProxy->course->course_name ?? 'Null',
+                    'student_courses' => $slotsProxy->studentcourses->first()['start_date'] ?? 'Null',
+                    'standard' => $slotsProxy->student->standard ?? 'Null',
+                    'mobileno' => $slotsProxy->student->father_contact_no ?? 'Null',
+                    'startDate' => $slotsProxy->starting_date ?? '',
+                    'endDate' => $slotsProxy->ending_date ?? '',
+                ];
 
+                $trainerDataProxy[$trainerName][$slotID]['student_id'][] = $slotsProxy->student_id ?? 'Null';
             }
         }
 

@@ -36,18 +36,18 @@
                                 $presentStudent = 0;
                             @endphp
 
-                            @foreach ($absentPresentStudent as $student)   
+                            @foreach ($absentPresentStudent as $student)
                                 @if ($student->attendance_type == '1')
                                     @php
                                         $presentStudent++;
                                     @endphp
-                                @endif   
+                                @endif
                             @endforeach
-                            
+
                             <div class="small-box" style="background-color:lightgray">
                                 <div class="inner">
                                     <h4>Total Present Student</h4>
-                                    <h4>{{ $presentStudent }}</h4>
+                                    <h4>{{ $presentStudent ?? ''}}</h4>
                                 </div>
                             </div>
                         </div>
@@ -63,7 +63,7 @@
                                     @endphp
                                 @endif
                             @endforeach
-                            
+
                             <div class="small-box" style="background-color:lightgray">
                                 <div class="inner">
                                     <h4>Total Absent Student</h4>
@@ -72,9 +72,9 @@
                             </div>
                         </div>
                     </div>
-                </div>  
+                </div>
             </div>
-            
+
             <div class="card bg-light card-info">
                 <div class="card-header">
                     <h4 class="card-title w-100">
@@ -98,10 +98,10 @@
                             @foreach($trainerStudent as $key=>$trainer)
                                 <tr>
                                     <td>{{ ++$key}}</td>
-                                    <td>{{$trainer->student->name}} {{$trainer->student->surname}}</td>
-                                    <td>{{$trainer->student->medium}}</td>
-                                    <td>{{$trainer->student->standard}}</td>
-                                    <td>{{ $trainer->slot->slot_time }}</td>
+                                    <td>{{$trainer->student->name ?? ''}} {{$trainer->student->surname ?? ''}}</td>
+                                    <td>{{$trainer->student->medium ?? ''}}</td>
+                                    <td>{{$trainer->student->standard ?? ''}}</td>
+                                    <td>{{ $trainer->slot->slot_time ?? ''}}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -130,7 +130,7 @@
                             @endphp
                             @foreach($tarinerRegularLecture as $key=>$trainerLecture)
                                 <tr>
-                                    <td>{{$trainerLecture->slot->slot_time}}</td>
+                                    <td>{{$trainerLecture->slot->slot_time ?? ''}}</td>
                                     <td>Regular</td>
                                     @php
                                         $regularSlot[] = $trainerLecture->slot_id;
@@ -140,14 +140,14 @@
                             @foreach($tarinerProxyLecture as $key=>$trainerLecture)
                                 @if(!in_array($trainerLecture->slot_id,$regularSlot))
                                     <tr>
-                                        <td>{{$trainerLecture->slot->slot_time}}</td>
+                                        <td>{{$trainerLecture->slot->slot_time ?? ''}}</td>
                                         <td>Proxy</td>
                                     </tr>
-                                @endif   
+                                @endif
                             @endforeach
                         </tbody>
                     </table>
-                </div>  
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-3">
@@ -157,21 +157,21 @@
                                 <img class="profile-user-img img-fluid img-circle" style="height: 100px;"
                                         src="{{asset('assets/trainer/'. $trainers->photo )}}" alt="Trainer Profile Photo">
                             </div>
-                            <h3 class="profile-username text-center">{{ $trainers->name }} {{ $trainers->surname }}</h3>
+                            <h3 class="profile-username text-center">{{ $trainers->name ?? ''}} {{ $trainers->surname ?? ''}}</h3>
                             <p class="text-muted text-center">Trainer</p>
-            
+
                             <ul class="list-group list-group-unbordered mb-3">
                                 <li class="list-group-item">
-                                    <b>Designation : </b> <a class="float-right">{{ $trainers->designation }}</a>
+                                    <b>Designation : </b> <a class="float-right">{{ $trainers->designation ?? ''}}</a>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Branch Name : </b> <a class="float-right">{{ $trainers->branch->name }}</a>
+                                    <b>Branch Name : </b> <a class="float-right">{{ $trainers->branch->name ?? ''}}</a>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Email address : </b> <a class="float-right">{{ $trainers->email_id }}</a>
+                                    <b>Email address : </b> <a class="float-right">{{ $trainers->email_id ?? ''}}</a>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Qualification : </b> <a class="float-right">{{ $trainers->qualification }}</a>
+                                    <b>Qualification : </b> <a class="float-right">{{ $trainers->qualification ?? ''}}</a>
                                 </li>
                             </ul>
                         </div>
@@ -182,11 +182,11 @@
                         </div>
                         <div class="card-body">
                             <strong><i class="fas fa-map-marker-alt mr-1"></i> Address </strong>
-                            <p class="text-muted"> {{ $trainers->address }}</p>
+                            <p class="text-muted"> {{ $trainers->address ?? ''}}</p>
                             <hr>
-                            <strong><i class="fas fa-calendar-alt mr-1"></i>Date of Birth</strong> :  {{ date('d-m-Y',strtotime($trainers->dob)) }}
+                            <strong><i class="fas fa-calendar-alt mr-1"></i>Date of Birth</strong> :  {{ date('d-m-Y',strtotime($trainers->dob)) ?? '' }}
                             <hr>
-                            <strong>Father Name :</strong> {{ $trainers->father_name }}
+                            <strong>Father Name :</strong> {{ $trainers->father_name ?? ''}}
                             <hr>
                             <strong>Marital Status :</strong> {{ $trainers->marital_status == 1 ? "Married" : "Unmarried"     }}
                             <hr>
@@ -203,19 +203,19 @@
                                 <table class="table table-striped table-hover">
                                     <tr>
                                         <th>Full Name</th>
-                                        <td>{{ $trainers->emer_fullName }}</td>
+                                        <td>{{ $trainers->emer_fullName ??'' }}</td>
                                     </tr>
                                     <tr>
                                         <th>Address</th>
-                                        <td>{{ $trainers->emer_address }}</td>
+                                        <td>{{ $trainers->emer_address ?? ''}}</td>
                                     </tr>
                                     <tr>
                                         <th>Mobile No</th>
-                                        <td>{{ $trainers->emer_phone }}</td>
+                                        <td>{{ $trainers->emer_phone ?? ''}}</td>
                                     </tr>
                                     <tr>
                                         <th>Relationship</th>
-                                        <td>{{ $trainers->emer_relationship }}</td>
+                                        <td>{{ $trainers->emer_relationship ?? ''}}</td>
                                     </tr>
                                 </table>
                             </div>
@@ -230,19 +230,19 @@
                                 <table class="table table-striped table-hover">
                                     <tr>
                                         <th>Department</th>
-                                        <td>{{ $trainers->department }}</td>
+                                        <td>{{ $trainers->department ?? '' }}</td>
                                         <th>Work Location</th>
-                                        <td>{{ $trainers->work_location }}</td>
+                                        <td>{{ $trainers->work_location ?? ''}}</td>
                                     </tr>
                                     <tr>
                                         <th>Trainer Type</th>
                                         <td>{{ $trainers->emp_type == 1 ? "FreeLancer" : "Fixed" }}</td>
                                         <th>Email Address</th>
-                                        <td>{{ $trainers->office_use_email }}</td>
+                                        <td>{{ $trainers->office_use_email ?? ''}}</td>
                                     </tr>
                                     <tr>
                                         <th>Joining Date</th>
-                                        <td>{{ $str = str_replace(',', ' to ', $trainers->joining_date) }}</td>
+                                        <td>{{ $str = str_replace(',', ' to ', $trainers->joining_date) ?? ''}}</td>
                                         <th>I-Card</th>
                                         <td>{{ $trainers->i_card_date ?  date('d-m-Y', strtotime($trainers->i_card_date)) : '' }}</td>
                                     </tr>
@@ -250,7 +250,7 @@
                                         <th>I-Card Return Date</th>
                                         <td>{{ $trainers->i_card_return_date ? date('d-m-Y', strtotime($trainers->i_card_return_date)) : '' }}</td>
                                         <th>I-Card Note</th>
-                                        <td>{{ $trainers->i_card_note }}</td>
+                                        <td>{{ $trainers->i_card_note ?? ''}}</td>
                                     </tr>
                                     <tr>
                                         <th>Uniform</th>
@@ -260,7 +260,7 @@
                                     </tr>
                                     <tr>
                                         <th>Uniform Note</th>
-                                        <td>{{ $trainers->uniform_note }}</td>
+                                        <td>{{ $trainers->uniform_note ?? ''}}</td>
                                         <th>Material</th>
                                         <td>{{ $trainers->material_date ? date('d-m-Y', strtotime($trainers->material_date)) : '' }}</td>
                                     </tr>
@@ -344,15 +344,15 @@
                                     </form>
                                 </div>
                             </div>
-                        </div> 
-                        <hr>       
+                        </div>
+                        <hr>
                         <div class="card-body">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th>Slot Time</th>
                                         <th>Date</th>
-                                        <th>Status</th> 
+                                        <th>Status</th>
                                         <th>Slot Type</th>
                                         <th>Absent Reason</th>
                                     </tr>
@@ -360,8 +360,8 @@
                                 <tbody>
                                     @foreach ($trainerAttendance as $attendance)
                                         <tr>
-                                            <td>{{ $attendance->slots->slot_time }}</td>
-                                            <td>{{ date('d-m-Y', strtotime($attendance->date)) }}</td>
+                                            <td>{{ $attendance->slots->slot_time ?? '' }}</td>
+                                            <td>{{ date('d-m-Y', strtotime($attendance->date)) ?? ''}}</td>
                                             <td>
                                                 @if($attendance->status == 'A')
                                                     Absent
@@ -369,21 +369,21 @@
                                                     Present
                                                 @endif
                                             </td>
-                                            <td>{{ $attendance->slot_type }}</td>
+                                            <td>{{ $attendance->slot_type ?? '' }}</td>
                                             <td>
                                                 @if($attendance->absent_reason !== null)
-                                                    {{ $attendance->absent_reason }}
+                                                    {{ $attendance->absent_reason ?? '' }}
                                                 @else
                                                 -
                                                 @endif
                                             </td>
-                                        </tr> 
+                                        </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                </div>  
+                </div>
             </div>
         </div>
     </section>
@@ -396,7 +396,7 @@
             var toDate = $("#to_date").val();
             var trainer_id = $('#trainer_id').val();
             var url = baseurl + "trainer-dashboard/" + "?fromDate=" + fromDate + "&toDate=" + toDate;
-            window.location = url;            
+            window.location = url;
         });
     </script>
 @endpush

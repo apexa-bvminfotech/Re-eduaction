@@ -54,11 +54,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {{-- @php
-                                                $sDate = now()->startOfMonth();
-                                                $eDate = now()->endOfMonth();
-                                                $numberOfDays = 6;
-                                            @endphp --}}
+
                                             <tr>
                                                 @foreach ($slots as $slot)
                                                     @php
@@ -75,6 +71,8 @@
                                                         style="background-color: lightgreen ;font-weight: bold">
                                                         Time :- {{ $slot['slot_time'] }}<br><br>
                                                         Total Students :- {{ count($slot['students']) }}
+                                                        {{-- {{ implode(',', $slot['students'])}} --}}
+
                                                           <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg{{ $slot['student_id'] }}">Student Details</button>
 
                                                           <div class="modal fade bd-example-modal-lg{{ $slot['student_id'] }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel{{ $slot['student_id'] }}" aria-hidden="true">
@@ -97,17 +95,21 @@
                                                                   <th>RTC</th>
                                                                 </tr>
                                                               </thead>
-
                                                               <tbody>
-                                                                <tr>
-                                                                  <td>{{ implode(', ', $slot['students']) }}</td>
-                                                                  <td>{{ implode(', ', $slot['courses']) }}</td>
-                                                                  <td>{{ implode(', ', $slot['mobileno']) }}</td>
-                                                                  <td>{{ implode(', ', $slot['student_courses']) }}</td>
-                                                                  <td>{{ implode(', ', $slot['standard']) }}</td>
-                                                                  <td>{{implode(', ', $slot['branches']) }}</td>
-                                                                </tr>
+
+                                                                    @foreach ($slot['students'] as $student)
+                                                                   <tr>
+                                                                       <td>{{$student['name']}} {{ $student['surname'] }}</td>
+                                                                       <td>{{$student['courses']}}</td>
+                                                                       <td>{{$student['mobileno']}}</td>
+                                                                       <td>{{$student['student_courses']}}</td>
+                                                                       <td>{{$student['standard']}}</td>
+                                                                       <td>{{$student['branches']}}</td>
+                                                                   </tr>
+                                                                    @endforeach
+
                                                               </tbody>
+
                                                             </table>
                                                             </div>
                                                               </div>
@@ -126,6 +128,9 @@
                                             </tr>
                             @endforeach
 
+
+
+
                             </tr>
 
                             <tr>
@@ -137,9 +142,11 @@
                                                 $checkStartDate = now()->startOfWeek();
                                                 $checkEndDate = now()->endOfWeek();
                                                 $numberOfDays = 7;
+
                                             @endphp
 
                                             @for ($day = 1; $day <= $numberOfDays; $day++)
+
                                                 @if ($checkStartDate->format('Y-m-d') >= $slot['startDate'] && $checkStartDate->format('Y-m-d') <= $slot['endDate'])
 
                                                     <td class="text-center p-5"
@@ -170,15 +177,18 @@
                                                               </tr>
                                                             </thead>
                                                             <tbody>
-                                                              <tr>
 
-                                                                <td>{{ implode(', ', $slot['students']) }}</td>
-                                                                <td>{{ implode(', ', $slot['courses']) }}</td>
-                                                                <td>{{ implode(', ', $slot['mobileno']) }}</td>
-                                                                <td>{{ implode(', ', $slot['student_courses']) }}</td>
-                                                                <td>{{ implode(', ', $slot['standard']) }}</td>
-                                                                <td>{{implode(', ', $slot['branches']) }}</td>
-                                                              </tr>
+                                                                    @foreach ($slot['students'] as $student)
+                                                                       <tr>
+                                                                            <td>{{ $student['name'] }} {{ $student['surname'] }}</td>
+                                                                            <td>{{ $student['branches'] }}</td>
+                                                                            <td>{{ $student['courses'] }}</td>
+                                                                            <td>{{ $student['student_courses'] }}</td>
+                                                                            <td>{{ $student['standard'] }}</td>
+                                                                            <td>{{ $student['mobileno'] }}</td>
+
+                                                                        </tr>
+                                                                    @endforeach
                                                             </tbody>
                                                           </table>
                                                           </div>
@@ -314,7 +324,7 @@
                                                                                             @if ($trainer->is_active == 0)
                                                                                                 <option
                                                                                                     value="{{ $trainer->id }}"
-                                                                                                                                                                                                        data-trainer-id="{{ $trainer->id }}">
+                                                                                                    data-trainer-id="{{ $trainer->id }}">
                                                                                                     {{ $trainer->name }}
                                                                                                 </option>
                                                                                             @endif

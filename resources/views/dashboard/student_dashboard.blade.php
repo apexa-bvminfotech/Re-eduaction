@@ -26,16 +26,16 @@
 
                                     <ul class="list-group list-group-unbordered mb-3">
                                         <li class="list-group-item">
-                                            <b>Email : </b> <a class="float-right">{{ $student->email_id }}</a>
+                                            <b>Email : </b> <a class="float-right">{{ $student->email_id ?? ''}}</a>
                                         </li>
                                         <li class="list-group-item">
-                                            <b>Gender : </b> <a class="float-right">{{ $student->gender }}</a>
+                                            <b>Gender : </b> <a class="float-right">{{ $student->gender ?? ''}}</a>
                                         </li>
                                         <li class="list-group-item">
-                                            <b>Meduim : </b> <a class="float-right">{{ $student->medium }}</a>
+                                            <b>Meduim : </b> <a class="float-right">{{ $student->medium ?? ''}}</a>
                                         </li>
                                         <li class="list-group-item">
-                                            <b>Standard : </b> <a class="float-right">{{ $student->standard }}</a>
+                                            <b>Standard : </b> <a class="float-right">{{ $student->standard ?? ''}}</a>
                                         </li>
                                         <li class="list-group-item">
                                             <b>Demo taken:</b> <a class="float-right">{{ $student->trainer->name ?? ''}}</a>
@@ -49,7 +49,7 @@
                                         <li class="list-group-item">
                                             <b>Courses : </b>
                                             @foreach ($studentCourse as $course)
-                                                <a class="float-right">{{ $course->course->course_name }}</a><br>
+                                                <a class="float-right">{{ $course->course->course_name ?? ''}}</a><br>
                                             @endforeach
                                         </li>
                                     </ul>
@@ -62,16 +62,16 @@
                                 </div>
                                 <div class="card-body">
                                     <strong><i class="fas fa-map-marker-alt mr-1"></i> Address </strong>
-                                    <p class="text-muted"> {{ $student->address }}</p>
+                                    <p class="text-muted"> {{ $student->address ?? ''}}</p>
                                     <hr>
                                     <strong><i class="fas fa-school mr-1"></i>School Name</strong>
                                     <p class="text-muted">
-                                        {{ $student->school_name }}
+                                        {{ $student->school_name ?? ''}}
                                     </p>
                                     <hr>
-                                    <strong><i class="fas fa-calendar-alt mr-1"></i>Date of Birth</strong> :  {{ date('d-m-Y',strtotime($student->dob)) }}
+                                    <strong><i class="fas fa-calendar-alt mr-1"></i>Date of Birth</strong> :  {{ date('d-m-Y',strtotime($student->dob)) ?? '' }}
                                     <hr>
-                                    <strong><i class="fas fa-user mr-1"></i>Age :</strong> {{ $student->age }}
+                                    <strong><i class="fas fa-user mr-1"></i>Age :</strong> {{ $student->age ?? ''}}
                                     <hr>
                                 </div>
                             </div>
@@ -86,39 +86,39 @@
                                         <table class="table table-borderless table-striped table-hover">
                                             <tr>
                                                 <th><b>Father Name:</b></th>
-                                                <td>{{$student->father_name}}</td>
+                                                <td>{{$student->father_name ?? ''}}</td>
 
                                             </tr>
                                             <tr>
                                                 <th><b>Father Contact No:</b></th>
-                                                <td>{{$student->father_contact_no}}</td>
+                                                <td>{{$student->father_contact_no ?? ''}}</td>
                                             </tr>
                                             <tr>
                                                 <th><b>Mother Contact No:</b></th>
-                                                <td>{{$student->mother_contact_no}}</td>
+                                                <td>{{$student->mother_contact_no ?? ''}}</td>
                                             </tr>
                                             <tr>
                                                 <th><b>School Time:</b></th>
-                                                <td>{{$student->school_time}}</td>
+                                                <td>{{$student->school_time ?? ''}}</td>
                                             </tr>
                                             <tr>
                                                 <th><b>Extra Tuition Time:</b></th>
-                                                <td>{{$student->extra_tuition_time}}</td>
+                                                <td>{{$student->extra_tuition_time ?? ''}}</td>
                                             </tr>
                                             <tr>
                                                 <th><b>Date Of Birth:</b></th>
-                                                <td>{{date('Y-m-d', strtotime($student->dob))}}</td>
+                                                <td>{{date('Y-m-d', strtotime($student->dob)) ?? ''}}</td>
                                             </tr>
                                             <tr>
                                                 <th><b>Fees:</b></th>
-                                                <td>{{$student->fees}}</td>
+                                                <td>{{$student->fees ?? ''}}</td>
                                             </tr>
 
                                             <tr>
                                                 <th><b>Courses:</b></th>
                                                 <td>
                                                     @foreach($student->courses as $key => $course)
-                                                        <b>{{ $key+1 }}:</b> {{ $course->course->course_name }}
+                                                        <b>{{ $key+1 }}:</b> {{ $course->course->course_name ?? ''}}
                                                         <br>
                                                     @endforeach
                                                 </td>
@@ -127,7 +127,7 @@
                                                 <th>Course Material :</th>
                                                 <td>
                                                     @foreach ($student->studentMaterial as $key => $material)
-                                                        <b>{{ $key+1 }}:</b> {{ $material->material->material_name }}
+                                                        <b>{{ $key+1 }}:</b> {{ $material->material->material_name ?? ''}}
                                                         <br>
                                                     @endforeach
                                                 </td>
@@ -156,7 +156,7 @@
                                         <table class="table table-borderless table-striped table-hover">
                                             <tr>
                                                 <th><b>Reference By:</b></th>
-                                                <td>{{$student->reference_by}}</td>
+                                                <td>{{$student->reference_by ?? ''}}</td>
                                             </tr>
                                             <tr>
                                                 <th><b>Demo Taken By:</b></th>
@@ -168,15 +168,15 @@
                                             </tr>
                                             <tr>
                                                 <th><b>Payment Condition:</b></th>
-                                                <td>{{$student->payment_condition}}</td>
+                                                <td>{{$student->payment_condition ?? ''}}</td>
                                             </tr>
                                             <tr>
                                                 <th><b>Branch Name:</b></th>
-                                                <td>{{ $student->branch->name }}</td>
+                                                <td>{{ $student->branch->name ?? ''}}</td>
                                             </tr>
                                             <tr>
                                                 <th><b>STF:</b></th>
-                                                <td>{{$student->stf}}</td>
+                                                <td>{{$student->stf ?? ''}}</td>
                                             </tr>
                                             @if($student->studentDmit)
                                                 <tr>
