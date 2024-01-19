@@ -518,12 +518,12 @@
                                                                     </button>
 
                                                                 @endif
-                                                                {{-- @if($appreciation->appreciation_given_date != NULL)
+                                                                @if($appreciation->appreciation_given_date != NULL)
                                                                 <button type="button"
                                                                 class="btn btn-danger btn-sm btn-student-appreciation-delete"
                                                                 data-id="{{$appreciation->id}}" data-student-id="{{ $appreciation->student_id }}"> Delete
                                                                 </button>
-                                                                @endif --}}
+                                                                @endif
                                                             @endcan
                                                         </td>
                                                     </tr>
@@ -1060,7 +1060,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function (response) {
-                        console.log(response.message);
+                        window.location.reload();
                     },
                     error: function (error) {
                         console.error('Error deleting record:', error);

@@ -298,17 +298,15 @@ class StudentsController extends Controller
     public function delete($id)
     {
         $appreciation = StudentCourse::find($id);
+
         if (!$appreciation) {
             return response()->json(['message' => 'Record not found'], 404);
         }
-        $appdate = $appreciation->appreciation_given_date;
-        if ($appdate) {
-            $appdate = new \DateTime($appdate);
-            $appreciation->delete();
-            return response()->json(['message' => 'Record deleted successfully']);
-        } else {
-            return response()->json(['message' => 'No date to delete']);
-        }
+
+        $appreciation->update(['appreciation_given_date' => null]);
+
+        return response()->json(['message' => 'Date deleted successfully'], 200);
+
     }
 
 

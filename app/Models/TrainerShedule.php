@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class TrainerShedule extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id','trainer_id','slot_id','date','note','day'];
+    protected $fillable = ['user_id','trainer_id','slot_id','date','note','day','slot_time'];
 
     public function user()
     {

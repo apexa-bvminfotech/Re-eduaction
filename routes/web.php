@@ -88,6 +88,7 @@ Route::group(['middleware'=>['auth']],function (){
         Route::post('/edit-student-leave-approve','StudentsController@editStudentLeaveApprove')->name('student.editStudentLeaveApprove');
         Route::post('/change-student-status','StudentsController@ChangeStudentStatus')->name('student.ChangeStudentStatus');
         Route::post('/student-appreciation','StudentsController@studentAppreciation')->name('student.studentAppreciation');
+        Route::post('/updateStartDate/{student_id}/{course_id}','StudentsController@coursedate')->name('student.updateStartDate');
         Route::get('/update-course-start-end-date/{student_id}/{course_id}/{task}','StudentsController@updateCourseStartEndDate')->name('student.updateCourseStartEndDate');
         Route::get('/restart-course/{student_id}/{course_id}','StudentsController@restartCourse')->name('student.restartCourse');
 
@@ -138,6 +139,7 @@ Route::group(['middleware'=>['auth']],function (){
     Route::get('/weekly-student-list-with-trainer','ReportController@getWeeklyStudentListWithTrainer')->name('report.weekly-student-list-with-trainer');
     Route::get('/transfer-student-transfer-trainer-list','ReportController@getTransferStudentTransferTrainerList')->name('report.transfer-student-transfer-trainer-list');
     Route::get('/reports-student-data','ReportController@getStudentData')->name('report.student-data');
+    Route::get('/student-courseduration','ReportController@studentcourseduration')->name('report.student-courseduration');
     Route::get('/sloat-wise-student','ReportController@sloatwisestudent')->name('report.sloatwisestudent');
     Route::get('/proxy-sloat-wise-student','ReportController@Proxysloatwisestudent')->name('report.Proxysloatwisestudent');
 
@@ -147,7 +149,9 @@ Route::group(['middleware'=>['auth']],function (){
         Route::post('/trinerweeklyadd', 'TrainerDashboardController@trinerweeklyadd')->name('get-slot-times');
         Route::get('shift-triner-slot/{id}','TrainerDashboardController@TrinerSlot');
         Route::post('/slots/{slotId}', 'TrainerDashboardController@slotupdate')->name('sloatupdate');
-        
+        Route::delete('/delete/{slotId}', 'TrainerDashboardController@delete')->name('delete.slot');
+
+
     });
 
     Route::group(['prefix'=>'student-dashboard'],function (){

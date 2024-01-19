@@ -107,6 +107,10 @@
                                                 <td>13.</td>
                                                 <td><a href="{{ route('report.student-data') }}">Student</a></td>
                                             </tr>
+                                            <tr>
+                                                <td>13.</td>
+                                                <td><a href="{{ route('report.student-courseduration') }}">Student Course Duration</a></td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>

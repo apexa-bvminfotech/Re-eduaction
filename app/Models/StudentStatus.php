@@ -14,4 +14,13 @@ class StudentStatus extends Model
     public function student(){
         return $this->belongsTo(Student::class);
     }
+
+    public function studentcourses()
+    {
+        return $this->hasMany(StudentCourse::class, 'student_id', 'student_id');
+    }
+
+    public function course(){
+        return $this->belongsTo(Course::class);
+    }
 }

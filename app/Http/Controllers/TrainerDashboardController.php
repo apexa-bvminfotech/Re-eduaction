@@ -71,6 +71,7 @@ class TrainerDashboardController extends Controller
             ->get()
             ->groupBy('trainer.name');
 
+
             $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot','studentcourses','course')
             ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
             ->join('branches', 'branches.id', 'students.branch_id')
@@ -111,7 +112,7 @@ class TrainerDashboardController extends Controller
 
         foreach ($stuListWithTrainer as $trainerName => $trainerSlot) {
             $trainerData[$trainerName] = [];
-
+            //  dd($trainerSlot);
             foreach ($trainerSlot as $slots) {
                 $slotID = $slots->slot->id ?? '';
 
@@ -121,6 +122,8 @@ class TrainerDashboardController extends Controller
                         'students' => [],
                         'student_id' => $slots->student_id ?? '',
                         'id' => $slots->id ?? '',
+                        'medium' => $slots->medium ?? '',
+                        'whatsapp_group_name' => $slots->slot->whatsapp_group_name ?? '',
 
                     ];
                 }
@@ -133,11 +136,13 @@ class TrainerDashboardController extends Controller
                     'student_courses' => $slots->studentcourses->first()['start_date'] ?? 'Null',
                     'standard' => $slots->student->standard ?? 'Null',
                     'mobileno' => $slots->student->father_contact_no ?? 'Null',
+                    'medium' => $slots->medium ?? '',
+
 
                 ];
-              //  $trainerData[$trainerName][$slotID]['students'][] = $slots->student->name . ' ' . $slots->student->surname ?? '';
 
             }
+
         }
 
         foreach ($stuListWithTrainerProxy as $trainerName => $trainerSlotProxy) {
@@ -145,7 +150,7 @@ class TrainerDashboardController extends Controller
 
             foreach ($trainerSlotProxy as $slotsProxy) {
                 $slotID = $slotsProxy->slot->id ?? '';
-
+                // dd($trainerSlotProxy);
                 if (!isset($trainerDataProxy[$trainerName][$slotID])) {
                     $trainerDataProxy[$trainerName][$slotID] = [
                         'slot_time' => $slotsProxy->slot->slot_time ?? '',
@@ -154,6 +159,8 @@ class TrainerDashboardController extends Controller
                         'rtc' => $slotsProxy->branch->name ?? '',
                         'students' => [],
                         'student_id' => [],
+                        'whatsapp_group_name' => $slotsProxy->slot->whatsapp_group_name ?? '',
+
                     ];
                 }
 
@@ -167,6 +174,7 @@ class TrainerDashboardController extends Controller
                     'mobileno' => $slotsProxy->student->father_contact_no ?? 'Null',
                     'startDate' => $slotsProxy->starting_date ?? '',
                     'endDate' => $slotsProxy->ending_date ?? '',
+                    'medium' => $slotsProxy->medium ?? '',
                 ];
 
                 $trainerDataProxy[$trainerName][$slotID]['student_id'][] = $slotsProxy->student_id ?? 'Null';
@@ -193,8 +201,9 @@ class TrainerDashboardController extends Controller
                         'note' => $Usertrainer->note ?? '',
                         'day' => $Usertrainer->day ?? '',
                         'userName' => $trainerName ?? '',
-                        'slot_time'=>$Usertrainer->slot->slot_time ?? '',
+                        // 'slot_time'=>$Usertrainer->slot->slot_time ?? '',
                         'id'=> $Usertrainer->id ?? '',
+                        'slot_time' => $Usertrainer->slot_time ?? '',
                     ];
 
             }
@@ -207,6 +216,7 @@ class TrainerDashboardController extends Controller
 
     public function trinerweeklyadd(Request $request)
     {
+        $time = $request->input('slot_time_to') . " - " . $request->input('slot_time_from');
 
         TrainerShedule::create([
              'user_id' => $request->user_id,
@@ -215,6 +225,7 @@ class TrainerDashboardController extends Controller
             'date' => $request->date,
             'day' => $request->day,
             'note' => $request->note ? $request->note : '',
+            'slot_time' => $time ?? '',
         ]);
 
 
@@ -233,18 +244,28 @@ class TrainerDashboardController extends Controller
 
     public function slotupdate(Request $request, $slotId)
     {
-
+        $time = $request->input('slot_time_to') . " - " . $request->input('slot_time_from');
         $slot = TrainerShedule::findOrFail($slotId);
 
         $slot->note = $request->input('note');
         $slot->trainer_id = $request->input('trainer_id');
         $slot->slot_id = $request->input('slot_id');
         $slot->day = $request->input('day');
+        $slot->slot_time = $time;
         // dd($slot);
 
         $slot->save();
 
         return redirect()->back()->with('success', 'Slot updated successfully');
+    }
+
+    public function delete(Request $request, $slotId)
+    {
+
+        $slot = TrainerShedule::findOrFail($slotId);
+        $slot->delete();
+
+        return redirect()->back()->with('success', 'Slot Delete successfully');
     }
 
 

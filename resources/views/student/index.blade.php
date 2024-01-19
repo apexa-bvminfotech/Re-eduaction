@@ -44,22 +44,28 @@
                                         <th><span>Standard</span></th>
                                         <th><span>Medium</span></th>
                                         <th><span>Status</span></th>
+                                        <th><span>Trainer Status</span></th>
+                                        <th><span>Course Status</span></th>
                                         <th>Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
+
                                     @foreach($students as $key=>$s)
+
                                         <tr>
                                             <td>{{ ++$i }}</td>
                                             <td>{{ $s->surname }} {{ $s->name }}</td>
                                             <td>
                                                 @foreach($s->courses as $course)
+
                                                 {{$course->course->course_name }}<br>
                                                 @endforeach
                                             </td>
                                             <td>{{ $s->branch_name }}</td>
                                             <td>{{ $s->mother_contact_no }}</td>
                                             <td>{{ $s->standard }}</td>
+
                                             <td>{{ $s->medium }}</td>
 
                                              @if($s->isActiveStatus()->status == 'Hold' || $s->isActiveStatus()->status == 'Cancel')
@@ -69,7 +75,32 @@
                                             @else
                                              <td>{{ $s->isActiveStatus() != null ? $s->isActiveStatus()->status : 'Pending' }}</td>
 
+
                                             @endif
+                                            @php
+                                             $statusnumber = 1;
+                                            @endphp
+                                            <td>
+                                                @foreach($s->courses as $course)
+                                                    @if($course->start_date)
+                                                    {{ $statusnumber }}.Course Start
+                                                    @else
+                                                    {{ $statusnumber }}.Course not started
+                                                    @endif
+                                                    @php
+                                                    $statusnumber++;
+                                                @endphp
+                                                @endforeach
+                                            </td>
+
+                                            @if($s->studentTrainer && $s->studentTrainer->trainer_id != null)
+                                            <td style="color: green">Trainer Assigned</td>
+                                            @else
+                                                <td style="color: red">Trainer Not Assigned</td>
+                                            @endif
+
+
+
                                             <td>
                                                 <div class="flex justify-between">
                                                     <a href="{{ route('student.show',$s->id) }}"
@@ -512,7 +543,7 @@
                 "responsive": true, "lengthChange": false, "autoWidth": false,
                 "buttons": ["csv", "excel", "pdf", "print"],
                 initComplete: function () {
-                    this.api().columns([3, 5, 6, 7]).every(function () {
+                    this.api().columns([3, 5, 6, 7,8,9]).every(function () {
                         var column = this;
                         var columnName = column.header().innerText;
 

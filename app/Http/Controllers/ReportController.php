@@ -176,10 +176,13 @@ class ReportController extends Controller
             $user = Auth::user();
             $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
-            $studentStatus = StudentStatus::whereIn('student_id',$studentTrainer)->whereIn('status',['Hold','Cancel'])->where('is_active','0')->with('student.activeCourses.course')->get();
+            $studentStatus = StudentStatus::whereIn('student_id',$studentTrainer)->whereIn('status',['Hold','Cancel','Start','Pending','Cancel'])->where('is_active','0')->with('student.activeCourses.course','course','studentcourses')->get();
         }
         else{
-            $studentStatus = StudentStatus::whereIn('status',['Hold','Cancel'])->where('is_active','0')->with('student.activeCourses.course')->get();
+            $studentStatus = StudentStatus::whereIn('status',['Hold','Cancel','Start','Pending','Cancel'])->where('is_active','0')
+            ->join('student_courses', 'student_courses.student_id', 'student_status.student_id')
+            ->join('courses', 'courses.id', 'student_courses.course_id')
+            ->with('student.activeCourses.course','course','studentcourses')->get();
 
         }
         return view('reports.student_status_list',compact('studentStatus'));
@@ -211,6 +214,21 @@ class ReportController extends Controller
             ->groupBy('branch.slot_time');
         }
         return view('reports.sloat_wise_student_list',compact('stuListWithTrainer'));
+    }
+
+
+    public function studentcourseduration()
+    {
+        if(Auth::user()->type == 1){
+            $user = Auth::user();
+            $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
+            $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
+            $courseWiseStudentData = StudentCourse::whereIn('student_id',$studentTrainer)->with('student','course')->get();
+        }else{
+            $courseWiseStudentData = StudentCourse::with('student','course')->get();
+            // dd($courseWiseStudentData);
+        }
+        return view('reports.course_duration_time_list',compact('courseWiseStudentData'));
     }
 
     public function Proxysloatwisestudent()

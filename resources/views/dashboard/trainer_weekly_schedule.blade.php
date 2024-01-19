@@ -6,6 +6,7 @@
                 <div class="row mb-2">
                     <div class="col-sm-8">
                         <h1>Trainer Weekly Schedule</h1>
+
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
@@ -70,9 +71,12 @@
                                                     <td class="text-center p-5"
                                                         style="background-color: lightgreen ;font-weight: bold">
                                                         Time :- {{ $slot['slot_time'] }}<br><br>
-                                                        Total Students :- {{ count($slot['students']) }}
-                                                        {{-- {{ implode(',', $slot['students'])}} --}}
-
+                                                        Rtc :-
+                                                        @foreach ($slot['students'] as $student)
+                                                       {{$student['branches']}}
+                                                       @endforeach <br> <br>
+                                                        Total Students :- {{ count($slot['students']) }}<br><br>
+                                                        Watsapp Group Name :- {{$slot['whatsapp_group_name']}}<br>
                                                           <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg{{ $slot['student_id'] }}">Student Details</button>
 
                                                           <div class="modal fade bd-example-modal-lg{{ $slot['student_id'] }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel{{ $slot['student_id'] }}" aria-hidden="true">
@@ -92,19 +96,19 @@
                                                                   <th>Mobile No</th>
                                                                   <th>Course Start Date</th>
                                                                   <th>standard</th>
-                                                                  <th>RTC</th>
+                                                                  <th>Medium</th>
                                                                 </tr>
                                                               </thead>
                                                               <tbody>
 
                                                                     @foreach ($slot['students'] as $student)
                                                                    <tr>
-                                                                       <td>{{$student['name']}} {{ $student['surname'] }}</td>
-                                                                       <td>{{$student['courses']}}</td>
-                                                                       <td>{{$student['mobileno']}}</td>
-                                                                       <td>{{$student['student_courses']}}</td>
-                                                                       <td>{{$student['standard']}}</td>
-                                                                       <td>{{$student['branches']}}</td>
+                                                                       <td style="font-weight: normal">{{$student['name']}} {{ $student['surname'] }}</td>
+                                                                       <td style="font-weight: normal">{{$student['courses']}}</td>
+                                                                       <td style="font-weight: normal">{{$student['mobileno']}}</td>
+                                                                       <td style="font-weight: normal">{{$student['student_courses']}}</td>
+                                                                       <td style="font-weight: normal">{{$student['standard']}}</td>
+                                                                       <td style="font-weight: normal">{{$student['medium']}}</td>
                                                                    </tr>
                                                                     @endforeach
 
@@ -152,6 +156,8 @@
                                                     <td class="text-center p-5"
                                                         style="background-color: red ;font-weight: bold">
                                                         Proxy Slot Time :- {{ $slot['slot_time'] }}<br><br>
+                                                        RTC:- {{$slot['rtc']}}<br><br>
+                                                        WhatsApp Group :- {{$slot['whatsapp_group_name']}}<br><br>
 
                                                         Total Students :- {{ count($slot['students']) }}
                                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg{{ implode('', $slot['student_id']) }}">Student Details</button>
@@ -173,19 +179,19 @@
                                                                 <th>Mobile No</th>
                                                                 <th>Course Start Date</th>
                                                                 <th>standard</th>
-                                                                <th>RTC</th>
+                                                                <th>Medium</th>
                                                               </tr>
                                                             </thead>
                                                             <tbody>
 
                                                                     @foreach ($slot['students'] as $student)
                                                                        <tr>
-                                                                            <td>{{ $student['name'] }} {{ $student['surname'] }}</td>
-                                                                            <td>{{ $student['branches'] }}</td>
-                                                                            <td>{{ $student['courses'] }}</td>
-                                                                            <td>{{ $student['student_courses'] }}</td>
-                                                                            <td>{{ $student['standard'] }}</td>
-                                                                            <td>{{ $student['mobileno'] }}</td>
+                                                                            <td style="font-weight: normal">{{ $student['name'] }} {{ $student['surname'] }}</td>
+                                                                            <td style="font-weight: normal">{{ $student['courses'] }}</td>
+                                                                            <td style="font-weight: normal">{{ $student['mobileno'] }}</td>
+                                                                            <td style="font-weight: normal">{{ $student['student_courses'] }}</td>
+                                                                            <td style="font-weight: normal">{{ $student['standard'] }}</td>
+                                                                            <td style="font-weight: normal">{{ $student['medium'] }}</td>
 
                                                                         </tr>
                                                                     @endforeach
@@ -238,6 +244,7 @@
                                             <td class="text-center p-5"
                                                 @if ($applyStyle) style="background-color: yellow; font-weight: bold;" @endif>
                                                 @foreach ($slots as $s)
+
                                                     @if ($checkStartDate->format('Y-m-d') == $s['date'] || $checkStartDate->format('D') == $s['day'])
                                                         @if ($s['note'] != null)
                                                             Note:-{{ $noteNumber }} {{ $s['note'] }}<br><br>
@@ -246,11 +253,16 @@
                                                                 $noteNumber++;
                                                             @endphp
                                                             <br>
-                                                            <button type="button" class="btn btn-primary"
+                                                            <button type="button" class="btn btn-primary edit-slot"
                                                                 data-toggle="modal"
                                                                 data-target="#editModal{{ $s['id'] }}">
                                                                 Edit
                                                             </button>
+                                                            <button type="button" class="btn btn-danger"
+                                                                data-toggle="modal"
+                                                                data-target="#deleteModal{{ $s['id'] }}">
+                                                                Delete
+                                                             </button>
                                                             <!-- Edit Modal -->
                                                             <div class="modal fade" id="editModal{{ $s['id'] }}"
                                                                 tabindex="-1" role="dialog"
@@ -311,6 +323,14 @@
                                                                                             SUNDAY</option>
                                                                                     </select>
                                                                                 </div>
+                                                                                <div class="form-group">
+                                                                                    <label for="note"
+                                                                                        class="col-form-label">time:</label>
+                                                                                    <input type=""
+                                                                                        class="form-control" id="note"
+                                                                                        name="note"
+                                                                                        value="{{ $s['note'] }}">
+                                                                                </div>
 
                                                                                 <div class="form-group">
                                                                                     <label for="triner"
@@ -331,25 +351,40 @@
                                                                                         @endforeach
                                                                                     </select>
                                                                                 </div>
-                                                                                <div class="form-group">
-                                                                                    <label for="note"
-                                                                                        class="col-form-label">Slot
-                                                                                        Time:</label>
-                                                                                    <select class="form-control  slot select2"
-                                                                                        name="slot_id" >
-                                                                                        <option value="">--- Select
-                                                                                            Slot Time ---</option>
-                                                                                        @foreach ($slotstime as $key => $s)
-                                                                                            @if ($s->is_active == 0)
-                                                                                                <option
-                                                                                                    value="{{ $s->id }}"
-                                                                                                    {{ old('slot_time', $s->slot_time) == $s->id ? 'selected' : '' }}
-                                                                                                    data-slot-id="{{ $s->id }}">
-                                                                                                    {{ $s->slot_time }}
-                                                                                                </option>
-                                                                                            @endif
-                                                                                        @endforeach
-                                                                                    </select>
+                                                                                <div class="form-group col-md-12">
+                                                                                    <label for="inputEmail3" class="col-form-label">Slot Time:</label>
+                                                                                    <div class="row">
+                                                                                        <div class="col-sm-5">
+                                                                                            <div class="form-group">
+                                                                                                <div class="input-group date" id="timepicker2"
+                                                                                                     data-target-input="nearest">
+                                                                                                    <input type="time"
+                                                                                                           class="form-control "
+                                                                                                           name="slot_time_to"
+                                                                                                           value="{{ old('slot_time_to') }}"
+                                                                                                           />
+
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-2 mt-2"
+                                                                                             style="display: flex;justify-content: space-around;">
+                                                                                            <p>to</p>
+                                                                                        </div>
+                                                                                        <div class="col-sm-5">
+                                                                                            <div class="form-group">
+                                                                                                <div class="input-group date" id="timepicker3"
+                                                                                                     data-target-input="nearest">
+                                                                                                    <input type="time"
+                                                                                                           class="form-control "
+                                                                                                           name="slot_time_from"
+                                                                                                           value="{{ old('slot_time_from') }}"
+                                                                                                           />
+
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
                                                                                 </div>
 
 
@@ -361,7 +396,41 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            {{-- End Edit Model --}}
 
+                                                            {{-- Delete Model --}}
+                                                        <div class="modal fade" id="deleteModal{{ $s['id'] }}"
+                                                            tabindex="-1" role="dialog"
+                                                            aria-labelledby="deleteModalLabel{{ $s['id'] }}"
+                                                            aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title"
+                                                                            id="deleteModalLabel{{ $s['id'] }}">Delete
+                                                                            Slot</h5>
+                                                                        <button type="button" class="close"
+                                                                            data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <form action="{{ route('delete.slot', ['slotId' => $s['id']]) }}" method="POST">
+                                                                            @csrf
+                                                                            @method('DELETE')
+                                                                            <div class="modal-body">
+                                                                                <p>Are you sure you want to delete?</p>
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                                                                <button type="submit" class="btn btn-danger">Yes</button>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                            {{-- End Delete Model --}}
 
                                                         @endif
                                                     @endif
@@ -601,6 +670,55 @@
                                 <input type="date" class="form-control" name="date" value="">
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-form-label">SLOT
+                                Time:</label>
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <div class="input-group date" id="timepicker"
+                                             data-target-input="nearest">
+                                            <input type="text"
+                                                   class="form-control datetimepicker-input"
+                                                   name="slot_time_to"
+                                                   value="{{ old('slot_time_to') }}"
+                                                   aria-describedby="button-addon2"
+                                                   data-target="#timepicker"/>
+                                            <div class="input-group-append"
+                                                 data-target="#timepicker"
+                                                 data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i
+                                                        class="far fa-clock"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2"
+                                     style="display: flex;justify-content: space-around;">
+                                    <p>to</p>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <div class="input-group date" id="timepicker1"
+                                             data-target-input="nearest">
+                                            <input type="text"
+                                                   class="form-control datetimepicker-input"
+                                                   name="slot_time_from"
+                                                   value="{{ old('slot_time_from') }}"
+                                                   aria-describedby="button-addon2"
+                                                   data-target="#timepicker1"/>
+                                            <div class="input-group-append"
+                                                 data-target="#timepicker1"
+                                                 data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i
+                                                        class="far fa-clock"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-12 mb-1">
                             <div class="form-group">
                                 <label for="start_date">Day:</label>
@@ -660,8 +778,30 @@
                 }
             });
         });
+
         $(document).on('click', '.btn-submit-triner-slot', function() {
             $('#shiftRegularSlotForm').submit();
+        });
+        $('#timepicker').datetimepicker({
+                format: 'LT'
+            })
+            $('#timepicker1').datetimepicker({
+                format: 'LT'
+            })
+            $('#timepicker2').datetimepicker({
+                format: 'LT'
+            })
+            $('#timepicker3').datetimepicker({
+                format: 'LT'
+            })
+            $('#timepickerTest').datetimepicker({
+                format: 'LT'
+            })
+
+        $('body').on('click', '.edit-slot', function(){
+            $('.datetimepicker-input').datetimepicker({
+                format: 'LT'
+            });
         });
     </script>
 @endpush
