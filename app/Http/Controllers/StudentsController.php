@@ -1047,10 +1047,39 @@ class StudentsController extends Controller
     public function restartCourse($student_id, $course_id)
     {
         StudentCourse::where('student_id',$student_id)->where('course_id',$course_id)->update([
-            'end_date' =>  null,
+                'end_date' =>  null,
                 'restart_date' =>  date('Y-m-d'),
             ]);
         return response()->json(['success' => true, 'course_id' => $course_id]);
+    }
+
+
+    public function coursedate(Request $request, $student_id, $course_id)
+    {
+        $student_course = StudentCourse::where('student_id', $student_id)
+            ->where('course_id', $course_id)
+            ->first();
+
+        if ($student_course) {
+            // Update only the fields that are present in the request
+            if ($request->has('start_date')) {
+                $student_course->start_date = $request->start_date;
+            }
+
+            if ($request->has('end_date')) {
+                $student_course->end_date = $request->end_date;
+            }
+
+            if ($request->has('restart_date')) {
+                $student_course->restart_date = $request->restart_date;
+            }
+
+            $student_course->save();
+
+            return redirect()->back()->with(['success' => 'Your Date Update Successfully']);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Record not found']);
+        }
     }
 
 

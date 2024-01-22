@@ -88,7 +88,7 @@ Route::group(['middleware'=>['auth']],function (){
         Route::post('/edit-student-leave-approve','StudentsController@editStudentLeaveApprove')->name('student.editStudentLeaveApprove');
         Route::post('/change-student-status','StudentsController@ChangeStudentStatus')->name('student.ChangeStudentStatus');
         Route::post('/student-appreciation','StudentsController@studentAppreciation')->name('student.studentAppreciation');
-        Route::post('/updateStartDate/{student_id}/{course_id}','StudentsController@coursedate')->name('student.updateStartDate');
+        Route::put('/updateStartDate/{student_id}/{course_id}','StudentsController@coursedate')->name('student.updateStartDate');
         Route::get('/update-course-start-end-date/{student_id}/{course_id}/{task}','StudentsController@updateCourseStartEndDate')->name('student.updateCourseStartEndDate');
         Route::get('/restart-course/{student_id}/{course_id}','StudentsController@restartCourse')->name('student.restartCourse');
 

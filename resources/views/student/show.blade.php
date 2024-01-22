@@ -582,38 +582,68 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="card-body">
+                                    @foreach($student->courses as $student_course)
+                                    {{-- @dd($student_course->start_date) --}}
+                                    <span class="h4 p-2">{{$student_course->course->course_name}}</span>
+                                    @if($student_course->start_date == null )
+                                        <a class="btn btn-success btn-start btn-start_{{ $student_course->course_id }} inactiveLink" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="start_task" id="">Start Course</a>
+                                        <span class="h6 border p-2 display_start_date_{{ $student_course->course_id }}" style="display: none;" id=""> Start Date :- {{ date('d-m-Y', $student_course->start_date)}}</span>
+                                    @else
+                                    <span class="h6 border p-2 mr-2 start-date-container">
+                                        Start Date: {{ $student_course->start_date }}
+                                        <form action="{{ route('student.updateStartDate', ['student_id'=> $student->id,'course_id' => $student_course->course_id]) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('put')
+                                            <input type="date" name="start_date" required>
+                                            <button type="submit" class="btn btn-info btn-sm">Update</button>
+                                        </form>
+                                    </span>
+                                    @endif
+                                    @if($student_course->end_date == null)
+                                        <a class="btn btn-primary btn-end btn-end_{{ $student_course->course_id  }} inactiveLink" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="end_task" id="">End Course</a>
+                                        <span class="h6 border p-2 display_end_date_{{ $student_course->course_id }}" style="display: none;" id=""> End Date :- {{ date('d-m-Y', $student_course->end_date) }}</span>
+                                    @else
+                                         <span class="h6 border p-2 mr-2 ">
+                                    {{-- {{dd($student_course)}} --}}
+                                    End Date: {{ $student_course->end_date }}
+
+                                    <form action="{{ route('student.updateStartDate', ['student_id'=> $student->id,'course_id' => $student_course->course_id]) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('put')
+                                        <input type="date" name="end_date" required>
+                                        <button type="submit" class="btn btn-info btn-sm">Update</button>
+                                    </form>
+                                    </span>
+                                        <button class="btn btn-success" disabled>Course Completed</button>
+                                    @endif
+                                    <button class="btn btn-success course-complete_{{ $student_course->course_id }}" style="display: none;" id="" disabled>Course Completed</button>
+                                    <a class="btn btn-secondary btn-restart-course restart_course_{{ $student_course->course_id }}" data-student-id="{{ $student->id }}"
+                                       data-course-id="{{ $student_course->course_id }}" data-btn="Restart_task" style="display: none;">Restart Course</a>
+
+                                       @if($student_course->end_date !== null)
+                                        <span><a class="btn btn-secondary btn-restart-course" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}">Restart Course</a></span>
+                                        @else
+                                        <span class="h6 border p-2 mr-2 restart-date-container">
+                                            Restart Date: {{ $student_course->restart_date }}
+                                            <form action="{{ route('student.updateStartDate', ['student_id'=> $student->id,'course_id' => $student_course->course_id]) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('put')
+                                                <input type="date" name="restart_date" required>
+                                                <button type="submit" class="btn btn-info btn-sm">Update</button>
+                                            </form>
+                                        </span>
+                                    @endif
+                                    <br><br>
+                                    <table class="table table-bordered table-striped" id="courseTable" style="width: 180%">
+                                        <td class="text-center"><b>Course Start Date:</b>  {{$student_course->start_date}}</td>
+                                        @if($student_course->end_date !== null)
+                                        <td class="text-center"><b>Course End Date:</b>  {{$student_course->end_date}}</td>
+                                        @endif
+                                        <td class="text-center"><b>Course Restart Date:</b>  {{$student_course->restart_date}}</td>
+                                    </table>
                                     <form action="{{route('student.sendNotification')}}" method="POST">
                                         @csrf
-                                        @foreach($student->courses as $student_course)
-                                            {{-- @dd($student_course->start_date) --}}
-                                            <span class="h4 p-2">{{$student_course->course->course_name}}</span>
-                                            @if($student_course->start_date == null)
-                                                <a class="btn btn-success btn-start btn-start_{{ $student_course->course_id }} inactiveLink" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="start_task" id="">Start Course</a>
-                                                <span class="h6 border p-2 display_start_date_{{ $student_course->course_id }}" style="display: none;" id=""> Start Date :- {{ date('d-m-Y', $student_course->start_date)}}</span>
-                                            @else
-                                                <span class="h6 border p-2 mr-2"> Start Date :- {{ date('d-m-Y', strtotime($student_course->start_date))}} </span>
-                                            @endif
-                                            @if($student_course->end_date == null)
-                                                <a class="btn btn-primary btn-end btn-end_{{ $student_course->course_id  }} inactiveLink" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="end_task" id="">End Course</a>
-                                                <span class="h6 border p-2 display_end_date_{{ $student_course->course_id }}" style="display: none;" id=""> End Date :- {{ date('d-m-Y', $student_course->end_date) }}</span>
-                                            @else
-                                                <span class="h6 border p-2"> End Date :- {{ date('d-m-Y', strtotime($student_course->end_date))}}</span>
-                                                <button class="btn btn-success" disabled>Course Completed</button>
-                                            @endif
-                                            <button class="btn btn-success course-complete_{{ $student_course->course_id }}" style="display: none;" id="" disabled>Course Completed</button>
-                                            <a class="btn btn-secondary btn-restart-course restart_course_{{ $student_course->course_id }}" data-student-id="{{ $student->id }}"
-                                               data-course-id="{{ $student_course->course_id }}" data-btn="Restart_task" style="display: none;">Restart Course</a>
-                                            @if($student_course->end_date !== null)
-                                                <span><a class="btn btn-secondary btn-restart-course" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}">Restart Course</a></span>
-                                            @endif
-                                            <br><br>
-                                            <table class="table table-bordered table-striped" id="courseTable" style="width: 180%">
-                                                <td class="text-center"><b>Course Start Date:</b>  {{$student_course->start_date}}</td>
-                                                @if($student_course->end_date !== null)
-                                                <td class="text-center"><b>Course End Date:</b>  {{$student_course->end_date}}</td>
-                                                @endif
-                                                <td class="text-center"><b>Course Restart Date:</b>  {{$student_course->restart_date}}</td>
-                                            </table>
+
 
                                             <table class="table table-bordered table-striped" id="courseTable" style="width: 180%">
                                                 <input type="hidden" name="student_id" class="form-control student_id" value="{{$student->id}}">
@@ -1102,20 +1132,39 @@
             });
         });
 
-        $(document).on('click','.btn-restart-course',function(){
+        $(document).on('click', '.btn-restart-course', function () {
             let student_id = $(this).data('student-id');
             let course_id = $(this).data('course-id');
-            let url =  "restart-course/" + student_id + "/" + course_id;
+            let url = "restart-course/" + student_id + "/" + course_id;
 
             $.ajax({
-                url : url,
+                url: url,
                 type: 'GET',
                 success: function (data) {
-                   location.reload();
+                    console.log('Data received from the server:', data);
+
+                    if (data.course_restarted) {
+                        console.log('Course restarted. Hiding start date, showing restart date.');
+                        $('.start-date-container').hide();
+                        $('.restart-date-container').show();
+                    } else {
+                        console.log('Course not restarted. Showing start date, hiding restart date.');
+                        $('.start-date-container').show();
+                        $('.restart-date-container').hide();
+                    }
+
+                    // Assuming the reload is necessary
+                    setTimeout(function () {
+                        console.log('Reloading the page.');
+                        window.location.reload();
+                    }, 500);
+                },
+                error: function (xhr, status, error) {
+                    console.error('AJAX error:', error);
                 }
             });
-
         });
+
 
         $('body').on('click', '.search-btn',  function(){
             var baseurl = "{{ asset('/') }}";

@@ -48,8 +48,11 @@
                                                     $startDateTime = \Carbon\Carbon::parse($students->start_date);
                                                     $endDateTime = \Carbon\Carbon::parse($students->end_date);
                                                     $duration = $endDateTime->diff($startDateTime);
-                                                    echo $duration->format('%d days, %h hours, %i minutes');
-                                                    ?>
+
+                                                    // Format with months, days, hours, minutes
+                                                    echo $duration->format('%m months, %d days');
+                                                    //, %h hours, %i minutes
+                                                ?>
                                                 </td>
                                             </tr>
                                             @endif
