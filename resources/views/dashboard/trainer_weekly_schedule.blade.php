@@ -82,38 +82,47 @@
                                                           <div class="modal fade bd-example-modal-lg{{ $slot['student_id'] }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel{{ $slot['student_id'] }}" aria-hidden="true">
                                                             <div class="modal-dialog modal-lg">
 
-                                                              <div class="modal-content">
+                                                              <div class="modal-content" style="width: 125%;">
                                                                 <div class="modal-header">
                                                                     <h4 class="modal-title">student Details</h4>
                                                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                                   </div>
                                                                 <div class="modal-body">
                                                                     <table class="table table-striped">
-                                                              <thead>
-                                                                <tr>
-                                                                  <th>Student Name</th>
-                                                                  <th>Course</th>
-                                                                  <th>Mobile No</th>
-                                                                  <th>Course Start Date</th>
-                                                                  <th>standard</th>
-                                                                  <th>Medium</th>
-                                                                </tr>
-                                                              </thead>
-                                                              <tbody>
+                                                                        <thead>
+                                                                            <tr>
+                                                                              <th>Student Name</th>
+                                                                              <th>Course</th>
+                                                                              <th>Father Contact No</th>
+                                                                              <th>Mother Contact No</th>
+                                                                              <th>Course Start Date</th>
+                                                                              <th>standard</th>
+                                                                              <th>Trainer Name</th>
+                                                                              <th>Running Course</th>
+                                                                              <th>Complete Course</th>
+                                                                              <th>Pending Course</th>
+                                                                              <th>Medium</th>
+                                                                            </tr>
+                                                                          </thead>
+                                                                          <tbody>
 
-                                                                    @foreach ($slot['students'] as $student)
-                                                                   <tr>
-                                                                       <td style="font-weight: normal">{{$student['name']}} {{ $student['surname'] }}</td>
-                                                                       <td style="font-weight: normal">{{$student['courses']}}</td>
-                                                                       <td style="font-weight: normal">{{$student['mobileno']}}</td>
-                                                                       <td style="font-weight: normal">{{$student['student_courses']}}</td>
-                                                                       <td style="font-weight: normal">{{$student['standard']}}</td>
-                                                                       <td style="font-weight: normal">{{$student['medium']}}</td>
-                                                                   </tr>
-                                                                    @endforeach
+                                                                                @foreach ($slot['students'] as $student)
+                                                                               <tr>
+                                                                                   <td style="font-weight: normal">{{$student['name']}} {{ $student['surname'] }}</td>
+                                                                                   <td style="font-weight: normal">{{$student['courses']}}</td>
+                                                                                   <td style="font-weight: normal">{{$student['father_phone_no']}}</td>
+                                                                                   <td style="font-weight: normal">{{$student['mother_phone_no']}}</td>
+                                                                                   <td style="font-weight: normal">{{$student['student_courses']}}</td>
+                                                                                   <td style="font-weight: normal">{{$student['standard']}}</td>
+                                                                                   <td style="font-weight: normal">{{$student['trainer_name']}}</td>
+                                                                                   <td style="font-weight: normal">{{$student['running_course']}}</td>
+                                                                                   <td style="font-weight: normal">{{$student['complete_course']}}</td>
+                                                                                   <td style="font-weight: normal">{{$student['pending_course']}}</td>
+                                                                                   <td style="font-weight: normal">{{$student['medium']}}</td>
+                                                                               </tr>
+                                                                                @endforeach
 
-                                                              </tbody>
-
+                                                                          </tbody>
                                                             </table>
                                                             </div>
                                                               </div>
@@ -165,7 +174,7 @@
                                                         <div class="modal fade bd-example-modal-lg{{ implode('', $slot['student_id']) }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel{{ implode('', $slot['student_id']) }}" aria-hidden="true">
                                                           <div class="modal-dialog modal-lg">
 
-                                                            <div class="modal-content">
+                                                            <div class="modal-content" style="width: 136%">
                                                               <div class="modal-header">
                                                                   <h4 class="modal-title">student Details</h4>
                                                                   <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -179,6 +188,12 @@
                                                                 <th>Mobile No</th>
                                                                 <th>Course Start Date</th>
                                                                 <th>standard</th>
+                                                                <th>Father Contact No</th>
+                                                                <th>Mother Contact No</th>
+                                                                <th>Trainer Name</th>
+                                                                <th>Running Course</th>
+                                                                <th>Complete Course</th>
+                                                                <th>Pending Course</th>
                                                                 <th>Medium</th>
                                                               </tr>
                                                             </thead>
@@ -191,8 +206,13 @@
                                                                             <td style="font-weight: normal">{{ $student['mobileno'] }}</td>
                                                                             <td style="font-weight: normal">{{ $student['student_courses'] }}</td>
                                                                             <td style="font-weight: normal">{{ $student['standard'] }}</td>
+                                                                            <td style="font-weight: normal">{{$student['father_phone_no']}}</td>
+                                                                            <td style="font-weight: normal">{{$student['mother_phone_no']}}</td>
+                                                                            <td style="font-weight: normal">{{$student['trainer_name']}}</td>
+                                                                            <td style="font-weight: normal">{{$student['running_course']}}</td>
+                                                                            <td style="font-weight: normal">{{$student['complete_course']}}</td>
+                                                                            <td style="font-weight: normal">{{$student['pending_course']}}</td>
                                                                             <td style="font-weight: normal">{{ $student['medium'] }}</td>
-
                                                                         </tr>
                                                                     @endforeach
                                                             </tbody>

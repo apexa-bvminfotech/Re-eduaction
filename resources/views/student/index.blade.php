@@ -44,8 +44,8 @@
                                         <th><span>Standard</span></th>
                                         <th><span>Medium</span></th>
                                         <th><span>Status</span></th>
-                                        <th><span>Trainer Status</span></th>
                                         <th><span>Course Status</span></th>
+                                        <th><span>Trainer Status</span></th>
                                         <th>Action</th>
                                     </tr>
                                     </thead>
@@ -75,21 +75,14 @@
                                             @else
                                              <td>{{ $s->isActiveStatus() != null ? $s->isActiveStatus()->status : 'Pending' }}</td>
 
-
                                             @endif
-                                            @php
-                                             $statusnumber = 1;
-                                            @endphp
                                             <td>
                                                 @foreach($s->courses as $course)
                                                     @if($course->start_date)
-                                                    {{ $statusnumber }}.Course Start
+                                                    Course Start
                                                     @else
-                                                    {{ $statusnumber }}.Course not started
+                                                    Course not started
                                                     @endif
-                                                    @php
-                                                    $statusnumber++;
-                                                @endphp
                                                 @endforeach
                                             </td>
 
@@ -98,8 +91,6 @@
                                             @else
                                                 <td style="color: red">Trainer Not Assigned</td>
                                             @endif
-
-
 
                                             <td>
                                                 <div class="flex justify-between">
@@ -539,33 +530,37 @@
                 $('#studentStatusForm').submit();
             });
             $(function () {
-            $("#example1").DataTable({
-                "responsive": true, "lengthChange": false, "autoWidth": false,
-                "buttons": ["csv", "excel", "pdf", "print"],
-                initComplete: function () {
-                    this.api().columns([3, 5, 6, 7,8,9]).every(function () {
-                        var column = this;
-                        var columnName = column.header().innerText;
+                var table = $("#example1").DataTable({
+                    "responsive": true,
+                    "lengthChange": false,
+                    "autoWidth": false,
+                    "buttons": ["csv", "excel", "pdf", "print"]
+                });
 
-                        var select = $('<select class="form-control select2"><option value="">' + columnName + '</option></select>')
-                            .appendTo($(column.header()).find('span').empty())
-                            .on({
-                                'change': function () {
-                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                                    column.search(val ? '^' + val + '$' : '', true, false).draw();
-                                },
-                                'click': function (e) {
-                                    e.stopPropagation();
-                                }
-                            });
+                table.columns([3, 5, 6, 7, 8, 9]).every(function () {
+                    var column = this;
+                    var columnName = $(column.header()).text().trim();
 
-                        column.data().unique().sort().each(function (d, j) {
-                            select.append('<option value="' + d + '">' + d + '</option>');
+                    var select = $('<select class="form-control select2"><option value="">' + columnName + '</option></select>')
+                        .appendTo($(column.header()).empty())
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
                         });
-                    });
-                }
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-        });
+
+                    if (columnName === 'Course Status') {
+                        $('<option value="Course Start">Course Start</option>').appendTo(select);
+                        $('<option value="Course not started">Course not started</option>').appendTo(select);
+                    } else {
+                        column.data().unique().sort().each(function (d, j) {
+                            $('<option value="' + d + '">' + d + '</option>').appendTo(select);
+                        });
+                    }
+                });
+
+                table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+            });
+
         });
     </script>
 @endpush

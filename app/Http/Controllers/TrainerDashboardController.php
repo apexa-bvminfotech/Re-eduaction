@@ -83,22 +83,32 @@ class TrainerDashboardController extends Controller
             $userSchedule = TrainerShedule::with('user')->where('user_id', '!=', 0)->get()->groupBy('user.name');
         }
         else{
-            $stuListWithTrainer = StudentStaffAssign::
-              with('trainer', 'student', 'slot', 'branch','studentcourses','course')
+            $stuListWithTrainer = StudentStaffAssign::with('trainer', 'student', 'slot', 'branch', 'studentcourses', 'course')
             ->where('student_staff_assigns.is_active', 0)
             ->join('students', 'students.id', 'student_staff_assigns.student_id')
             ->join('branches', 'branches.id', 'students.branch_id')
             ->join('student_courses', 'student_courses.student_id', 'students.id')
             ->join('courses', 'courses.id', 'student_courses.course_id')
+            ->selectRaw('*, (CASE
+                            WHEN start_date IS NULL THEN "Pending"
+                            WHEN start_date IS NOT NULL AND end_date IS NULL THEN "Running"
+                            ELSE "Complete"
+                        END) AS course_status')
             ->get()
-             ->groupBy('trainer.name');
+            ->groupBy('trainer.name');
 
              $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot','branch','studentcourses','course')
             ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
             ->join('branches', 'branches.id', 'students.branch_id')
             ->join('student_courses', 'student_courses.student_id', 'students.id')
             ->join('courses', 'courses.id', 'student_courses.course_id')
+            ->selectRaw('*, (CASE
+                            WHEN start_date IS NULL THEN "Pending"
+                            WHEN start_date IS NOT NULL AND end_date IS NULL THEN "Running"
+                            ELSE "Complete"
+                        END) AS course_status')
             ->get()->groupBy('trainer.name');
+  
 
             $trainerSchedule = TrainerShedule::with('trainer','student','slot')->where('user_id', '=', 0)
             ->get()->groupBy('trainer.name');
@@ -135,10 +145,13 @@ class TrainerDashboardController extends Controller
                     'courses' => $slots->course->course_name ?? 'Null',
                     'student_courses' => $slots->studentcourses->first()['start_date'] ?? 'Null',
                     'standard' => $slots->student->standard ?? 'Null',
-                    'mobileno' => $slots->student->father_contact_no ?? 'Null',
+                    'father_phone_no' => $slots->student->father_contact_no ?? 'Null',
+                    'mother_phone_no' => $slots->student->mother_contact_no ?? 'Null',
+                    'trainer_name' => $slots->trainer->name ?? 'Null',
                     'medium' => $slots->medium ?? '',
-
-
+                    'running_course' => $slots->course_status === 'Running' ? $slots->course_name : '',
+                    'complete_course' => $slots->course_status === 'Complete' ? $slots->course_name : '',
+                    'pending_course' => $slots->course_status === 'Pending' ? $slots->course_name : '',
                 ];
 
             }
@@ -174,7 +187,13 @@ class TrainerDashboardController extends Controller
                     'mobileno' => $slotsProxy->student->father_contact_no ?? 'Null',
                     'startDate' => $slotsProxy->starting_date ?? '',
                     'endDate' => $slotsProxy->ending_date ?? '',
+                    'father_phone_no' => $slotsProxy->student->father_contact_no ?? 'Null',
+                    'mother_phone_no' => $slotsProxy->student->mother_contact_no ?? 'Null',
+                    'trainer_name' => $slotsProxy->trainer->name ?? 'Null',
                     'medium' => $slotsProxy->medium ?? '',
+                    'running_course' => $slotsProxy->course_status === 'Running' ? $slotsProxy->course_name : '',
+                    'complete_course' => $slotsProxy->course_status === 'Complete' ? $slotsProxy->course_name : '',
+                    'pending_course' => $slotsProxy->course_status === 'Pending' ? $slotsProxy->course_name : '',
                 ];
 
                 $trainerDataProxy[$trainerName][$slotID]['student_id'][] = $slotsProxy->student_id ?? 'Null';
