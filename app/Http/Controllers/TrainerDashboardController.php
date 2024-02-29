@@ -68,6 +68,11 @@ class TrainerDashboardController extends Controller
             ->join('student_courses', 'student_courses.student_id', 'students.id')
             ->join('courses', 'courses.id', 'student_courses.course_id')
             ->with('trainer', 'student', 'slot', 'studentcourses', 'course')
+            ->selectRaw('*, (CASE
+            WHEN start_date IS NULL THEN "Pending"
+            WHEN start_date IS NOT NULL AND end_date IS NULL THEN "Running"
+            ELSE "Complete"
+            END) AS course_status')
             ->get()
             ->groupBy('trainer.name');
 
@@ -77,6 +82,11 @@ class TrainerDashboardController extends Controller
             ->join('branches', 'branches.id', 'students.branch_id')
             ->join('student_courses', 'student_courses.student_id', 'students.id')
             ->join('courses', 'courses.id', 'student_courses.course_id')
+            ->selectRaw('*, (CASE
+                            WHEN start_date IS NULL THEN "Pending"
+                            WHEN start_date IS NOT NULL AND end_date IS NULL THEN "Running"
+                            ELSE "Complete"
+                        END) AS course_status')
             ->get()->groupBy('trainer.name');
 
             $trainerSchedule = TrainerShedule::with('trainer','student','slot')->where('user_id', '=', 0)->get()->groupBy('trainer.name');
@@ -108,7 +118,7 @@ class TrainerDashboardController extends Controller
                             ELSE "Complete"
                         END) AS course_status')
             ->get()->groupBy('trainer.name');
-  
+
 
             $trainerSchedule = TrainerShedule::with('trainer','student','slot')->where('user_id', '=', 0)
             ->get()->groupBy('trainer.name');
