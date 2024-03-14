@@ -8,6 +8,10 @@
                     <div class="col-sm-6">
                         <h1>Student Details</h1>
                     </div>
+                    <div class="col-sm-6 row input-group-append justify-content-end">
+                        <a href="{{route('report.report-list')}}" class="btn btn-primary float-right"><i
+                                ></i>Back</a>
+                </div>
                 </div>
             </div><!-- /.container-fluid -->
         </section>

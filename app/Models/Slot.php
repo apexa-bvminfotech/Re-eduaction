@@ -23,6 +23,9 @@ class Slot extends Model
     public function rtc(){
         return $this->belongsTo(Rtc::class)->where('is_active',0);
     }
+    public function student(){
+        return $this->belongsTo(Student::class)->where('is_active',0);
+    }
     public function trainer(){
         return $this->belongsTo(Trainer::class)->where('is_active',0);
     }

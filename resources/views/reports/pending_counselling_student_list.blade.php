@@ -4,9 +4,13 @@
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
-                    <div class="col-sm-8">
+                    <div class="col-sm-6">
                         <h1>Pending Counselling Student List</h1>
                     </div>
+                    <div class="col-sm-6 row input-group-append justify-content-end">
+                        <a href="{{route('report.report-list')}}" class="btn btn-primary float-right"><i
+                                ></i>Back</a>
+                </div>
                 </div>
             </div><!-- /.container-fluid -->
         </section>
@@ -51,9 +55,9 @@
                                         @foreach($pendingKeyPoint as $key=>$student)
                                             <tr>
                                                 <td>{{ $key+1 }}</td>
-                                                <td>{{ $student->student->name }} {{ $student->student->surname  }}</td>
-                                                <td>{{$student->student->medium}}</td>
-                                                <td>{{$student->student->standard}}</td>
+                                                <td>{{ $student->student->name ?? '' }} {{ $student->student->surname ?? '' }}</td>
+                                                <td>{{$student->student->medium ?? ''}}</td>
+                                                <td>{{$student->student->standard ?? ''}}</td>
                                                 <td>Pending Key point</td>
                                             </tr>
                                         @endforeach

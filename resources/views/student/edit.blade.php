@@ -110,7 +110,7 @@
                                                     </div>
                                                     <div class="col-md-4 mb-1">
                                                         <div class="form-group mb-3">
-                                                            <label for="simpleinput">Father Name:</label>
+                                                            <label for="simpleinput">Father/Husband Name:</label>
                                                             <input type="text" id="simpleinput" class="form-control"
                                                                    name="father_name"
                                                                    value="{{ $student->father_name }}"

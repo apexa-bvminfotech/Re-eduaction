@@ -267,7 +267,9 @@ class ReportController extends Controller
                         'students' => [],
                     ];
                 }
-                $trainerData[$trainerName][$slotID]['students'][] = $slots->student->name . ' ' . $slots->student->surname;
+                if ($slots->student !== null) {
+                    $trainerData[$trainerName][$slotID]['students'][] = $slots->student->name . ' ' . $slots->student->surname;
+                }
             }
         }
         return view('reports.weekly_student_list_with_trainer', compact('trainerData'));

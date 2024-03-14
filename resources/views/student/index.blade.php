@@ -46,6 +46,7 @@
                                         <th><span>Status</span></th>
                                         <th><span>Course Status</span></th>
                                         <th><span>Trainer Status</span></th>
+                                        <th><span>Trainer Name</span></th>
                                         <th>Action</th>
                                     </tr>
                                     </thead>
@@ -91,7 +92,7 @@
                                             @else
                                                 <td style="color: red">Trainer Not Assigned</td>
                                             @endif
-
+                                            <td>{{ $s->trainer_name ?? '' }}</td>
                                             <td>
                                                 <div class="flex justify-between">
                                                     <a href="{{ route('student.show',$s->id) }}"

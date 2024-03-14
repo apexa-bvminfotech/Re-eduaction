@@ -7,6 +7,7 @@
                     <div class="col-sm-6">
                         <h1>Report List</h1>
                     </div>
+                    
                 </div>
             </div>
         </section>

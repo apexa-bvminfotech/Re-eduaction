@@ -102,7 +102,7 @@
                                         <div class="post">
                                             <table class="table border-bottom">
                                                 <tr>
-                                                    <th><b>Father Name:</b></th>
+                                                    <th><b>Father/Husband Name:</b></th>
                                                     <td>{{$student->father_name}}</td>
                                                     <th><b>Father Contact No:</b></th>
                                                     <td>{{$student->father_contact_no}}</td>
@@ -641,7 +641,7 @@
                                         @endif
                                         <td class="text-center"><b>Course Restart Date:</b>  {{$student_course->restart_date}}</td>
                                     </table>
-                                    <form action="{{route('student.sendNotification')}}" method="POST">
+                                    <form id="trainerForm" action="{{route('student.sendNotification')}}" method="POST" >
                                         @csrf
 
 
@@ -649,6 +649,7 @@
                                                 <input type="hidden" name="student_id" class="form-control student_id" value="{{$student->id}}">
                                                 <input type="hidden" name="course_id" class="form-control course_id" value="{{$student_course->course_id}}">
                                                 <input type="hidden" name="trainer_id" class="form-control trainer" value="{{ $trainer ? $trainer->trainer_id : ''}}">
+
                                                 @if($student_course->course->subcourses->isNotEmpty())
                                                     <tr>
                                                         <td class="text-center">Before</td>
@@ -1254,6 +1255,17 @@
             });
         });
 
+        $(document).ready(function() {
+        $('.saveChanges').click(function(event) {
+
+            @if ($trainer && $trainer->trainer_id !== null)
+            @else
+                event.preventDefault();
+
+                alert("Please assign a trainer first.");
+            @endif
+        });
+    });
     </script>
 @endpush
 

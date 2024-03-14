@@ -13,6 +13,7 @@ use App\Models\TrainerAttendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class SlotController extends Controller
 {
@@ -35,19 +36,24 @@ class SlotController extends Controller
      */
     public function index()
     {
-        $slot = Slot::orderBy('id', 'DESC')->get();
+         $slot = Slot::orderBy('id', 'DESC')->get();
+     
+         $slotStudent = Slot::join('student_staff_assigns', 'student_staff_assigns.slot_id', 'slots.id')
+         ->join('students', 'students.id', 'student_staff_assigns.student_id')
+         ->orderBy('slots.id', 'DESC')
+         ->get();
+        //   dd($slotStudent);
+
         if(Auth::user()->type == 1){
             $slot = Slot::where('branch_id', Auth::user()->branch_id)->where('is_active','0')->orderBy('id', 'DESC')->get();
         }
-        // $trainerAttendances = TrainerAttendance::whereDate('date', now()->format('Y-m-d'))->where('status','A')->get();
+
         $studentStaffAssign = StudentStaffAssign::where('is_active','0')->get();
         $trainerId = [];
-        // foreach($trainerAttendances as $trainer){
-        //     $trainerId[] = $trainer->trainer_id;
-        // }
+
         $trainers = Trainer::where('is_active', 0)->orderBy('id', 'desc')->get();
         $proxyStaff = StudentProxyStaffAssign::whereDate('starting_date', now()->format('Y-m-d'))->whereDate('ending_date', now()->format('Y-m-d'))->get();
-        return view('slot.index', compact('slot','trainers','studentStaffAssign','proxyStaff'))->with('i');
+        return view('slot.index', compact('slot','slotStudent','trainers','studentStaffAssign','proxyStaff'))->with('i');
     }
     /**
      * Show the form for creating a new resource.
@@ -289,3 +295,5 @@ class SlotController extends Controller
         return redirect()->back()->with('success', 'Trainer shifted succesfully !!');
     }
 }
+
+

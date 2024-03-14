@@ -20,8 +20,8 @@ class TrainerDashboardController extends Controller
         $user = Auth::user();
         $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->with('branch')->first();
         $trainerStudent = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->with('student.courses.course','slot','trainer')->get();
-        $tarinerRegularLecture = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->with('slot')->get();
-        $tarinerProxyLecture = StudentProxyStaffAssign::where('trainer_id',$trainers->id)->whereDate('starting_date', now()->format('Y-m-d'))->whereDate('ending_date', now()->format('Y-m-d'))->with('slot')->get();
+        $tarinerRegularLecture = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->with('slot','student')->get();
+        $tarinerProxyLecture = StudentProxyStaffAssign::where('trainer_id',$trainers->id)->whereDate('starting_date', now()->format('Y-m-d'))->whereDate('ending_date', now()->format('Y-m-d'))->with('slot','student')->get();
         $totalStudent = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->get();
         $tStudent = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
         $absentPresentStudent = StudentAttendance::where('trainer_id',$trainers->id)->whereIn('student_id',$tStudent)->whereDate('attendance_date', now()->format('Y-m-d'))->where('slot_type','Regular')->get();
@@ -62,20 +62,19 @@ class TrainerDashboardController extends Controller
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
 
             $stuListWithTrainer = StudentStaffAssign::whereIn('students.id', $studentTrainer)
-            ->where('student_staff_assigns.is_active', 0)
-            ->join('students', 'students.id', 'student_staff_assigns.student_id')
-            ->join('branches', 'branches.id', 'students.branch_id')
-            ->join('student_courses', 'student_courses.student_id', 'students.id')
-            ->join('courses', 'courses.id', 'student_courses.course_id')
-            ->with('trainer', 'student', 'slot', 'studentcourses', 'course')
-            ->selectRaw('*, (CASE
-            WHEN start_date IS NULL THEN "Pending"
-            WHEN start_date IS NOT NULL AND end_date IS NULL THEN "Running"
-            ELSE "Complete"
-            END) AS course_status')
-            ->get()
-            ->groupBy('trainer.name');
-
+                ->where('student_staff_assigns.is_active', 0)
+                ->join('students', 'students.id', 'student_staff_assigns.student_id')
+                ->join('branches', 'branches.id', 'students.branch_id')
+                ->join('student_courses', 'student_courses.student_id', 'students.id')
+                ->join('courses', 'courses.id', 'student_courses.course_id')
+                ->with('trainer', 'student', 'slot', 'studentcourses', 'course')
+                ->selectRaw('*, (CASE
+                    WHEN start_date IS NULL THEN "Pending"
+                    WHEN start_date IS NOT NULL AND end_date IS NULL THEN "Running"
+                    ELSE "Complete"
+                    END) AS course_status')
+                ->get()
+                ->groupBy('trainer.name');
 
             $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot','studentcourses','course')
             ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
@@ -106,6 +105,7 @@ class TrainerDashboardController extends Controller
                         END) AS course_status')
             ->get()
             ->groupBy('trainer.name');
+            
 
              $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot','branch','studentcourses','course')
             ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
@@ -119,7 +119,6 @@ class TrainerDashboardController extends Controller
                         END) AS course_status')
             ->get()->groupBy('trainer.name');
 
-
             $trainerSchedule = TrainerShedule::with('trainer','student','slot')->where('user_id', '=', 0)
             ->get()->groupBy('trainer.name');
 
@@ -130,43 +129,56 @@ class TrainerDashboardController extends Controller
         $userListWithTrinerData = [];
         $userScheduleList = [];
 
-        foreach ($stuListWithTrainer as $trainerName => $trainerSlot) {
-            $trainerData[$trainerName] = [];
-            //  dd($trainerSlot);
-            foreach ($trainerSlot as $slots) {
-                $slotID = $slots->slot->id ?? '';
+            foreach ($stuListWithTrainer as $trainerName => $trainerSlot) {
+                $trainerData[$trainerName] = [];
+                foreach ($trainerSlot as $slots) {
+                    $slotID = $slots->slot->id ?? '';
 
-                if (!isset($trainerData[$trainerName][$slotID])) {
-                    $trainerData[$trainerName][$slotID] = [
-                        'slot_time' => $slots->slot->slot_time ?? '',
-                        'students' => [],
-                        'student_id' => $slots->student_id ?? '',
-                        'id' => $slots->id ?? '',
-                        'medium' => $slots->medium ?? '',
-                        'whatsapp_group_name' => $slots->slot->whatsapp_group_name ?? '',
+                    if (!isset($trainerData[$trainerName][$slotID])) {
+                        $trainerData[$trainerName][$slotID] = [
+                            'slot_time' => $slots->slot->slot_time ?? '',
+                            'students' => [],
+                            'whatsapp_group_name' => $slots->slot->whatsapp_group_name ?? '',
+                            'rtc' => $slots->branch->name ?? '',
+                            'student_id' => $slots->student_id ?? '',
+                        ];
+                    }
 
-                    ];
+                    $existingStudentIndex = null;
+                    foreach ($trainerData[$trainerName][$slotID]['students'] as $index => $student) {
+                        if ($student['student_id'] === $slots->student_id) {
+                            $existingStudentIndex = $index;
+                            break;
+                        }
+                    }
+
+                    if ($existingStudentIndex !== null) {
+                        $trainerData[$trainerName][$slotID]['students'][$existingStudentIndex]['courses'][] = $slots->course_name;
+                        $trainerData[$trainerName][$slotID]['students'][$existingStudentIndex]['course_status'][] = $slots->course_status;
+                    } else {
+                        $courses = [$slots->course_name];
+                        $course_status = [$slots->course_status];
+
+                        $trainerData[$trainerName][$slotID]['students'][] = [
+                            'student_id' => $slots->student_id ?? '',
+                            'name' => $slots->student->name,
+                            'surname' => $slots->student->surname ?? '',
+                            'branches' => $slots->branch->name ?? 'Null',
+                            'courses' => $courses,
+                            'course_status' => $course_status,
+                            'student_courses' => $slots->studentcourses->first()['start_date'] ?? 'Null',
+                            'standard' => $slots->student->standard ?? 'Null',
+                            'father_phone_no' => $slots->student->father_contact_no ?? 'Null',
+                            'mother_phone_no' => $slots->student->mother_contact_no ?? 'Null',
+                            'trainer_name' => $trainerName ?? 'Null',
+                            'medium' => $slots->medium ?? '',
+
+                        ];
+                    }
                 }
-
-                $trainerData[$trainerName][$slotID]['students'][] = [
-                    'name' => $slots->student->name,
-                    'surname' => $slots->student->surname ?? '',
-                    'branches' => $slots->branch->name ?? 'Null',
-                    'courses' => $slots->course->course_name ?? 'Null',
-                    'student_courses' => $slots->studentcourses->first()['start_date'] ?? 'Null',
-                    'standard' => $slots->student->standard ?? 'Null',
-                    'father_phone_no' => $slots->student->father_contact_no ?? 'Null',
-                    'mother_phone_no' => $slots->student->mother_contact_no ?? 'Null',
-                    'trainer_name' => $slots->trainer->name ?? 'Null',
-                    'medium' => $slots->medium ?? '',
-                    'running_course' => $slots->course_status === 'Running' ? $slots->course_name : '',
-                    'complete_course' => $slots->course_status === 'Complete' ? $slots->course_name : '',
-                    'pending_course' => $slots->course_status === 'Pending' ? $slots->course_name : '',
-                ];
-
             }
 
-        }
+
 
         foreach ($stuListWithTrainerProxy as $trainerName => $trainerSlotProxy) {
             $trainerDataProxy[$trainerName] = [];
@@ -187,24 +199,39 @@ class TrainerDashboardController extends Controller
                     ];
                 }
 
-                $trainerDataProxy[$trainerName][$slotID]['students'][] = [
-                    'name' => $slotsProxy->student->name,
-                    'surname' => $slotsProxy->student->surname,
-                    'branches' => $slotsProxy->branch->name ?? 'Null',
-                    'courses' => $slotsProxy->course->course_name ?? 'Null',
-                    'student_courses' => $slotsProxy->studentcourses->first()['start_date'] ?? 'Null',
-                    'standard' => $slotsProxy->student->standard ?? 'Null',
-                    'mobileno' => $slotsProxy->student->father_contact_no ?? 'Null',
-                    'startDate' => $slotsProxy->starting_date ?? '',
-                    'endDate' => $slotsProxy->ending_date ?? '',
-                    'father_phone_no' => $slotsProxy->student->father_contact_no ?? 'Null',
-                    'mother_phone_no' => $slotsProxy->student->mother_contact_no ?? 'Null',
-                    'trainer_name' => $slotsProxy->trainer->name ?? 'Null',
-                    'medium' => $slotsProxy->medium ?? '',
-                    'running_course' => $slotsProxy->course_status === 'Running' ? $slotsProxy->course_name : '',
-                    'complete_course' => $slotsProxy->course_status === 'Complete' ? $slotsProxy->course_name : '',
-                    'pending_course' => $slotsProxy->course_status === 'Pending' ? $slotsProxy->course_name : '',
-                ];
+
+                $existingStudentIndex = null;
+                foreach ($trainerDataProxy[$trainerName][$slotID]['students'] as $index => $student) {
+                    if ($student['student_id'] === $slotsProxy->student_id) {
+                        $existingStudentIndex = $index;
+                        break;
+                    }
+                }
+
+                if ($existingStudentIndex !== null) {
+                    $trainerDataProxy[$trainerName][$slotID]['students'][$existingStudentIndex]['courses'][] = $slotsProxy->course_name;
+                    $trainerDataProxy[$trainerName][$slotID]['students'][$existingStudentIndex]['course_status'][] = $slotsProxy->course_status;
+                } else {
+                    $courses = [$slotsProxy->course_name];
+                    $course_status = [$slotsProxy->course_status];
+
+                    $trainerDataProxy[$trainerName][$slotID]['students'][] = [
+                        'student_id' => $slotsProxy->student_id ?? '',
+                        'name' => $slotsProxy->student->name,
+                        'surname' => $slotsProxy->student->surname ?? '',
+                        'branches' => $slotsProxy->branch->name ?? 'Null',
+                        'courses' => $courses,
+                        'course_status' => $course_status,
+                        'student_courses' => $slotsProxy->studentcourses->first()['start_date'] ?? 'Null',
+                        'standard' => $slotsProxy->student->standard ?? 'Null',
+                        'father_phone_no' => $slotsProxy->student->father_contact_no ?? 'Null',
+                        'mother_phone_no' => $slotsProxy->student->mother_contact_no ?? 'Null',
+                        'trainer_name' => $trainerName ?? 'Null',
+                        'medium' => $slotsProxy->medium ?? '',
+
+                    ];
+                }
+
 
                 $trainerDataProxy[$trainerName][$slotID]['student_id'][] = $slotsProxy->student_id ?? 'Null';
             }
@@ -230,11 +257,11 @@ class TrainerDashboardController extends Controller
                         'note' => $Usertrainer->note ?? '',
                         'day' => $Usertrainer->day ?? '',
                         'userName' => $trainerName ?? '',
-                        // 'slot_time'=>$Usertrainer->slot->slot_time ?? '',
+                         'slot_id'=>$Usertrainer->slot_id ?? '',
                         'id'=> $Usertrainer->id ?? '',
+                        'trainer_id' => $Usertrainer->trainer_id ?? '',
                         'slot_time' => $Usertrainer->slot_time ?? '',
                     ];
-
             }
 
         }
@@ -281,6 +308,7 @@ class TrainerDashboardController extends Controller
         $slot->slot_id = $request->input('slot_id');
         $slot->day = $request->input('day');
         $slot->slot_time = $time;
+        $slot->slot_id = $request->input('slot_id');
         // dd($slot);
 
         $slot->save();

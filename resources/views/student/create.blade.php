@@ -106,7 +106,7 @@
                                                     </div>
                                                     <div class="col-md-4 mb-1">
                                                         <div class="form-group mb-3">
-                                                            <label for="simpleinput">Father Name:</label>
+                                                            <label for="simpleinput">Father/Husband Name:</label>
                                                             <input type="text" id="simpleinput" class="form-control" name="father_name" value="{{ old('father_name') }}" placeholder="enter father name" required>
                                                             @error('father_name')
                                                             <span class="text-danger">{{$message}}</span>
@@ -382,16 +382,14 @@
                                                             @enderror
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6 mb-1" >
+                                                    <div class="col-md-6 mb-1">
                                                         <div class="form-group">
                                                             <label for="course_name">Course Name:</label>
                                                             <br>
-                                                            <select name="course_id[]" multiple="" class="form-control select2 course_id" id="course_id"
-                                                                    required disabled>
+                                                            <select name="course_id[]" multiple="" class="form-control select2 course_id" id="course_id" required {{ old('medium') ? '' : 'disabled' }}>
                                                                 <option value="">----- Course Name -----</option>
                                                                 @foreach($course as $key=>$c)
-                                                                    <option
-                                                                        value="{{$c->id}}" {{ old('course_id')==$c->id?'selected':'' }}>{{$c->course_name}}</option>
+                                                                    <option value="{{$c->id}}" {{ (is_array(old('course_id')) && in_array($c->id, old('course_id'))) ? 'selected' : '' }}>{{$c->course_name}}</option>
                                                                 @endforeach
                                                             </select>
                                                             @error('course_id')
@@ -963,9 +961,7 @@
                 form.find('.is-invalid').removeClass('is-invalid');
                 form.find('.invalid-feedback').remove();
             }
-            $('.medium-list').on('change', function () {
-                $('.medium-list').not(this).prop('checked', false);
-            });
+
 
         });
         document.addEventListener('DOMContentLoaded', function () {
@@ -985,9 +981,7 @@
                 $('#age').val(age);
             });
 
-            $('.medium-list').on('change', function(){
-                $('#course_id').prop("disabled", false);
-            });
+
 
             $("#notApplicable").change(function() {
                 if (this.checked) {
@@ -1004,32 +998,46 @@
                 $("#dmitContainer").show();
                 }
             });
+            $('.medium-list').on('change', function () {
+                $('.medium-list').not(this).prop('checked', false);
+            });
+
+            $(document).ready(function() {
+            $('.medium-list').on('change', function() {
+                if ($('.medium-list:checked').length > 0) {
+                    $('#course_id').prop("disabled", false);
+                }
+            });
+            $('.medium-list:checked').trigger('change');
+        });
+
 
             //append course_material according to change meduim and course
-            $('body').on("change", ".medium-list, #course_id", function(){
-                $('#course_material').empty();
-                var medium_id = $('input[name="medium"]:checked').val();
-                var course_id = $('.course_id option:selected').map(function () {
-                    return $(this).val();
-                }).get();
+            // $('body').on("change", ".medium-list, #course_id", function(){
+            //     $('#course_material').empty();
+            //     var medium_id = $('input[name="medium"]:checked').val();
+            //     console.log(medium_id)
+            //     var course_id = $('.course_id option:selected').map(function () {
+            //         return $(this).val();
+            //     }).get();
 
-                $.ajax({
-                    url : "{{ route('student.getCourseMaterialData') }}",
-                    type: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': $('input[name="_token"]').val(),
-                    },
-                    data: {
-                        'course_id': course_id,
-                        'medium_id' : medium_id
-                    },
-                    success: function (data) {
-                        $('#course_material').append(data);
-                    },
-                    error: function (err) {
-                    }
-                });
-            });
+            //     $.ajax({
+            //         url : "{{ route('student.getCourseMaterialData') }}",
+            //         type: 'POST',
+            //         headers: {
+            //             'X-CSRF-TOKEN': $('input[name="_token"]').val(),
+            //         },
+            //         data: {
+            //             'course_id': course_id,
+            //             'medium_id' : medium_id
+            //         },
+            //         success: function (data) {
+            //             $('#course_material').append(data);
+            //         },
+            //         error: function (err) {
+            //         }
+            //     });
+            // });
         });
 
     </script>

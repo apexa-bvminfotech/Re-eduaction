@@ -21,14 +21,14 @@
                             data-target="#myModal" data-old-regular-slot-id data-old-regular-trainer-id>
                             Add Weekly Schedule
                         </button>
+
                     </td>
                     <div class="col-12">
                         <div class="card">
-
                             @foreach ($trainerData as $trainerName => $slots)
-
                                 <div class="card-body">
                                     <table class="table table-bordered table-striped">
+
                                         @php
                                             $startDate = now()->startOfWeek();
                                             $endDate = now()->endOfWeek();
@@ -45,7 +45,6 @@
                                                 @for ($day = 1; $day <= $numberOfDays; $day++)
                                                     <th class="text-center p-3">
                                                         {{-- {{ $startDate->format('d-m-Y') }}<br> --}}
-
                                                         {{ $startDate->format('D') }}
                                                     </th>
                                                     @php
@@ -71,10 +70,10 @@
                                                     <td class="text-center p-5"
                                                         style="background-color: lightgreen ;font-weight: bold">
                                                         Time :- {{ $slot['slot_time'] }}<br><br>
-                                                        Rtc :-
-                                                        @foreach ($slot['students'] as $student)
+                                                        Rtc :- {{ $slot['rtc']}}<br><br>
+                                                        {{-- @foreach ($slot['students'] as $student)
                                                        {{$student['branches']}}
-                                                       @endforeach <br> <br>
+                                                       @endforeach <br> <br> --}}
                                                         Total Students :- {{ count($slot['students']) }}<br><br>
                                                         Watsapp Group Name :- {{$slot['whatsapp_group_name']}}<br>
                                                           <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg{{ $slot['student_id'] }}">Student Details</button>
@@ -82,7 +81,7 @@
                                                           <div class="modal fade bd-example-modal-lg{{ $slot['student_id'] }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel{{ $slot['student_id'] }}" aria-hidden="true">
                                                             <div class="modal-dialog modal-lg">
 
-                                                              <div class="modal-content" style="width: 125%;">
+                                                              <div class="modal-content" style="width: 140%;;">
                                                                 <div class="modal-header">
                                                                     <h4 class="modal-title">student Details</h4>
                                                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -91,46 +90,63 @@
                                                                     <table class="table table-striped">
                                                                         <thead>
                                                                             <tr>
-                                                                              <th>Student Name</th>
-                                                                              <th>Course</th>
-                                                                              <th>Father Contact No</th>
-                                                                              <th>Mother Contact No</th>
-                                                                              <th>Course Start Date</th>
-                                                                              <th>standard</th>
-                                                                              <th>Trainer Name</th>
-                                                                              <th>Running Course</th>
-                                                                              <th>Complete Course</th>
-                                                                              <th>Pending Course</th>
-                                                                              <th>Medium</th>
+                                                                                <th>#</th>
+                                                                                <th>Student Name</th>
+                                                                                <th>Course</th>
+                                                                                <th>Father Contact No</th>
+                                                                                <th>Mother Contact No</th>
+                                                                                <th>Course Start Date</th>
+                                                                                <th>Standard</th>
+                                                                                <th>Trainer Name</th>
+                                                                                <th>Running Course</th>
+                                                                                <th>Complete Course</th>
+                                                                                <th>Pending Course</th>
+                                                                                <th>Medium</th>
                                                                             </tr>
-                                                                          </thead>
-                                                                          <tbody>
-
-                                                                                @foreach ($slot['students'] as $student)
-                                                                               <tr>
-                                                                                   <td style="font-weight: normal">{{$student['name']}} {{ $student['surname'] }}</td>
-                                                                                   <td style="font-weight: normal">{{$student['courses']}}</td>
-                                                                                   <td style="font-weight: normal">{{$student['father_phone_no']}}</td>
-                                                                                   <td style="font-weight: normal">{{$student['mother_phone_no']}}</td>
-                                                                                   <td style="font-weight: normal">{{$student['student_courses']}}</td>
-                                                                                   <td style="font-weight: normal">{{$student['standard']}}</td>
-                                                                                   <td style="font-weight: normal">{{$student['trainer_name']}}</td>
-                                                                                   <td style="font-weight: normal">{{$student['running_course']}}</td>
-                                                                                   <td style="font-weight: normal">{{$student['complete_course']}}</td>
-                                                                                   <td style="font-weight: normal">{{$student['pending_course']}}</td>
-                                                                                   <td style="font-weight: normal">{{$student['medium']}}</td>
-                                                                               </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @php $noteNumber = 1; @endphp
+                                                                            @foreach ($slot['students'] as $student)
+                                                                            <tr>
+                                                                                <td style="font-weight: normal">{{ $noteNumber }}</td>
+                                                                                <td style="font-weight: normal">{{ $student['name'] }} {{ $student['surname'] }}</td>
+                                                                                <td style="font-weight: normal">{{ implode(', ', $student['courses']) }}</td>
+                                                                                <td style="font-weight: normal">{{ $student['father_phone_no'] }}</td>
+                                                                                <td style="font-weight: normal">{{ $student['mother_phone_no'] }}</td>
+                                                                                <td style="font-weight: normal">{{ $student['student_courses'] }}</td>
+                                                                                <td style="font-weight: normal">{{ $student['standard'] }}</td>
+                                                                                <td style="font-weight: normal">{{ $student['trainer_name'] }}</td>
+                                                                                @php
+                                                                                    $runningCourses = [];
+                                                                                    $completeCourses = [];
+                                                                                    $pendingCourses = [];
+                                                                                @endphp
+                                                                                @foreach ($student['courses'] as $key => $course)
+                                                                                    @php
+                                                                                        $status = $student['course_status'][$key];
+                                                                                        if ($status == 'Running') {
+                                                                                            $runningCourses[] = $course;
+                                                                                        } elseif ($status == 'Complete') {
+                                                                                            $completeCourses[] = $course;
+                                                                                        } elseif ($status == 'Pending') {
+                                                                                            $pendingCourses[] = $course;
+                                                                                        }
+                                                                                    @endphp
                                                                                 @endforeach
+                                                                                <td style="font-weight: normal">{{ implode(', ', $runningCourses) }}</td>
+                                                                                <td style="font-weight: normal">{{ implode(', ', $completeCourses) }}</td>
+                                                                                <td style="font-weight: normal">{{ implode(', ', $pendingCourses) }}</td>
+                                                                                <td style="font-weight: normal">{{ $student['medium'] }}</td>
+                                                                            </tr>
 
-                                                                          </tbody>
-                                                            </table>
-                                                            </div>
+                                                                                @php $noteNumber++; @endphp
+                                                                            @endforeach
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
                                                               </div>
                                                             </div>
                                                           </div>
-
-
-
                                                     </td>
                                                     @else
                                                     <td class="text-center p-5"
@@ -140,14 +156,8 @@
 
                                             </tr>
                             @endforeach
-
-
-
-
                             </tr>
-
                             <tr>
-
                                 @foreach ($trainerDataProxy as $trainerNames => $slots)
                                     @if ($trainerName == $trainerNames)
                                         @foreach ($slots as $slot)
@@ -174,7 +184,7 @@
                                                         <div class="modal fade bd-example-modal-lg{{ implode('', $slot['student_id']) }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel{{ implode('', $slot['student_id']) }}" aria-hidden="true">
                                                           <div class="modal-dialog modal-lg">
 
-                                                            <div class="modal-content" style="width: 136%">
+                                                            <div class="modal-content" style="width: 150%">
                                                               <div class="modal-header">
                                                                   <h4 class="modal-title">student Details</h4>
                                                                   <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -185,7 +195,6 @@
                                                               <tr>
                                                                 <th>Student Name</th>
                                                                 <th>Course</th>
-                                                                <th>Mobile No</th>
                                                                 <th>Course Start Date</th>
                                                                 <th>standard</th>
                                                                 <th>Father Contact No</th>
@@ -202,16 +211,33 @@
                                                                     @foreach ($slot['students'] as $student)
                                                                        <tr>
                                                                             <td style="font-weight: normal">{{ $student['name'] }} {{ $student['surname'] }}</td>
-                                                                            <td style="font-weight: normal">{{ $student['courses'] }}</td>
-                                                                            <td style="font-weight: normal">{{ $student['mobileno'] }}</td>
+                                                                            <td style="font-weight: normal">{{ implode(', ', $student['courses']) }}</td>
                                                                             <td style="font-weight: normal">{{ $student['student_courses'] }}</td>
                                                                             <td style="font-weight: normal">{{ $student['standard'] }}</td>
                                                                             <td style="font-weight: normal">{{$student['father_phone_no']}}</td>
                                                                             <td style="font-weight: normal">{{$student['mother_phone_no']}}</td>
                                                                             <td style="font-weight: normal">{{$student['trainer_name']}}</td>
-                                                                            <td style="font-weight: normal">{{$student['running_course']}}</td>
-                                                                            <td style="font-weight: normal">{{$student['complete_course']}}</td>
-                                                                            <td style="font-weight: normal">{{$student['pending_course']}}</td>
+                                                                            @php
+                                                                                    $runningCourses = [];
+                                                                                    $completeCourses = [];
+                                                                                    $pendingCourses = [];
+                                                                                @endphp
+                                                                                @foreach ($student['courses'] as $key => $course)
+                                                                                    @php
+                                                                                        $status = $student['course_status'][$key];
+                                                                                        if ($status == 'Running') {
+                                                                                            $runningCourses[] = $course;
+                                                                                        } elseif ($status == 'Complete') {
+                                                                                            $completeCourses[] = $course;
+                                                                                        } elseif ($status == 'Pending') {
+                                                                                            $pendingCourses[] = $course;
+                                                                                        }
+                                                                                    @endphp
+                                                                                @endforeach
+                                                                                <td style="font-weight: normal">{{ implode(', ', $runningCourses) }}</td>
+                                                                                <td style="font-weight: normal">{{ implode(', ', $completeCourses) }}</td>
+                                                                                <td style="font-weight: normal">{{ implode(', ', $pendingCourses) }}</td>
+                                                                            {{-- <td style="font-weight: normal">{{implode(', ', $student['course_status'])}}</td> --}}
                                                                             <td style="font-weight: normal">{{ $student['medium'] }}</td>
                                                                         </tr>
                                                                     @endforeach
@@ -307,7 +333,7 @@
                                                                                 <div class="form-group">
                                                                                     <label for="note"
                                                                                         class="col-form-label">Note:</label>
-                                                                                    <input type="text"
+                                                                                    <input type=""
                                                                                         class="form-control" id="note"
                                                                                         name="note"
                                                                                         value="{{ $s['note'] }}">
@@ -343,15 +369,7 @@
                                                                                             SUNDAY</option>
                                                                                     </select>
                                                                                 </div>
-                                                                                <div class="form-group">
-                                                                                    <label for="note"
-                                                                                        class="col-form-label">time:</label>
-                                                                                    <input type=""
-                                                                                        class="form-control" id="note"
-                                                                                        name="note"
-                                                                                        value="{{ $s['note'] }}">
-                                                                                </div>
-
+                                                                                {{-- {{dd($s)}} --}}
                                                                                 <div class="form-group">
                                                                                     <label for="triner"
                                                                                         class="col-form-label">Triner
@@ -360,51 +378,79 @@
                                                                                         name="trainer_id" >
                                                                                         <option value="">--- Select
                                                                                             Trainer ---</option>
-                                                                                        @foreach ($trainershedule as $key => $trainer)
+                                                                                            @foreach ($trainershedule as $key => $trainer)
                                                                                             @if ($trainer->is_active == 0)
-                                                                                                <option
-                                                                                                    value="{{ $trainer->id }}"
-                                                                                                    data-trainer-id="{{ $trainer->id }}">
-                                                                                                    {{ $trainer->name }}
-                                                                                                </option>
+                                                                                                <option value="{{ $trainer->id }}" {{ $s['trainer_id'] == $trainer->id ? 'selected' : '' }}>{{ $trainer->name }}</option>
                                                                                             @endif
                                                                                         @endforeach
                                                                                     </select>
                                                                                 </div>
+
+                                                                                <div class="form-group">
+                                                                                    <label for="name">Slot: </label>
+                                                                                    <select name="slot_id" class="form-control slot select2" required>
+                                                                                        <option value="">------Select Slot-----</option>
+                                                                                        @foreach ($slotstime as $key => $slot)
+                                                                                            @if ($slot->is_active == 0)
+                                                                                                <option value="{{ $slot->id }}"  {{ $s['slot_id'] == $slot->id ? 'selected' : '' }} data-slot-id="{{ $slot->id }}">
+                                                                                                    {{ $slot->slot_time }}</option>
+                                                                                            @endif
+                                                                                        @endforeach
+                                                                                    </select>
+                                                                                </div>
+                                                                                @php
+                                                                                $time_parts = explode(' - ', $s['slot_time']);
+                                                                                $slot_time_to = isset($time_parts[0]) ? $time_parts[0] : '';
+                                                                                $slot_time_from = isset($time_parts[1]) ? $time_parts[1] : '';
+                                                                                @endphp
                                                                                 <div class="form-group col-md-12">
                                                                                     <label for="inputEmail3" class="col-form-label">Slot Time:</label>
                                                                                     <div class="row">
                                                                                         <div class="col-sm-5">
                                                                                             <div class="form-group">
-                                                                                                <div class="input-group date" id="timepicker2"
+                                                                                                <div class="input-group date" id="timepicker"
                                                                                                      data-target-input="nearest">
-                                                                                                    <input type="time"
-                                                                                                           class="form-control "
+                                                                                                    <input type="text"
+                                                                                                           class="form-control datetimepicker-input"
                                                                                                            name="slot_time_to"
-                                                                                                           value="{{ old('slot_time_to') }}"
-                                                                                                           />
-
+                                                                                                           value="{{ $slot_time_to }}"
+                                                                                                           aria-describedby="button-addon2"
+                                                                                                           data-target="#timepicker"/>
+                                                                                                    <div class="input-group-append"
+                                                                                                         data-target="#timepicker"
+                                                                                                         data-toggle="datetimepicker">
+                                                                                                        <div class="input-group-text"><i
+                                                                                                                class="far fa-clock"></i>
+                                                                                                        </div>
+                                                                                                    </div>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
-                                                                                        <div class="col-sm-2 mt-2"
+                                                                                        <div class="col-sm-2"
                                                                                              style="display: flex;justify-content: space-around;">
                                                                                             <p>to</p>
                                                                                         </div>
                                                                                         <div class="col-sm-5">
                                                                                             <div class="form-group">
-                                                                                                <div class="input-group date" id="timepicker3"
+                                                                                                <div class="input-group date" id="timepicker1"
                                                                                                      data-target-input="nearest">
-                                                                                                    <input type="time"
-                                                                                                           class="form-control "
+                                                                                                    <input type="text"
+                                                                                                           class="form-control datetimepicker-input"
                                                                                                            name="slot_time_from"
-                                                                                                           value="{{ old('slot_time_from') }}"
-                                                                                                           />
-
+                                                                                                           value="{{ $slot_time_from }}"
+                                                                                                           aria-describedby="button-addon2"
+                                                                                                           data-target="#timepicker1"/>
+                                                                                                    <div class="input-group-append"
+                                                                                                         data-target="#timepicker1"
+                                                                                                         data-toggle="datetimepicker">
+                                                                                                        <div class="input-group-text"><i
+                                                                                                                class="far fa-clock"></i></div>
+                                                                                                    </div>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
+
                                                                                 </div>
 
 
@@ -776,52 +822,50 @@
 
 @push('scripts')
     <script>
-        $(document).on('change', '.proxy_class', function() {
+            $(document).on('change', '.proxy_class', function() {
 
-            let triner = ($(this).val());
+                let triner = ($(this).val());
 
-            $.ajax({
-                url: 'shift-triner-slot/' + triner,
-                type: 'GET',
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                },
-                success: function(data) {
-                    console.log("Slot display done.", data);
-                    let slotOption = '<option value="">------Select Slot-----</option>';
-                    $.each(data.slots, function(index, slot) {
-                        slotOption += '<option value="' + slot.id + '">' + slot.slot_time +
-                            '  (' + slot.rtc.rtc_name + ')</option>';
-                    })
-                    $('.slot').html("")
-                    $('.slot').html(slotOption)
-                }
+                $.ajax({
+                    url: 'shift-triner-slot/' + triner,
+                    type: 'GET',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                    },
+                    success: function(data) {
+                        console.log("Slot display done.", data);
+                        let slotOption = '<option value="">------Select Slot-----</option>';
+                        $.each(data.slots, function(index, slot) {
+                            slotOption += '<option value="' + slot.id + '">' + slot.slot_time +
+                                '  (' + slot.rtc.rtc_name + ')</option>';
+                        })
+                        $('.slot').html("")
+                        $('.slot').html(slotOption)
+                    }
+                });
             });
-        });
 
-        $(document).on('click', '.btn-submit-triner-slot', function() {
-            $('#shiftRegularSlotForm').submit();
-        });
-        $('#timepicker').datetimepicker({
+            $(document).on('click', '.btn-submit-triner-slot', function() {
+                $('#shiftRegularSlotForm').submit();
+            });
+            $('#timepicker').datetimepicker({
                 format: 'LT'
             })
             $('#timepicker1').datetimepicker({
                 format: 'LT'
             })
+
+            $(document).on('click', '.edit-slot', function() {
+                console.log("timepicker model open");
             $('#timepicker2').datetimepicker({
                 format: 'LT'
-            })
+            });
+
             $('#timepicker3').datetimepicker({
                 format: 'LT'
-            })
-            $('#timepickerTest').datetimepicker({
-                format: 'LT'
-            })
-
-        $('body').on('click', '.edit-slot', function(){
-            $('.datetimepicker-input').datetimepicker({
-                format: 'LT'
             });
-        });
+            });
+
+
     </script>
 @endpush

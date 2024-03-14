@@ -4,13 +4,17 @@
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
-                    <div class="col-sm-8">
+                    <div class="col-sm-6">
                         <h1>Weekly Student List with Trainer</h1>
                     </div>
+                    <div class="col-sm-6 row input-group-append justify-content-end">
+                        <a href="{{route('report.report-list')}}" class="btn btn-primary float-right"><i
+                                ></i>Back</a>
+                </div>
                 </div>
             </div><!-- /.container-fluid -->
-        </section>    
-        
+        </section>
+
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
@@ -65,7 +69,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                            @endforeach    
+                            @endforeach
                         </div>
                     </div>
                 </div>

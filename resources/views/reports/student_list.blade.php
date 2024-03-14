@@ -4,10 +4,11 @@
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
-                    <div class="col-sm-8">
+                    <div class="col-sm-4">
                         <h1>Student List</h1>
                     </div>
-                    <div class="col-sm-4 text-right">
+
+                    <div class="col-sm-6 text-right">
                         <form class="form-inline" action="">
                             <div class="form-group mr-2">
                                 <label for="start-date" class="mr-2">Start Date:</label>
@@ -22,6 +23,10 @@
                             </button>
                         </form>
                     </div>
+                    <div class="col-sm-2 row input-group-append justify-content-end">
+                        <a href="{{route('report.report-list')}}" class="btn btn-primary float-right"><i
+                                ></i>Back</a>
+                </div>
                 </div>
             </div><!-- /.container-fluid -->
         </section>

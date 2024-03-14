@@ -53,6 +53,7 @@
                                             @endcan
                                         </tr>
                                     </thead>
+
                                     <tbody>
                                         @foreach ($slot as $key => $s)
                                             <tr>
@@ -80,13 +81,64 @@
                                                             data-old-proxy-slot-id="{{ $s->id }}" data-old-proxy-trainer-id="{{ $s->trainer->id }}">
                                                             Shift As Proxy Slot
                                                         </button>
+                                                        @foreach ($slotStudent->groupBy(['trainer_id', 'slot_id']) as $keys  => $groupedStudents)
+                                                        @foreach ($groupedStudents as $slotId => $students)
+                                                        @if ($s->trainer->id . $s->id == $keys . $slotId)
+                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#studentData{{ $s->trainer->id }}_{{ $s->id }}">Student Detail</button>
+                                                        @endif
+                                                        @endforeach
+                                                        @endforeach
+                                                    </div>
                                                     </td>
                                                 @endcan
                                             </tr>
+
                                         @endforeach
                                     </tbody>
                                 </table>
                             </div>
+
+
+                            @foreach ($slotStudent->groupBy(['trainer_id', 'slot_id']) as $keys  => $groupedStudents)
+                                @foreach ($groupedStudents as $slotId => $students)
+                                    <div class="modal fade" id="studentData{{ $keys }}_{{ $slotId }}" tabindex="-1" role="dialog" aria-labelledby="studentData" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content modal-bg-dark">
+                                                <div class="modal-header">
+                                                    <h2 class="modal-title" id="editStatusModalLabel">Student Details</h2>
+                                                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <table id="example1" class="table table-bordered table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Student Name</th>
+                                                                <th>Father Contact Number</th>
+                                                                <th>Mother Contact Number</th>
+                                                                <th>Medium</th>
+                                                                <th>Standard</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($students as $student)
+                                                                <tr>
+                                                                    <td>{{ $student->name ?? '' }}</td>
+                                                                    <td>{{ $student->father_contact_no ?? '' }}</td>
+                                                                    <td>{{ $student->mother_contact_no ?? '' }}</td>
+                                                                    <td>{{ $student->medium ?? '' }}</td>
+                                                                    <td>{{ $student->standard ?? '' }}</td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endforeach
                             {{-- form for shift slot --}}
                             <form id="shiftRegularSlotForm" action="{{ route('slot.shift-regular-slot') }}" method="POST">
                                 @csrf

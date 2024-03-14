@@ -126,7 +126,7 @@
                                                     </div>
                                                     <div class="col-md-4 mb-1">
                                                         <div class="form-group mb-3">
-                                                            <label for="simpleinput">Father Name:</label>
+                                                            <label for="simpleinput">Father/Husband Name:</label>
                                                             <input type="text" class="form-control"
                                                                    name="father_name"
                                                                    value="{{ old('father_name',$trainer->father_name) }}"
@@ -693,7 +693,7 @@
                                                                 </div>
                                                                 <div style="display: none;" id="passbookPhotoContainer">
                                                                     <img id="passbookPhotoHolder" alt="Uploaded Image Preview Holder"  width="100" height="100"/>
-                                                                </div>   
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -725,7 +725,7 @@
                                                 <textarea cols="5" id="summernote" name="terms_conditions_detail" value="{{ old('terms_conditions_detail',$trainer->terms_conditions_detail) }}">{{ $trainer->terms_conditions_detail }}</textarea>
                                                 @error('terms_conditions_detail')
                                                     <span class="text-danger">{{ $message }}</span>
-                                                @enderror                                
+                                                @enderror
                                                 <button type="submit" name="submit"
                                                         class="btn btn-success float-right next-btn  ml-2">
                                                     Update
@@ -898,7 +898,7 @@
                     },
                     is_active: {
                         required : "Please select status ",
-                    }, 
+                    },
                     terms_conditions: {
                         required: 'Please read terms and condition and select this checkbox for submit data',
                     }

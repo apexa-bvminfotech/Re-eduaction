@@ -43,7 +43,7 @@
                                             @endphp
                                         @endif
                                     @endforeach
-                                    
+
                                     <div class="small-box bg-warning">
                                         <div class="inner">
                                             <h5>Pending</h5>
@@ -63,7 +63,7 @@
                                             @endphp
                                         @endif
                                     @endforeach
-                                    
+
                                     <div class="small-box bg-info">
                                         <div class="inner">
                                             <h5>Start</h5>
@@ -83,7 +83,7 @@
                                             @endphp
                                         @endif
                                     @endforeach
-                                    
+
                                     <div class="small-box bg-danger">
                                         <div class="inner">
                                             <h5>Hold</h5>
@@ -162,7 +162,7 @@
                                             @endphp
                                         @endif
                                     @endforeach
-                                    
+
                                     <div class="small-box bg-warning">
                                         <div class="inner">
                                             <h5>Pending</h5>
@@ -182,7 +182,7 @@
                                             @endphp
                                         @endif
                                     @endforeach
-                                    
+
                                     <div class="small-box bg-info">
                                         <div class="inner">
                                             <h5>Start</h5>
@@ -202,7 +202,7 @@
                                             @endphp
                                         @endif
                                     @endforeach
-                                    
+
                                     <div class="small-box bg-danger">
                                         <div class="inner">
                                             <h5>Hold</h5>
@@ -258,13 +258,13 @@
                                     Today Absent Trainer
                                 </h5>
                             </h5>
-                        </div>    
+                        </div>
                         <div class="card-body">
                             <div class="row">
                                 @foreach ($absentTrainer as $branch)
                                     <div class="col-md-2">
                                         <div class="small-box bg-secondary">
-                                            <div class="inner">   
+                                            <div class="inner">
                                                 <h5 style="color: deepskyblue">{{ $branch->name }}</h5>
                                                 @php
                                                     $countAbsent = 0;
@@ -282,9 +282,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                @endforeach             
+                                @endforeach
                             </div>
-                        </div>                          
+                        </div>
                     </div>
                     <div class="card bg-light">
                         <div class="card-header" style="background-color:lightgray">
@@ -299,7 +299,7 @@
                                 @foreach($absentStudent as $branch)
                                     <div class="col-md-2">
                                         <div class="small-box bg-warning">
-                                            <div class="inner">   
+                                            <div class="inner">
                                                 <h5 style="color: mediumvioletred">{{ $branch->name }}</h5>
                                                 @php
                                                     $stuAbsent = 0;
@@ -352,15 +352,28 @@
                                                         @foreach ($branch->trainer as $trainer)
                                                             @if($trainer->trainerProxySlot->isNotEmpty())
                                                                 <h5 style="color: lightpink">Trainer Name :- {{ $trainer->name }}</h5>
+                                                                @php
+                                                                    $uniqueSlotTimes = [];
+                                                                @endphp
+
                                                                 @foreach ($trainer->trainerProxySlot as $slot)
-                                                                    <h5 style="color: lightpink">Slot Time :- {{ $slot->slot->slot_time }}</h5>
+                                                                    @php
+                                                                        $slotTime = $slot->slot->slot_time;
+                                                                    @endphp
+
+                                                                    @if (!in_array($slotTime, $uniqueSlotTimes))
+                                                                        <h5 style="color: lightpink">Slot Time: {{ $slotTime }}</h5>
+                                                                        @php
+                                                                            $uniqueSlotTimes[] = $slotTime;
+                                                                        @endphp
+                                                                    @endif
                                                                 @endforeach
-                                                            @endif    
+                                                            @endif
                                                         @endforeach
                                                     </div>
                                                 </div>
-                                            @endif 
-                                        </div>        
+                                            @endif
+                                        </div>
                                     @endforeach
                                 </div>
                             @endif
