@@ -23,4 +23,9 @@ class StudentStatus extends Model
     public function course(){
         return $this->belongsTo(Course::class);
     }
+
+    public function studentStaffAssign()
+    {
+        return $this->belongsTo(StudentStaffAssign::class, 'student_id');
+    }
 }

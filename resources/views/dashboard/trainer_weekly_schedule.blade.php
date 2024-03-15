@@ -64,7 +64,7 @@
                                                         //dd($checkDate);
                                                         $numberOfDays = 7;
                                                     @endphp
-                                            <tr>
+
                                                 @for ($day = 1; $day <= $numberOfDays; $day++)
                                                 @if ($day <= 5)
                                                     <td class="text-center p-5"
@@ -157,6 +157,8 @@
                                             </tr>
                             @endforeach
                             </tr>
+
+
                             <tr>
                                 @foreach ($trainerDataProxy as $trainerNames => $slots)
                                     @if ($trainerName == $trainerNames)
@@ -209,6 +211,7 @@
                                                             <tbody>
 
                                                                     @foreach ($slot['students'] as $student)
+                                                                        {{-- {{dd($student)}} --}}
                                                                        <tr>
                                                                             <td style="font-weight: normal">{{ $student['name'] }} {{ $student['surname'] }}</td>
                                                                             <td style="font-weight: normal">{{ implode(', ', $student['courses']) }}</td>
@@ -237,8 +240,7 @@
                                                                                 <td style="font-weight: normal">{{ implode(', ', $runningCourses) }}</td>
                                                                                 <td style="font-weight: normal">{{ implode(', ', $completeCourses) }}</td>
                                                                                 <td style="font-weight: normal">{{ implode(', ', $pendingCourses) }}</td>
-                                                                            {{-- <td style="font-weight: normal">{{implode(', ', $student['course_status'])}}</td> --}}
-                                                                            <td style="font-weight: normal">{{ $student['medium'] }}</td>
+                                                                                <td style="font-weight: normal">{{ $student['medium'] }}</td>
                                                                         </tr>
                                                                     @endforeach
                                                             </tbody>
@@ -388,7 +390,7 @@
 
                                                                                 <div class="form-group">
                                                                                     <label for="name">Slot: </label>
-                                                                                    <select name="slot_id" class="form-control slot select2" required>
+                                                                                    <select name="slot_id" class="form-control slot select2">
                                                                                         <option value="">------Select Slot-----</option>
                                                                                         @foreach ($slotstime as $key => $slot)
                                                                                             @if ($slot->is_active == 0)

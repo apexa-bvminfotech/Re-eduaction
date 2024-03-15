@@ -28,6 +28,16 @@ class StudentStaffAssign extends Model
         return $this->belongsTo(Student::class, 'student_id');
     }
 
+    public function rtc()
+    {
+        return $this->belongsTo(Rtc::class);
+    }
+
+    public function studentStatus()
+    {
+        return $this->hasMany(StudentStatus::class, 'student_id','id');
+    }
+
     public function branch()
     {
         return $this->belongsTo(Branch::class);

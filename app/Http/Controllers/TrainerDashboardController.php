@@ -64,7 +64,7 @@ class TrainerDashboardController extends Controller
             $stuListWithTrainer = StudentStaffAssign::whereIn('students.id', $studentTrainer)
                 ->where('student_staff_assigns.is_active', 0)
                 ->join('students', 'students.id', 'student_staff_assigns.student_id')
-                ->join('branches', 'branches.id', 'students.branch_id')
+                ->join('rtc', 'rtc.branch_id', 'students.branch_id')
                 ->join('student_courses', 'student_courses.student_id', 'students.id')
                 ->join('courses', 'courses.id', 'student_courses.course_id')
                 ->with('trainer', 'student', 'slot', 'studentcourses', 'course')
@@ -78,7 +78,7 @@ class TrainerDashboardController extends Controller
 
             $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot','studentcourses','course')
             ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
-            ->join('branches', 'branches.id', 'students.branch_id')
+            ->join('rtc', 'rtc.branch_id', 'students.branch_id')
             ->join('student_courses', 'student_courses.student_id', 'students.id')
             ->join('courses', 'courses.id', 'student_courses.course_id')
             ->selectRaw('*, (CASE
@@ -92,24 +92,25 @@ class TrainerDashboardController extends Controller
             $userSchedule = TrainerShedule::with('user')->where('user_id', '!=', 0)->get()->groupBy('user.name');
         }
         else{
-            $stuListWithTrainer = StudentStaffAssign::with('trainer', 'student', 'slot', 'branch', 'studentcourses', 'course')
+            $stuListWithTrainer = StudentStaffAssign::with('trainer', 'student', 'slot', 'branch', 'studentcourses', 'course','studentStatus')
             ->where('student_staff_assigns.is_active', 0)
             ->join('students', 'students.id', 'student_staff_assigns.student_id')
-            ->join('branches', 'branches.id', 'students.branch_id')
+             ->join('rtc', 'rtc.branch_id', 'students.branch_id')
             ->join('student_courses', 'student_courses.student_id', 'students.id')
             ->join('courses', 'courses.id', 'student_courses.course_id')
-            ->selectRaw('*, (CASE
+            ->selectRaw('*,
+                        (CASE
                             WHEN start_date IS NULL THEN "Pending"
                             WHEN start_date IS NOT NULL AND end_date IS NULL THEN "Running"
                             ELSE "Complete"
                         END) AS course_status')
             ->get()
             ->groupBy('trainer.name');
-            
 
+            //   dd($stuListWithTrainer);
              $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot','branch','studentcourses','course')
             ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
-            ->join('branches', 'branches.id', 'students.branch_id')
+            ->join('rtc', 'rtc.branch_id', 'students.branch_id')
             ->join('student_courses', 'student_courses.student_id', 'students.id')
             ->join('courses', 'courses.id', 'student_courses.course_id')
             ->selectRaw('*, (CASE
@@ -130,6 +131,7 @@ class TrainerDashboardController extends Controller
         $userScheduleList = [];
 
             foreach ($stuListWithTrainer as $trainerName => $trainerSlot) {
+
                 $trainerData[$trainerName] = [];
                 foreach ($trainerSlot as $slots) {
                     $slotID = $slots->slot->id ?? '';
@@ -139,8 +141,9 @@ class TrainerDashboardController extends Controller
                             'slot_time' => $slots->slot->slot_time ?? '',
                             'students' => [],
                             'whatsapp_group_name' => $slots->slot->whatsapp_group_name ?? '',
-                            'rtc' => $slots->branch->name ?? '',
+                            'rtc' => $slots->rtc_name ?? '',
                             'student_id' => $slots->student_id ?? '',
+                            // 'status' => $slots->studentStatus->trainer_name ?? '',
                         ];
                     }
 
@@ -191,7 +194,7 @@ class TrainerDashboardController extends Controller
                         'slot_time' => $slotsProxy->slot->slot_time ?? '',
                         'startDate' => $slotsProxy->starting_date ?? '',
                         'endDate' => $slotsProxy->ending_date ?? '',
-                        'rtc' => $slotsProxy->branch->name ?? '',
+                        'rtc' => $slotsProxy->rtc_name ?? '',
                         'students' => [],
                         'student_id' => [],
                         'whatsapp_group_name' => $slotsProxy->slot->whatsapp_group_name ?? '',

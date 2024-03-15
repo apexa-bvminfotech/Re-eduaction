@@ -112,7 +112,7 @@
                 <div class="card-header">
                     <h4 class="card-title w-100">
                         <h5 class="d-block w-100" data-toggle="collapse">
-                            <b>Today Regular slot</b>
+                            <b>Regular slot</b>
                         </h5>
                     </h4>
                 </div>
@@ -120,9 +120,9 @@
                     <table class="table table-bordered table-striped">
                         <thead>
                         <tr>
+                            <th>Student Name</th>
                             <th>Slot Time</th>
                             <th>Slot Type</th>
-                            <th>Student Name</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -133,9 +133,9 @@
                             @foreach($tarinerRegularLecture as $key=>$trainerLecture)
 
                                 <tr>
+                                    <td>{{$trainerLecture->student->name ?? ''}}{{$trainerLecture->student->surname ?? ''}}</td>
                                     <td>{{$trainerLecture->slot->slot_time ?? ''}}</td>
                                     <td>Regular</td>
-                                    <td>{{$trainerLecture->student->name ?? ''}}{{$trainerLecture->student->surname ?? ''}}</td>
                                     @php
                                         $regularSlot[] = $trainerLecture->slot_id;
                                     @endphp
@@ -159,9 +159,9 @@
                     <table class="table table-bordered table-striped">
                         <thead>
                         <tr>
+                            <th>Student Name</th>
                             <th>Slot Time</th>
                             <th>Slot Type</th>
-                            <th>Student Name</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -172,9 +172,9 @@
                             @foreach($tarinerProxyLecture as $key=>$trainerLecture)
                                 @if(!in_array($trainerLecture->slot_id,$regularSlot))
                                     <tr>
+                                        <td>{{$trainerLecture->student->name ?? ''}}{{$trainerLecture->student->surname ?? ''}}</td>
                                         <td>{{$trainerLecture->slot->slot_time ?? ''}}</td>
                                         <td>Proxy</td>
-                                        <td>{{$trainerLecture->student->name ?? ''}}{{$trainerLecture->student->surname ?? ''}}</td>
                                     </tr>
                                 @endif
                             @endforeach

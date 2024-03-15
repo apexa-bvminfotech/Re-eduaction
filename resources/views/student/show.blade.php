@@ -542,6 +542,8 @@
                                                     <th><b>Trainer Name:</b></th>
                                                     <th><b>Reason:</b></th>
                                                     <th><b>Date:</b></th>
+                                                    <th><b>Hold Date:</b></th>
+                                                    <th><b>Cancle Date:</b></th>
                                                     <th><b>Action</b></th>
                                                 </tr>
                                                 </thead>
@@ -561,6 +563,16 @@
                                                             <td>-</td>
                                                         @endif
                                                         <td>{{ date('d-m-Y', strtotime($status->date)) }}</td>
+                                                        @if ($status->hold_date !== null)
+                                                            <td>{{ $status->hold_date ?? '' }}</td>
+                                                        @else
+                                                            <td>-</td>
+                                                        @endif
+                                                        @if ($status->cancel_date !== null)
+                                                            <td>{{ $status->cancel_date ?? '' }}</td>
+                                                        @else
+                                                            <td>-</td>
+                                                        @endif
                                                         <td>{!! $status->is_active == 0 ? '<i class="fa fa-check-circle" style="font-size:25px;color:green"></i>' : '' !!}</td>
                                                     </tr>
                                                 @endforeach
@@ -634,12 +646,44 @@
                                         </span>
                                     @endif
                                     <br><br>
+
+                                    {{-- $student->studentStatus --}}
                                     <table class="table table-bordered table-striped" id="courseTable" style="width: 180%">
                                         <td class="text-center"><b>Course Start Date:</b>  {{$student_course->start_date}}</td>
                                         @if($student_course->end_date !== null)
                                         <td class="text-center"><b>Course End Date:</b>  {{$student_course->end_date}}</td>
                                         @endif
                                         <td class="text-center"><b>Course Restart Date:</b>  {{$student_course->restart_date}}</td>
+                                        @php
+                                        $firstHoldDate = null;
+                                        $firstCancelDate = null;
+                                    @endphp
+
+                                    @foreach($student->studentStatus as $key => $status)
+                                        @if($status->hold_date !== null && $firstHoldDate === null)
+                                            @php
+                                                $firstHoldDate = $status->hold_date;
+                                            @endphp
+                                        @endif
+
+                                        @if($status->cancel_date !== null && $firstCancelDate === null)
+                                            @php
+                                                $firstCancelDate = $status->cancel_date;
+                                            @endphp
+                                        @endif
+
+                                        @if($firstHoldDate !== null && $firstCancelDate !== null)
+                                            @break
+                                        @endif
+                                    @endforeach
+
+                                    @if($firstHoldDate !== null)
+                                        <td class="text-center"><b>Course Hold Date:</b>  {{$firstHoldDate}}</td>
+                                    @endif
+
+                                    @if($firstCancelDate !== null)
+                                        <td class="text-center"><b>Course Cancel Date:</b>  {{$firstCancelDate}}</td>
+                                    @endif
                                     </table>
                                     <form id="trainerForm" action="{{route('student.sendNotification')}}" method="POST" >
                                         @csrf

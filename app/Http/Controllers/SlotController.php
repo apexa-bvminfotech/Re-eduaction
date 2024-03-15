@@ -37,12 +37,16 @@ class SlotController extends Controller
     public function index()
     {
          $slot = Slot::orderBy('id', 'DESC')->get();
-     
+
          $slotStudent = Slot::join('student_staff_assigns', 'student_staff_assigns.slot_id', 'slots.id')
          ->join('students', 'students.id', 'student_staff_assigns.student_id')
          ->orderBy('slots.id', 'DESC')
          ->get();
-        //   dd($slotStudent);
+
+         $slotProxyStudent = Slot::join('student_proxy_staff_assigns', 'student_proxy_staff_assigns.slot_id', 'slots.id')
+        ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
+        ->orderBy('slots.id', 'DESC')
+        ->get();
 
         if(Auth::user()->type == 1){
             $slot = Slot::where('branch_id', Auth::user()->branch_id)->where('is_active','0')->orderBy('id', 'DESC')->get();
@@ -53,7 +57,7 @@ class SlotController extends Controller
 
         $trainers = Trainer::where('is_active', 0)->orderBy('id', 'desc')->get();
         $proxyStaff = StudentProxyStaffAssign::whereDate('starting_date', now()->format('Y-m-d'))->whereDate('ending_date', now()->format('Y-m-d'))->get();
-        return view('slot.index', compact('slot','slotStudent','trainers','studentStaffAssign','proxyStaff'))->with('i');
+        return view('slot.index', compact('slot','slotStudent','trainers','studentStaffAssign','proxyStaff','slotProxyStudent'))->with('i');
     }
     /**
      * Show the form for creating a new resource.

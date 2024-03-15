@@ -53,29 +53,30 @@
                                     <tbody>
 
                                     @foreach($students as $key=>$s)
-
+                                        {{-- {{dd($s->course_start_date)}} --}}
                                         <tr>
                                             <td>{{ ++$i }}</td>
                                             <td>{{ $s->surname }} {{ $s->name }}</td>
                                             <td>
                                                 @foreach($s->courses as $course)
-
                                                 {{$course->course->course_name }}<br>
                                                 @endforeach
                                             </td>
                                             <td>{{ $s->branch_name }}</td>
                                             <td>{{ $s->mother_contact_no }}</td>
                                             <td>{{ $s->standard }}</td>
-
                                             <td>{{ $s->medium }}</td>
 
-                                             @if($s->isActiveStatus()->status == 'Hold' || $s->isActiveStatus()->status == 'Cancel')
-                                            <td style="color: #dc3545;font-weight: bold;">{{ $s->isActiveStatus() != null ? $s->isActiveStatus()->status : 'Pending' }}</td>
-                                            @elseif($s->isActiveStatus()->status == 'Start' || $s->isActiveStatus()->status == 'Complete')
-                                            <td>{{ $s->isActiveStatus() != null ? $s->isActiveStatus()->status : 'Pending' }}</td>
+                                            @if($isActiveStatus = $s->isActiveStatus())
+                                            @if($isActiveStatus->status == 'Hold' || $isActiveStatus->status == 'Cancel')
+                                                <td style="color: #dc3545;font-weight: bold;">{{ $isActiveStatus->status }}</td>
+                                            @elseif($isActiveStatus->status == 'Start' || $isActiveStatus->status == 'Complete')
+                                                <td>{{ $isActiveStatus->status }}</td>
                                             @else
-                                             <td>{{ $s->isActiveStatus() != null ? $s->isActiveStatus()->status : 'Pending' }}</td>
-
+                                                <td>{{ $isActiveStatus->status }}</td>
+                                            @endif
+                                            @else
+                                                <td>Pending</td>
                                             @endif
                                             <td>
                                                 @foreach($s->courses as $course)
@@ -121,13 +122,15 @@
 {{--                                                        {!! Form::close() !!}--}}
 {{--                                                    @endcan--}}
                                                     @can('student-edit')
-                                                        @if($s->isActiveStatus()->status == 'Start')
-                                                            <button type="button"
-                                                                    class="btn  btn-secondary btn-assign btn-sm mb-1"
-                                                                    data-id="{{$s->id}}"
-                                                                    data-assigned="{{ $s->isStaffAssigned() ? 'true' : 'false' }}">
-                                                                {{ $s->isStaffAssigned() ? 'Shift Trainer' : 'Assign Trainer' }}
-                                                            </button>
+                                                    @if($isActiveStatus = $s->isActiveStatus())
+                                                    @if($isActiveStatus->status == 'Start')
+                                                        <button type="button" class="btn btn-secondary btn-assign btn-sm mb-1"
+                                                                data-id="{{$s->id}}"
+                                                                data-assigned="{{ $s->isStaffAssigned() ? 'true' : 'false' }}">
+                                                            {{ $s->isStaffAssigned() ? 'Shift Trainer' : 'Assign Trainer' }}
+                                                        </button>
+                                                    @endif
+                                               
                                                             {{-- <button type="button"
                                                                     class="btn btn-secondary btn-proxy btn-sm mb-1"
                                                                     data-id="{{$s->id}}"> Assign Proxy Trainer
@@ -330,13 +333,7 @@
                                             <option value="Complete">Complete</option>
                                         </select>
                                     </div>
-                                    {{-- <div class="col-md-12 mb-1">
-                                    <div class="form-group">
-                                        <label for="dob">Status Date:</label>
-                                        <input type="date" class="form-control" name="date"
-                                                value="{{ old('date',date('Y-m-d')) }}" id="date">
-                                    </div>
-                                    </div> --}}
+
                                     <div class="col-md-12 mb-1" id="displayTrainerBox" style="display: none">
                                         <div class="form-group">
                                             <label for="text">Trainer name:</label>
@@ -349,10 +346,22 @@
                                             <input type="text" class="form-control" name="hold_reason" required>
                                         </div>
                                     </div>
+                                    <div class="col-md-12 mb-1" id="displayHoldDate" style="display: none">
+                                        <div class="form-group">
+                                            <label for="text">Hold Date:</label>
+                                            <input type="Date" class="form-control" name="hold_date" required>
+                                        </div>
+                                    </div>
                                     <div class="col-md-12 mb-1" id="displayCancelReason" style="display: none">
                                         <div class="form-group">
                                             <label for="text">Cancel Reason:</label>
                                             <input type="text" class="form-control" name="cancel_reason" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mb-1" id="displayCancelDate" style="display: none">
+                                        <div class="form-group">
+                                            <label for="text">Cancel Date:</label>
+                                            <input type="date" class="form-control" name="cancel_date" required>
                                         </div>
                                     </div>
                                 </div>
@@ -502,6 +511,8 @@
             $(document).ready(function () {
                 $('.statusSelect').on('change', function () {
                     $('#displayHoldReason').hide();
+                    $('#displayHoldDate').hide();
+                    $('#displayCancelDate').hide();
                     $('#displayCancelReason').hide();
                     $('#displayTrainerBox').hide();
 
@@ -511,9 +522,11 @@
                         $('#displayTrainerBox').show();
                     } else if (selectedValue === 'Cancel') {
                         $('#displayCancelReason').show();
+                        $('#displayCancelDate').show();
                     }
                     else if (selectedValue === 'Hold') {
                         $('#displayHoldReason').show();
+                        $('#displayHoldDate').show();
                     }
                     else{
                         $('#displayTrainerBox').hide();
