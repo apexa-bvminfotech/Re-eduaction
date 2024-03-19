@@ -156,6 +156,12 @@
                                                         </a>
                                                     </td>
                                                 </tr>
+                                                <tr class="border-bottom">
+
+                                                    <th><b>Education Board:</b></th>
+                                                    <td>{{$student->education_board}}
+                                                    </td>
+                                                </tr>
                                                 {{-- <tr>
                                                     <th><b>Extra Note:</b></th>
                                                     <td>{{$student->extra_note}}</td>
@@ -524,6 +530,7 @@
                                                                 data-id="{{$appreciation->id}}" data-student-id="{{ $appreciation->student_id }}"> Delete
                                                                 </button>
                                                                 @endif
+
                                                             @endcan
                                                         </td>
                                                     </tr>
@@ -542,8 +549,6 @@
                                                     <th><b>Trainer Name:</b></th>
                                                     <th><b>Reason:</b></th>
                                                     <th><b>Date:</b></th>
-                                                    <th><b>Hold Date:</b></th>
-                                                    <th><b>Cancle Date:</b></th>
                                                     <th><b>Action</b></th>
                                                 </tr>
                                                 </thead>
@@ -594,106 +599,89 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="card-body">
-                                    @foreach($student->courses as $student_course)
-                                    {{-- @dd($student_course->start_date) --}}
-                                    <span class="h4 p-2">{{$student_course->course->course_name}}</span>
-                                    @if($student_course->start_date == null )
-                                        <a class="btn btn-success btn-start btn-start_{{ $student_course->course_id }} inactiveLink" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="start_task" id="">Start Course</a>
-                                        <span class="h6 border p-2 display_start_date_{{ $student_course->course_id }}" style="display: none;" id=""> Start Date :- {{ date('d-m-Y', $student_course->start_date)}}</span>
-                                    @else
-                                    <span class="h6 border p-2 mr-2 start-date-container">
-                                        Start Date: {{ $student_course->start_date }}
-                                        <form action="{{ route('student.updateStartDate', ['student_id'=> $student->id,'course_id' => $student_course->course_id]) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('put')
-                                            <input type="date" name="start_date" required>
-                                            <button type="submit" class="btn btn-info btn-sm">Update</button>
-                                        </form>
-                                    </span>
-                                    @endif
-                                    @if($student_course->end_date == null)
-                                        <a class="btn btn-primary btn-end btn-end_{{ $student_course->course_id  }} inactiveLink" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="end_task" id="">End Course</a>
-                                        <span class="h6 border p-2 display_end_date_{{ $student_course->course_id }}" style="display: none;" id=""> End Date :- {{ date('d-m-Y', $student_course->end_date) }}</span>
-                                    @else
-                                         <span class="h6 border p-2 mr-2 ">
-                                    {{-- {{dd($student_course)}} --}}
-                                    End Date: {{ $student_course->end_date }}
 
-                                    <form action="{{ route('student.updateStartDate', ['student_id'=> $student->id,'course_id' => $student_course->course_id]) }}" method="POST" class="d-inline">
+
+
+
+                                    <form action="{{route('student.sendNotification')}}" method="POST">
                                         @csrf
-                                        @method('put')
-                                        <input type="date" name="end_date" required>
-                                        <button type="submit" class="btn btn-info btn-sm">Update</button>
-                                    </form>
-                                    </span>
-                                        <button class="btn btn-success" disabled>Course Completed</button>
-                                    @endif
-                                    <button class="btn btn-success course-complete_{{ $student_course->course_id }}" style="display: none;" id="" disabled>Course Completed</button>
-                                    <a class="btn btn-secondary btn-restart-course restart_course_{{ $student_course->course_id }}" data-student-id="{{ $student->id }}"
-                                       data-course-id="{{ $student_course->course_id }}" data-btn="Restart_task" style="display: none;">Restart Course</a>
 
-                                       @if($student_course->end_date !== null)
-                                        <span><a class="btn btn-secondary btn-restart-course" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}">Restart Course</a></span>
+                                        @foreach($student->courses as $student_course)
+                                        <span class="h4 p-2">{{$student_course->course->course_name}}</span>
+                                        @if($student_course->start_date == null)
+                                            <a class="btn btn-success btn-start btn-start_{{ $student_course->course_id }} inactiveLink" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="start_task" id="">Start Course</a>
+                                            <span class="h6 border p-2 display_start_date_{{ $student_course->course_id }}" style="display: none;" id=""> Start Date :- {{ date('d-m-Y', $student_course->start_date)}}</span>
                                         @else
-                                        <span class="h6 border p-2 mr-2 restart-date-container">
-                                            Restart Date: {{ $student_course->restart_date }}
-                                            <form action="{{ route('student.updateStartDate', ['student_id'=> $student->id,'course_id' => $student_course->course_id]) }}" method="POST" class="d-inline">
-                                                @csrf
-                                                @method('put')
-                                                <input type="date" name="restart_date" required>
-                                                <button type="submit" class="btn btn-info btn-sm">Update</button>
-                                            </form>
-                                        </span>
-                                    @endif
-                                    <br><br>
-
-                                    {{-- $student->studentStatus --}}
-                                    <table class="table table-bordered table-striped" id="courseTable" style="width: 180%">
-                                        <td class="text-center"><b>Course Start Date:</b>  {{$student_course->start_date}}</td>
+                                            <span class="h6 border p-2 mr-2"> Start Date :- {{ date('d-m-Y', strtotime($student_course->start_date))}} </span>
+                                        @endif
+                                        @if($student_course->end_date == null)
+                                            <a class="btn btn-primary btn-end btn-end_{{ $student_course->course_id  }} inactiveLink" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}" data-btn="end_task" id="">End Course</a>
+                                            <span class="h6 border p-2 display_end_date_{{ $student_course->course_id }}" style="display: none;" id=""> End Date :- {{ date('d-m-Y', $student_course->end_date) }}</span>
+                                        @else
+                                            <span class="h6 border p-2"> End Date :- {{ date('d-m-Y', strtotime($student_course->end_date))}}</span>
+                                            <button class="btn btn-success" disabled>Course Completed</button>
+                                        @endif
+                                        <button class="btn btn-success course-complete_{{ $student_course->course_id }}" style="display: none;" id="" disabled>Course Completed</button>
+                                        <a class="btn btn-secondary btn-restart-course restart_course_{{ $student_course->course_id }}" data-student-id="{{ $student->id }}"
+                                           data-course-id="{{ $student_course->course_id }}" style="display: none;">Restart Course</a>
                                         @if($student_course->end_date !== null)
-                                        <td class="text-center"><b>Course End Date:</b>  {{$student_course->end_date}}</td>
+                                            <span><a class="btn btn-secondary btn-restart-course" data-student-id="{{ $student->id }}" data-course-id="{{ $student_course->course_id }}">Restart Course</a></span>
                                         @endif
-                                        <td class="text-center"><b>Course Restart Date:</b>  {{$student_course->restart_date}}</td>
-                                        @php
-                                        $firstHoldDate = null;
-                                        $firstCancelDate = null;
-                                    @endphp
+                                        <br><br>
 
-                                    @foreach($student->studentStatus as $key => $status)
-                                        @if($status->hold_date !== null && $firstHoldDate === null)
+                                        <table class="table table-bordered table-striped" id="courseTable" style="width: 180%">
+                                            <td class="text-center"><b>Course Start Date:</b>  {{$student_course->start_date}}
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                                   Update Start Date
+                                                  </button>
+                                        </td>
+                                            @if($student_course->end_date !== null)
+                                            <td class="text-center"><b>Course End Date:</b>  {{$student_course->end_date}}
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2">
+                                                    Update End Date
+                                                   </button>
+                                        </td>
+                                            @endif
+                                            <td class="text-center"><b>Course Restart Date:</b>  {{$student_course->restart_date}}
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal3">
+                                                    Update Restart Date
+                                                   </button>
+                                        </td>
                                             @php
-                                                $firstHoldDate = $status->hold_date;
-                                            @endphp
+                                            $firstHoldDate = null;
+                                            $firstCancelDate = null;
+                                        @endphp
+
+                                        @foreach($student->studentStatus as $key => $status)
+                                            @if($status->hold_date !== null && $firstHoldDate === null)
+                                                @php
+                                                    $firstHoldDate = $status->hold_date;
+                                                @endphp
+                                            @endif
+
+                                            @if($status->cancel_date !== null && $firstCancelDate === null)
+                                                @php
+                                                    $firstCancelDate = $status->cancel_date;
+                                                @endphp
+                                            @endif
+
+                                            @if($firstHoldDate !== null && $firstCancelDate !== null)
+                                                @break
+                                            @endif
+                                        @endforeach
+
+                                        @if($firstHoldDate !== null)
+                                            <td class="text-center"><b>Course Hold Date:</b>  {{$firstHoldDate}}</td>
                                         @endif
 
-                                        @if($status->cancel_date !== null && $firstCancelDate === null)
-                                            @php
-                                                $firstCancelDate = $status->cancel_date;
-                                            @endphp
+                                        @if($firstCancelDate !== null)
+                                            <td class="text-center"><b>Course Cancel Date:</b>  {{$firstCancelDate}}</td>
                                         @endif
-
-                                        @if($firstHoldDate !== null && $firstCancelDate !== null)
-                                            @break
-                                        @endif
-                                    @endforeach
-
-                                    @if($firstHoldDate !== null)
-                                        <td class="text-center"><b>Course Hold Date:</b>  {{$firstHoldDate}}</td>
-                                    @endif
-
-                                    @if($firstCancelDate !== null)
-                                        <td class="text-center"><b>Course Cancel Date:</b>  {{$firstCancelDate}}</td>
-                                    @endif
                                     </table>
-                                    <form id="trainerForm" action="{{route('student.sendNotification')}}" method="POST" >
-                                        @csrf
-
-
                                             <table class="table table-bordered table-striped" id="courseTable" style="width: 180%">
                                                 <input type="hidden" name="student_id" class="form-control student_id" value="{{$student->id}}">
                                                 <input type="hidden" name="course_id" class="form-control course_id" value="{{$student_course->course_id}}">
                                                 <input type="hidden" name="trainer_id" class="form-control trainer" value="{{ $trainer ? $trainer->trainer_id : ''}}">
-
                                                 @if($student_course->course->subcourses->isNotEmpty())
                                                     <tr>
                                                         <td class="text-center">Before</td>
@@ -838,7 +826,8 @@
                                                                         @php
                                                                             $checked= '';
                                                                             if($sub_course1 = \App\Models\StudentCourseComplete::where(['student_id'=>$student->id,'sub_course_point_id'=>$sp->id,'after'=>1])->first()) {
-                                                                                $checked= "checked disabled";
+                                                                                // $checked= "checked disabled";
+                                                                                $checked= "checked";
                                                                                 $checkPoint = true;
                                                                             }
                                                                         @endphp
@@ -891,11 +880,99 @@
                                         @endforeach
                                         <button type="submit" class="btn btn-primary float-right mt-2 saveChanges inactiveLink">Save Changes</button>
                                     </form>
+
+
                                 </div>
                             </div>
                         </div>
                         <div id="result"></div>
                     </div>
+
+
+
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                                @foreach($student->courses as $student_course)
+                                <strong>Course Name:-{{$student_course->course->course_name}}</strong>
+                                <form action="{{ route('student.updateStartDate', ['student_id'=> $student->id,'course_id' => $student_course->course_id]) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('put')
+                                    <input type="date" name="start_date" required>
+                                    <button type="submit" class="btn btn-info btn-sm">Update</button>
+                                </form>
+                                @endforeach
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModal2Label" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModal2Label">Modal title</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                                @foreach($student->courses as $student_course)
+                                <strong>Course Name:-{{$student_course->course->course_name}}</strong>
+
+                                <form action="{{ route('student.updateStartDate', ['student_id'=> $student->id,'course_id' => $student_course->course_id]) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('put')
+                                    <input type="date" name="end_date" required>
+                                    <button type="submit" class="btn btn-info btn-sm">Update</button>
+                                </form>
+                                @endforeach
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModal3Label" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModal3Label">Modal title</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                                @foreach($student->courses as $student_course)
+                                <strong>Course Name:-{{$student_course->course->course_name}}</strong>
+                                <form action="{{ route('student.updateStartDate', ['student_id'=> $student->id,'course_id' => $student_course->course_id]) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('put')
+                                    <input type="date" name="restart_date" required>
+                                    <button type="submit" class="btn btn-info btn-sm">Update</button>
+                                </form>
+                                @endforeach
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+
                 {{-- @if($trainerAttendance->isNotEmpty()) --}}
                 <div class="row">
                         <div class="col-md-12">
@@ -1298,18 +1375,9 @@
                 $('#approvedSubCourse_' + subCourseApproveId).text(totalApproved);
             });
         });
-
-        $(document).ready(function() {
-        $('.saveChanges').click(function(event) {
-
-            @if ($trainer && $trainer->trainer_id !== null)
-            @else
-                event.preventDefault();
-
-                alert("Please assign a trainer first.");
-            @endif
-        });
-    });
     </script>
 @endpush
+
+
+
 

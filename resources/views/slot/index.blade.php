@@ -114,27 +114,48 @@
                                                     </td>
                                                     <td>
                                                         @foreach ($slotStudent->groupBy(['trainer_id', 'slot_id']) as $keys => $groupedStudents)
-                                                            @php
-                                                                $studentCount = $groupedStudents->count();
-                                                            @endphp
-                                                                @foreach ($groupedStudents as $slotId => $students)
-                                                                    @if ($s->trainer->id . $s->id == $keys . $slotId)
-                                                                    {{ $studentCount }}
-                                                                    @endif
-                                                                @endforeach
-                                                        @endforeach
-                                                    </td>
-                                                    <td>
-                                                        @foreach ($slotProxyStudent->groupBy(['trainer_id', 'slot_id']) as $keys  => $groupedStudents)
-                                                        @php
-                                                        $studentCount = $groupedStudents->count();
-                                                        @endphp
                                                         @foreach ($groupedStudents as $slotId => $students)
-                                                        @if ($s->trainer->id . $s->id == $keys . $slotId)
-                                                        {{ $studentCount }}
-                                                        @endif
+                                                            @php
+                                                                $studentCount = 0;
+                                                                $countedStudents = [];
+                                                            @endphp
+                                                            @foreach ($students as $student)
+
+                                                                @if (!in_array($student->id, $countedStudents))
+                                                                    @php
+                                                                        $studentCount++;
+                                                                        $countedStudents[] = $student->id;
+                                                                    @endphp
+                                                                @endif
+                                                            @endforeach
+                                                            @if ($s->trainer->id . $s->id == $keys . $slotId)
+                                                                {{ $studentCount }}
+                                                            @endif
                                                         @endforeach
+                                                    @endforeach
+                                                    </td>
+
+                                                    <td>
+                                                        @foreach ($slotProxyStudent->groupBy(['trainer_id', 'slot_id']) as $keys => $groupedStudents)
+                                                        @foreach ($groupedStudents as $slotId => $students)
+                                                            @php
+                                                                $studentCount = 0;
+                                                                $countedStudents = [];
+                                                            @endphp
+                                                            @foreach ($students as $student)
+
+                                                                @if (!in_array($student->id, $countedStudents))
+                                                                    @php
+                                                                        $studentCount++;
+                                                                        $countedStudents[] = $student->id;
+                                                                    @endphp
+                                                                @endif
+                                                            @endforeach
+                                                            @if ($s->trainer->id . $s->id == $keys . $slotId)
+                                                                {{ $studentCount }}
+                                                            @endif
                                                         @endforeach
+                                                    @endforeach
                                                     </td>
                                                 @endcan
                                             </tr>
@@ -149,7 +170,7 @@
                                 @foreach ($groupedStudents as $slotId => $students)
                                     <div class="modal fade" id="studentData{{ $keys }}_{{ $slotId }}" tabindex="-1" role="dialog" aria-labelledby="studentData" aria-hidden="true">
                                         <div class="modal-dialog modal-lg" role="document">
-                                            <div class="modal-content modal-bg-dark">
+                                            <div class="modal-content modal-bg-dark" style="width: fit-content;">
                                                 <div class="modal-header">
                                                     <h2 class="modal-title" id="editStatusModalLabel">Student Details</h2>
                                                     <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
@@ -160,22 +181,36 @@
                                                     <table id="example1" class="table table-bordered table-striped">
                                                         <thead>
                                                             <tr>
+                                                                <th>#</th>
                                                                 <th>Student Name</th>
                                                                 <th>Father Contact Number</th>
                                                                 <th>Mother Contact Number</th>
+                                                                <th>Course Name</th>
+                                                                <th>Course Start Date</th>
                                                                 <th>Medium</th>
                                                                 <th>Standard</th>
+                                                                <th>Running Course</th>
+                                                                <th>Pending Course</th>
+                                                                <th>Complete Course</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
+                                                            @php $noteNumber = 1; @endphp
                                                             @foreach ($students as $student)
                                                                 <tr>
+                                                                    <td>{{ $noteNumber }}</td>
                                                                     <td>{{ $student->name ?? '' }}</td>
                                                                     <td>{{ $student->father_contact_no ?? '' }}</td>
                                                                     <td>{{ $student->mother_contact_no ?? '' }}</td>
+                                                                    <td>{{ $student->course_name ?? '' }}</td>
+                                                                    <td>{{ $student->start_date ?? '' }}</td>
                                                                     <td>{{ $student->medium ?? '' }}</td>
                                                                     <td>{{ $student->standard ?? '' }}</td>
+                                                                    <td>{{ $student->course_status === 'Running' ? $student->course_name : '' }}</td>
+                                                                    <td>{{ $student->course_status === 'Pending' ? $student->course_name : '' }}</td>
+                                                                    <td>{{ $student->course_status === 'Complete' ? $student->course_name : '' }}</td>
                                                                 </tr>
+                                                                @php $noteNumber++; @endphp
                                                             @endforeach
                                                         </tbody>
                                                     </table>
@@ -190,7 +225,7 @@
                                 @foreach ($groupedStudents as $slotId => $students)
                                     <div class="modal fade" id="studentDataProxy{{ $keys }}_{{ $slotId }}" tabindex="-1" role="dialog" aria-labelledby="studentDataProxy" aria-hidden="true">
                                         <div class="modal-dialog modal-lg" role="document">
-                                            <div class="modal-content modal-bg-dark">
+                                            <div class="modal-content modal-bg-dark" style="width: fit-content;">
                                                 <div class="modal-header">
                                                     <h2 class="modal-title" id="editStatusModalLabel">Student Details</h2>
                                                     <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
@@ -201,23 +236,37 @@
                                                     <table id="example1" class="table table-bordered table-striped">
                                                         <thead>
                                                             <tr>
+                                                                <th>#</th>
                                                                 <th>Student Name</th>
                                                                 <th>Father Contact Number</th>
                                                                 <th>Mother Contact Number</th>
+                                                                <th>Course Name</th>
+                                                                <th>Course start Date</th>
                                                                 <th>Medium</th>
                                                                 <th>Standard</th>
+                                                                <th>Running Course</th>
+                                                                <th>Pending Course</th>
+                                                                <th>Complete Course</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
+                                                            @php $noteNumber = 1; @endphp
                                                             @foreach ($students as $student)
                                                                 <tr>
+                                                                    <td>{{ $noteNumber }}</td>
                                                                     <td>{{ $student->name ?? '' }}</td>
                                                                     <td>{{ $student->father_contact_no ?? '' }}</td>
                                                                     <td>{{ $student->mother_contact_no ?? '' }}</td>
+                                                                    <td>{{ $student->course_name ?? '' }}</td>
+                                                                    <td>{{ $student->start_date ?? '' }}</td>
                                                                     <td>{{ $student->medium ?? '' }}</td>
                                                                     <td>{{ $student->standard ?? '' }}</td>
+                                                                    <td>{{ $student->course_status === 'Running' ? $student->course_name : '' }}</td>
+                                                                    <td>{{ $student->course_status === 'Pending' ? $student->course_name : '' }}</td>
+                                                                    <td>{{ $student->course_status === 'Complete' ? $student->course_name : '' }}</td>
                                                                 </tr>
                                                             @endforeach
+                                                            @php $noteNumber++; @endphp
                                                         </tbody>
                                                     </table>
                                                 </div>

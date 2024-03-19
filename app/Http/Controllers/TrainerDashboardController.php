@@ -63,6 +63,10 @@ class TrainerDashboardController extends Controller
 
             $stuListWithTrainer = StudentStaffAssign::whereIn('students.id', $studentTrainer)
                 ->where('student_staff_assigns.is_active', 0)
+                ->whereHas('slot', function($query) {
+                    $query->where('is_active', 0);
+                })
+                ->join('student_status', 'student_status.student_id', 'students.id')
                 ->join('students', 'students.id', 'student_staff_assigns.student_id')
                 ->join('rtc', 'rtc.branch_id', 'students.branch_id')
                 ->join('student_courses', 'student_courses.student_id', 'students.id')
@@ -77,7 +81,11 @@ class TrainerDashboardController extends Controller
                 ->groupBy('trainer.name');
 
             $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot','studentcourses','course')
+            ->whereHas('slot', function($query) {
+                $query->where('is_active', 0);
+            })
             ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
+            ->join('student_status', 'student_status.student_id', 'students.id')
             ->join('rtc', 'rtc.branch_id', 'students.branch_id')
             ->join('student_courses', 'student_courses.student_id', 'students.id')
             ->join('courses', 'courses.id', 'student_courses.course_id')
@@ -93,23 +101,31 @@ class TrainerDashboardController extends Controller
         }
         else{
             $stuListWithTrainer = StudentStaffAssign::with('trainer', 'student', 'slot', 'branch', 'studentcourses', 'course','studentStatus')
-            ->where('student_staff_assigns.is_active', 0)
-            ->join('students', 'students.id', 'student_staff_assigns.student_id')
-             ->join('rtc', 'rtc.branch_id', 'students.branch_id')
-            ->join('student_courses', 'student_courses.student_id', 'students.id')
-            ->join('courses', 'courses.id', 'student_courses.course_id')
-            ->selectRaw('*,
-                        (CASE
-                            WHEN start_date IS NULL THEN "Pending"
-                            WHEN start_date IS NOT NULL AND end_date IS NULL THEN "Running"
-                            ELSE "Complete"
-                        END) AS course_status')
-            ->get()
-            ->groupBy('trainer.name');
+                ->where('student_staff_assigns.is_active', 0)
+                ->whereHas('slot', function($query) {
+                    $query->where('is_active', 0);
+                })
+                ->join('students', 'students.id', 'student_staff_assigns.student_id')
+                ->join('student_status', 'student_status.student_id', 'students.id')
+                ->join('rtc', 'rtc.branch_id', 'students.branch_id')
+                ->join('student_courses', 'student_courses.student_id', 'students.id')
+                ->join('courses', 'courses.id', 'student_courses.course_id')
+                ->selectRaw('*,
+                            (CASE
+                                WHEN start_date IS NULL THEN "Pending"
+                                WHEN start_date IS NOT NULL AND end_date IS NULL THEN "Running"
+                                ELSE "Complete"
+                            END) AS course_status')
+                ->get()
+                ->groupBy('trainer.name');
 
-            //   dd($stuListWithTrainer);
+
              $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot','branch','studentcourses','course')
+             ->whereHas('slot', function($query) {
+                $query->where('is_active', 0);
+            })
             ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
+            ->join('student_status', 'student_status.student_id', 'students.id')
             ->join('rtc', 'rtc.branch_id', 'students.branch_id')
             ->join('student_courses', 'student_courses.student_id', 'students.id')
             ->join('courses', 'courses.id', 'student_courses.course_id')
@@ -141,7 +157,7 @@ class TrainerDashboardController extends Controller
                             'slot_time' => $slots->slot->slot_time ?? '',
                             'students' => [],
                             'whatsapp_group_name' => $slots->slot->whatsapp_group_name ?? '',
-                            'rtc' => $slots->rtc_name ?? '',
+                             'rtc' => $slots->rtc_name ?? '',
                             'student_id' => $slots->student_id ?? '',
                             // 'status' => $slots->studentStatus->trainer_name ?? '',
                         ];
@@ -175,8 +191,10 @@ class TrainerDashboardController extends Controller
                             'mother_phone_no' => $slots->student->mother_contact_no ?? 'Null',
                             'trainer_name' => $trainerName ?? 'Null',
                             'medium' => $slots->medium ?? '',
-
+                            'status' => $slots->status ?? '',
                         ];
+                        // dd($trainerData);
+
                     }
                 }
             }
@@ -188,7 +206,7 @@ class TrainerDashboardController extends Controller
 
             foreach ($trainerSlotProxy as $slotsProxy) {
                 $slotID = $slotsProxy->slot->id ?? '';
-                // dd($trainerSlotProxy);
+                // dd($trainerSlotProxy->trainer_id);
                 if (!isset($trainerDataProxy[$trainerName][$slotID])) {
                     $trainerDataProxy[$trainerName][$slotID] = [
                         'slot_time' => $slotsProxy->slot->slot_time ?? '',
@@ -197,11 +215,13 @@ class TrainerDashboardController extends Controller
                         'rtc' => $slotsProxy->rtc_name ?? '',
                         'students' => [],
                         'student_id' => [],
+                        'id' => $slotsProxy->id ?? '',
+                        'trainer_id' => $slotsProxy->trainer_id ?? '',
                         'whatsapp_group_name' => $slotsProxy->slot->whatsapp_group_name ?? '',
 
                     ];
                 }
-
+                // dd($trainerDataProxy);
 
                 $existingStudentIndex = null;
                 foreach ($trainerDataProxy[$trainerName][$slotID]['students'] as $index => $student) {

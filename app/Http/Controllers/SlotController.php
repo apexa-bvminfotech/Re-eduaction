@@ -40,11 +40,26 @@ class SlotController extends Controller
 
          $slotStudent = Slot::join('student_staff_assigns', 'student_staff_assigns.slot_id', 'slots.id')
          ->join('students', 'students.id', 'student_staff_assigns.student_id')
-         ->orderBy('slots.id', 'DESC')
+         ->join('student_courses', 'student_courses.student_id', 'students.id')
+         ->join('courses', 'courses.id', 'student_courses.course_id')
+         ->selectRaw('*, (CASE
+            WHEN start_date IS NULL THEN "Pending"
+            WHEN start_date IS NOT NULL AND end_date IS NULL THEN "Running"
+            ELSE "Complete"
+            END) AS course_status')
+            ->orderBy('slots.id', 'DESC')
          ->get();
+        // dd($slotStudent);
 
          $slotProxyStudent = Slot::join('student_proxy_staff_assigns', 'student_proxy_staff_assigns.slot_id', 'slots.id')
         ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
+        ->join('student_courses', 'student_courses.student_id', 'students.id')
+         ->join('courses', 'courses.id', 'student_courses.course_id')
+         ->selectRaw('*, (CASE
+            WHEN start_date IS NULL THEN "Pending"
+            WHEN start_date IS NOT NULL AND end_date IS NULL THEN "Running"
+            ELSE "Complete"
+            END) AS course_status')
         ->orderBy('slots.id', 'DESC')
         ->get();
 
@@ -271,8 +286,10 @@ class SlotController extends Controller
             return back()->with('error', 'Trainer is already assigned as proxy staff for the specified dates');
         }
 
-        $regularSlotShift = StudentStaffAssign::where('slot_id',$request->old_proxy_slot_id)->where('trainer_id',$request->old_proxy_trainer_id)->where('is_active','0')->get();
+        $regularSlotShift = StudentStaffAssign::where('slot_id',$request->old_proxy_slot_id)->where('trainer_id',$request->old_proxy_trainer_id)->where('is_active','0')->with('trainer')->get();
+         
         $proxySlotShift = StudentProxyStaffAssign::where('slot_id',$request->old_proxy_slot_id)->where('trainer_id',$request->old_proxy_trainer_id)->get();
+        // dd($proxySlotShift);
         if($regularSlotShift->isNotempty()){
             foreach($regularSlotShift as $regularTrainer){
                 StudentProxyStaffAssign::create([
@@ -281,6 +298,7 @@ class SlotController extends Controller
                     'slot_id' => $request->slot_id,
                     'starting_date' => $request->starting_date,
                     'ending_date' => $request->ending_date,
+                    'old_regular_trainer_id' => $request->old_proxy_trainer_id,
                 ]);
             }
         }
@@ -292,6 +310,7 @@ class SlotController extends Controller
                     'slot_id' => $request->slot_id,
                     'starting_date' => $request->starting_date,
                     'ending_date' => $request->ending_date,
+                    'old_regular_trainer_id' => $request->old_proxy_trainer_id,
                 ]);
             }
         }

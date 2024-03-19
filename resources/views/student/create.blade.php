@@ -124,7 +124,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-sm-6">
+                                                    <div class="col-sm-4">
                                                         <div class="form-group mb-3">
                                                             <label for="email">Email ID:</label>
                                                             <input type="email" class="form-control" name="email_id"
@@ -132,7 +132,15 @@
                                                                    value="{{ old('email_id') }}">
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6 mb-1">
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group mb-3">
+                                                            <label for="Education Board">Education Board:</label>
+                                                            <input type="text" class="form-control" name="education_board"
+                                                                   placeholder="enter Eduction Board"
+                                                                   value="{{ old('education_board') }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4 mb-1">
                                                         <div class="form-group">
                                                             <label for="standard">Standard:</label>
                                                             <input type="number" class="form-control" max="12" min="1"
@@ -152,9 +160,10 @@
                                                                    placeholder="1234567890"
                                                                    id="mother_contact_no"
                                                                    value="{{ old('mother_contact_no') }}">
-                                                            @error('mother_contact_no')
+                                                            {{-- @error('mother_contact_no')
                                                             <span class="text-danger">{{$message}}</span>
-                                                            @enderror
+                                                            @enderror --}}
+                                                            <span id="mother_contact_error" class="text-danger"></span>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 mb-1">
@@ -165,9 +174,10 @@
                                                                    placeholder="1234567890"
                                                                    id="father_contact_no"
                                                                    value="{{ old('father_contact_no') }}">
-                                                            @error('father_contact_no')
+                                                            {{-- @error('father_contact_no')
                                                             <span class="text-danger">{{$message}}</span>
-                                                            @enderror
+                                                            @enderror --}}
+                                                            <span id="father_contact_error" class="text-danger"></span>
                                                         </div>
                                                     </div>
 
@@ -414,8 +424,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button type="button" class="btn btn-primary float-right btn-next-form nxtbt next-btn">Next</button>
+                                                <button type="button" class="btn btn-primary float-right btn-next-form validate-form nxtbt next-btn">Next</button>
                                             </div>
+
                                         </div>
                                         <div id="information-part" class="content" role="tabpanel" aria-labelledby="information-part-trigger">
                                             <div class="card-body">
@@ -1012,32 +1023,64 @@
         });
 
 
-            //append course_material according to change meduim and course
-            // $('body').on("change", ".medium-list, #course_id", function(){
-            //     $('#course_material').empty();
-            //     var medium_id = $('input[name="medium"]:checked').val();
-            //     console.log(medium_id)
-            //     var course_id = $('.course_id option:selected').map(function () {
-            //         return $(this).val();
-            //     }).get();
+        $(document).ready(function(){
+    $('.btn-next-form').click(function(event){
+        var motherContact = $('#mother_contact_no').val();
+        var fatherContact = $('#father_contact_no').val();
+        var valid = true;
 
-            //     $.ajax({
-            //         url : "{{ route('student.getCourseMaterialData') }}",
-            //         type: 'POST',
-            //         headers: {
-            //             'X-CSRF-TOKEN': $('input[name="_token"]').val(),
-            //         },
-            //         data: {
-            //             'course_id': course_id,
-            //             'medium_id' : medium_id
-            //         },
-            //         success: function (data) {
-            //             $('#course_material').append(data);
-            //         },
-            //         error: function (err) {
-            //         }
-            //     });
-            // });
+
+        if(motherContact.length != 10 || isNaN(motherContact)) {
+            $('#mother_contact_error').text('Please enter a valid 10-digit number');
+            valid = false;
+        } else {
+            $('#mother_contact_error').text('');
+        }
+
+
+        if(fatherContact.length != 10 || isNaN(fatherContact)) {
+            $('#father_contact_error').text('Please enter a valid 10-digit number');
+            valid = false;
+        } else {
+            $('#father_contact_error').text('');
+        }
+
+        if(!valid) {
+            event.preventDefault();
+        } else {
+
+            console.log("All validations passed. Proceeding to the next step...");
+        }
+    });
+});
+
+
+            //append course_material according to change meduim and course
+             $('body').on("change", ".medium-list, #course_id", function(){
+                 $('#course_material').empty();
+                var medium_id = $('input[name="medium"]:checked').val();
+                 console.log(medium_id)
+                var course_id = $('.course_id option:selected').map(function () {
+                     return $(this).val();
+                 }).get();
+
+                $.ajax({
+                     url : "{{ route('student.getCourseMaterialData') }}",
+                    type: 'POST',
+                     headers: {
+                         'X-CSRF-TOKEN': $('input[name="_token"]').val(),
+                     },
+                     data: {
+                         'course_id': course_id,
+                         'medium_id' : medium_id
+                     },
+                     success: function (data) {
+                         $('#course_material').append(data);
+                     },
+                     error: function (err) {
+                     }
+                 });
+             });
         });
 
     </script>

@@ -331,6 +331,7 @@
                         </div>
 
                         <div class="card-body">
+
                             @if($trainerProxySlot->isNotEmpty())
                                 <div class="row">
                                     @foreach($proxyTrainer as $key => $branch)
@@ -345,22 +346,28 @@
                                                     @endphp
                                                 @endif
                                             @endforeach
+
+
                                             @if(in_array('none',$trainerSlot))
                                                 <div class="small-box bg-info">
                                                     <div class="inner">
                                                         <h5 style="color: lightpink">{{ $branch->name }}</h5>
+                                                        <h5 style="color: lightpink">Regular Trainer Name:-{{ $branch->trainer_name }}</h5>
+
                                                         @foreach ($branch->trainer as $trainer)
+
                                                             @if($trainer->trainerProxySlot->isNotEmpty())
+
                                                                 <h5 style="color: lightpink">Trainer Name :- {{ $trainer->name }}</h5>
                                                                 @php
                                                                     $uniqueSlotTimes = [];
                                                                 @endphp
 
                                                                 @foreach ($trainer->trainerProxySlot as $slot)
+
                                                                     @php
                                                                         $slotTime = $slot->slot->slot_time;
                                                                     @endphp
-
                                                                     @if (!in_array($slotTime, $uniqueSlotTimes))
                                                                         <h5 style="color: lightpink">Slot Time: {{ $slotTime }}</h5>
                                                                         @php

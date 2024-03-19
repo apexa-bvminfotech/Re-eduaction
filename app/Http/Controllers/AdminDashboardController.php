@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Branch;
 use App\Models\Student;
 use App\Models\StudentProxyStaffAssign;
+use App\Models\StudentStaffAssign;
 use App\Models\StudentStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -23,16 +24,25 @@ class AdminDashboardController extends Controller
             ->where('student_status.is_active','0')
             ->where('students.branch_id',Auth::user()->branch_id)
             ->get();
+
         $absentTrainer = Branch::with('trainer.trainerAttendance')->get();
         $absentStudent = Branch::with('student.studentAttendance')->get();
-        $proxyTrainer = Branch::with('trainer.trainerProxySlot.slot')->get();
-        $trainerProxySlot = StudentProxyStaffAssign::whereDate('starting_date', now()->format('Y-m-d'))->get();
+        $proxyTrainer = Branch::with('trainer.trainerProxySlot.slot')
+        ->join('trainers', 'trainers.branch_id', 'branches.id')
+        ->join('student_proxy_staff_assigns', 'student_proxy_staff_assigns.old_regular_trainer_id', 'trainers.id')
+        ->select('branches.*', 'student_proxy_staff_assigns.*', 'trainers.name as trainer_name')
+        ->get();
+
+        $trainerSlot = StudentStaffAssign::with('student','trainer')->get();
+        $trainerProxySlot = StudentProxyStaffAssign::whereDate('starting_date', now()->format('Y-m-d'))
+        ->with('student','trainer','regular')->get();
+
         // $trainerProxySlot = StudentProxyStaffAssign::select('student_proxy_staff_assigns.*','trainers.branch_id')
         //     ->join('trainers', 'trainers.id', 'student_proxy_staff_assigns.trainer_id')
         //     ->join('branches', 'branches.id', 'trainers.branch_id')
         //     ->whereDate('student_proxy_staff_assigns.starting_date', now()->format('Y-m-d'))->whereDate('student_proxy_staff_assigns.ending_date', now()->format('Y-m-d'))
         //     ->where('trainers.branch_id',Auth::user()->branch_id)->get();
 
-        return view('dashboard.admin_dashboard',compact('students','studentStatus','absentTrainer','absentStudent','proxyTrainer','trainerProxySlot','curMonStu','curMonStuStatus'));
+        return view('dashboard.admin_dashboard',compact('trainerSlot','students','studentStatus','absentTrainer','absentStudent','proxyTrainer','trainerProxySlot','curMonStu','curMonStuStatus'));
     }
 }

@@ -185,32 +185,32 @@
                                             <tr>
                                                 <th><b>Gujarati</b></th>
                                                 <td>{!! $student->studentDmit->stf_gujarati !!}</td>
-                                               
+
                                             </tr>
                                             <tr>
                                                 <th><b>Hindi</b></th>
                                                 <td>{!! $student->studentDmit->stf_hindi !!}</td>
-                                               
+
                                             </tr>
                                             <tr>
                                                 <th><b>English</b></th>
                                                 <td>{!! $student->studentDmit->stf_english !!}</td>
-                                               
+
                                             </tr>
                                             <tr>
                                                 <th><b>Maths</b></th>
                                                 <td>{!! $student->studentDmit->stf_maths !!}</td>
-                                               
+
                                             </tr>
                                             <tr>
                                                 <th><b>Self Development</b></th>
                                                 <td>{!! $student->studentDmit->stf_self_development !!}</td>
-                                               
+
                                             </tr>
                                             <tr>
                                                 <th><b>Others</b></th>
                                                 <td>{!! $student->studentDmit->stf_others !!}</td>
-                                               
+
                                             </tr>
                                                 <tr>
                                                     <th><b>DMIT Details</b></th>
@@ -764,9 +764,85 @@
                                         </tbody>
                                     </table>
                                 </div>
+
                             </div>
                         </div>
                     </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header" style="background-color:lightgray">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <h3 class="card-title"><b>Other Course :</b></h3>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <form class="form-inline" action="">
+                                                <div class="form-group mr-2">
+                                                    <label for="start-date" class="mr-2">From :</label>
+                                                    <input type="date" class="form-control" id="from_date_course" name="fromDateCourse" value="{{ !empty($fromDateCourse) ? $fromDateCourse : '' }}">
+                                                </div>
+                                                <div class="form-group mr-2">
+                                                    <label for="end-date" class="mr-2">To :</label>
+                                                    <input type="date" class="form-control" id="to_date_course" name="toDateCourse" value="{{ !empty($toDateCourse) ? $toDateCourse : '' }}">
+                                                </div>
+                                                <button type="button" class="btn btn-secondary student-course-search">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="card-body">
+                                    <table class="table table-bordere example1 table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Admission Course</th>
+                                                <th>Running Course</th>
+                                                <th>Complete Course </th>
+                                                <th>Pedding/Hold Course</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($studentCourse as $course)
+                                                <tr>
+                                                    <td>{{ $course->course->course_name ?? '' }}</td>
+                                                    <td>
+                                                        @if($course->start_date !== null && $course->end_date == null)
+                                                            {{$course->course->course_name ?? ''}}
+                                                        @else
+                                                            -
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if($course->end_date !== null)
+                                                        {{$course->course->course_name ?? ''}}<br>
+                                                        start Date:-{{$course->start_date}}<br>
+                                                        end Date:-{{$course->end_date}}
+                                                        @else
+                                                            -
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if($course->start_date == null)
+                                                        {{$course->course->course_name ?? ''}}
+                                                        @else
+                                                            -
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">

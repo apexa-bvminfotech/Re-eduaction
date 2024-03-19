@@ -130,7 +130,7 @@
                                                             @enderror
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-6">
+                                                    <div class="col-sm-4">
                                                         <div class="form-group mb-3">
                                                             <label for="inputMailForm">Email ID:</label>
                                                             <input type="email" class="form-control" name="email_id"
@@ -141,7 +141,18 @@
                                                             @enderror
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6 mb-1">
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group mb-3">
+                                                            <label for="Education Board">Education Board:</label>
+                                                            <input type="text" class="form-control" name="education_board"
+                                                                   placeholder="enter Eduction Board"
+                                                                   value="{{ $student->education_board }}">
+                                                        </div>
+                                                        @error('education_board')
+                                                            <span class="text-danger">{{$message}}</span>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="col-md-4 mb-1">
                                                         <div class="form-group">
                                                             <label for="standard">Standard:</label>
                                                             <input type="number" class="form-control" min="1" max="12"

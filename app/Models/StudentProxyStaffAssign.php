@@ -19,6 +19,10 @@ class StudentProxyStaffAssign extends Model
     {
         return $this->belongsTo(Trainer::class)->where('is_active',0);
     }
+    public function regular()
+    {
+        return $this->belongsTo(Trainer::class,'old_regular_trainer_id');
+    }
     public function slot()
     {
         return $this->belongsTo(Slot::class)->where('is_active', 0);

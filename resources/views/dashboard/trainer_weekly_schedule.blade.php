@@ -71,9 +71,7 @@
                                                         style="background-color: lightgreen ;font-weight: bold">
                                                         Time :- {{ $slot['slot_time'] }}<br><br>
                                                         Rtc :- {{ $slot['rtc']}}<br><br>
-                                                        {{-- @foreach ($slot['students'] as $student)
-                                                       {{$student['branches']}}
-                                                       @endforeach <br> <br> --}}
+
                                                         Total Students :- {{ count($slot['students']) }}<br><br>
                                                         Watsapp Group Name :- {{$slot['whatsapp_group_name']}}<br>
                                                           <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg{{ $slot['student_id'] }}">Student Details</button>
@@ -107,40 +105,39 @@
                                                                         <tbody>
                                                                             @php $noteNumber = 1; @endphp
                                                                             @foreach ($slot['students'] as $student)
-                                                                            <tr>
-                                                                                <td style="font-weight: normal">{{ $noteNumber }}</td>
-                                                                                <td style="font-weight: normal">{{ $student['name'] }} {{ $student['surname'] }}</td>
-                                                                                <td style="font-weight: normal">{{ implode(', ', $student['courses']) }}</td>
-                                                                                <td style="font-weight: normal">{{ $student['father_phone_no'] }}</td>
-                                                                                <td style="font-weight: normal">{{ $student['mother_phone_no'] }}</td>
-                                                                                <td style="font-weight: normal">{{ $student['student_courses'] }}</td>
-                                                                                <td style="font-weight: normal">{{ $student['standard'] }}</td>
-                                                                                <td style="font-weight: normal">{{ $student['trainer_name'] }}</td>
-                                                                                @php
-                                                                                    $runningCourses = [];
-                                                                                    $completeCourses = [];
-                                                                                    $pendingCourses = [];
-                                                                                @endphp
-                                                                                @foreach ($student['courses'] as $key => $course)
-                                                                                    @php
-                                                                                        $status = $student['course_status'][$key];
-                                                                                        if ($status == 'Running') {
-                                                                                            $runningCourses[] = $course;
-                                                                                        } elseif ($status == 'Complete') {
-                                                                                            $completeCourses[] = $course;
-                                                                                        } elseif ($status == 'Pending') {
-                                                                                            $pendingCourses[] = $course;
-                                                                                        }
-                                                                                    @endphp
+                                                                                    <tr>
+                                                                                        <td style="font-weight: normal">{{ $noteNumber }}</td>
+                                                                                        <td style="font-weight: normal">{{ $student['name'] }} {{ $student['surname'] }}</td>
+                                                                                        <td style="font-weight: normal">{{ implode(', ', array_unique($student['courses'])) }}</td>
+                                                                                        <td style="font-weight: normal">{{ $student['father_phone_no'] }}</td>
+                                                                                        <td style="font-weight: normal">{{ $student['mother_phone_no'] }}</td>
+                                                                                        <td style="font-weight: normal">{{ $student['student_courses'] }}</td>
+                                                                                        <td style="font-weight: normal">{{ $student['standard'] }}</td>
+                                                                                        <td style="font-weight: normal">{{ $student['trainer_name'] }}</td>
+                                                                                        @php
+                                                                                            $runningCourses = [];
+                                                                                            $completeCourses = [];
+                                                                                            $pendingCourses = [];
+                                                                                        @endphp
+                                                                                        @foreach ($student['courses'] as $key => $course)
+                                                                                            @php
+                                                                                                $status = $student['course_status'][$key];
+                                                                                                if ($status == 'Running' && !in_array($course, $runningCourses)) {
+                                                                                                    $runningCourses[] = $course;
+                                                                                                } elseif ($status == 'Complete' && !in_array($course, $completeCourses)) {
+                                                                                                    $completeCourses[] = $course;
+                                                                                                } elseif ($status == 'Pending' && !in_array($course, $pendingCourses)) {
+                                                                                                    $pendingCourses[] = $course;
+                                                                                                }
+                                                                                            @endphp
+                                                                                        @endforeach
+                                                                                        <td style="font-weight: normal">{{ implode(', ', $runningCourses) }}</td>
+                                                                                        <td style="font-weight: normal">{{ implode(', ', $completeCourses) }}</td>
+                                                                                        <td style="font-weight: normal">{{ implode(', ', $pendingCourses) }}</td>
+                                                                                        <td style="font-weight: normal">{{ $student['medium'] }}</td>
+                                                                                    </tr>
+                                                                                    @php $noteNumber++; @endphp
                                                                                 @endforeach
-                                                                                <td style="font-weight: normal">{{ implode(', ', $runningCourses) }}</td>
-                                                                                <td style="font-weight: normal">{{ implode(', ', $completeCourses) }}</td>
-                                                                                <td style="font-weight: normal">{{ implode(', ', $pendingCourses) }}</td>
-                                                                                <td style="font-weight: normal">{{ $student['medium'] }}</td>
-                                                                            </tr>
-
-                                                                                @php $noteNumber++; @endphp
-                                                                            @endforeach
                                                                         </tbody>
                                                                     </table>
                                                                 </div>
@@ -161,6 +158,7 @@
 
                             <tr>
                                 @foreach ($trainerDataProxy as $trainerNames => $slots)
+                                {{-- {{dd($slots)}} --}}
                                     @if ($trainerName == $trainerNames)
                                         @foreach ($slots as $slot)
                                             @php
@@ -191,64 +189,65 @@
                                                                   <h4 class="modal-title">student Details</h4>
                                                                   <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                                 </div>
-                                                              <div class="modal-body">
-                                                                  <table class="table table-striped">
-                                                            <thead>
-                                                              <tr>
-                                                                <th>Student Name</th>
-                                                                <th>Course</th>
-                                                                <th>Course Start Date</th>
-                                                                <th>standard</th>
-                                                                <th>Father Contact No</th>
-                                                                <th>Mother Contact No</th>
-                                                                <th>Trainer Name</th>
-                                                                <th>Running Course</th>
-                                                                <th>Complete Course</th>
-                                                                <th>Pending Course</th>
-                                                                <th>Medium</th>
-                                                              </tr>
-                                                            </thead>
-                                                            <tbody>
-
-                                                                    @foreach ($slot['students'] as $student)
-                                                                        {{-- {{dd($student)}} --}}
-                                                                       <tr>
-                                                                            <td style="font-weight: normal">{{ $student['name'] }} {{ $student['surname'] }}</td>
-                                                                            <td style="font-weight: normal">{{ implode(', ', $student['courses']) }}</td>
-                                                                            <td style="font-weight: normal">{{ $student['student_courses'] }}</td>
-                                                                            <td style="font-weight: normal">{{ $student['standard'] }}</td>
-                                                                            <td style="font-weight: normal">{{$student['father_phone_no']}}</td>
-                                                                            <td style="font-weight: normal">{{$student['mother_phone_no']}}</td>
-                                                                            <td style="font-weight: normal">{{$student['trainer_name']}}</td>
-                                                                            @php
-                                                                                    $runningCourses = [];
-                                                                                    $completeCourses = [];
-                                                                                    $pendingCourses = [];
-                                                                                @endphp
-                                                                                @foreach ($student['courses'] as $key => $course)
-                                                                                    @php
-                                                                                        $status = $student['course_status'][$key];
-                                                                                        if ($status == 'Running') {
-                                                                                            $runningCourses[] = $course;
-                                                                                        } elseif ($status == 'Complete') {
-                                                                                            $completeCourses[] = $course;
-                                                                                        } elseif ($status == 'Pending') {
-                                                                                            $pendingCourses[] = $course;
-                                                                                        }
-                                                                                    @endphp
-                                                                                @endforeach
-                                                                                <td style="font-weight: normal">{{ implode(', ', $runningCourses) }}</td>
-                                                                                <td style="font-weight: normal">{{ implode(', ', $completeCourses) }}</td>
-                                                                                <td style="font-weight: normal">{{ implode(', ', $pendingCourses) }}</td>
-                                                                                <td style="font-weight: normal">{{ $student['medium'] }}</td>
+                                                                <div class="modal-body">
+                                                                    <table class="table table-striped">
+                                                                        <thead>
+                                                                        <tr>
+                                                                            <th>Student Name</th>
+                                                                            <th>Course</th>
+                                                                            <th>Course Start Date</th>
+                                                                            <th>standard</th>
+                                                                            <th>Father Contact No</th>
+                                                                            <th>Mother Contact No</th>
+                                                                            <th>Trainer Name</th>
+                                                                            <th>Running Course</th>
+                                                                            <th>Complete Course</th>
+                                                                            <th>Pending Course</th>
+                                                                            <th>Medium</th>
                                                                         </tr>
-                                                                    @endforeach
-                                                            </tbody>
-                                                          </table>
-                                                          </div>
+                                                                        </thead>
+                                                                        <tbody>
+
+                                                                                @foreach ($slot['students'] as $student)
+
+                                                                                <tr>
+                                                                                        <td style="font-weight: normal">{{ $student['name'] }} {{ $student['surname'] }}</td>
+                                                                                        <td style="font-weight: normal">{{ implode(', ', array_unique($student['courses'])) }}</td>
+                                                                                        <td style="font-weight: normal">{{ $student['student_courses'] }}</td>
+                                                                                        <td style="font-weight: normal">{{ $student['standard'] }}</td>
+                                                                                        <td style="font-weight: normal">{{$student['father_phone_no']}}</td>
+                                                                                        <td style="font-weight: normal">{{$student['mother_phone_no']}}</td>
+                                                                                        <td style="font-weight: normal">{{$student['trainer_name']}}</td>
+                                                                                        @php
+                                                                                                $runningCourses = [];
+                                                                                                $completeCourses = [];
+                                                                                                $pendingCourses = [];
+                                                                                            @endphp
+                                                                                            @foreach ($student['courses'] as $key => $course)
+                                                                                            @php
+                                                                                            $status = $student['course_status'][$key];
+                                                                                            if ($status == 'Running' && !in_array($course, $runningCourses)) {
+                                                                                                $runningCourses[] = $course;
+                                                                                            } elseif ($status == 'Complete' && !in_array($course, $completeCourses)) {
+                                                                                                $completeCourses[] = $course;
+                                                                                            } elseif ($status == 'Pending' && !in_array($course, $pendingCourses)) {
+                                                                                                $pendingCourses[] = $course;
+                                                                                            }
+                                                                                        @endphp
+                                                                                            @endforeach
+                                                                                            <td style="font-weight: normal">{{ implode(', ', $runningCourses) }}</td>
+                                                                                            <td style="font-weight: normal">{{ implode(', ', $completeCourses) }}</td>
+                                                                                            <td style="font-weight: normal">{{ implode(', ', $pendingCourses) }}</td>
+                                                                                            <td style="font-weight: normal">{{ $student['medium'] }}</td>
+                                                                                    </tr>
+                                                                                @endforeach
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
                                                             </div>
                                                           </div>
                                                         </div>
+
                                                     </td>
                                                 @else
                                                     <td class="text-center p-5">
@@ -297,10 +296,20 @@
                                                         @if ($s['note'] != null)
                                                             Note:-{{ $noteNumber }} {{ $s['note'] }}<br><br>
                                                             Sloat Time:-{{ $s['slot_time'] }}
+
+                                                            @foreach ($slotstime as $key => $slot)
+                                                            @if ($slot->is_active == 0)
+                                                                @if ($s['slot_id'] == $slot->id)
+                                                                    <span>slot:-{{ $slot->slot_time }}</span>
+                                                                @endif
+                                                            @endif
+                                                        @endforeach
+
                                                             @php
                                                                 $noteNumber++;
                                                             @endphp
                                                             <br>
+                                                            @if(auth()->user()->type == 0)
                                                             <button type="button" class="btn btn-primary edit-slot"
                                                                 data-toggle="modal"
                                                                 data-target="#editModal{{ $s['id'] }}">
@@ -311,6 +320,7 @@
                                                                 data-target="#deleteModal{{ $s['id'] }}">
                                                                 Delete
                                                              </button>
+                                                             @endif
                                                             <!-- Edit Modal -->
                                                             <div class="modal fade" id="editModal{{ $s['id'] }}"
                                                                 tabindex="-1" role="dialog"
@@ -410,44 +420,29 @@
                                                                                     <div class="row">
                                                                                         <div class="col-sm-5">
                                                                                             <div class="form-group">
-                                                                                                <div class="input-group date" id="timepicker"
+                                                                                                <div class="input-group date" id="timepicker2"
                                                                                                      data-target-input="nearest">
-                                                                                                    <input type="text"
-                                                                                                           class="form-control datetimepicker-input"
+                                                                                                    <input type="time"
+                                                                                                           class="form-control "
                                                                                                            name="slot_time_to"
-                                                                                                           value="{{ $slot_time_to }}"
-                                                                                                           aria-describedby="button-addon2"
-                                                                                                           data-target="#timepicker"/>
-                                                                                                    <div class="input-group-append"
-                                                                                                         data-target="#timepicker"
-                                                                                                         data-toggle="datetimepicker">
-                                                                                                        <div class="input-group-text"><i
-                                                                                                                class="far fa-clock"></i>
-                                                                                                        </div>
-                                                                                                    </div>
+                                                                                                           value="{{  $slot_time_to }}"
+                                                                                                           />
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
-                                                                                        <div class="col-sm-2"
+                                                                                        <div class="col-sm-2 mt-2"
                                                                                              style="display: flex;justify-content: space-around;">
                                                                                             <p>to</p>
                                                                                         </div>
                                                                                         <div class="col-sm-5">
                                                                                             <div class="form-group">
-                                                                                                <div class="input-group date" id="timepicker1"
+                                                                                                <div class="input-group date" id="timepicker3"
                                                                                                      data-target-input="nearest">
-                                                                                                    <input type="text"
-                                                                                                           class="form-control datetimepicker-input"
+                                                                                                    <input type="time"
+                                                                                                           class="form-control "
                                                                                                            name="slot_time_from"
                                                                                                            value="{{ $slot_time_from }}"
-                                                                                                           aria-describedby="button-addon2"
-                                                                                                           data-target="#timepicker1"/>
-                                                                                                    <div class="input-group-append"
-                                                                                                         data-target="#timepicker1"
-                                                                                                         data-toggle="datetimepicker">
-                                                                                                        <div class="input-group-text"><i
-                                                                                                                class="far fa-clock"></i></div>
-                                                                                                    </div>
+                                                                                                           />
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -467,37 +462,37 @@
                                                             {{-- End Edit Model --}}
 
                                                             {{-- Delete Model --}}
-                                                        <div class="modal fade" id="deleteModal{{ $s['id'] }}"
-                                                            tabindex="-1" role="dialog"
-                                                            aria-labelledby="deleteModalLabel{{ $s['id'] }}"
-                                                            aria-hidden="true">
-                                                            <div class="modal-dialog" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title"
-                                                                            id="deleteModalLabel{{ $s['id'] }}">Delete
-                                                                            Slot</h5>
-                                                                        <button type="button" class="close"
-                                                                            data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <form action="{{ route('delete.slot', ['slotId' => $s['id']]) }}" method="POST">
-                                                                            @csrf
-                                                                            @method('DELETE')
+                                                                <div class="modal fade" id="deleteModal{{ $s['id'] }}"
+                                                                    tabindex="-1" role="dialog"
+                                                                    aria-labelledby="deleteModalLabel{{ $s['id'] }}"
+                                                                    aria-hidden="true">
+                                                                    <div class="modal-dialog" role="document">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h5 class="modal-title"
+                                                                                    id="deleteModalLabel{{ $s['id'] }}">Delete
+                                                                                    Slot</h5>
+                                                                                <button type="button" class="close"
+                                                                                    data-dismiss="modal" aria-label="Close">
+                                                                                    <span aria-hidden="true">&times;</span>
+                                                                                </button>
+                                                                            </div>
                                                                             <div class="modal-body">
-                                                                                <p>Are you sure you want to delete?</p>
+                                                                                <form action="{{ route('delete.slot', ['slotId' => $s['id']]) }}" method="POST">
+                                                                                    @csrf
+                                                                                    @method('DELETE')
+                                                                                    <div class="modal-body">
+                                                                                        <p>Are you sure you want to delete?</p>
+                                                                                    </div>
+                                                                                    <div class="modal-footer">
+                                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                                                                        <button type="submit" class="btn btn-danger">Yes</button>
+                                                                                    </div>
+                                                                                </form>
                                                                             </div>
-                                                                            <div class="modal-footer">
-                                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                                                                                <button type="submit" class="btn btn-danger">Yes</button>
-                                                                            </div>
-                                                                        </form>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        </div>
                                                             {{-- End Delete Model --}}
 
                                                         @endif
@@ -521,6 +516,7 @@
                         </div>
                         @endforeach
 
+                        @if(auth()->user()->type == 0)
                         @foreach ($userScheduleList as $userName => $slots)
                             <div class="card-body">
                                 <table class="table table-bordered table-striped">
@@ -675,6 +671,7 @@
                                 </table>
                             </div>
                         @endforeach
+                        @endif
                     </div>
                 </div>
             </div>
