@@ -363,10 +363,20 @@
                                                                 @php
                                                                     $uniqueSlotTimes = [];
                                                                 @endphp
-
+                                                                @php
+                                                                $uniqueTrainerName = [];
+                                                                @endphp
                                                                 @foreach ($trainer->trainerProxySlot as $slot)
-                                                                <h5 style="color: lightpink">Regular Trainer Name :- {{ $slot->old_regular_trainer_id }}</h5>
-
+                                                                    @php
+                                                                        $trainerName = $slot->old_regular_trainer_id;
+                                                                    @endphp
+                                                                    @if (!in_array($trainerName, $uniqueTrainerName))
+                                                                    <h5 style="color: lightpink">Regular Trainer Name: {{ $trainerName }}</h5>
+                                                                    @php
+                                                                        $uniqueTrainerName[] = $trainerName;
+                                                                    @endphp
+                                                                @endif
+                                                           
                                                                     @php
                                                                         $slotTime = $slot->slot->slot_time;
                                                                     @endphp
