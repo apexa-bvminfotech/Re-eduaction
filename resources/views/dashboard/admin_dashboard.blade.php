@@ -335,7 +335,8 @@
                             @if($trainerProxySlot->isNotEmpty())
                                 <div class="row">
                                     @foreach($proxyTrainer as $key => $branch)
-                                        <div class="">
+
+                                    <div class="">
                                             @php
                                                 $trainerSlot = [];
                                             @endphp
@@ -351,8 +352,8 @@
                                             @if(in_array('none',$trainerSlot))
                                                 <div class="small-box bg-info">
                                                     <div class="inner">
+
                                                         <h5 style="color: lightpink">{{ $branch->name }}</h5>
-                                                        <h5 style="color: lightpink">Regular Trainer Name:-{{ $branch->trainer_name }}</h5>
 
                                                         @foreach ($branch->trainer as $trainer)
 
@@ -364,6 +365,7 @@
                                                                 @endphp
 
                                                                 @foreach ($trainer->trainerProxySlot as $slot)
+                                                                <h5 style="color: lightpink">Regular Trainer Name :- {{ $slot->old_regular_trainer_id }}</h5>
 
                                                                     @php
                                                                         $slotTime = $slot->slot->slot_time;

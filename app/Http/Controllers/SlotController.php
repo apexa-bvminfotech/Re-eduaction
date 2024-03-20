@@ -287,7 +287,7 @@ class SlotController extends Controller
         }
 
         $regularSlotShift = StudentStaffAssign::where('slot_id',$request->old_proxy_slot_id)->where('trainer_id',$request->old_proxy_trainer_id)->where('is_active','0')->with('trainer')->get();
-         
+
         $proxySlotShift = StudentProxyStaffAssign::where('slot_id',$request->old_proxy_slot_id)->where('trainer_id',$request->old_proxy_trainer_id)->get();
         // dd($proxySlotShift);
         if($regularSlotShift->isNotempty()){
@@ -298,7 +298,7 @@ class SlotController extends Controller
                     'slot_id' => $request->slot_id,
                     'starting_date' => $request->starting_date,
                     'ending_date' => $request->ending_date,
-                    'old_regular_trainer_id' => $request->old_proxy_trainer_id,
+                    'old_regular_trainer_id' => $regularTrainer->trainer->name ?? '',
                 ]);
             }
         }
@@ -310,7 +310,7 @@ class SlotController extends Controller
                     'slot_id' => $request->slot_id,
                     'starting_date' => $request->starting_date,
                     'ending_date' => $request->ending_date,
-                    'old_regular_trainer_id' => $request->old_proxy_trainer_id,
+                    'old_regular_trainer_id' => $proxyTrainer->trainer->name ?? '',
                 ]);
             }
         }

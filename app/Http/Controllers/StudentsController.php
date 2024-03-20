@@ -183,7 +183,7 @@ class StudentsController extends Controller
             'not_aaplicable_for_dmit' => $request->not_aaplicable_for_dmit ? '1' : '0',
             'not_aaplicable_for_course_material' => $request->not_aaplicable_for_course_material ? '1' : '0',
         ]);
-// dd($student);
+
         StudentStatus::create([
             'status' => 'Pending',
             'is_active' => 0,
@@ -992,7 +992,7 @@ class StudentsController extends Controller
                 'course_status' => $request->status,
             ]);
         }
-        
+
         return redirect()->route('student.index')->with('success', 'Student status change');
     }
 

@@ -28,9 +28,6 @@ class AdminDashboardController extends Controller
         $absentTrainer = Branch::with('trainer.trainerAttendance')->get();
         $absentStudent = Branch::with('student.studentAttendance')->get();
         $proxyTrainer = Branch::with('trainer.trainerProxySlot.slot')
-        ->join('trainers', 'trainers.branch_id', 'branches.id')
-        ->join('student_proxy_staff_assigns', 'student_proxy_staff_assigns.old_regular_trainer_id', 'trainers.id')
-        ->select('branches.*', 'student_proxy_staff_assigns.*', 'trainers.name as trainer_name')
         ->get();
 
         $trainerSlot = StudentStaffAssign::with('student','trainer')->get();
