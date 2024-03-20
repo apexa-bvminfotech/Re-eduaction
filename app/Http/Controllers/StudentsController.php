@@ -65,7 +65,9 @@ class StudentsController extends Controller
                     ->leftJoin('student_staff_assigns','student_staff_assigns.student_id','students.id')
                     ->leftJoin('trainers','trainers.id','student_staff_assigns.trainer_id')
                     ->with('courses','studentTrainer.trainer','user')
-                    ->orderBy('students.id')->get();
+                    ->orderBy('students.id')
+                    ->groupBy('students.id')->get();
+        // dd($students);
 
         if(Auth::user()->type == 1) {
             $slots = Slot::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'desc')->where('is_active','0')->get();
