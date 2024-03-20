@@ -61,31 +61,29 @@ class TrainerDashboardController extends Controller
             $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
 
-            $stuListWithTrainer = StudentStaffAssign::whereIn('students.id', $studentTrainer)
-                ->where('student_staff_assigns.is_active', 0)
-                ->whereHas('slot', function($query) {
-                    $query->where('is_active', 0);
-                })
-                ->join('student_status', 'student_status.student_id', 'students.id')
-                ->join('students', 'students.id', 'student_staff_assigns.student_id')
-                ->join('rtc', 'rtc.branch_id', 'students.branch_id')
-                ->join('student_courses', 'student_courses.student_id', 'students.id')
-                ->join('courses', 'courses.id', 'student_courses.course_id')
-                ->with('trainer', 'student', 'slot', 'studentcourses', 'course')
-                ->selectRaw('*, (CASE
-                    WHEN start_date IS NULL THEN "Pending"
-                    WHEN start_date IS NOT NULL AND end_date IS NULL THEN "Running"
-                    ELSE "Complete"
-                    END) AS course_status')
-                ->get()
-                ->groupBy('trainer.name');
-
-            $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot','studentcourses','course')
+            $stuListWithTrainer = StudentStaffAssign::with('trainer', 'student', 'slot', 'branch', 'studentcourses', 'course')
+            ->where('student_staff_assigns.is_active', 0)
             ->whereHas('slot', function($query) {
                 $query->where('is_active', 0);
             })
+            ->join('students', 'students.id', 'student_staff_assigns.student_id')
+             ->join('rtc', 'rtc.branch_id', 'students.branch_id')
+            ->join('student_courses', 'student_courses.student_id', 'students.id')
+            ->join('courses', 'courses.id', 'student_courses.course_id')
+            ->selectRaw('*,
+                        (CASE
+                            WHEN start_date IS NULL THEN "Pending"
+                            WHEN start_date IS NOT NULL AND end_date IS NULL THEN "Running"
+                            ELSE "Complete"
+                        END) AS course_status')
+            ->get()
+            ->groupBy('trainer.name');
+
+            $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot','branch','studentcourses','course')
+             ->whereHas('slot', function($query) {
+                $query->where('is_active', 0);
+            })
             ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
-            ->join('student_status', 'student_status.student_id', 'students.id')
             ->join('rtc', 'rtc.branch_id', 'students.branch_id')
             ->join('student_courses', 'student_courses.student_id', 'students.id')
             ->join('courses', 'courses.id', 'student_courses.course_id')
@@ -100,14 +98,14 @@ class TrainerDashboardController extends Controller
             $userSchedule = TrainerShedule::with('user')->where('user_id', '!=', 0)->get()->groupBy('user.name');
         }
         else{
-            $stuListWithTrainer = StudentStaffAssign::with('trainer', 'student', 'slot', 'branch', 'studentcourses', 'course','studentStatus')
+
+            $stuListWithTrainer = StudentStaffAssign::with('trainer', 'student', 'slot', 'branch', 'studentcourses', 'course')
                 ->where('student_staff_assigns.is_active', 0)
                 ->whereHas('slot', function($query) {
                     $query->where('is_active', 0);
                 })
                 ->join('students', 'students.id', 'student_staff_assigns.student_id')
-                ->join('student_status', 'student_status.student_id', 'students.id')
-                ->join('rtc', 'rtc.branch_id', 'students.branch_id')
+                 ->join('rtc', 'rtc.branch_id', 'students.branch_id')
                 ->join('student_courses', 'student_courses.student_id', 'students.id')
                 ->join('courses', 'courses.id', 'student_courses.course_id')
                 ->selectRaw('*,
@@ -125,7 +123,6 @@ class TrainerDashboardController extends Controller
                 $query->where('is_active', 0);
             })
             ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
-            ->join('student_status', 'student_status.student_id', 'students.id')
             ->join('rtc', 'rtc.branch_id', 'students.branch_id')
             ->join('student_courses', 'student_courses.student_id', 'students.id')
             ->join('courses', 'courses.id', 'student_courses.course_id')
@@ -159,7 +156,7 @@ class TrainerDashboardController extends Controller
                             'whatsapp_group_name' => $slots->slot->whatsapp_group_name ?? '',
                              'rtc' => $slots->rtc_name ?? '',
                             'student_id' => $slots->student_id ?? '',
-                            // 'status' => $slots->studentStatus->trainer_name ?? '',
+                            'status' => $slots->student->course_status ?? '',
                         ];
                     }
 
@@ -180,7 +177,7 @@ class TrainerDashboardController extends Controller
 
                         $trainerData[$trainerName][$slotID]['students'][] = [
                             'student_id' => $slots->student_id ?? '',
-                            'name' => $slots->student->name,
+                            'name' => $slots->student->name ?? '',
                             'surname' => $slots->student->surname ?? '',
                             'branches' => $slots->branch->name ?? 'Null',
                             'courses' => $courses,
@@ -191,10 +188,11 @@ class TrainerDashboardController extends Controller
                             'mother_phone_no' => $slots->student->mother_contact_no ?? 'Null',
                             'trainer_name' => $trainerName ?? 'Null',
                             'medium' => $slots->medium ?? '',
-                            'status' => $slots->status ?? '',
-                        ];
-                        // dd($trainerData);
+                            'status' => $slots->student->course_status,
 
+                        ];
+
+                        //  dd($trainerData);
                     }
                 }
             }
@@ -251,8 +249,10 @@ class TrainerDashboardController extends Controller
                         'mother_phone_no' => $slotsProxy->student->mother_contact_no ?? 'Null',
                         'trainer_name' => $trainerName ?? 'Null',
                         'medium' => $slotsProxy->medium ?? '',
+                        'status' => $slotsProxy->student->course_status,
 
                     ];
+
                 }
 
 

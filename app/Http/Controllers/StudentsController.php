@@ -66,7 +66,7 @@ class StudentsController extends Controller
                     ->leftJoin('trainers','trainers.id','student_staff_assigns.trainer_id')
                     ->with('courses','studentTrainer.trainer','user')
                     ->orderBy('students.id')->get();
-        //  dd($students);
+
         if(Auth::user()->type == 1) {
             $slots = Slot::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'desc')->where('is_active','0')->get();
             $trainers = Trainer::where('branch_id', Auth::user()->branch_id)->where('is_active',0)->orderBy('id', 'desc')->get();
@@ -90,6 +90,7 @@ class StudentsController extends Controller
         $trainer = Trainer::orderBy('id')->where('is_active', 0)->get();
         $branch = Branch::orderBy('id', 'DESC')->get();
         $last_id = Student::latest()->first() ? 'RE/'.Student::get()->count() + 1 : 'RE/1';
+
         if(Auth::user()->type == 1) {
             $trainer = Trainer::orderBy('id')->where(['is_active' => 0, 'branch_id' => Auth::user()->branch_id])->get();
             $branch = Branch::where('id', Auth::user()->branch_id)->orderBy('id', 'DESC')->get();
@@ -980,6 +981,18 @@ class StudentsController extends Controller
            'student_id' => $request->student_id,
            'user_id' => Auth::id(),
         ]);
+
+        $student = Student::where('id', $request->student_id)->first();
+
+        if ($student) {
+            $student->update(['course_status' => $request->status]);
+        } else {
+            Student::create([
+                'id' => $request->student_id,
+                'course_status' => $request->status,
+            ]);
+        }
+        
         return redirect()->route('student.index')->with('success', 'Student status change');
     }
 

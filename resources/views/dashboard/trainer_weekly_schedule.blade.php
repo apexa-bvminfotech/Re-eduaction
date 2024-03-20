@@ -79,7 +79,7 @@
                                                           <div class="modal fade bd-example-modal-lg{{ $slot['student_id'] }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel{{ $slot['student_id'] }}" aria-hidden="true">
                                                             <div class="modal-dialog modal-lg">
 
-                                                              <div class="modal-content" style="width: 140%;;">
+                                                              <div class="modal-content" style="width: fit-content;">
                                                                 <div class="modal-header">
                                                                     <h4 class="modal-title">student Details</h4>
                                                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -105,6 +105,8 @@
                                                                         <tbody>
                                                                             @php $noteNumber = 1; @endphp
                                                                             @foreach ($slot['students'] as $student)
+
+                                                                                @if($student['status'] != 'Hold')
                                                                                     <tr>
                                                                                         <td style="font-weight: normal">{{ $noteNumber }}</td>
                                                                                         <td style="font-weight: normal">{{ $student['name'] }} {{ $student['surname'] }}</td>
@@ -137,6 +139,7 @@
                                                                                         <td style="font-weight: normal">{{ $student['medium'] }}</td>
                                                                                     </tr>
                                                                                     @php $noteNumber++; @endphp
+                                                                                @endif
                                                                                 @endforeach
                                                                         </tbody>
                                                                     </table>
@@ -184,7 +187,7 @@
                                                         <div class="modal fade bd-example-modal-lg{{ implode('', $slot['student_id']) }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel{{ implode('', $slot['student_id']) }}" aria-hidden="true">
                                                           <div class="modal-dialog modal-lg">
 
-                                                            <div class="modal-content" style="width: 150%">
+                                                            <div class="modal-content" style="width: fit-content;">
                                                               <div class="modal-header">
                                                                   <h4 class="modal-title">student Details</h4>
                                                                   <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -209,7 +212,7 @@
                                                                         <tbody>
 
                                                                                 @foreach ($slot['students'] as $student)
-
+                                                                                @if($student['status'] != 'Hold')
                                                                                 <tr>
                                                                                         <td style="font-weight: normal">{{ $student['name'] }} {{ $student['surname'] }}</td>
                                                                                         <td style="font-weight: normal">{{ implode(', ', array_unique($student['courses'])) }}</td>
@@ -239,7 +242,8 @@
                                                                                             <td style="font-weight: normal">{{ implode(', ', $completeCourses) }}</td>
                                                                                             <td style="font-weight: normal">{{ implode(', ', $pendingCourses) }}</td>
                                                                                             <td style="font-weight: normal">{{ $student['medium'] }}</td>
-                                                                                    </tr>
+                                                                                     </tr>
+                                                                                     @endif
                                                                                 @endforeach
                                                                         </tbody>
                                                                     </table>
