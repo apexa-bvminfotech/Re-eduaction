@@ -87,20 +87,24 @@
                                                         </button>
 
                                                     @foreach ($slotStudent->groupBy(['trainer_id', 'slot_id']) as $keys => $groupedStudents)
+
                                                         @php
                                                             $studentCount = $groupedStudents->count();
                                                         @endphp
 
                                                         @foreach ($groupedStudents as $slotId => $students)
+                                                        @php
+                                                        $studentCounts = $students->count();
+                                                        @endphp
                                                             @if ($s->trainer->id . $s->id == $keys . $slotId)
                                                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#studentData{{ $s->trainer->id }}_{{ $s->id }}">
-                                                                    Student Detail
+                                                                   Student Detail
                                                                 </button>
                                                             @endif
                                                         @endforeach
                                                     @endforeach
 
-                                                        @foreach ($slotProxyStudent->groupBy(['trainer_id', 'slot_id']) as $keys  => $groupedStudents)
+                                                    @foreach ($slotProxyStudent->groupBy(['trainer_id', 'slot_id']) as $keys  => $groupedStudents)
                                                                 @php
                                                                 $studentCount = $groupedStudents->count();
                                                                 @endphp
@@ -109,25 +113,16 @@
                                                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#studentDataProxy{{ $s->trainer->id }}_{{ $s->id }}">Student Proxy Detail</button>
                                                                 @endif
                                                             @endforeach
-                                                        @endforeach
+                                                    @endforeach
                                                     </div>
                                                     </td>
                                                     <td>
                                                         @foreach ($slotStudent->groupBy(['trainer_id', 'slot_id']) as $keys => $groupedStudents)
+                                                        @php
+                                                            $studentCount = $groupedStudents->count();
+                                                        @endphp
                                                         @foreach ($groupedStudents as $slotId => $students)
-                                                            @php
-                                                                $studentCount = 0;
-                                                                $countedStudents = [];
-                                                            @endphp
-                                                            @foreach ($students as $student)
 
-                                                                @if (!in_array($student->id, $countedStudents))
-                                                                    @php
-                                                                        $studentCount++;
-                                                                        $countedStudents[] = $student->id;
-                                                                    @endphp
-                                                                @endif
-                                                            @endforeach
                                                             @if ($s->trainer->id . $s->id == $keys . $slotId)
                                                                 {{ $studentCount }}
                                                             @endif
@@ -137,20 +132,10 @@
 
                                                     <td>
                                                         @foreach ($slotProxyStudent->groupBy(['trainer_id', 'slot_id']) as $keys => $groupedStudents)
+                                                        @php
+                                                        $studentCount = $groupedStudents->count();
+                                                        @endphp
                                                         @foreach ($groupedStudents as $slotId => $students)
-                                                            @php
-                                                                $studentCount = 0;
-                                                                $countedStudents = [];
-                                                            @endphp
-                                                            @foreach ($students as $student)
-
-                                                                @if (!in_array($student->id, $countedStudents))
-                                                                    @php
-                                                                        $studentCount++;
-                                                                        $countedStudents[] = $student->id;
-                                                                    @endphp
-                                                                @endif
-                                                            @endforeach
                                                             @if ($s->trainer->id . $s->id == $keys . $slotId)
                                                                 {{ $studentCount }}
                                                             @endif
@@ -190,29 +175,59 @@
                                                                 <th>Medium</th>
                                                                 <th>Standard</th>
                                                                 <th>Running Course</th>
-                                                                <th>Pending Course</th>
                                                                 <th>Complete Course</th>
+                                                                <th>Pending Course</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             @php $noteNumber = 1; @endphp
-                                                            @foreach ($students as $student)
+                                                            @foreach ($students->unique('name', 'surname') as $student)
+                                                                @php
+                                                                    $studentCourses = [];
+                                                                    $courseStatuses = [];
+                                                                @endphp
+                                                                @foreach ($students as $s)
+                                                                    @if ($s->name == $student->name && $s->surname == $student->surname)
+                                                                        @php
+                                                                            $studentCourses[] = $s;
+                                                                        @endphp
+                                                                    @endif
+                                                                @endforeach
                                                                 <tr>
                                                                     <td>{{ $noteNumber }}</td>
-                                                                    <td>{{ $student->name ?? '' }}</td>
+                                                                    <td>{{ $student->name ?? '' }} {{$student->surname ?? ''}}</td>
                                                                     <td>{{ $student->father_contact_no ?? '' }}</td>
                                                                     <td>{{ $student->mother_contact_no ?? '' }}</td>
-                                                                    <td>{{ $student->course_name ?? '' }}</td>
+                                                                    <td>{{ implode(', ', array_unique(array_column($studentCourses, 'course_name'))) }}</td>
                                                                     <td>{{ $student->start_date ?? '' }}</td>
                                                                     <td>{{ $student->medium ?? '' }}</td>
                                                                     <td>{{ $student->standard ?? '' }}</td>
-                                                                    <td>{{ $student->course_status === 'Running' ? $student->course_name : '' }}</td>
-                                                                    <td>{{ $student->course_status === 'Pending' ? $student->course_name : '' }}</td>
-                                                                    <td>{{ $student->course_status === 'Complete' ? $student->course_name : '' }}</td>
+                                                                    @php
+                                                                        $runningCourses = [];
+                                                                        $completeCourses = [];
+                                                                        $pendingCourses = [];
+                                                                    @endphp
+                                                                    @foreach ($studentCourses as $course)
+                                                                        @php
+                                                                            $status = $course->course_status;
+                                                                            $courseName = $course->course_name;
+                                                                            if ($status == 'Running') {
+                                                                                $runningCourses[] = $courseName;
+                                                                            } elseif ($status == 'Complete') {
+                                                                                $completeCourses[] = $courseName;
+                                                                            } elseif ($status == 'Pending') {
+                                                                                $pendingCourses[] = $courseName;
+                                                                            }
+                                                                        @endphp
+                                                                    @endforeach
+                                                                    <td style="font-weight: normal">{{ implode(', ', $runningCourses) }}</td>
+                                                                    <td style="font-weight: normal">{{ implode(', ', $completeCourses) }}</td>
+                                                                    <td style="font-weight: normal">{{ implode(', ', $pendingCourses) }}</td>
                                                                 </tr>
                                                                 @php $noteNumber++; @endphp
                                                             @endforeach
                                                         </tbody>
+
                                                     </table>
                                                 </div>
                                             </div>
@@ -220,6 +235,7 @@
                                     </div>
                                 @endforeach
                             @endforeach
+
 
                             @foreach ($slotProxyStudent->groupBy(['trainer_id', 'slot_id']) as $keys  => $groupedStudents)
                                 @foreach ($groupedStudents as $slotId => $students)
@@ -245,28 +261,57 @@
                                                                 <th>Medium</th>
                                                                 <th>Standard</th>
                                                                 <th>Running Course</th>
-                                                                <th>Pending Course</th>
                                                                 <th>Complete Course</th>
+                                                                <th>Pending Course</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             @php $noteNumber = 1; @endphp
-                                                            @foreach ($students as $student)
+                                                            @foreach ($students->unique('name', 'surname') as $student)
+                                                                @php
+                                                                    $studentCourses = [];
+                                                                    $courseStatuses = [];
+                                                                @endphp
+                                                                @foreach ($students as $s)
+                                                                    @if ($s->name == $student->name && $s->surname == $student->surname)
+                                                                        @php
+                                                                            $studentCourses[] = $s;
+                                                                        @endphp
+                                                                    @endif
+                                                                @endforeach
                                                                 <tr>
                                                                     <td>{{ $noteNumber }}</td>
-                                                                    <td>{{ $student->name ?? '' }}</td>
+                                                                    <td>{{ $student->name ?? '' }} {{$student->surname ?? ''}}</td>
                                                                     <td>{{ $student->father_contact_no ?? '' }}</td>
                                                                     <td>{{ $student->mother_contact_no ?? '' }}</td>
-                                                                    <td>{{ $student->course_name ?? '' }}</td>
+                                                                    <td>{{ implode(', ', array_unique(array_column($studentCourses, 'course_name'))) }}</td>
                                                                     <td>{{ $student->start_date ?? '' }}</td>
                                                                     <td>{{ $student->medium ?? '' }}</td>
                                                                     <td>{{ $student->standard ?? '' }}</td>
-                                                                    <td>{{ $student->course_status === 'Running' ? $student->course_name : '' }}</td>
-                                                                    <td>{{ $student->course_status === 'Pending' ? $student->course_name : '' }}</td>
-                                                                    <td>{{ $student->course_status === 'Complete' ? $student->course_name : '' }}</td>
+                                                                    @php
+                                                                        $runningCourses = [];
+                                                                        $completeCourses = [];
+                                                                        $pendingCourses = [];
+                                                                    @endphp
+                                                                    @foreach ($studentCourses as $course)
+                                                                        @php
+                                                                            $status = $course->course_status;
+                                                                            $courseName = $course->course_name;
+                                                                            if ($status == 'Running') {
+                                                                                $runningCourses[] = $courseName;
+                                                                            } elseif ($status == 'Complete') {
+                                                                                $completeCourses[] = $courseName;
+                                                                            } elseif ($status == 'Pending') {
+                                                                                $pendingCourses[] = $courseName;
+                                                                            }
+                                                                        @endphp
+                                                                    @endforeach
+                                                                    <td style="font-weight: normal">{{ implode(', ', $runningCourses) }}</td>
+                                                                    <td style="font-weight: normal">{{ implode(', ', $completeCourses) }}</td>
+                                                                    <td style="font-weight: normal">{{ implode(', ', $pendingCourses) }}</td>
                                                                 </tr>
+                                                                @php $noteNumber++; @endphp
                                                             @endforeach
-                                                            @php $noteNumber++; @endphp
                                                         </tbody>
                                                     </table>
                                                 </div>

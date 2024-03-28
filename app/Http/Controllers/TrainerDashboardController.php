@@ -79,33 +79,39 @@ class TrainerDashboardController extends Controller
             ->get()
             ->groupBy('trainer.name');
 
+            $startDate = now()->startOfWeek();
+            $endDate = now()->endOfWeek();
             $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot','branch','studentcourses','course')
-             ->whereHas('slot', function($query) {
-                $query->where('is_active', 0);
-            })
-            ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
-            ->join('rtc', 'rtc.branch_id', 'students.branch_id')
-            ->join('student_courses', 'student_courses.student_id', 'students.id')
-            ->join('courses', 'courses.id', 'student_courses.course_id')
-            ->selectRaw('*, (CASE
-                            WHEN start_date IS NULL THEN "Pending"
-                            WHEN start_date IS NOT NULL AND end_date IS NULL THEN "Running"
-                            ELSE "Complete"
-                        END) AS course_status')
-            ->get()->groupBy('trainer.name');
+                ->whereHas('slot', function($query) use ($startDate, $endDate) {
+                    $query->where('is_active', 0)
+                          ->where(function($subQuery) use ($startDate, $endDate) {
+                              $subQuery->whereBetween('starting_date', [$startDate->toDateString(), $endDate->toDateString()])
+                                       ->orWhereBetween('ending_date', [$startDate->toDateString(), $endDate->toDateString()]);
+                          });
+                })
+                ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
+                ->join('rtc', 'rtc.branch_id', 'students.branch_id')
+                ->join('student_courses', 'student_courses.student_id', 'students.id')
+                ->join('courses', 'courses.id', 'student_courses.course_id')
+                ->selectRaw('*, (CASE
+                                    WHEN start_date IS NULL THEN "Pending"
+                                    WHEN start_date IS NOT NULL AND end_date IS NULL THEN "Running"
+                                    ELSE "Complete"
+                                END) AS course_status')
+                ->get()
+                ->groupBy('trainer.name');
 
             $trainerSchedule = TrainerShedule::with('trainer','student','slot')->where('user_id', '=', 0)->get()->groupBy('trainer.name');
             $userSchedule = TrainerShedule::with('user')->where('user_id', '!=', 0)->get()->groupBy('user.name');
         }
         else{
-
             $stuListWithTrainer = StudentStaffAssign::with('trainer', 'student', 'slot', 'branch', 'studentcourses', 'course')
                 ->where('student_staff_assigns.is_active', 0)
                 ->whereHas('slot', function($query) {
                     $query->where('is_active', 0);
                 })
                 ->join('students', 'students.id', 'student_staff_assigns.student_id')
-                 ->join('rtc', 'rtc.branch_id', 'students.branch_id')
+                  ->join('rtc', 'rtc.branch_id', 'students.branch_id')
                 ->join('student_courses', 'student_courses.student_id', 'students.id')
                 ->join('courses', 'courses.id', 'student_courses.course_id')
                 ->selectRaw('*,
@@ -118,20 +124,28 @@ class TrainerDashboardController extends Controller
                 ->groupBy('trainer.name');
 
 
-             $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot','branch','studentcourses','course')
-             ->whereHas('slot', function($query) {
-                $query->where('is_active', 0);
-            })
-            ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
-            ->join('rtc', 'rtc.branch_id', 'students.branch_id')
-            ->join('student_courses', 'student_courses.student_id', 'students.id')
-            ->join('courses', 'courses.id', 'student_courses.course_id')
-            ->selectRaw('*, (CASE
-                            WHEN start_date IS NULL THEN "Pending"
-                            WHEN start_date IS NOT NULL AND end_date IS NULL THEN "Running"
-                            ELSE "Complete"
-                        END) AS course_status')
-            ->get()->groupBy('trainer.name');
+                $startDate = now()->startOfWeek();
+                $endDate = now()->endOfWeek();
+                $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot','branch','studentcourses','course')
+                    ->whereHas('slot', function($query) use ($startDate, $endDate) {
+                        $query->where('is_active', 0)
+                              ->where(function($subQuery) use ($startDate, $endDate) {
+                                  $subQuery->whereBetween('starting_date', [$startDate->toDateString(), $endDate->toDateString()])
+                                           ->orWhereBetween('ending_date', [$startDate->toDateString(), $endDate->toDateString()]);
+                              });
+                    })
+                    ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
+                    ->join('rtc', 'rtc.branch_id', 'students.branch_id')
+                    ->join('student_courses', 'student_courses.student_id', 'students.id')
+                    ->join('courses', 'courses.id', 'student_courses.course_id')
+                    ->selectRaw('*, (CASE
+                                        WHEN start_date IS NULL THEN "Pending"
+                                        WHEN start_date IS NOT NULL AND end_date IS NULL THEN "Running"
+                                        ELSE "Complete"
+                                    END) AS course_status')
+                    ->get()
+                    ->groupBy('trainer.name');
+
 
             $trainerSchedule = TrainerShedule::with('trainer','student','slot')->where('user_id', '=', 0)
             ->get()->groupBy('trainer.name');
@@ -219,7 +233,7 @@ class TrainerDashboardController extends Controller
 
                     ];
                 }
-                // dd($trainerDataProxy);
+
 
                 $existingStudentIndex = null;
                 foreach ($trainerDataProxy[$trainerName][$slotID]['students'] as $index => $student) {
@@ -254,7 +268,6 @@ class TrainerDashboardController extends Controller
                     ];
 
                 }
-
 
                 $trainerDataProxy[$trainerName][$slotID]['student_id'][] = $slotsProxy->student_id ?? 'Null';
             }
