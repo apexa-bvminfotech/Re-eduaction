@@ -93,10 +93,9 @@
                                                         @endphp
 
                                                         @foreach ($groupedStudents as $slotId => $students)
-                                                        @php
-                                                        $studentCounts = $students->count();
-                                                        @endphp
+
                                                             @if ($s->trainer->id . $s->id == $keys . $slotId)
+
                                                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#studentData{{ $s->trainer->id }}_{{ $s->id }}">
                                                                    Student Detail
                                                                 </button>
@@ -105,9 +104,7 @@
                                                     @endforeach
 
                                                     @foreach ($slotProxyStudent->groupBy(['trainer_id', 'slot_id']) as $keys  => $groupedStudents)
-                                                                @php
-                                                                $studentCount = $groupedStudents->count();
-                                                                @endphp
+
                                                             @foreach ($groupedStudents as $slotId => $students)
                                                                 @if ($s->trainer->id . $s->id == $keys . $slotId)
                                                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#studentDataProxy{{ $s->trainer->id }}_{{ $s->id }}">Student Proxy Detail</button>
@@ -118,24 +115,25 @@
                                                     </td>
                                                     <td>
                                                         @foreach ($slotStudent->groupBy(['trainer_id', 'slot_id']) as $keys => $groupedStudents)
-                                                        @php
-                                                            $studentCount = $groupedStudents->count();
-                                                        @endphp
-                                                        @foreach ($groupedStudents as $slotId => $students)
-
-                                                            @if ($s->trainer->id . $s->id == $keys . $slotId)
-                                                                {{ $studentCount }}
-                                                            @endif
+                                                            @foreach ($groupedStudents as $slotId => $students)
+                                                                @php
+                                                                $uniqueStudents = $students->unique('name');
+                                                                $studentCount = $uniqueStudents->count();
+                                                                @endphp
+                                                                @if ($s->trainer->id . $s->id == $keys . $slotId)
+                                                                    {{ $studentCount }}
+                                                                @endif
+                                                            @endforeach
                                                         @endforeach
-                                                    @endforeach
                                                     </td>
 
                                                     <td>
                                                         @foreach ($slotProxyStudent->groupBy(['trainer_id', 'slot_id']) as $keys => $groupedStudents)
-                                                        @php
-                                                        $studentCount = $groupedStudents->count();
-                                                        @endphp
                                                         @foreach ($groupedStudents as $slotId => $students)
+                                                            @php
+                                                            $uniqueStudents = $students->unique('name');
+                                                            $studentCount = $uniqueStudents->count();
+                                                            @endphp
                                                             @if ($s->trainer->id . $s->id == $keys . $slotId)
                                                                 {{ $studentCount }}
                                                             @endif

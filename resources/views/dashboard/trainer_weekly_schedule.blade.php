@@ -161,7 +161,6 @@
 
                             <tr>
                                 @foreach ($trainerDataProxy as $trainerNames => $slots)
-                                {{-- {{dd($slots)}} --}}
                                     @if ($trainerName == $trainerNames)
                                         @foreach ($slots as $slot)
                                             @php
@@ -265,260 +264,285 @@
                                         @endforeach
                                     @endif
                                 @endforeach
-                            </tr>
-                            <tr>
-                                @foreach ($userListWithTrinerData as $trainerNames => $slots)
-                                    @if ($trainerName == $trainerNames)
-                                        @php
-                                            $checkStartDate = now()->startOfWeek();
-                                            $checkEndDate = now()->endOfWeek();
-                                            $numberOfDays = 7;
-                                            $noteNumber = 1;
-                                            $checkDate = $startDate->format('Y-m-d');
-                                        @endphp
-
-                                        @for ($day = 1; $day <= $numberOfDays; $day++)
-                                            @php
-                                                $applyStyle = false;
-                                            @endphp
-
-                                            @foreach ($slots as $s)
-                                                @if ($checkStartDate->format('Y-m-d') == $s['date'] || $checkStartDate->format('D') == $s['day'])
-                                                    @php
-                                                        if ($s['note'] != null) {
-                                                            $applyStyle = true;
-                                                        }
-                                                    @endphp
-                                                @endif
-                                            @endforeach
-
-                                            <td class="text-center p-5"
-                                                @if ($applyStyle) style="background-color: yellow; font-weight: bold;" @endif>
-                                                @foreach ($slots as $s)
-
-                                                    @if ($checkStartDate->format('Y-m-d') == $s['date'] || $checkStartDate->format('D') == $s['day'])
-                                                        @if ($s['note'] != null)
-                                                            Note:-{{ $noteNumber }} {{ $s['note'] }}<br><br>
-                                                            Sloat Time:-{{ $s['slot_time'] }}
-
-                                                            @foreach ($slotstime as $key => $slot)
-                                                            @if ($slot->is_active == 0)
-                                                                @if ($s['slot_id'] == $slot->id)
-                                                                    <span>slot:-{{ $slot->slot_time }}</span>
-                                                                @endif
-                                                            @endif
-                                                        @endforeach
-
-                                                            @php
-                                                                $noteNumber++;
-                                                            @endphp
-                                                            <br>
-                                                            @if(auth()->user()->type == 0)
-                                                            <button type="button" class="btn btn-primary edit-slot"
-                                                                data-toggle="modal"
-                                                                data-target="#editModal{{ $s['id'] }}">
-                                                                Edit
-                                                            </button>
-                                                            <button type="button" class="btn btn-danger"
-                                                                data-toggle="modal"
-                                                                data-target="#deleteModal{{ $s['id'] }}">
-                                                                Delete
-                                                             </button>
-                                                             @endif
-                                                            <!-- Edit Modal -->
-                                                            <div class="modal fade" id="editModal{{ $s['id'] }}"
-                                                                tabindex="-1" role="dialog"
-                                                                aria-labelledby="editModalLabel{{ $s['id'] }}"
-                                                                aria-hidden="true">
-                                                                <div class="modal-dialog" role="document">
-                                                                    <div class="modal-content">
-                                                                        <div class="modal-header">
-                                                                            <h5 class="modal-title"
-                                                                                id="editModalLabel{{ $s['id'] }}">Edit
-                                                                                Slot</h5>
-                                                                            <button type="button" class="close"
-                                                                                data-dismiss="modal" aria-label="Close">
-                                                                                <span aria-hidden="true">&times;</span>
-                                                                            </button>
-                                                                        </div>
-                                                                        <div class="modal-body">
-                                                                            <form
-                                                                                action="{{ route('sloatupdate', ['slotId' => $s['id']]) }}"
-                                                                                method="POST">
-                                                                                @csrf
-                                                                                <div class="form-group">
-                                                                                    <label for="note"
-                                                                                        class="col-form-label">Note:</label>
-                                                                                    <input type=""
-                                                                                        class="form-control" id="note"
-                                                                                        name="note"
-                                                                                        value="{{ $s['note'] }}">
-                                                                                </div>
-
-                                                                                <div class="form-group">
-                                                                                    <label for="note"
-                                                                                        class="col-form-label">Day:</label>
-                                                                                    <select name="day"
-                                                                                        class="form-control" >
-                                                                                        <option value="">------Select
-                                                                                            day-----</option>
-                                                                                        <option value="Mon"
-                                                                                            {{ old('day', $s['day']) == 'Mon' ? 'selected' : '' }}>
-                                                                                            MONDAY</option>
-                                                                                        <option value="Tue"
-                                                                                            {{ old('day', $s['day']) == 'Tue' ? 'selected' : '' }}>
-                                                                                            TUESDAY</option>
-                                                                                        <option value="Wed"
-                                                                                            {{ old('day', $s['day']) == 'Wed' ? 'selected' : '' }}>
-                                                                                            WEDNESDAY</option>
-                                                                                        <option value="Thu"
-                                                                                            {{ old('day', $s['day']) == 'Thu' ? 'selected' : '' }}>
-                                                                                            THURSDAY</option>
-                                                                                        <option value="Fri"
-                                                                                            {{ old('day', $s['day']) == 'Fri' ? 'selected' : '' }}>
-                                                                                            FRIDAY</option>
-                                                                                        <option value="Sat"
-                                                                                            {{ old('day', $s['day']) == 'Sat' ? 'selected' : '' }}>
-                                                                                            SATURDAY</option>
-                                                                                        <option value="Sun"
-                                                                                            {{ old('day', $s['day']) == 'Sun' ? 'selected' : '' }}>
-                                                                                            SUNDAY</option>
-                                                                                    </select>
-                                                                                </div>
-                                                                                {{-- {{dd($s)}} --}}
-                                                                                <div class="form-group">
-                                                                                    <label for="triner"
-                                                                                        class="col-form-label">Triner
-                                                                                        Name:</label>
-                                                                                    <select class="form-control select2 proxy_class select2 trainer_id"
-                                                                                        name="trainer_id" >
-                                                                                        <option value="">--- Select
-                                                                                            Trainer ---</option>
-                                                                                            @foreach ($trainershedule as $key => $trainer)
-                                                                                            @if ($trainer->is_active == 0)
-                                                                                                <option value="{{ $trainer->id }}" {{ $s['trainer_id'] == $trainer->id ? 'selected' : '' }}>{{ $trainer->name }}</option>
-                                                                                            @endif
-                                                                                        @endforeach
-                                                                                    </select>
-                                                                                </div>
-
-                                                                                <div class="form-group">
-                                                                                    <label for="name">Slot: </label>
-                                                                                    <select name="slot_id" class="form-control slot select2">
-                                                                                        <option value="">------Select Slot-----</option>
-                                                                                        @foreach ($slotstime as $key => $slot)
-                                                                                            @if ($slot->is_active == 0)
-                                                                                                <option value="{{ $slot->id }}"  {{ $s['slot_id'] == $slot->id ? 'selected' : '' }} data-slot-id="{{ $slot->id }}">
-                                                                                                    {{ $slot->slot_time }}</option>
-                                                                                            @endif
-                                                                                        @endforeach
-                                                                                    </select>
-                                                                                </div>
-                                                                                @php
-                                                                                $time_parts = explode(' - ', $s['slot_time']);
-                                                                                $slot_time_to = isset($time_parts[0]) ? $time_parts[0] : '';
-                                                                                $slot_time_from = isset($time_parts[1]) ? $time_parts[1] : '';
-                                                                                @endphp
-                                                                                <div class="form-group col-md-12">
-                                                                                    <label for="inputEmail3" class="col-form-label">Slot Time:</label>
-                                                                                    <div class="row">
-                                                                                        <div class="col-sm-5">
-                                                                                            <div class="form-group">
-                                                                                                <div class="input-group date" id="timepicker2"
-                                                                                                     data-target-input="nearest">
-                                                                                                    <input type="time"
-                                                                                                           class="form-control "
-                                                                                                           name="slot_time_to"
-                                                                                                           value="{{  $slot_time_to }}"
-                                                                                                           />
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="col-sm-2 mt-2"
-                                                                                             style="display: flex;justify-content: space-around;">
-                                                                                            <p>to</p>
-                                                                                        </div>
-                                                                                        <div class="col-sm-5">
-                                                                                            <div class="form-group">
-                                                                                                <div class="input-group date" id="timepicker3"
-                                                                                                     data-target-input="nearest">
-                                                                                                    <input type="time"
-                                                                                                           class="form-control "
-                                                                                                           name="slot_time_from"
-                                                                                                           value="{{ $slot_time_from }}"
-                                                                                                           />
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-
-                                                                                </div>
-
-
-                                                                                <button type="submit"
-                                                                                    class="btn btn-primary">Save
-                                                                                    Changes</button>
-                                                                            </form>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            {{-- End Edit Model --}}
-
-                                                            {{-- Delete Model --}}
-                                                                <div class="modal fade" id="deleteModal{{ $s['id'] }}"
-                                                                    tabindex="-1" role="dialog"
-                                                                    aria-labelledby="deleteModalLabel{{ $s['id'] }}"
-                                                                    aria-hidden="true">
-                                                                    <div class="modal-dialog" role="document">
-                                                                        <div class="modal-content">
-                                                                            <div class="modal-header">
-                                                                                <h5 class="modal-title"
-                                                                                    id="deleteModalLabel{{ $s['id'] }}">Delete
-                                                                                    Slot</h5>
-                                                                                <button type="button" class="close"
-                                                                                    data-dismiss="modal" aria-label="Close">
-                                                                                    <span aria-hidden="true">&times;</span>
-                                                                                </button>
-                                                                            </div>
-                                                                            <div class="modal-body">
-                                                                                <form action="{{ route('delete.slot', ['slotId' => $s['id']]) }}" method="POST">
-                                                                                    @csrf
-                                                                                    @method('DELETE')
-                                                                                    <div class="modal-body">
-                                                                                        <p>Are you sure you want to delete?</p>
-                                                                                    </div>
-                                                                                    <div class="modal-footer">
-                                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                                                                                        <button type="submit" class="btn btn-danger">Yes</button>
-                                                                                    </div>
-                                                                                </form>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            {{-- End Delete Model --}}
-
-                                                        @endif
-                                                    @endif
-                                                @endforeach
-                                                @php
-                                                    // Reset noteNumber for each date
-                                                    $noteNumber = 1;
-                                                @endphp
-                                            </td>
-
-                                            @php
-                                                $checkStartDate->addDay();
-                                            @endphp
-                                        @endfor
-                                    @endif
-                                @endforeach
-                            </tr>
+                        </tr>
                             </tbody>
                             </table>
                         </div>
                         @endforeach
+
+                            @foreach ($userListWithTrinerData as $userName => $slots)
+
+                                <div class="card-body">
+                                    <table class="table table-bordered table-striped">
+                                        @php
+                                            $startDate = now()->startOfWeek();
+                                            $endDate = now()->endOfWeek();
+                                            $checkDate = $startDate->format('Y-m-d');
+                                            $numberOfDays = 7;
+                                        @endphp
+                                        <thead>
+                                            <tr>
+                                                <th colspan="7" style="background-color:lightgray; font-size:25px;"
+                                                    class="text-center p-3"><b>{{ $userName }}</b></th>
+                                            </tr>
+                                            <tr>
+                                                @for ($day = 1; $day <= $numberOfDays; $day++)
+                                                    <th class="text-center p-3">
+                                                        {{ $startDate->format('D') }}
+                                                    </th>
+                                                    @php
+                                                        $startDate->addDay();
+                                                    @endphp
+
+                                                @endfor
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                @php
+                                                    $checkStartDate = now()->startOfWeek();
+                                                    $checkEndDate = now()->endOfWeek();
+                                                    $numberOfDays = 7;
+                                                    $noteNumber = 1;
+                                                    $checkDate = $startDate->format('Y-m-d');
+                                                @endphp
+
+                                                @for ($day = 1; $day <= $numberOfDays; $day++)
+                                                    @php
+                                                        $applyStyle = false;
+                                                    @endphp
+
+                                                    @foreach ($slots as $s)
+                                                        @if ($checkStartDate->format('Y-m-d') == $s['date'] || $s['day'] == $checkStartDate->format('D'))
+                                                            @php
+                                                                if ($s['note'] != null) {
+                                                                    $applyStyle = true;
+                                                                }
+                                                            @endphp
+                                                        @endif
+                                                    @endforeach
+
+                                                    <td class="text-center p-5"
+                                                        @if ($applyStyle) style="background-color: yellow; font-weight: bold;" @endif>
+                                                        @foreach ($slots as $s)
+                                                            @if ($checkStartDate->format('Y-m-d') == $s['date'] || $s['day'] == $checkStartDate->format('D'))
+                                                            @if ($s['note'] != null)
+                                                            Note:-{{ $noteNumber }} {{ $s['note'] }}<br><br>
+                                                            Sloat Time:-{{ $s['slot_time'] }}<br><br>
+
+                                                            @foreach ($slotstime as $key => $slot)
+                                                            @if ($slot->is_active == 0)
+                                                                @if ($s['slot_id'] == $slot->id)
+                                                                    <span>slot:-{{ $slot->slot_time }}</span><br><br>
+                                                                @endif
+                                                            @endif
+                                                        @endforeach
+                                                                    @php
+                                                                        $noteNumber++;
+                                                                    @endphp
+                                                                   @if(auth()->user()->type == 0)
+                                                                   <button type="button" class="btn btn-primary edit-slot"
+                                                                       data-toggle="modal"
+                                                                       data-target="#editModal{{ $s['id'] }}">
+                                                                       Edit
+                                                                   </button>
+                                                                   <button type="button" class="btn btn-danger"
+                                                                       data-toggle="modal"
+                                                                       data-target="#deleteModal{{ $s['id'] }}">
+                                                                       Delete
+                                                                    </button>
+                                                                    @endif
+
+                                                                @endif
+                                                            @endif
+
+                                                        @endforeach
+                                                        <!-- Edit Modal -->
+                                                        <div class="modal fade" id="editModal{{ $s['id'] }}"
+                                                        tabindex="-1" role="dialog"
+                                                        aria-labelledby="editModalLabel{{ $s['id'] }}"
+                                                        aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title"
+                                                                        id="editModalLa bel{{ $s['id'] }}">Edit
+                                                                        Slot</h5>
+                                                                    <button type="button" class="close"
+                                                                        data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form
+                                                                        action="{{ route('sloatupdate', ['slotId' => $s['id']]) }}"
+                                                                        method="POST">
+                                                                        @csrf
+                                                                        <div class="form-group">
+                                                                            <label for="note"
+                                                                                class="col-form-label">Note:</label>
+                                                                            <input type=""
+                                                                                class="form-control" id="note"
+                                                                                name="note"
+                                                                                value="{{ $s['note'] }}">
+                                                                        </div>
+
+                                                                        <div class="form-group">
+                                                                            <label for="note"
+                                                                                class="col-form-label">Day:</label>
+                                                                            <select name="day"
+                                                                                class="form-control" >
+                                                                                <option value="">------Select
+                                                                                    day-----</option>
+                                                                                <option value="Mon"
+                                                                                    {{ old('day', $s['day']) == 'Mon' ? 'selected' : '' }}>
+                                                                                    MONDAY</option>
+                                                                                <option value="Tue"
+                                                                                    {{ old('day', $s['day']) == 'Tue' ? 'selected' : '' }}>
+                                                                                    TUESDAY</option>
+                                                                                <option value="Wed"
+                                                                                    {{ old('day', $s['day']) == 'Wed' ? 'selected' : '' }}>
+                                                                                    WEDNESDAY</option>
+                                                                                <option value="Thu"
+                                                                                    {{ old('day', $s['day']) == 'Thu' ? 'selected' : '' }}>
+                                                                                    THURSDAY</option>
+                                                                                <option value="Fri"
+                                                                                    {{ old('day', $s['day']) == 'Fri' ? 'selected' : '' }}>
+                                                                                    FRIDAY</option>
+                                                                                <option value="Sat"
+                                                                                    {{ old('day', $s['day']) == 'Sat' ? 'selected' : '' }}>
+                                                                                    SATURDAY</option>
+                                                                                <option value="Sun"
+                                                                                    {{ old('day', $s['day']) == 'Sun' ? 'selected' : '' }}>
+                                                                                    SUNDAY</option>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="triner"
+                                                                                class="col-form-label">Triner
+                                                                                Name:</label>
+                                                                            <select class="form-control select2 proxy_class select2 trainer_id"
+                                                                                name="trainer_id" >
+                                                                                <option value="">--- Select
+                                                                                    Trainer ---</option>
+                                                                                    @foreach ($trainershedule as $key => $trainer)
+                                                                                    @if ($trainer->is_active == 0)
+                                                                                        <option value="{{ $trainer->id }}" {{ $s['trainer_id'] == $trainer->id ? 'selected' : '' }}>{{ $trainer->name }}</option>
+                                                                                    @endif
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+
+                                                                        <div class="form-group">
+                                                                            <label for="name">Slot: </label>
+                                                                            <select name="slot_id" class="form-control slot select2">
+                                                                                <option value="">------Select Slot-----</option>
+                                                                                @foreach ($slotstime as $key => $slot)
+                                                                                    @if ($slot->is_active == 0)
+                                                                                        <option value="{{ $slot->id }}"  {{ $s['slot_id'] == $slot->id ? 'selected' : '' }} data-slot-id="{{ $slot->id }}">
+                                                                                            {{ $slot->slot_time }}</option>
+                                                                                    @endif
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+                                                                        @php
+                                                                        $time_parts = explode(' - ', $s['slot_time']);
+                                                                        $slot_time_to = isset($time_parts[0]) ? $time_parts[0] : '';
+                                                                        $slot_time_from = isset($time_parts[1]) ? $time_parts[1] : '';
+                                                                        @endphp
+                                                                        <div class="form-group col-md-12">
+                                                                            <label for="inputEmail3" class="col-form-label">Slot Time:</label>
+                                                                            <div class="row">
+                                                                                <div class="col-sm-5">
+                                                                                    <div class="form-group">
+                                                                                        <div class="input-group date" id="timepicker2"
+                                                                                             data-target-input="nearest">
+                                                                                            <input type="time"
+                                                                                                   class="form-control "
+                                                                                                   name="slot_time_to"
+                                                                                                   value="{{  $slot_time_to }}"
+                                                                                                   />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-2 mt-2"
+                                                                                     style="display: flex;justify-content: space-around;">
+                                                                                    <p>to</p>
+                                                                                </div>
+                                                                                <div class="col-sm-5">
+                                                                                    <div class="form-group">
+                                                                                        <div class="input-group date" id="timepicker3"
+                                                                                             data-target-input="nearest">
+                                                                                            <input type="time"
+                                                                                                   class="form-control "
+                                                                                                   name="slot_time_from"
+                                                                                                   value="{{ $slot_time_from }}"
+                                                                                                   />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <button type="submit"
+                                                                            class="btn btn-primary">Save
+                                                                            Changes</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {{-- End Edit Model --}}
+
+                                                    {{-- Delete Model --}}
+                                                        <div class="modal fade" id="deleteModal{{ $s['id'] }}"
+                                                            tabindex="-1" role="dialog"
+                                                            aria-labelledby="deleteModalLabel{{ $s['id'] }}"
+                                                            aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title"
+                                                                            id="deleteModalLabel{{ $s['id'] }}">Delete
+                                                                            Slot</h5>
+                                                                        <button type="button" class="close"
+                                                                            data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <form action="{{ route('delete.slot', ['slotId' => $s['id']]) }}" method="POST">
+                                                                            @csrf
+                                                                            @method('DELETE')
+                                                                            <div class="modal-body">
+                                                                                <p>Are you sure you want to delete?</p>
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                                                                <button type="submit" class="btn btn-danger">Yes</button>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {{-- End Delete Model --}}
+                                                    </div>
+
+                                                        @php
+                                                            // Reset noteNumber for each date
+                                                            $noteNumber = 1;
+                                                        @endphp
+                                                    </td>
+                                                    @php
+                                                        $checkStartDate->addDay();
+                                                    @endphp
+                                                @endfor
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                             
+                            @endforeach
 
                         @if(auth()->user()->type == 0)
                         @foreach ($userScheduleList as $userName => $slots)

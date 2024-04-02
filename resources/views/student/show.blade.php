@@ -807,7 +807,8 @@
                                                                                     $checkPoint = true;
                                                                                 }
                                                                             @endphp
-                                                                            <input {{ $checked }} @if($student_course->start_date == null) disabled @endif  @if(auth()->user()->type == 1) disabled @endif
+                                                                            {{-- <input {{ $checked }} @if($student_course->start_date == null) disabled @endif  @if(auth()->user()->type == 1) disabled @endif --}}
+                                                                            <input {{ $checked }} @if($student_course->start_date == null)  @endif  @if(auth()->user()->type == 1) disabled @endif
                                                                             class="form-check-input point-checkbox subcourse_before_{{ $sc->id }} beforSubCourse"
                                                                                    name="subCourse_point_before[{{$student_course->id}}][{{$sp->id}}]" type="checkbox" data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}">
                                                                         @endcan
@@ -831,7 +832,8 @@
                                                                                 $checkPoint = true;
                                                                             }
                                                                         @endphp
-                                                                        <input {{ $checked }} @if($student_course->start_date == null) disabled @endif
+                                                                        {{-- <input {{ $checked }} @if($student_course->start_date == null) disabled @endif --}}
+                                                                        <input {{ $checked }} @if($student_course->start_date == null)  @endif
                                                                         class="form-check-input point-checkbox subcourse_{{ $sc->id }} afterSubCourse" type="checkbox" name="subCourse_point_after[{{$student_course->id}}][{{$sp->id}}]" data-subCourseId="{{ $sc->id }}" data-pointId="{{ $sp->id }}">
                                                                     @endcan
                                                                 </div>
