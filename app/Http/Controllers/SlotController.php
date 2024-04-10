@@ -38,32 +38,47 @@ class SlotController extends Controller
     {
          $slot = Slot::orderBy('id', 'DESC')->get();
 
-         $slotStudent = Slot::join('student_staff_assigns', 'student_staff_assigns.slot_id', 'slots.id')
-         ->join('students', 'students.id', 'student_staff_assigns.student_id')
-         ->join('student_courses', 'student_courses.student_id', 'students.id')
-         ->join('courses', 'courses.id', 'student_courses.course_id')
-         ->selectRaw('*, (CASE
-            WHEN start_date IS NULL THEN "Pending"
-            WHEN start_date IS NOT NULL AND end_date IS NULL THEN "Running"
-            ELSE "Complete"
-            END) AS course_status')
-            ->orderBy('slots.id', 'DESC')
-         ->get();
-  
-        $currentDate = now()->toDateString();
-
-        $slotProxyStudent = Slot::join('student_proxy_staff_assigns', 'student_proxy_staff_assigns.slot_id', 'slots.id')
-            ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
+         $slotStudent = Slot::join('student_staff_assigns', function($join) {
+            $join->on('student_staff_assigns.slot_id', 'slots.id')
+                ->whereIn('student_staff_assigns.id', function($query) {
+                    $query->selectRaw('MAX(id)')
+                          ->from('student_staff_assigns')
+                          ->groupBy('student_id');
+                });
+            })
+            ->join('students', 'students.id', 'student_staff_assigns.student_id')
             ->join('student_courses', 'student_courses.student_id', 'students.id')
             ->join('courses', 'courses.id', 'student_courses.course_id')
             ->selectRaw('*, (CASE
                 WHEN start_date IS NULL THEN "Pending"
                 WHEN start_date IS NOT NULL AND end_date IS NULL THEN "Running"
                 ELSE "Complete"
-                END) AS course_status')
-            ->whereDate('student_proxy_staff_assigns.starting_date', $currentDate)
-            ->orderBy('slots.id', 'DESC')
+                END) AS status_course')
+            ->orderBy('slots.created_at', 'DESC')
             ->get();
+
+
+        $currentDate = now()->toDateString();
+        $slotProxyStudent = Slot::join('student_proxy_staff_assigns', function($join) {
+            $join->on('student_proxy_staff_assigns.slot_id', 'slots.id')
+                ->whereIn('student_proxy_staff_assigns.id', function($query) {
+                    $query->selectRaw('MAX(id)')
+                          ->from('student_proxy_staff_assigns')
+                          ->groupBy('student_id');
+                });
+        })
+        ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
+        ->join('student_courses', 'student_courses.student_id', 'students.id')
+        ->join('courses', 'courses.id', 'student_courses.course_id')
+        ->selectRaw('*, (CASE
+            WHEN start_date IS NULL THEN "Pending"
+            WHEN start_date IS NOT NULL AND end_date IS NULL THEN "Running"
+            ELSE "Complete"
+            END) AS status_course')
+        ->whereDate('student_proxy_staff_assigns.starting_date', $currentDate)
+        ->orderBy('slots.id', 'DESC')
+        ->get();
+
 
         if(Auth::user()->type == 1){
             $slot = Slot::where('branch_id', Auth::user()->branch_id)->where('is_active','0')->orderBy('id', 'DESC')->get();

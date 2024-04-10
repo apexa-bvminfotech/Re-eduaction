@@ -184,6 +184,7 @@
                                                                     $studentCourses = [];
                                                                     $courseStatuses = [];
                                                                 @endphp
+                                                                @if($student->course_status != 'Hold')
                                                                 @foreach ($students as $s)
                                                                     @if ($s->name == $student->name && $s->surname == $student->surname)
                                                                         @php
@@ -207,7 +208,7 @@
                                                                     @endphp
                                                                     @foreach ($studentCourses as $course)
                                                                         @php
-                                                                            $status = $course->course_status;
+                                                                            $status = $course->status_course;
                                                                             $courseName = $course->course_name;
                                                                             if ($status == 'Running') {
                                                                                 $runningCourses[] = $courseName;
@@ -222,6 +223,7 @@
                                                                     <td style="font-weight: normal">{{ implode(', ', $completeCourses) }}</td>
                                                                     <td style="font-weight: normal">{{ implode(', ', $pendingCourses) }}</td>
                                                                 </tr>
+                                                               @endif
                                                                 @php $noteNumber++; @endphp
                                                             @endforeach
                                                         </tbody>
@@ -270,6 +272,7 @@
                                                                     $studentCourses = [];
                                                                     $courseStatuses = [];
                                                                 @endphp
+                                                                @if($student->course_status != 'Hold')
                                                                 @foreach ($students as $s)
                                                                     @if ($s->name == $student->name && $s->surname == $student->surname)
                                                                         @php
@@ -293,7 +296,7 @@
                                                                     @endphp
                                                                     @foreach ($studentCourses as $course)
                                                                         @php
-                                                                            $status = $course->course_status;
+                                                                            $status = $course->status_course;
                                                                             $courseName = $course->course_name;
                                                                             if ($status == 'Running') {
                                                                                 $runningCourses[] = $courseName;
@@ -308,6 +311,7 @@
                                                                     <td style="font-weight: normal">{{ implode(', ', $completeCourses) }}</td>
                                                                     <td style="font-weight: normal">{{ implode(', ', $pendingCourses) }}</td>
                                                                 </tr>
+                                                                @endif
                                                                 @php $noteNumber++; @endphp
                                                             @endforeach
                                                         </tbody>

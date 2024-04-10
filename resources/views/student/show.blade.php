@@ -547,8 +547,11 @@
                                                     <th><b>No</b></th>
                                                     <th><b>Status:</b></th>
                                                     <th><b>Trainer Name:</b></th>
-                                                    <th><b>Reason:</b></th>
+                                                    <th><b>Cancle Reason:</b></th>
+                                                    <th><b>Hold Resson:</b></th>
                                                     <th><b>Date:</b></th>
+                                                    <th><b>Hold Date:</b></th>
+                                                    <th><b>Cancle Date:</b></th>
                                                     <th><b>Action</b></th>
                                                 </tr>
                                                 </thead>
@@ -567,12 +570,18 @@
                                                         @else
                                                             <td>-</td>
                                                         @endif
+                                                        @if ($status->hold_reason !== null)
+                                                        <td>{{ $status->hold_reason ?? '' }}</td>
+                                                        @else
+                                                            <td>-</td>
+                                                        @endif
                                                         <td>{{ date('d-m-Y', strtotime($status->date)) }}</td>
                                                         @if ($status->hold_date !== null)
                                                             <td>{{ $status->hold_date ?? '' }}</td>
                                                         @else
                                                             <td>-</td>
                                                         @endif
+
                                                         @if ($status->cancel_date !== null)
                                                             <td>{{ $status->cancel_date ?? '' }}</td>
                                                         @else

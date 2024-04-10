@@ -53,7 +53,7 @@
                                     <tbody>
 
                                     @foreach($students as $key=>$s)
-                                        {{-- {{dd($s->course_start_date)}} --}}
+                                       
                                         <tr>
                                             <td>{{ ++$i }}</td>
                                             <td>{{ $s->surname }} {{ $s->name }}</td>
@@ -93,7 +93,7 @@
                                             @else
                                                 <td style="color: red">Trainer Not Assigned</td>
                                             @endif
-                                            <td>{{ $s->trainer_name ?? '' }}</td>
+                                            <td>{{ $s->studentTrainer->trainer->name ?? '' }}</td>
                                             <td>
                                                 <div class="flex justify-between">
                                                     <a href="{{ route('student.show',$s->id) }}"
@@ -130,7 +130,7 @@
                                                             {{ $s->isStaffAssigned() ? 'Shift Trainer' : 'Assign Trainer' }}
                                                         </button>
                                                     @endif
-                                               
+
                                                             {{-- <button type="button"
                                                                     class="btn btn-secondary btn-proxy btn-sm mb-1"
                                                                     data-id="{{$s->id}}"> Assign Proxy Trainer
