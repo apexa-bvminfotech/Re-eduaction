@@ -115,25 +115,35 @@
                                                     </td>
                                                     <td>
                                                         @foreach ($slotStudent->groupBy(['trainer_id', 'slot_id']) as $keys => $groupedStudents)
-                                                            @foreach ($groupedStudents as $slotId => $students)
-                                                                @php
-                                                                $uniqueStudents = $students->unique('name');
-                                                                $studentCount = $uniqueStudents->count();
-                                                                @endphp
-                                                                @if ($s->trainer->id . $s->id == $keys . $slotId)
-                                                                    {{ $studentCount }}
-                                                                @endif
-                                                            @endforeach
+                                                        @foreach ($groupedStudents as $slotId => $students)
+                                                            @php
+
+                                                                $activeStudents = $students->reject(function ($student) {
+                                                                    return $student->course_status === 'Hold';
+                                                                });
+
+                                                                $studentCount = $activeStudents->unique('name')->count();
+                                                            @endphp
+
+                                                            @if ($s->trainer->id . $s->id == $keys . $slotId)
+                                                                {{ $studentCount }}
+                                                            @endif
                                                         @endforeach
+                                                    @endforeach
                                                     </td>
 
                                                     <td>
                                                         @foreach ($slotProxyStudent->groupBy(['trainer_id', 'slot_id']) as $keys => $groupedStudents)
                                                         @foreach ($groupedStudents as $slotId => $students)
                                                             @php
-                                                            $uniqueStudents = $students->unique('name');
-                                                            $studentCount = $uniqueStudents->count();
+
+                                                                $activeStudents = $students->reject(function ($student) {
+                                                                    return $student->course_status === 'Hold';
+                                                                });
+
+                                                                $studentCount = $activeStudents->unique('name')->count();
                                                             @endphp
+
                                                             @if ($s->trainer->id . $s->id == $keys . $slotId)
                                                                 {{ $studentCount }}
                                                             @endif

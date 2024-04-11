@@ -72,7 +72,12 @@
                                                         Time :- {{ $slot['slot_time'] }}<br><br>
                                                         Rtc :- {{ $slot['rtc']}}<br><br>
 
-                                                        Total Students :- {{ count($slot['students']) }}<br><br>
+                                                        @php
+                                                            $activeStudentsCount = collect($slot['students'])->reject(function ($student) {
+                                                                return $student['status'] == 'Hold';
+                                                            })->count();
+                                                        @endphp
+                                                        Total Active Students: {{ $activeStudentsCount }}<br><br>
                                                         Watsapp Group Name :- {{$slot['whatsapp_group_name']}}<br>
                                                           <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg{{ $slot['student_id'] }}">Student Details</button>
 
@@ -424,8 +429,7 @@
                                                                                     <div class="row">
                                                                                         <div class="col-sm-5">
                                                                                             <div class="form-group">
-                                                                                                <div class="input-group date" id="timepicker2"
-                                                                                                     data-target-input="nearest">
+                                                                                                <div>
                                                                                                     <input type="time"
                                                                                                            class="form-control "
                                                                                                            name="slot_time_to"
@@ -440,8 +444,7 @@
                                                                                         </div>
                                                                                         <div class="col-sm-5">
                                                                                             <div class="form-group">
-                                                                                                <div class="input-group date" id="timepicker3"
-                                                                                                     data-target-input="nearest">
+                                                                                                <div>
                                                                                                     <input type="time"
                                                                                                            class="form-control "
                                                                                                            name="slot_time_from"
