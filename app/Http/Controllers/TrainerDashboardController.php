@@ -103,6 +103,63 @@ class TrainerDashboardController extends Controller
 
             $trainerSchedule = TrainerShedule::with('trainer','student','slot')->where('user_id', '=', 0)->get()->groupBy('trainer.name');
             $userSchedule = TrainerShedule::with('user')->where('user_id', '!=', 0)->get()->groupBy('user.name');
+        }elseif(Auth::user()->type == 3)
+        {
+            $stuListWithTrainer = StudentStaffAssign::with('trainer', 'student', 'slot', 'branch', 'studentcourses', 'course')
+            ->where('student_staff_assigns.is_active', 0)
+            ->whereHas('slot', function($query) {
+                $query->where('is_active', 0);
+            })
+            ->whereHas('student', function($query) {
+                $query->where('branch_id', Auth::user()->branch_id);
+            })
+            ->join('students', 'students.id', 'student_staff_assigns.student_id')
+              ->join('rtc', 'rtc.branch_id', 'students.branch_id')
+            ->join('student_courses', 'student_courses.student_id', 'students.id')
+            ->join('courses', 'courses.id', 'student_courses.course_id')
+            ->selectRaw('*,
+                        (CASE
+                            WHEN start_date IS NULL THEN "Pending"
+                            WHEN start_date IS NOT NULL AND end_date IS NULL THEN "Running"
+                            ELSE "Complete"
+                        END) AS course_status')
+            ->get()
+            ->groupBy('trainer.name');
+
+            $startDate = now()->startOfWeek();
+                $endDate = now()->endOfWeek();
+                $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot','branch','studentcourses','course')
+                    ->whereHas('slot', function($query) use ($startDate, $endDate) {
+                        $query->where('is_active', 0)
+                              ->where(function($subQuery) use ($startDate, $endDate) {
+                                  $subQuery->whereBetween('starting_date', [$startDate->toDateString(), $endDate->toDateString()])
+                                           ->orWhereBetween('ending_date', [$startDate->toDateString(), $endDate->toDateString()]);
+                              });
+                    })
+                    ->whereHas('student', function($query) {
+                        $query->where('branch_id', Auth::user()->branch_id);
+                    })
+                    ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
+                    ->join('rtc', 'rtc.branch_id', 'students.branch_id')
+                    ->join('student_courses', 'student_courses.student_id', 'students.id')
+                    ->join('courses', 'courses.id', 'student_courses.course_id')
+                    ->selectRaw('*, (CASE
+                                        WHEN start_date IS NULL THEN "Pending"
+                                        WHEN start_date IS NOT NULL AND end_date IS NULL THEN "Running"
+                                        ELSE "Complete"
+                                    END) AS course_status')
+                    ->get()
+                    ->groupBy('trainer.name');
+
+
+            $trainerSchedule = TrainerShedule::with('trainer','student','slot')->whereHas('trainer', function($query) {
+                $query->where('branch_id', Auth::user()->branch_id);
+            })->where('user_id', '=', 0)
+            ->get()->groupBy('trainer.name');
+
+            $userSchedule = TrainerShedule::with('user')->where('user_id', '!=', 0)->whereHas('trainer', function($query) {
+                $query->where('branch_id', Auth::user()->branch_id);
+            })->get()->groupBy('user.name');
         }
         else{
             $stuListWithTrainer = StudentStaffAssign::with('trainer', 'student', 'slot', 'branch', 'studentcourses', 'course')
@@ -229,6 +286,7 @@ class TrainerDashboardController extends Controller
                         'student_id' => [],
                         'id' => $slotsProxy->id ?? '',
                         'trainer_id' => $slotsProxy->trainer_id ?? '',
+                        'slot_id' => $slotsProxy->slot_id ?? '',
                         'whatsapp_group_name' => $slotsProxy->slot->whatsapp_group_name ?? '',
 
                     ];
@@ -300,6 +358,7 @@ class TrainerDashboardController extends Controller
                     ];
             }
 
+
         }
 
         return view('dashboard.trainer_weekly_schedule', compact('userScheduleList','userListWithTrinerData','trainerData','trainerDataProxy','trainershedule','slotstime','users'));
@@ -352,11 +411,54 @@ class TrainerDashboardController extends Controller
         return redirect()->back()->with('success', 'Slot updated successfully');
     }
 
+    public function proxySlotUpdate(Request $request, $slotId)
+    {
+        $proxySlots = StudentProxyStaffAssign::where('slot_id', $slotId)
+            ->get();
+
+        if ($proxySlots->isNotEmpty()) {
+            foreach ($proxySlots as $proxySlot) {
+                $proxySlot->update([
+                    'trainer_id' => $request->trainer_id,
+                    'slot_id' => $request->slot_id,
+                    'starting_date' => $request->starting_date,
+                    'ending_date' => $request->ending_date,
+                ]);
+            }
+
+            return redirect()->back()->with('success', 'All slots updated successfully');
+        } else {
+            return back()->with('error', 'No slots found for the specified criteria');
+        }
+    }
+
+
     public function delete(Request $request, $slotId)
     {
-
         $slot = TrainerShedule::findOrFail($slotId);
+
         $slot->delete();
+
+        return redirect()->back()->with('success', 'Slot Delete successfully');
+    }
+
+    public function ProxyDelete($slotId)
+    {
+
+        $proxySlots = StudentProxyStaffAssign::where('slot_id', $slotId)
+            ->get();
+
+            if ($proxySlots->isNotEmpty()) {
+                foreach ($proxySlots as $proxySlot) {
+                    $proxySlot->delete();
+                }
+
+                return redirect()->back()->with('success', 'All slots updated successfully');
+            } else {
+                return back()->with('error', 'No slots found for the specified criteria');
+            }
+
+
 
         return redirect()->back()->with('success', 'Slot Delete successfully');
     }

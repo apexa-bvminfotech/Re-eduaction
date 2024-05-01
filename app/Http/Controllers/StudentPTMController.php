@@ -29,7 +29,6 @@ class StudentPTMController extends Controller
      */
     public function index()
     {
-        $ptmData = Student::join('student_ptm_report', 'student_ptm_report.student_id', 'students.id')->orderBy('student_ptm_report.id','DESC')->groupby('students.id')->get();
         if(Auth::user()->type == 1) {
             $ptmData = Student::
             select('students.id','students.surname', 'students.name','student_ptm_report.student_id')
@@ -38,7 +37,18 @@ class StudentPTMController extends Controller
                 ->join('student_ptm_report', 'student_ptm_report.student_id', 'students.id')
                 ->where(['trainers.user_id' => Auth::user()->id,'student_staff_assigns.is_active' => 0])
                 ->orderBy('students.id', 'DESC')->groupby('students.id')->get();
-        }
+        }elseif(Auth::user()->type == 3)
+            {
+                $ptmData = Student::
+                select('students.id','students.surname', 'students.name','student_ptm_report.student_id')
+                    ->join('student_staff_assigns', 'student_staff_assigns.student_id', 'students.id')
+                    ->join('trainers','trainers.id', 'student_staff_assigns.trainer_id')
+                    ->join('student_ptm_report', 'student_ptm_report.student_id', 'students.id')
+                    ->where('students.branch_id',Auth::user()->branch_id)
+                    ->orderBy('students.id', 'DESC')->groupby('students.id')->get();
+            }else{
+                $ptmData = Student::join('student_ptm_report', 'student_ptm_report.student_id', 'students.id')->orderBy('student_ptm_report.id','DESC')->groupby('students.id')->get();
+            }
         return view('student_ptm.index', compact('ptmData'))->with('i');
     }
 

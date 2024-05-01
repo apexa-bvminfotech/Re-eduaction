@@ -31,7 +31,7 @@
                             </a>
                         </li>
                     {{-- @endif --}}
-                    @if(\Illuminate\Support\Facades\Auth::user()->type == 0)
+                    @if(\Illuminate\Support\Facades\Auth::user()->type == 0 || \Illuminate\Support\Facades\Auth::user()->type == 3)
                         <li class="nav-item">
                             <a href="{{route('admindashboard.index')}}" class="nav-link @if(Route::currentRouteName() == 'admindashboard.index')active  @endif">
                                 <i class="nav-icon fas fa-graduation-cap"></i>
@@ -100,7 +100,7 @@
                             @endif
                         </ul>
                     </li>
-                    @if(\Illuminate\Support\Facades\Auth::user()->type == 0)
+                    @if(\Illuminate\Support\Facades\Auth::user()->type == 0 || \Illuminate\Support\Facades\Auth::user()->type == 3)
                         <li class="nav-item">
                             <a href="{{ route('user.index') }}" class="nav-link @if(Route::currentRouteName() == 'user.index')active  @endif">
                                 <i class="nav-icon fas fa-user-alt"></i>

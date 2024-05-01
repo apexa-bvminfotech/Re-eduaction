@@ -55,22 +55,6 @@ class StudentsController extends Controller
 
     public function index()
     {
-        $user = Auth::user();
-        $slots = Slot::where('is_active', 0)->orderBy('id', 'desc')->get();
-        $trainers = Trainer::where('is_active', 0)->orderBy('id', 'desc')->get();
-        $students = Student::select('students.id', 'students.surname', 'students.name', 'students.mother_contact_no',
-        'students.standard', 'students.medium', 'students.course_id', 'students.user_id', 'branches.name as branch_name',
-        'trainers.name as trainer_name', 'student_staff_assigns.trainer_id as trainer',
-        'student_courses.start_date as course_start_date', 'student_courses.student_id as student_id')
-        ->join('branches', 'branches.id', 'students.branch_id')
-        ->join('student_courses', 'student_courses.student_id', 'students.id')
-        ->leftJoin('student_staff_assigns', 'student_staff_assigns.student_id', 'students.id')
-        ->leftJoin('trainers', 'trainers.id', 'student_staff_assigns.trainer_id')
-        ->with(['courses', 'studentTrainer.trainer', 'user'])
-        ->orderBy('students.id')
-        ->groupBy('students.id')
-        ->get();
-
         if(Auth::user()->type == 1) {
             $slots = Slot::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'desc')->where('is_active','0')->get();
             $trainers = Trainer::where('branch_id', Auth::user()->branch_id)->where('is_active',0)->orderBy('id', 'desc')->get();
@@ -83,6 +67,35 @@ class StudentsController extends Controller
                 ->where(['trainers.user_id' => Auth::user()->id,'student_staff_assigns.is_active' => 0])
                 ->orderBy('students.id', 'DESC')->get();
 
+        }elseif(Auth::user()->type == 3)
+        {
+            $slots = Slot::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'desc')->where('is_active','0')->get();
+            $trainers = Trainer::where('branch_id', Auth::user()->branch_id)->where('is_active',0)->orderBy('id', 'desc')->get();
+            $students = Student::
+                select('students.surname', 'students.name','students.standard','students.medium','students.course_id','students.id','students.mother_contact_no','branches.name as branch_name')
+                ->with('courses')
+                ->join('branches', 'branches.id', 'students.branch_id')
+                ->where('students.branch_id',Auth::user()->branch_id)
+                ->join('student_staff_assigns', 'student_staff_assigns.student_id', 'students.id')
+                ->join('trainers','trainers.id', 'student_staff_assigns.trainer_id')
+                ->orderBy('students.id', 'DESC')->get();
+
+        }else{
+            $user = Auth::user();
+            $slots = Slot::where('is_active', 0)->orderBy('id', 'desc')->get();
+            $trainers = Trainer::where('is_active', 0)->orderBy('id', 'desc')->get();
+            $students = Student::select('students.id', 'students.surname', 'students.name', 'students.mother_contact_no',
+            'students.standard', 'students.medium', 'students.course_id', 'students.user_id', 'branches.name as branch_name',
+            'trainers.name as trainer_name', 'student_staff_assigns.trainer_id as trainer',
+            'student_courses.start_date as course_start_date', 'student_courses.student_id as student_id')
+            ->join('branches', 'branches.id', 'students.branch_id')
+            ->join('student_courses', 'student_courses.student_id', 'students.id')
+            ->leftJoin('student_staff_assigns', 'student_staff_assigns.student_id', 'students.id')
+            ->leftJoin('trainers', 'trainers.id', 'student_staff_assigns.trainer_id')
+            ->with(['courses', 'studentTrainer.trainer', 'user'])
+            ->orderBy('students.id')
+            ->groupBy('students.id')
+            ->get();
         }
         return view('student.index', compact('students', 'trainers', 'slots'))->with('i');
     }

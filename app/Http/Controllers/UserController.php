@@ -21,7 +21,13 @@ class UserController extends Controller
     public function index()
     {
         $branches = Branch::orderBy('id', 'ASC')->get();
-        $users = User::where('type', 0)->orderBy('id', 'ASC')->get();
+        if(Auth::user()->type == 3){
+            $users = User::where('type', 3)->orderBy('id', 'ASC')->get();
+
+        }else{
+            $users = User::whereIn('type', [0, 3])->orderBy('id', 'ASC')->get();
+        }
+
         return view('user.index', compact('users', 'branches'))->with('i');
     }
 
@@ -44,41 +50,43 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|max:255',
-            'surname' => 'required|max:255',
-            'father_name' => 'required|max:255',
-            'email' => 'nullable',
-            'password' => 'required|string',
-            'contact' => 'required|digits:10|numeric',
-            'is_active' => 'required',
-            'user_profile' => 'nullable|mimes:jpeg,png,jpg|max:2048',
-        ]);
+{
+    $request->validate([
+        'name' => 'required|max:255',
+        'surname' => 'required|max:255',
+        'father_name' => 'required|max:255',
+        'email' => 'nullable',
+        'password' => 'required|string',
+        'contact' => 'required|digits:10|numeric',
+        'is_active' => 'required',
+        'user_profile' => 'nullable|mimes:jpeg,png,jpg|max:2048',
+    ]);
 
-        $user_profile = null;
-        if ($request->user_profile) {
-            $filename = $request->user_profile->getClientOriginalName();
-            $request->user_profile->move('assets/user', $filename);
-            $user_profile = $filename;
-        }
-
-        $user = User::Create([
-            'name' => $request->name,
-            'surname' => $request->surname,
-            'father_name' => $request->father_name,
-            'email' => $request->email,
-            // 'password' => Hash::make($request->password),
-            'password' => Hash::make($request->password),
-            'user_profile' => $user_profile,
-            'contact' => $request->contact,
-            'branch_id' => $request->branch_id ? $request->branch_id : 0,
-            'type'=> 0,
-        ]);
-
-        $user->assignRole($request->input('role'));
-        return redirect()->route('user.index')->with('success', 'User created successfully');
+    $user_profile = null;
+    if ($request->user_profile) {
+        $filename = $request->user_profile->getClientOriginalName();
+        $request->user_profile->move('assets/user', $filename);
+        $user_profile = $filename;
     }
+
+    $role = Role::findOrFail($request->input('role')); // Get the role object
+
+    $user = User::create([
+        'name' => $request->name,
+        'surname' => $request->surname,
+        'father_name' => $request->father_name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'user_profile' => $user_profile,
+        'contact' => $request->contact,
+        'branch_id' => $request->branch_id ? $request->branch_id : 0,
+        'type' => $role->name == "Admin" ? 0 : ($role->name == "Sub-Admin" ? 3 : null),
+    ]);
+
+    $user->assignRole($role); // Assign the role object directly
+
+    return redirect()->route('user.index')->with('success', 'User created successfully');
+}
 
     /**
      * Display the specified resource.

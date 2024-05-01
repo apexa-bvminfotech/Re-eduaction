@@ -14,25 +14,69 @@ use Illuminate\Support\Facades\Auth;
 class AdminDashboardController extends Controller
 {
     public function index(){
-        $students = Student::whereMonth('registration_date', Carbon::now()->month)->where('branch_id',Auth::user()->branch_id)->get();
-        $curMonStu = Student::whereMonth('registration_date', Carbon::now()->month)->get();
-        $curMonStuStatus = StudentStatus::where('is_active','0')->with('student')->get();
-        $studentStatus = StudentStatus::select('student_status.id','student_status.status','students.branch_id','students.registration_date')
-            ->join('students', 'students.id', 'student_status.student_id')
-            ->join('branches', 'branches.id', 'students.branch_id')
-            ->whereMonth('students.registration_date', '=', Carbon::now()->month)
-            ->where('student_status.is_active','0')
-            ->where('students.branch_id',Auth::user()->branch_id)
+        if(Auth::user()->type == 3)
+        {
+            $students = Student::whereMonth('registration_date', Carbon::now()->month)->where('branch_id',Auth::user()->branch_id)->get();
+            $curMonStu = Student::whereMonth('registration_date', Carbon::now()->month)->where('branch_id',Auth::user()->branch_id)->get();
+            $curMonStuStatus = StudentStatus::where('is_active', '0')
+                                ->whereHas('student', function($query) {
+                                    $query->where('branch_id', Auth::user()->branch_id);
+                                })
+                                ->with('student')
+                               ->get();
+            $studentStatus = StudentStatus::select('student_status.id','student_status.status','students.branch_id','students.registration_date')
+                               ->join('students', 'students.id', 'student_status.student_id')
+                               ->join('branches', 'branches.id', 'students.branch_id')
+                               ->whereMonth('students.registration_date', '=', Carbon::now()->month)
+                               ->where('student_status.is_active','0')
+                               ->where('students.branch_id',Auth::user()->branch_id)
+                               ->get();
+
+            $absentTrainer = Branch::with('trainer.trainerAttendance')->whereHas('trainer', function($query) {
+                            $query->where('branch_id', Auth::user()->branch_id);
+                            })->get();
+            $absentStudent = Branch::with('student.studentAttendance')->whereHas('student', function($query) {
+                $query->where('branch_id', Auth::user()->branch_id);
+                })->get();
+            $proxyTrainer = Branch::with('trainer.trainerProxySlot.slot')->whereHas('trainer', function($query) {
+                    $query->where('branch_id', Auth::user()->branch_id);
+                    })
+                ->get();
+            $trainerSlot = StudentStaffAssign::with('student','trainer')->whereHas('trainer', function($query) {
+                    $query->where('branch_id', Auth::user()->branch_id);
+                    })->get();
+
+            $trainerProxySlot = StudentProxyStaffAssign::whereDate('starting_date', now()->format('Y-m-d'))
+                    ->with('student','trainer','regular')->whereHas('student', function($query) {
+                        $query->where('branch_id', Auth::user()->branch_id);
+                        })->get();
+        }else{
+            $students = Student::whereMonth('registration_date', Carbon::now()->month)->where('branch_id',Auth::user()->branch_id)->get();
+            $curMonStu = Student::whereMonth('registration_date', Carbon::now()->month)->get();
+            $curMonStuStatus = StudentStatus::where('is_active','0')->with('student')->get();
+
+            $studentStatus = StudentStatus::select('student_status.id','student_status.status','students.branch_id','students.registration_date')
+                ->join('students', 'students.id', 'student_status.student_id')
+                ->join('branches', 'branches.id', 'students.branch_id')
+                ->whereMonth('students.registration_date', '=', Carbon::now()->month)
+                ->where('student_status.is_active','0')
+                ->where('students.branch_id',Auth::user()->branch_id)
+                ->get();
+
+
+            $absentTrainer = Branch::with('trainer.trainerAttendance')->get();
+            $absentStudent = Branch::with('student.studentAttendance')->get();
+            $proxyTrainer = Branch::with('trainer.trainerProxySlot.slot')
             ->get();
 
-        $absentTrainer = Branch::with('trainer.trainerAttendance')->get();
-        $absentStudent = Branch::with('student.studentAttendance')->get();
-        $proxyTrainer = Branch::with('trainer.trainerProxySlot.slot')
-        ->get();
+            $trainerSlot = StudentStaffAssign::with('student','trainer')->get();
+            $trainerProxySlot = StudentProxyStaffAssign::whereDate('starting_date', now()->format('Y-m-d'))
+            ->with('student','trainer','regular')->get();
 
-        $trainerSlot = StudentStaffAssign::with('student','trainer')->get();
-        $trainerProxySlot = StudentProxyStaffAssign::whereDate('starting_date', now()->format('Y-m-d'))
-        ->with('student','trainer','regular')->get();
+        }
+
+
+
 
         // $trainerProxySlot = StudentProxyStaffAssign::select('student_proxy_staff_assigns.*','trainers.branch_id')
         //     ->join('trainers', 'trainers.id', 'student_proxy_staff_assigns.trainer_id')

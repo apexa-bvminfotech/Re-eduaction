@@ -36,7 +36,8 @@ class StudentAttendanceController extends Controller
     {
         $user = auth()->user();
         $trainerId = Trainer::where('user_id',Auth::user()->id)->where('is_active',0)->pluck('id');
-        if(Auth::user()->type == 0) {
+
+        if(Auth::user()->type == 0 || Auth::user()->type == 3) {
             $studenAttendance = DB::table("students_attendance")
                 ->select('students_attendance.attendance_date', DB::raw('count(IF(attendance_type = 1, 1, NULL)) as present'),
                     DB::raw('count(IF(attendance_type = 0, 1, NULL)) as absent'))

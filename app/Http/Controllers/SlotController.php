@@ -36,9 +36,12 @@ class SlotController extends Controller
      */
     public function index()
     {
-         $slot = Slot::orderBy('id', 'DESC')->get();
-
-         $slotStudent = Slot::join('student_staff_assigns', function($join) {
+        if(Auth::user()->type == 1 || Auth::user()->type == 3){
+            $slot = Slot::where('branch_id', Auth::user()->branch_id)->where('is_active','0')->orderBy('id', 'DESC')->get();
+        }else{
+            $slot = Slot::orderBy('id', 'DESC')->get();
+        }
+        $slotStudent = Slot::join('student_staff_assigns', function($join) {
             $join->on('student_staff_assigns.slot_id', 'slots.id')
                 ->whereIn('student_staff_assigns.id', function($query) {
                     $query->selectRaw('MAX(id)')
@@ -78,12 +81,7 @@ class SlotController extends Controller
         ->whereDate('student_proxy_staff_assigns.starting_date', $currentDate)
         ->orderBy('slots.id', 'DESC')
         ->get();
-
-
-        if(Auth::user()->type == 1){
-            $slot = Slot::where('branch_id', Auth::user()->branch_id)->where('is_active','0')->orderBy('id', 'DESC')->get();
-        }
-
+        
         $studentStaffAssign = StudentStaffAssign::where('is_active','0')->get();
         $trainerId = [];
 
@@ -334,6 +332,10 @@ class SlotController extends Controller
 
         return redirect()->back()->with('success', 'Trainer shifted succesfully !!');
     }
+
+
+
+
 }
 
 

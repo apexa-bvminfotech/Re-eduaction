@@ -13,7 +13,7 @@ use App\Models\TrainerAttendance;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class TrainerController extends Controller
@@ -27,7 +27,13 @@ class TrainerController extends Controller
 
     public function index()
     {
-        $trainer = Trainer::orderBy('id', 'DESC')->with('user')->get();
+        if(Auth::user()->type == 3)
+        {
+            $trainer = Trainer::orderBy('id', 'DESC')->where('trainers.branch_id',Auth::user()->branch_id)->with('user')->get();
+        }else{
+            $trainer = Trainer::orderBy('id', 'DESC')->with('user')->get();
+        }
+
         return view('trainer.index', compact('trainer'))->with('i');
     }
 

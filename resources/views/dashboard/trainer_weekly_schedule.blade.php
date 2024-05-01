@@ -166,6 +166,7 @@
 
                             <tr>
                                 @foreach ($trainerDataProxy as $trainerNames => $slots)
+
                                     @if ($trainerName == $trainerNames)
                                         @foreach ($slots as $slot)
                                             @php
@@ -184,10 +185,24 @@
                                                         Proxy Slot Time :- {{ $slot['slot_time'] }}<br><br>
                                                         RTC:- {{$slot['rtc']}}<br><br>
                                                         WhatsApp Group :- {{$slot['whatsapp_group_name']}}<br><br>
-
-                                                        Total Students :- {{ count($slot['students']) }}
+                                                        @php
+                                                        $activeStudentsCount = collect($slot['students'])->reject(function ($student) {
+                                                            return $student['status'] == 'Hold';
+                                                        })->count();
+                                                         @endphp
+                                                        Total Students :- {{ $activeStudentsCount }}
                                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg{{ implode('', $slot['student_id']) }}">Student Details</button>
+                                                        <button type="button" class="btn btn-success edit-slot"
+                                                        data-toggle="modal"
+                                                        data-target="#editModal{{ $slot['slot_id'] }}">
+                                                        Edit
+                                                        </button>
 
+                                                        <button type="button" class="btn btn-danger"
+                                                        data-toggle="modal"
+                                                        data-target="#deleteModal{{ $slot['slot_id'] }}">
+                                                        Delete
+                                                        </button>
                                                         <div class="modal fade bd-example-modal-lg{{ implode('', $slot['student_id']) }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel{{ implode('', $slot['student_id']) }}" aria-hidden="true">
                                                           <div class="modal-dialog modal-lg">
 
@@ -255,6 +270,108 @@
                                                             </div>
                                                           </div>
                                                         </div>
+                                                            {{-- Delete Model --}}
+                                                            <div class="modal fade" id="deleteModal{{ $slot['slot_id'] }}"
+                                                            tabindex="-1" role="dialog"
+                                                            aria-labelledby="deleteModalLabel{{ $slot['slot_id'] }}"
+                                                            aria-hidden="true">
+                                                                <div class="modal-dialog" role="document">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title"
+                                                                                id="deleteModalLabel{{ $slot['slot_id'] }}">Delete
+                                                                                Slot</h5>
+                                                                            <button type="button" class="close"
+                                                                                data-dismiss="modal" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <form action="{{ route('Proxy-delete.slot', ['slotId' => $slot['slot_id']]) }}" method="POST">
+                                                                                @csrf
+                                                                                @method('DELETE')
+                                                                                <div class="modal-body">
+                                                                                    <p>Are you sure you want to delete?</p>
+                                                                                </div>
+                                                                                <div class="modal-footer">
+                                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                                                                    <button type="submit" class="btn btn-danger">Yes</button>
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            {{-- End Delete Model --}}
+                                                            <!-- Edit Modal -->
+                                                            <div class="modal fade" id="editModal{{ $slot['slot_id'] }}"
+                                                            tabindex="-1" role="dialog"
+                                                            aria-labelledby="editModalLabel{{$slot['slot_id'] }}"
+                                                            aria-hidden="true">
+                                                                <div class="modal-dialog" role="document">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title"
+                                                                                id="editModalLa bel{{$slot['id'] }}">Edit
+                                                                                Slot</h5>
+                                                                            <button type="button" class="close"
+                                                                                data-dismiss="modal" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+
+                                                                        <div class="modal-body">
+
+                                                                            <form action="{{ route('proxySlotUpdate', ['slotId' => $slot['slot_id']]) }}" method="POST">
+                                                                                @csrf
+                                                                                <div class="form-group">
+                                                                                    <label for="trainer" class="col-form-label">Trainer Name:</label>
+                                                                                    <select class="form-control select2 proxy_class select2 trainer_id" name="trainer_id">
+                                                                                        <option value="">--- Select Trainer ---</option>
+                                                                                        @foreach ($trainershedule as $key => $trainer)
+                                                                                            @if ($trainer->is_active == 0)
+                                                                                                <option value="{{ $trainer->id }}" {{ $slot['trainer_id'] == $trainer->id ? 'selected' : '' }}>{{ $trainer->name }}</option>
+                                                                                            @endif
+                                                                                        @endforeach
+                                                                                    </select>
+                                                                                </div>
+
+                                                                                <div class="form-group">
+                                                                                    <label for="name">Slot: </label>
+                                                                                    <select name="slot_id" class="form-control slot select2">
+                                                                                        @foreach ($slotstime as $key => $time_slot)
+                                                                                            @if ($time_slot->is_active == 0)
+                                                                                                <option value="{{ $time_slot->id }}"  {{ $slot['slot_id'] == $time_slot->id ? 'selected' : '' }}>
+                                                                                                    {{ $time_slot->slot_time }}</option>
+                                                                                            @endif
+                                                                                        @endforeach
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="col-md-12 mb-1">
+                                                                                    <div class="form-group">
+                                                                                        <label for="start_date">Starting Date:</label>
+                                                                                        <input type="date" class="form-control" name="starting_date"
+                                                                                            value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-12 mb-1">
+                                                                                    <div class="form-group">
+                                                                                        <label for="end_date">Ending Date:</label>
+                                                                                        <input type="date" class="form-control" name="ending_date"
+                                                                                            value="{{date('Y-m-d')}}" min="{{date('Y-m-d')}}">
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            {{-- End Edit Model --}}
+
+
+
 
                                                     </td>
                                                 @else
@@ -708,33 +825,32 @@
                                                                                 <div class="row">
                                                                                     <div class="col-sm-5">
                                                                                         <div class="form-group">
-                                                                                            <div class="input-group date" id="timepicker2"
-                                                                                                data-target-input="nearest">
+                                                                                            <div>
                                                                                                 <input type="time"
-                                                                                                    class="form-control "
-                                                                                                    name="slot_time_to"
-                                                                                                    value="{{  $slot_time_to }}"
-                                                                                                    />
+                                                                                                       class="form-control "
+                                                                                                       name="slot_time_to"
+                                                                                                       value="{{  $slot_time_to }}"
+                                                                                                       />
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="col-sm-2 mt-2"
-                                                                                        style="display: flex;justify-content: space-around;">
+                                                                                         style="display: flex;justify-content: space-around;">
                                                                                         <p>to</p>
                                                                                     </div>
                                                                                     <div class="col-sm-5">
                                                                                         <div class="form-group">
-                                                                                            <div class="input-group date" id="timepicker3"
-                                                                                                data-target-input="nearest">
+                                                                                            <div>
                                                                                                 <input type="time"
-                                                                                                    class="form-control "
-                                                                                                    name="slot_time_from"
-                                                                                                    value="{{ $slot_time_from }}"
-                                                                                                    />
+                                                                                                       class="form-control "
+                                                                                                       name="slot_time_from"
+                                                                                                       value="{{ $slot_time_from }}"
+                                                                                                       />
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
+
                                                                             </div>
                                                                             <button type="submit"
                                                                                 class="btn btn-primary">Save
@@ -1020,51 +1136,38 @@
                         <div class="form-group">
                             <label for="inputEmail3" class="col-form-label">SLOT
                                 Time:</label>
-                            <div class="row">
-                                <div class="col-sm-5">
-                                    <div class="form-group">
-                                        <div class="input-group date" id="timepicker"
-                                             data-target-input="nearest">
-                                            <input type="text"
-                                                   class="form-control datetimepicker-input"
-                                                   name="slot_time_to"
-                                                   value="{{ old('slot_time_to') }}"
-                                                   aria-describedby="button-addon2"
-                                                   data-target="#timepicker"/>
-                                            <div class="input-group-append"
-                                                 data-target="#timepicker"
-                                                 data-toggle="datetimepicker">
-                                                <div class="input-group-text"><i
-                                                        class="far fa-clock"></i>
+                                <div class="form-group col-md-12">
+                                    <label for="inputEmail3" class="col-form-label">Slot Time:</label>
+                                    <div class="row">
+                                        <div class="col-sm-5">
+                                            <div class="form-group">
+                                                <div>
+                                                    <input type="time"
+                                                           class="form-control "
+                                                           name="slot_time_to"
+
+                                                           />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2 mt-2"
+                                             style="display: flex;justify-content: space-around;">
+                                            <p>to</p>
+                                        </div>
+                                        <div class="col-sm-5">
+                                            <div class="form-group">
+                                                <div>
+                                                    <input type="time"
+                                                           class="form-control "
+                                                           name="slot_time_from"
+
+                                                           />
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
-                                <div class="col-sm-2"
-                                     style="display: flex;justify-content: space-around;">
-                                    <p>to</p>
-                                </div>
-                                <div class="col-sm-5">
-                                    <div class="form-group">
-                                        <div class="input-group date" id="timepicker1"
-                                             data-target-input="nearest">
-                                            <input type="text"
-                                                   class="form-control datetimepicker-input"
-                                                   name="slot_time_from"
-                                                   value="{{ old('slot_time_from') }}"
-                                                   aria-describedby="button-addon2"
-                                                   data-target="#timepicker1"/>
-                                            <div class="input-group-append"
-                                                 data-target="#timepicker1"
-                                                 data-toggle="datetimepicker">
-                                                <div class="input-group-text"><i
-                                                        class="far fa-clock"></i></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                         <div class="col-md-12 mb-1">
                             <div class="form-group">

@@ -38,7 +38,13 @@ class ReportController extends Controller
             $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
             $courseWiseStudentData = StudentCourse::whereIn('student_id',$studentTrainer)->with('student','course')->get()->groupBy('course.course_name');
-        }else{
+        }elseif(Auth::user()->type == 3)
+        {
+            $courseWiseStudentData = StudentCourse::with('student','course') ->whereHas('student', function($query) {
+                $query->where('branch_id', Auth::user()->branch_id);
+            })->get()->groupBy('course.course_name');
+        }
+        else{
             $courseWiseStudentData = StudentCourse::with('student','course')->get()->groupBy('course.course_name');
         }
         return view('reports.course_wise_student_list',compact('courseWiseStudentData'));
@@ -63,6 +69,9 @@ class ReportController extends Controller
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
 
             $qurey = Student::whereIn('id',$studentTrainer)->from('students');
+        }elseif(Auth::user()->type == 3)
+        {
+            $qurey = Student::from('students')->where('branch_id',Auth::user()->branch_id);
         }
         else{
             $qurey = Student::from('students');
@@ -88,6 +97,10 @@ class ReportController extends Controller
             $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
             $pendingApprecitionStu = StudentCourse::whereIn('student_id',$studentTrainer)->with('student','course','appreciation')->where('end_date','!=',null)->where('appreciation_given_date',null)->get();
+        }elseif(Auth::user()->type == 3){
+            $pendingApprecitionStu = StudentCourse::with('student','course','appreciation')->whereHas('student', function($query) {
+                $query->where('branch_id', Auth::user()->branch_id);
+            })->where('end_date','!=',null)->where('appreciation_given_date',null)->get();
         }
         else{
             $pendingApprecitionStu = StudentCourse::with('student','course','appreciation')->where('end_date','!=',null)->where('appreciation_given_date',null)->get();
@@ -103,6 +116,10 @@ class ReportController extends Controller
             $trainers = Trainer::where('user_id',$user->id)->where('is_active','0')->first();
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
             $pendingCourseStu = StudentCourse::whereIn('student_id',$studentTrainer)->with('student','course')->where('start_date',null)->get();
+        }elseif(Auth::user()->type == 3){
+            $pendingCourseStu = StudentCourse::with('student','course')->where('start_date',null)->whereHas('student', function($query) {
+                $query->where('branch_id', Auth::user()->branch_id);
+            })->get();
         }
         else{
             $pendingCourseStu = StudentCourse::with('student','course')->where('start_date',null)->get();
@@ -117,6 +134,11 @@ class ReportController extends Controller
             $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
             $studentCourse = StudentCourse::whereIn('student_id',$studentTrainer)->with('student','course')->get();
+        }elseif(Auth::user()->type == 3)
+        {
+            $studentCourse = StudentCourse::with('student','course')->whereHas('student', function($query) {
+                $query->where('branch_id', Auth::user()->branch_id);
+            })->get();
         }
         else{
             $studentCourse = StudentCourse::with('student','course')->get();
@@ -133,6 +155,17 @@ class ReportController extends Controller
             $pendingCounselling = StudentDMIT::whereIn('student_id',$studentTrainer)->where('counselling_by','0')->with('student')->get();
             $pendingReport = StudentDMIT::whereIn('student_id',$studentTrainer)->where('report','0')->with('student')->get();
             $pendingKeyPoint = StudentDMIT::whereIn('student_id',$studentTrainer)->where('key_point',0)->with('student')->get();
+        }elseif(Auth::user()->type == 3)
+        {
+            $pendingCounselling = StudentDMIT::where('counselling_by','0')->with('student')->whereHas('student', function($query) {
+                $query->where('branch_id', Auth::user()->branch_id);
+            })->get();
+            $pendingReport = StudentDMIT::where('report','0')->with('student')->whereHas('student', function($query) {
+                $query->where('branch_id', Auth::user()->branch_id);
+            })->get();
+            $pendingKeyPoint = StudentDMIT::where('key_point',0)->with('student')->whereHas('student', function($query) {
+                $query->where('branch_id', Auth::user()->branch_id);
+            })->get();
         }
         else{
             $pendingCounselling = StudentDMIT::where('counselling_by','0')->with('student')->get();
@@ -150,6 +183,15 @@ class ReportController extends Controller
             $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
             $students = Student::whereIn('id',$studentTrainer)->with('studentMaterial', 'courses.course')->get();
+            $studentList = [];
+            foreach ($students as $student) {
+                if ($student->studentMaterial->isEmpty()) {
+                    $studentList[] = $student;
+                }
+            }
+        }elseif(Auth::user()->type == 3)
+        {
+            $students = Student::with('studentMaterial', 'courses.course')->where('branch_id', Auth::user()->branch_id)->get();
             $studentList = [];
             foreach ($students as $student) {
                 if ($student->studentMaterial->isEmpty()) {
@@ -177,6 +219,15 @@ class ReportController extends Controller
             $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
             $studentStatus = StudentStatus::whereIn('student_id',$studentTrainer)->whereIn('status',['Hold','Cancel','Start','Pending','Cancel'])->where('is_active','0')->with('student.activeCourses.course','course','studentcourses')->get();
+        }elseif(Auth::user()->type == 3)
+        {
+            $studentStatus = StudentStatus::whereIn('status',['Hold','Cancel','Start','Pending','Cancel'])->where('is_active','0')
+            ->join('student_courses', 'student_courses.student_id', 'student_status.student_id')
+            ->join('courses', 'courses.id', 'student_courses.course_id')
+            ->whereHas('student', function($query) {
+                $query->where('branch_id', Auth::user()->branch_id);
+            })
+            ->with('student.activeCourses.course','course','studentcourses')->get();
         }
         else{
             $studentStatus = StudentStatus::whereIn('status',['Hold','Cancel','Start','Pending','Cancel'])->where('is_active','0')
@@ -203,6 +254,16 @@ class ReportController extends Controller
             ->with('trainer', 'student', 'slot')
             ->get()
             ->groupBy('branch.slot_time');
+        }elseif(Auth::user()->type == 3){
+            $stuListWithTrainer = StudentStaffAssign::
+            with('trainer', 'student', 'slot', 'branch')
+            ->where('student_staff_assigns.is_active', 0)
+            ->join('students', 'students.id', 'student_staff_assigns.student_id')
+            ->join('branches', 'branches.id', 'students.id')
+            ->where('students.branch_id',Auth::user()->branch_id)
+            ->with('trainer', 'student', 'slot')
+            ->get()
+            ->groupBy('branch.slot_time');
         }else{
             $stuListWithTrainer = StudentStaffAssign::
             with('trainer', 'student', 'slot', 'branch')
@@ -224,6 +285,11 @@ class ReportController extends Controller
             $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
             $courseWiseStudentData = StudentCourse::whereIn('student_id',$studentTrainer)->with('student','course')->get();
+        }elseif(Auth::user()->type == 3)
+        {
+            $courseWiseStudentData = StudentCourse::with('student','course')->whereHas('student', function($query) {
+                $query->where('branch_id', Auth::user()->branch_id);
+            })->get();
         }else{
             $courseWiseStudentData = StudentCourse::with('student','course')->get();
             // dd($courseWiseStudentData);
@@ -233,11 +299,20 @@ class ReportController extends Controller
 
     public function Proxysloatwisestudent()
     {
-        $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot','branch')
-        ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
-        ->join('branches', 'branches.id', 'students.id')
-        ->get()->groupBy('trainer.name');
+        if(Auth::user()->type == 3)
+        {
+            $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot','branch')
+            ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
+            ->join('branches', 'branches.id', 'students.branch_id')
+            ->where('students.branch_id',Auth::user()->branch_id)
+            ->get()->groupBy('trainer.name');
+        }else{
+            $stuListWithTrainerProxy = StudentProxyStaffAssign::with('trainer', 'student', 'slot','branch')
+            ->join('students', 'students.id', 'student_proxy_staff_assigns.student_id')
+             ->join('branches', 'branches.id', 'students.branch_id')
+            ->get()->groupBy('trainer.name');
 
+        }
         return view('reports.proxy_sloat_wise_student_list',compact('stuListWithTrainerProxy'));
     }
 
@@ -248,6 +323,12 @@ class ReportController extends Controller
             $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
             $stuListWithTrainer = StudentStaffAssign::whereIn('student_id',$studentTrainer)->where('is_active','0')->with('trainer', 'student', 'slot')->get()->groupBy('trainer.name');
+        }elseif(Auth::user()->type == 3)
+        {
+            $stuListWithTrainer = StudentStaffAssign::where('is_active','0')->with('trainer', 'student', 'slot')->whereHas('student', function($query) {
+                $query->where('branch_id', Auth::user()->branch_id);
+            })->get()->groupBy('trainer.name');
+
         }
         else{
             $stuListWithTrainer = StudentStaffAssign::where('is_active','0')->with('trainer', 'student', 'slot')->get()->groupBy('trainer.name');
@@ -283,6 +364,14 @@ class ReportController extends Controller
             $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
             $studentList = StudentStaffAssign::where('is_active','0')->where('trainer_id',$trainers->id)->with(['student','trainer','slot'])->get();
             $transferStudent = StudentStaffAssign::where('is_active','1')->with(['student','trainer','slot'])->get();
+        }elseif(Auth::user()->type == 3)
+        {
+            $studentList = StudentStaffAssign::where('is_active','0')->with(['student','trainer','slot'])->whereHas('student', function($query) {
+                $query->where('branch_id', Auth::user()->branch_id);
+            })->get();
+            $transferStudent = StudentStaffAssign::where('is_active','1')->with(['student','trainer','slot'])->whereHas('student', function($query) {
+                $query->where('branch_id', Auth::user()->branch_id);
+            })->get();
         }
         else{
             $studentList = StudentStaffAssign::where('is_active','0')->with(['student','trainer','slot'])->get();
@@ -292,8 +381,15 @@ class ReportController extends Controller
     }
 
     public function getStudentData(){
-        $students = Student::where('status',1)->with('courses','trainer')->get();
-        $slots= Slot::where('is_active',0)->with('slotList','trainer','rtc')->get();
+        if(Auth::user()->type == 3)
+        {
+            $students = Student::where('status',1)->with('courses','trainer')->where('branch_id',Auth::user()->branch_id)->get();
+            $slots= Slot::where('is_active',0)->with('slotList','trainer','rtc')->where('slots.branch_id',Auth::user()->branch_id)->get();
+        }else{
+            $students = Student::where('status',1)->with('courses','trainer')->get();
+            $slots= Slot::where('is_active',0)->with('slotList','trainer','rtc')->get();
+        }
+
         return view('reports.student_report',compact('students','slots'));
     }
 }

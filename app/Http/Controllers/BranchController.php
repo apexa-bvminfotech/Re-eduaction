@@ -15,7 +15,13 @@ class BranchController extends Controller
      */
     public function index()
     {
-        $branches = Branch::orderBy('id','DESC')->get();
+
+        if(Auth::user()->type == 3)
+        {
+            $branches = Branch::orderBy('id','DESC')->where('id',Auth::user()->branch_id)->get();
+        }else{
+            $branches = Branch::orderBy('id','DESC')->get();
+        }
         return view('branch.index', compact('branches'))->with('i');
     }
 

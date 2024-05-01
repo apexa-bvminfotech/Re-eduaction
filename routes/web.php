@@ -45,7 +45,7 @@ Route::get('/clear-cache', function() {
 });
 Route::get('/dashboard', function () {
     $user =  Auth::user()->type;
-    if ($user == 0) {
+    if ($user == 0 || $user == 3) {
         return redirect()->route('admindashboard.index');
     } elseif ($user == 1) {
         return redirect()->route('trainerdashboard.index');
@@ -149,9 +149,9 @@ Route::group(['middleware'=>['auth']],function (){
         Route::post('/trinerweeklyadd', 'TrainerDashboardController@trinerweeklyadd')->name('get-slot-times');
         Route::get('shift-triner-slot/{id}','TrainerDashboardController@TrinerSlot');
         Route::post('/slots/{slotId}', 'TrainerDashboardController@slotupdate')->name('sloatupdate');
+        Route::post('/proxy-slot/{slotId}', 'TrainerDashboardController@proxySlotUpdate')->name('proxySlotUpdate');
         Route::delete('/delete/{slotId}', 'TrainerDashboardController@delete')->name('delete.slot');
-
-
+        Route::delete('/proxy-delete/{slotId}', 'TrainerDashboardController@ProxyDelete')->name('Proxy-delete.slot');
     });
 
     Route::group(['prefix'=>'student-dashboard'],function (){

@@ -15,7 +15,7 @@
                         </ol>
                     </div>
                 </div>
-            </div><!-- /.container-fluid -->
+            </div><!-- /.container-fluid-->
         </section>
         <section class="content">
             <div class="container-fluid">
@@ -115,11 +115,14 @@
                                     <label for="role" class="col-sm-3 col-form-label">Role </label>
                                     <div class="col-sm-9">
                                         <select class="form-control select2" name="role">
-                                            <?php $checkarray = [strtolower('admin'), strtolower('super admin')] ?>
-                                            <option value=""> Select Role </option>
-                                            @foreach($role as $key=> $roles)
+                                            <?php $checkarray = [strtolower('admin'), strtolower('Sub-Admin')]
+                                            ?>
+                                            <option value="">Select Role</option>
+                                            @foreach($role as $key => $roles)
                                                 @if(in_array(strtolower($roles->name), $checkarray))
-                                                    <option value="{{$roles->id}}" {{old('role')==$roles->id?'selected':''}}>{{$roles->name}}</option>
+                                                    <option value="{{ $roles->id }}" {{ old('role') == $roles->id ? 'selected' : '' }}>
+                                                        {{ $roles->name }}
+                                                    </option>
                                                 @endif
                                             @endforeach
                                         </select>
