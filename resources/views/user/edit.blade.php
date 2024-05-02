@@ -111,6 +111,26 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    <label for="role" class="col-sm-3 col-form-label">Role </label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control select2" name="role">
+                                            <?php $checkarray = [strtolower('admin'), strtolower('Sub-Admin')]
+                                            ?>
+                                            <option value="">Select Role</option>
+                                            @foreach($role as $key => $roles)
+                                                @if(in_array(strtolower($roles->name), $checkarray))
+                                                    <option value="{{ $roles->id }}" {{ old('role',$user->role) == $roles->id ? 'selected' : '' }}>
+                                                        {{ $roles->name }}
+                                                    </option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                        @error('role')
+                                            <span class="text-danger">{{$message}}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <label for="status" class="col-sm-3 col-form-label">Status:</label>
                                     <div class="col-sm-9 d-flex justify-content-evenly">
                                         <div class="custom-control custom-radio">

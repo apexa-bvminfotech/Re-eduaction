@@ -122,6 +122,7 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+
         $request->validate([
             'surname' => 'required|max:255',
             'name' => 'required|max:255',
@@ -145,7 +146,7 @@ class UserController extends Controller
                 $user_profile = $filename;
             }
         }
-
+        $role = Role::findOrFail($request->input('role'));
         $user->update([
             'surname' => $request->surname,
             'name' => $request->name,
@@ -155,10 +156,10 @@ class UserController extends Controller
             'user_profile' => $user_profile,
             'contact' => $request->contact,
             'branch_id' => $request->branch_id ? $request->branch_id : 0,
-            'type' => 0,
+            'type' => $role->name == "Admin" ? 0 : ($role->name == "Sub-Admin" ? 3 : null),
             'is_active' => $request->is_active,
         ]);
-        $user->syncRoles($request->input('role'));
+        $user->assignRole($role);
         return redirect()->route('user.index')->with('success', 'User updated successfully');
     }
 
