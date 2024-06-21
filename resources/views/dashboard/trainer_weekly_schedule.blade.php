@@ -161,9 +161,8 @@
                                             </tr>
                                             @endforeach
 
-
-
                                             <tr>
+
                                                 @foreach ($trainerDataProxy as $trainerNames => $slots)
                                                         @if ($trainerName == $trainerNames)
                                                             @foreach ($slots as $slot)
@@ -175,7 +174,6 @@
                                                                     $slotData['trainer_name'] = $trainerNames;
                                                                     $slotData['slot_data'] = $slot;
                                                                     $trainerAndSlotData[] = $slotData;
-
                                                                 @endphp
                                                                 @for ($day = 1; $day <= $numberOfDays; $day++)
                                                                     @if ($checkStartDate->format('Y-m-d') >= $slot['startDate'] && $checkStartDate->format('Y-m-d') <= $slot['endDate'])
@@ -638,10 +636,25 @@
                         </div>
                         @endforeach
 
+
                         <div class="col-12">
                             <div class="card">
                                 @foreach($trainerDataProxy as $trainerNames => $slots)
-                                @if($slotData['trainer_name'] != $trainerNames)
+                                @php
+                                    $trainerFound = false;
+                                @endphp
+
+                                @if(isset($trainerAndSlotData))
+                                @foreach ($trainerAndSlotData as $data)
+                                    @if($data['trainer_name'] == $trainerNames)
+                                        @php
+                                            $trainerFound = true;
+                                        @endphp
+                                        @break
+                                    @endif
+                                @endforeach
+                                @endif
+                                @if (!$trainerFound)
                                     <div class="card-body">
                                         <table class="table table-bordered table-striped">
                                             @php

@@ -78,10 +78,10 @@ class SlotController extends Controller
             WHEN start_date IS NOT NULL AND end_date IS NULL THEN "Running"
             ELSE "Complete"
             END) AS status_course')
-        ->whereDate('student_proxy_staff_assigns.starting_date', $currentDate)
+         ->whereDate('student_proxy_staff_assigns.starting_date','>=' ,$currentDate)
         ->orderBy('slots.id', 'DESC')
         ->get();
-        
+
         $studentStaffAssign = StudentStaffAssign::where('is_active','0')->get();
         $trainerId = [];
 

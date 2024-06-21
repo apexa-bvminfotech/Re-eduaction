@@ -61,7 +61,7 @@ class TrainerDashboardController extends Controller
             $trainers = Trainer::where('user_id',$user->id)->where('is_active',0)->first();
             $studentTrainer = StudentStaffAssign::where('trainer_id',$trainers->id)->where('is_active','0')->pluck('student_id');
 
-            $stuListWithTrainer = StudentStaffAssign::with('trainer', 'student', 'slot', 'branch', 'studentcourses', 'course')
+            $stuListWithTrainer = StudentStaffAssign::whereIn('student_staff_assigns.student_id',$studentTrainer)->with('trainer', 'student', 'slot', 'branch', 'studentcourses', 'course')
             ->where('student_staff_assigns.is_active', 0)
             ->whereHas('slot', function($query) {
                 $query->where('is_active', 0);
