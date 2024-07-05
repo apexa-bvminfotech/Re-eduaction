@@ -31,6 +31,7 @@ class UserController extends Controller
         return view('user.index', compact('users', 'branches'))->with('i');
     }
 
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -80,10 +81,10 @@ class UserController extends Controller
         'user_profile' => $user_profile,
         'contact' => $request->contact,
         'branch_id' => $request->branch_id ? $request->branch_id : 0,
-        'type' => $role->name == "Admin" ? 0 : ($role->name == "Sub-Admin" ? 3 : null),
+        'type' => $request->input('role') == "Admin" ? 0 : ($request->input('role') == "Sub-Admin" ? 3 : null),
     ]);
 
-    $user->assignRole($role); // Assign the role object directly
+    $user->assignRole($request->input('role')); // Assign the role object directly
 
     return redirect()->route('user.index')->with('success', 'User created successfully');
 }
@@ -121,47 +122,56 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $user)
-    {
+{
+    $request->validate([
+        'surname' => 'required|max:255',
+        'name' => 'required|max:255',
+        'father_name' => 'required|max:255',
+        'user_profile' => 'nullable|mimes:jpeg,png,jpg|max:2048',
+        'contact' => 'required|digits:10|numeric',
+        'is_active' => 'required',
+    ]);
 
-        $request->validate([
-            'surname' => 'required|max:255',
-            'name' => 'required|max:255',
-            'father_name' => 'required|max:255',
-            'user_profile' => 'nullable|mimes:jpeg,png,jpg|max:2048',
-            'contact' => 'required|digits:10|numeric',
-            'is_active' => 'required',
-        ]);
-
-        $user_profile = $user->user_profile;
-        if ($request->hasFile('user_profile') && $request->file('user_profile')->isValid()) {
-            if ($user_profile) {
-                // Delete old profile image if exists
-                $existingFilePath = public_path('assets/user/' . $user_profile);
-                if (file_exists($existingFilePath)) {
-                    unlink($existingFilePath);
-                }
-                // Upload new profile image
-                $filename = $request->file('user_profile')->getClientOriginalName();
-                $request->file('user_profile')->move(public_path('assets/user'), $filename);
-                $user_profile = $filename;
+    $user_profile = $user->user_profile;
+    if ($request->hasFile('user_profile') && $request->file('user_profile')->isValid()) {
+        if ($user_profile) {
+            // Delete old profile image if exists
+            $existingFilePath = public_path('assets/user/' . $user_profile);
+            if (file_exists($existingFilePath)) {
+                unlink($existingFilePath);
             }
         }
-        $role = Role::findOrFail($request->input('role'));
-        $user->update([
-            'surname' => $request->surname,
-            'name' => $request->name,
-            'father_name' => $request->father_name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'user_profile' => $user_profile,
-            'contact' => $request->contact,
-            'branch_id' => $request->branch_id ? $request->branch_id : 0,
-            'type' => $role->name == "Admin" ? 0 : ($role->name == "Sub-Admin" ? 3 : null),
-            'is_active' => $request->is_active,
-        ]);
-        $user->assignRole($role);
-        return redirect()->route('user.index')->with('success', 'User updated successfully');
+        // Upload new profile image
+        $filename = $request->file('user_profile')->getClientOriginalName();
+        $request->file('user_profile')->move(public_path('assets/user'), $filename);
+        $user_profile = $filename;
     }
+
+    $data = [
+        'surname' => $request->surname,
+        'name' => $request->name,
+        'father_name' => $request->father_name,
+        'email' => $request->email,
+        'user_profile' => $user_profile,
+        'contact' => $request->contact,
+        'branch_id' => $request->branch_id ? $request->branch_id : 0,
+        'type' => null,
+        'is_active' => $request->is_active,
+    ];
+
+    if ($request->filled('password')) {
+        $data['password'] = Hash::make($request->password);
+    }
+
+    $role = Role::findOrFail($request->input('role'));
+    $data['type'] = $role->name == "Admin" ? 0 : ($role->name == "Sub-Admin" ? 3 : null);
+
+    $user->update($data);
+    $user->assignRole($role);
+
+    return redirect()->route('user.index')->with('success', 'User updated successfully');
+}
+
 
     /**
      * Remove the specified resource from storage.

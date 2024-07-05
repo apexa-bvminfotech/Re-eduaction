@@ -114,12 +114,11 @@
                                     <label for="role" class="col-sm-3 col-form-label">Role </label>
                                     <div class="col-sm-9">
                                         <select class="form-control select2" name="role">
-                                            <?php $checkarray = [strtolower('admin'), strtolower('Sub-Admin')]
-                                            ?>
+                                            <?php $checkarray = ['admin', 'sub-admin']; ?>
                                             <option value="">Select Role</option>
                                             @foreach($role as $key => $roles)
                                                 @if(in_array(strtolower($roles->name), $checkarray))
-                                                    <option value="{{ $roles->id }}" {{ old('role',$user->role) == $roles->id ? 'selected' : '' }}>
+                                                    <option value="{{ $roles->id }}" {{ ($roles->name == 'Admin' && $user->type == 0) || ($roles->name == 'Sub-Admin' && $user->type == 3) ? 'selected' : '' }}>
                                                         {{ $roles->name }}
                                                     </option>
                                                 @endif

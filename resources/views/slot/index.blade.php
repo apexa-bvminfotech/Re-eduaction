@@ -8,7 +8,7 @@
                         <h1>Slot Management</h1>
                     </div>
                     <div class="col-sm-6 row input-group-append justify-content-end">
-                        @can('slot-create')
+                        @can('slot-list')
                             <div class="col-md-3 text-right">
                                 <a href="{{route('slot.create')}}" class="btn btn-primary"><i class="fa fa-plus pr-2"></i> Add</a>
                             </div>
@@ -47,11 +47,8 @@
                                             <th>RTC Name</th>
                                             <th>Time</th>
                                             <th>WhatsApp group Name</th>
-
-                                            @can('slot-edit')
-                                                <th>Status</th>
-                                                <th>Action</th>
-                                            @endcan
+                                            <th>Status</th>
+                                            <th>Action</th>
                                             <th>Regular Student</th>
                                             <th>Proxy Student</th>
                                         </tr>
@@ -67,7 +64,7 @@
                                                 <td>{{ $s->slot_time ?? '' }}</td>
                                                 <td>{{$s->whatsapp_group_name ?? ''}}</td>
 
-                                                @can('slot-edit')
+                                                
                                                     <td>
                                                         <span style="display: none">{{ $s->is_active }}</span>
                                                         <div class="custom-control custom-switch">
@@ -75,12 +72,15 @@
                                                             <label class="custom-control-label" for="c{{$key+1}}"></label>
                                                         </div>
                                                     </td>
+                                                   
                                                     <td>
+                                                        @can('slot-edit')
                                                         <a href="{{ route('slot.edit',$s->id) }}" class="btn btn-success btn-sm" title="Edit"><i class="fa fa-edit"></i> Edit</a>
                                                         <button class="btn btn-secondary btn-shift-regular-slot btn-sm mb-1 mt-1"
                                                             data-old-regular-slot-id="{{ $s->id }}" data-old-regular-trainer-id="{{ $s->trainer->id }}">
                                                             Shift As Regular Slot
                                                         </button>
+                                                        @endcan
                                                         <button class="btn btn-secondary btn-shift-proxy-slot btn-sm mb-1 mt-1"
                                                             data-old-proxy-slot-id="{{ $s->id }}" data-old-proxy-trainer-id="{{ $s->trainer->id }}">
                                                             Shift As Proxy Slot
@@ -150,7 +150,7 @@
                                                         @endforeach
                                                     @endforeach
                                                     </td>
-                                                @endcan
+                                               
                                             </tr>
 
                                         @endforeach

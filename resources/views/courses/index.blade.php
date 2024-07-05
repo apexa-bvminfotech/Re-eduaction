@@ -8,7 +8,7 @@
                         <h1>Course Management</h1>
                     </div>
                     <div class="col-sm-6">
-                        @can('branch-create')
+                        @can('course-create')
                             <a href="{{route('course.create')}}" class="btn btn-primary float-right"><i class="fa fa-plus pr-2"></i> Add</a>
                         @endcan
                     </div>
@@ -30,7 +30,9 @@
                                             <tr class="card-primary">
                                                 <th>No</th>
                                                 <th>Course Name</th>
+                                                @can('course-edit')
                                                 <th width="280px">Action</th>
+                                                @endcan
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -38,17 +40,12 @@
                                                 <tr>
                                                     <td>{{$course->id}}</td>
                                                     <td>{{$course->course_name}}</td>
+                                                    @can('course-edit')
                                                     <td>
-{{--                                                        <form action="{{route('course.destroy',$course->id)}}"--}}
-{{--                                                              method="POST">--}}
                                                             <a class="btn btn-success btn-sm fa fa-edit"
                                                                href="{{ route('course.edit',$course->id) }}"> Edit</a>
-{{--                                                            @csrf--}}
-{{--                                                            @method('DELETE')--}}
-{{--                                                            <button type="submit"--}}
-{{--                                                                    class="btn btn-danger fa fa-trash-alt btn-sm show_confirm"> Delete</button>--}}
-{{--                                                        </form>--}}
                                                     </td>
+                                                    @endcan
                                                 </tr>
                                             @endforeach
                                             </tbody>
