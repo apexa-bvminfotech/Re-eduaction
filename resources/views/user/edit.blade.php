@@ -69,7 +69,7 @@
                                         <input type="text" name="father_name" placeholder="Enter father name" value="{{ $user->father_name }}" class="form-control" required>
                                         @error('father_name')
                                             <span class="text-danger">{{$message}}</span>
-                                        @enderror
+                                        @enderror   
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -114,11 +114,12 @@
                                     <label for="role" class="col-sm-3 col-form-label">Role </label>
                                     <div class="col-sm-9">
                                         <select class="form-control select2" name="role">
-                                            <?php $checkarray = ['admin', 'sub-admin']; ?>
+                                            <?php $checkarray = [strtolower('admin'), strtolower('Sub-Admin')]
+                                            ?>
                                             <option value="">Select Role</option>
                                             @foreach($role as $key => $roles)
                                                 @if(in_array(strtolower($roles->name), $checkarray))
-                                                    <option value="{{ $roles->id }}" {{ ($roles->name == 'Admin' && $user->type == 0) || ($roles->name == 'Sub-Admin' && $user->type == 3) ? 'selected' : '' }}>
+                                                    <option value="{{ $roles->id }}" {{ old('role') == $roles->name ? 'selected' : '' }}>
                                                         {{ $roles->name }}
                                                     </option>
                                                 @endif

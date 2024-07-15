@@ -120,7 +120,7 @@
                                             <option value="">Select Role</option>
                                             @foreach($role as $key => $roles)
                                                 @if(in_array(strtolower($roles->name), $checkarray))
-                                                    <option value="{{ $roles->id }}" {{ old('role') == $roles->id ? 'selected' : '' }}>
+                                                    <option value="{{ $roles->id }}" {{ old('role') == $roles->name ? 'selected' : '' }}>
                                                         {{ $roles->name }}
                                                     </option>
                                                 @endif

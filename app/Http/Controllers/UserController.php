@@ -21,9 +21,10 @@ class UserController extends Controller
     public function index()
     {
         $branches = Branch::orderBy('id', 'ASC')->get();
+        
         if(Auth::user()->type == 3){
             $users = User::where('type', 3)->orderBy('id', 'ASC')->get();
-
+            
         }else{
             $users = User::whereIn('type', [0, 3])->orderBy('id', 'ASC')->get();
         }
@@ -40,6 +41,7 @@ class UserController extends Controller
     public function create()
     {
         $branches = Branch::orderBy('id')->get();
+
         $role = Role::orderBy('id')->get();
         return view('user.create', compact('role', 'branches'));
     }
@@ -52,6 +54,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
 {
+    // dd($request);
     $request->validate([
         'name' => 'required|max:255',
         'surname' => 'required|max:255',
@@ -71,7 +74,7 @@ class UserController extends Controller
     }
 
     $role = Role::findOrFail($request->input('role')); // Get the role object
-
+    // dd($role->name);
     $user = User::create([
         'name' => $request->name,
         'surname' => $request->surname,
@@ -81,10 +84,10 @@ class UserController extends Controller
         'user_profile' => $user_profile,
         'contact' => $request->contact,
         'branch_id' => $request->branch_id ? $request->branch_id : 0,
-        'type' => $request->input('role') == "Admin" ? 0 : ($request->input('role') == "Sub-Admin" ? 3 : null),
+        'type' => $role->name == "Admin" ? 0 : ($role->name == "Sub-Admin" ? 3 : null),
     ]);
-
-    $user->assignRole($request->input('role')); // Assign the role object directly
+    
+     $user->assignRole($request->input('role')); // Assign the role object directly
 
     return redirect()->route('user.index')->with('success', 'User created successfully');
 }
@@ -122,7 +125,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $user)
-{
+{   
     $request->validate([
         'surname' => 'required|max:255',
         'name' => 'required|max:255',
@@ -158,19 +161,21 @@ class UserController extends Controller
         'type' => null,
         'is_active' => $request->is_active,
     ];
-
+   
     if ($request->filled('password')) {
         $data['password'] = Hash::make($request->password);
     }
 
     $role = Role::findOrFail($request->input('role'));
+    
     $data['type'] = $role->name == "Admin" ? 0 : ($role->name == "Sub-Admin" ? 3 : null);
-
+    
     $user->update($data);
     $user->assignRole($role);
 
     return redirect()->route('user.index')->with('success', 'User updated successfully');
 }
+
 
 
     /**
