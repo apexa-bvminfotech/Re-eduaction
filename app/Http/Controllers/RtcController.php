@@ -46,7 +46,7 @@ class RtcController extends Controller
     public function create()
     {
         $branch = Branch::orderBy('id','DESC')->get();
-        if(Auth::user()->type == 1){
+        if(Auth::user()->type == 1 || Auth::user()->type == 3){
             $branch = Branch::where('id', Auth::user()->branch_id)->orderBy('id', 'DESC')->get();
         }
         return view('rtc.create',compact('branch'));
@@ -105,7 +105,7 @@ class RtcController extends Controller
     {
         $rtc = Rtc::find($id);
         $branch = Branch::orderBy('id','DESC')->get();
-        if(Auth::user()->type == 1){
+        if(Auth::user()->type == 1 || Auth::user()->type == 3){
             $branch = Branch::where('id', Auth::user()->branch_id)->orderBy('id', 'DESC')->get();
         }
         if($rtc){

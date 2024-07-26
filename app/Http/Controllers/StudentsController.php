@@ -73,13 +73,14 @@ class StudentsController extends Controller
             $trainers = Trainer::where('branch_id', Auth::user()->branch_id)->where('is_active',0)->orderBy('id', 'desc')->get();
             $students = Student::
                 select('students.surname', 'students.name','students.standard','students.medium','students.course_id','students.id','students.mother_contact_no','branches.name as branch_name')
-                ->with('courses')
-                ->join('branches', 'branches.id', 'students.branch_id')
-                ->where('students.branch_id',Auth::user()->branch_id)
-                ->join('student_staff_assigns', 'student_staff_assigns.student_id', 'students.id')
-                ->join('trainers','trainers.id', 'student_staff_assigns.trainer_id')
-                ->orderBy('students.id', 'DESC')->get();
-
+            ->with('courses')
+            ->join('branches', 'branches.id', 'students.branch_id')
+            ->where('students.branch_id',Auth::user()->branch_id)
+            ->leftjoin('student_staff_assigns', 'student_staff_assigns.student_id', 'students.id')
+            ->leftjoin('trainers','trainers.id', 'student_staff_assigns.trainer_id')
+            ->orderBy('students.id', 'DESC')
+            ->groupBy('students.id')
+            ->get();
         }else{
             $user = Auth::user();
             $slots = Slot::where('is_active', 0)->orderBy('id', 'desc')->get();

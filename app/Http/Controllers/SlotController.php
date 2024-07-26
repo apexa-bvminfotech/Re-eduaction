@@ -97,7 +97,7 @@ class SlotController extends Controller
     public function create()
     {
         $branch = Branch::orderBy('id', 'DESC')->get();
-        if(Auth::user()->type == 1) {
+        if(Auth::user()->type == 1 || Auth::user()->type == 3) {
             $branch = Branch::where('id', Auth::user()->branch_id)->orderBy('id', 'DESC')->get();
         }
         return view('slot.create', compact( 'branch'));
@@ -164,7 +164,7 @@ class SlotController extends Controller
     public function edit(Slot $slot)
     {
         $branch = Branch::orderBy('id', 'DESC')->get();
-        if(Auth::user()->type == 1){
+        if(Auth::user()->type == 1 || Auth::user()->type == 3) {
             $branch = Branch::where('id', Auth::user()->branch_id)->orderBy('id', 'DESC')->get();
         }
         $trainer = Trainer::where('branch_id', $slot->branch_id)->where('is_active',0)->orderBy('id', 'DESC')->get();

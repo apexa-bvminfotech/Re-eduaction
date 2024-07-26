@@ -62,7 +62,7 @@ class StudentPTMController extends Controller
         $students = Student::select('students.id','students.surname','students.name')->orderBy('id','DESC')->get();
         $trainers = Trainer::where('is_active', 0)->orderBy('id', 'desc')->get();
 
-        if(Auth::user()->type == 1) {
+        if(Auth::user()->type == 1 ) {
             $students = Student::
             select('students.id','students.surname', 'students.name')
                 ->join('student_staff_assigns', 'student_staff_assigns.student_id', 'students.id')

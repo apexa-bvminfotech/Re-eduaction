@@ -40,6 +40,7 @@ class TrainerController extends Controller
     public function create()
     {
         $branch = Branch::orderBy('id', 'DESC')->get();
+
         $course = Course::orderBy('id', 'DESC')->get();
         $roles = Role::orderBy('id', 'DESC')->get();
         $emp_id = Trainer::get()->count();
